@@ -10,7 +10,7 @@ public class PlayerScript : MonoBehaviour
     public float sideVelocity = 10;
     public float jumpForce = 10;
     public float topSpeed = 20;
-    public float hookForce = 20;
+    public float hookShootPower = 20;
     public int debugFPS = 60;
     // Start is called before the first frame update
     void Start()
@@ -21,23 +21,24 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         Application.targetFrameRate = debugFPS;// REMOVE
+
         #region PlayerMovement
         if (Input.GetKeyDown(KeyCode.W) && rigidbody.velocity.y < 1 && rigidbody.velocity.y > -1)
         {
-            rigidbody.velocity += Vector2.up * jumpForce;
+            rigidbody.velocity += Vector2.up * jumpForce; // Gravity is not affected by framerate
         }
 
-        if (rigidbody.velocity.x < topSpeed && rigidbody.velocity.x > topSpeed * -1) //|| (rigidbody.velocity.y < topSpeed && rigidbody.velocity.y > topSpeed * -1))
+        if (rigidbody.velocity.x < topSpeed && rigidbody.velocity.x > topSpeed * -1) 
         {
 
             if (Input.GetKey(KeyCode.A))
             {
                 spriteRenderer.flipX = false;
-                rigidbody.velocity += Vector2.left * sideVelocity;
+                rigidbody.velocity += Vector2.left * (sideVelocity * Time.deltaTime);
             } else if (Input.GetKey(KeyCode.D))
             {
                 spriteRenderer.flipX = true;
-                rigidbody.velocity += Vector2.right * sideVelocity;
+                rigidbody.velocity += Vector2.right * (sideVelocity * Time.deltaTime);
             }         
         }
         #endregion
@@ -55,7 +56,7 @@ public class PlayerScript : MonoBehaviour
             Vector2 fromPlayerToHook = hookTarget - (Vector2)transform.position ;
             fromPlayerToHook.Normalize();
 
-            hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookForce;
+            hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootPower;
 
         }
         if (Input.GetKeyDown(KeyCode.W))

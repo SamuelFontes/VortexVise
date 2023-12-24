@@ -490,10 +490,10 @@ MonoBehaviour:
   rigidbody: {fileID: 525692446}
   spriteRenderer: {fileID: 525692445}
   hook: {fileID: 1114015576}
-  sideVelocity: 0.2
+  sideVelocity: 80
   jumpForce: 25
   topSpeed: 20
-  hookForce: 30
+  hookForce: 50
   debugFPS: 999999999
 --- !u!61 &525692448
 BoxCollider2D:
@@ -834,7 +834,7 @@ MonoBehaviour:
   rigidbody: {fileID: 1114015579}
   player: {fileID: 525692442}
   playerRigidbody: {fileID: 0}
-  hookForce: 0.6
+  hookForce: 150
   hookPullOffset: 3.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
