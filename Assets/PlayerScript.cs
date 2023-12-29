@@ -1,3 +1,4 @@
+using Assets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class PlayerScript : MonoBehaviour
     public float topSpeed = 20;
     public float hookShootPower = 20;
     public int debugFPS = 60;
+    public int turnSpeed = 200;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,13 +36,16 @@ public class PlayerScript : MonoBehaviour
             if (Input.GetKey(KeyCode.A))
             {
                 spriteRenderer.flipX = false;
+
                 rigidbody.velocity += Vector2.left * (sideVelocity * Time.deltaTime);
             } else if (Input.GetKey(KeyCode.D))
             {
                 spriteRenderer.flipX = true;
                 rigidbody.velocity += Vector2.right * (sideVelocity * Time.deltaTime);
-            }         
-        }
+            }
+        } else
+            {
+            }
         #endregion
 
         #region Hook
@@ -49,9 +54,9 @@ public class PlayerScript : MonoBehaviour
             hook.SetActive(true);
             hook.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
             hook.transform.position = transform.position;
-            
 
-            Vector2 hookTarget = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector2 hookTarget = Utils.GetMousePosition();
 
             Vector2 fromPlayerToHook = hookTarget - (Vector2)transform.position ;
             fromPlayerToHook.Normalize();

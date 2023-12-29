@@ -25,8 +25,10 @@ public class HookScript : MonoBehaviour
             fromPlayerToHook.Normalize();
             float distance = Vector2.Distance(transform.position, player.transform.position);
 
-            if (distance > hookPullOffset) 
+            if (distance > hookPullOffset)
+            {
                 playerRigidbody.velocity += fromPlayerToHook * hookForce * Time.deltaTime;
+            }
 
         }
     }
