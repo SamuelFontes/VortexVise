@@ -335,7 +335,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: ActorCombat
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
 --- !u!95 &42553917
 Animator:
   serializedVersion: 5

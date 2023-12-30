@@ -54,12 +54,25 @@ public class ActorScript : MonoBehaviour
             hook.SetActive(false);
             return;
         }
+
         hook.SetActive(true);
         hook.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         hook.transform.position = transform.position;
 
 
         Vector2 hookTarget = crosshair.transform.position;
+        if (!crosshair.GetComponent<SpriteRenderer>().enabled)
+        {
+            Debug.Log("DISABLED");
+            // This means there is no crosshair, so shoot upwards
+            hookTarget.y += 4.5f;
+            if (spriteRenderer.flipX)
+                hookTarget.x += 4.5f; // Loking to the right
+            else
+                hookTarget.x -= 4.5f;
+
+
+        }
 
 
         Vector2 fromPlayerToHook = hookTarget - (Vector2)transform.position ;

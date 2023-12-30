@@ -27,7 +27,7 @@
                     "name": "Hook",
                     "type": "Value",
                     "id": "a30ba52c-84a2-4b20-af8e-1327be549da9",
-                    "expectedControlType": "Digital",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -77,7 +77,7 @@
                 {
                     "name": "",
                     "id": "f780320e-03f0-40a4-bdb2-9a21f612e463",
-                    "path": "<Gamepad>/leftShoulder",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -165,7 +165,7 @@
                 {
                     "name": "",
                     "id": "5fbdd09b-b71e-407b-979e-ae1be65a1ba1",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
