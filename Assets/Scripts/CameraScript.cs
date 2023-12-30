@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     // FIXME: Make the level camera size less hacky
+    // FIXME: The level borders should change depending on the level and on the device resolution
     public Transform target;
     public float smoothTime = 0.25f;
 

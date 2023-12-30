@@ -46,8 +46,14 @@ public class ActorScript : MonoBehaviour
         horizontal = inputValue.Get<Vector2>().x;
     }
 
-    private void OnHook()
+    private void OnHook(InputValue input)
     {
+        if(input.Get() == null)
+        {
+            // This is the release of the button
+            hook.SetActive(false);
+            return;
+        }
         hook.SetActive(true);
         hook.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         hook.transform.position = transform.position;

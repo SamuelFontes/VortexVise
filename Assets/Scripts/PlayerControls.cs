@@ -47,12 +47,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Hook"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""a30ba52c-84a2-4b20-af8e-1327be549da9"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Digital"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Aim"",
