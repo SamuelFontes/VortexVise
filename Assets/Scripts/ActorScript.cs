@@ -63,7 +63,6 @@ public class ActorScript : MonoBehaviour
         Vector2 hookTarget = crosshair.transform.position;
         if (!crosshair.GetComponent<SpriteRenderer>().enabled)
         {
-            Debug.Log("DISABLED");
             // This means there is no crosshair, so shoot upwards
             hookTarget.y += 4.5f;
             if (spriteRenderer.flipX)

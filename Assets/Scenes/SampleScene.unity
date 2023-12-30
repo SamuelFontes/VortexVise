@@ -335,7 +335,7 @@ MonoBehaviour:
   m_DefaultControlScheme: 
   m_DefaultActionMap: ActorCombat
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 519420031}
+  m_Camera: {fileID: 0}
 --- !u!95 &42553917
 Animator:
   serializedVersion: 5
@@ -531,6 +531,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1863132, y: 0.3345945}
   m_EdgeRadius: 0
+--- !u!1 &333817609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 333817610}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &333817610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333817609}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 41, y: 41, z: -0.43736374}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &367322491
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,7 +821,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 34
+  field of view: 100.5
   orthographic: 1
   orthographic size: 12
   m_Depth: -1
@@ -837,6 +868,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 42553914}
   smoothTime: 0.1
+  minLevelBorderX: -40
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,7 +1286,7 @@ Transform:
   m_GameObject: {fileID: 1159519082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.25, y: 7.8, z: -0.059046675}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2422,3 +2454,4 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 42553914}
   - {fileID: 1159519085}
+  - {fileID: 333817610}

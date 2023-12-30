@@ -4,36 +4,61 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    // FIXME: Make the level camera size less hacky
-    // FIXME: The level borders should change depending on the level and on the device resolution
+    // FIXME: change levelborders accoding to level selected
     public Transform target;
     public float smoothTime = 0.25f;
 
     private Vector3 offset = new Vector3(0, 0, -10);
     private Vector3 velocity = Vector3.zero;
 
-    private float maxLevelBorderX = 22f;
-    private float minLevelBorderX = -16f;
+    private float maxLevelBorderX = 41f;
+    public float minLevelBorderX = -41f;
 
-    private float maxLevelBorderY = 36f;
-    private float minLevelBorderY = -21f;
+    private float maxLevelBorderY = 41f;
+    private float minLevelBorderY = -41f;
+
+    private Camera cam;
+
+    private void Start()
+    {
+        cam = GetComponent<Camera>();
+    }
 
     private void FixedUpdate()
     {
-        Vector3 targetPosition = target.position + offset;
-        if(targetPosition.x < minLevelBorderX)
-            targetPosition.x = minLevelBorderX;
+        var rightTop = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth,cam.pixelHeight,cam.nearClipPlane));  
 
-        if (targetPosition.x > maxLevelBorderX)
-            targetPosition.x = maxLevelBorderX;
+        var cameraOffsetX = Vector2.Distance(new Vector2(transform.position.x,0),  new Vector2(rightTop.x,0));
+        var cameraOffsetY = Vector2.Distance(new Vector2(transform.position.y,0),  new Vector2(rightTop.y,0));
 
-        if (targetPosition.y < minLevelBorderY)
-            targetPosition.y = minLevelBorderY;
+        Vector3 targetPosition = target.position;
 
-        if(targetPosition.y > maxLevelBorderY)
-            targetPosition.y = maxLevelBorderY;
+        // Check if Camera is outside map, if it is it will autocorrect
+        if(targetPosition.x+(cameraOffsetX*-1) < minLevelBorderX)
+        {
+            targetPosition.x = transform.position.x;
+            targetPosition.x += (minLevelBorderX - (targetPosition.x+(cameraOffsetX*-1)));
+        } else if(targetPosition.x + cameraOffsetX > maxLevelBorderX)
+        {
+            targetPosition.x = transform.position.x;
+            targetPosition.x += maxLevelBorderX - (targetPosition.x+ cameraOffsetX);
+        }
+
+        if(targetPosition.y+(cameraOffsetY*-1) < minLevelBorderY)
+        {
+            targetPosition.y = transform.position.y;
+            targetPosition.y += (minLevelBorderY - (targetPosition.y+(cameraOffsetY*-1)));
+        } else if(targetPosition.y + cameraOffsetY > maxLevelBorderY)
+        {
+            targetPosition.y = transform.position.y;
+            targetPosition.y += maxLevelBorderY - (targetPosition.y+ cameraOffsetY);
+        }
+
+        targetPosition += offset;
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
+
+
 
 }
