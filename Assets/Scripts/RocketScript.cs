@@ -29,7 +29,7 @@ public class RocketScript : MonoBehaviour
             timer += Time.deltaTime;
             transform.localScale = transform.localScale + new Vector3(explosionSize * Time.deltaTime, explosionSize * Time.deltaTime);
 
-            spriteRenderer.color -= new Color (0, 0, 0, 1 * Time.deltaTime);
+            spriteRenderer.color -= new Color (0, 0, 0, 2 * Time.deltaTime);
             if(timer > explosionDuration)
             {
                 Object.Destroy(this.gameObject);
