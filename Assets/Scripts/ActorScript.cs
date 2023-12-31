@@ -8,10 +8,12 @@ public class ActorScript : MonoBehaviour
 {
     public GameObject hook;
     public GameObject crosshair;
+    public GameObject bullet;
     public float jumpForce = 25;
     public float moveSpeed = 80;
     public float maxMoveSpeed = 20;
     public float hookShootForce = 100;
+
 
     private PlayerControls playerControls;
     private Rigidbody2D rigidbody;
@@ -78,6 +80,27 @@ public class ActorScript : MonoBehaviour
         fromPlayerToHook.Normalize();
 
         hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
+    }
+
+    private void OnShoot(InputValue inputValue) 
+    {
+        var shoot = Instantiate(bullet, transform.position, crosshair.transform.rotation);
+
+        Vector2 target = crosshair.transform.position;
+        if (!crosshair.GetComponent<SpriteRenderer>().enabled)
+        {
+            // This means there is no crosshair, so shoot upwards
+            target.y += 4.5f;
+            if (spriteRenderer.flipX)
+                target.x += 4.5f; // Loking to the right
+            else
+                target.x -= 4.5f;
+        }
+
+        Vector2 fromPlayerToTarget = target - (Vector2)transform.position ;
+        fromPlayerToTarget.Normalize();
+
+        shoot.GetComponent<Rigidbody2D>().velocity = fromPlayerToTarget * 100;
     }
 
     private void Move()

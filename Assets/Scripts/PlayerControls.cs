@@ -71,6 +71,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""87d6eb12-a48d-41dd-8019-9bcaf87710ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -216,6 +225,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcede412-2900-41dc-9c83-d65d107d5ab3"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad1e1cab-53eb-446b-b9b3-9cf71dd3ac84"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -229,6 +260,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_ActorCombat_Hook = m_ActorCombat.FindAction("Hook", throwIfNotFound: true);
         m_ActorCombat_Aim = m_ActorCombat.FindAction("Aim", throwIfNotFound: true);
         m_ActorCombat_MousePosition = m_ActorCombat.FindAction("MousePosition", throwIfNotFound: true);
+        m_ActorCombat_Shoot = m_ActorCombat.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -295,6 +327,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ActorCombat_Hook;
     private readonly InputAction m_ActorCombat_Aim;
     private readonly InputAction m_ActorCombat_MousePosition;
+    private readonly InputAction m_ActorCombat_Shoot;
     public struct ActorCombatActions
     {
         private @PlayerControls m_Wrapper;
@@ -304,6 +337,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Hook => m_Wrapper.m_ActorCombat_Hook;
         public InputAction @Aim => m_Wrapper.m_ActorCombat_Aim;
         public InputAction @MousePosition => m_Wrapper.m_ActorCombat_MousePosition;
+        public InputAction @Shoot => m_Wrapper.m_ActorCombat_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_ActorCombat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -328,6 +362,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MousePosition.started += instance.OnMousePosition;
             @MousePosition.performed += instance.OnMousePosition;
             @MousePosition.canceled += instance.OnMousePosition;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         private void UnregisterCallbacks(IActorCombatActions instance)
@@ -347,6 +384,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @MousePosition.started -= instance.OnMousePosition;
             @MousePosition.performed -= instance.OnMousePosition;
             @MousePosition.canceled -= instance.OnMousePosition;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         public void RemoveCallbacks(IActorCombatActions instance)
@@ -371,5 +411,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnHook(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }
