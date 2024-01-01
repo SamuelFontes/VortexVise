@@ -41,9 +41,21 @@ public class RocketScript : MonoBehaviour
     {
         if (!exploded)
         {
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayRocketHit();
             rigidbody.bodyType = RigidbodyType2D.Static;
             exploded = true;
             return;
+        }
+        if (collision.gameObject.tag == "Player")
+        {
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayDeath();
+
+            collision.gameObject.transform.position = new Vector3(0, 0);
+
+            if (collision.gameObject.layer == 11)
+                Utils.playerOneScore++;
+            else
+                Utils.playerTwoScore++;
         }
         // TODO: Apply damage to things here
 

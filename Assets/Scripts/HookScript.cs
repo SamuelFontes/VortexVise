@@ -38,6 +38,7 @@ public class HookScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookHit();
         rigidbody.bodyType = RigidbodyType2D.Static;
         
     }

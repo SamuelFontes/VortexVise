@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,22 +10,41 @@ public class ActorScript : MonoBehaviour
     public GameObject hook;
     public GameObject crosshair;
     public GameObject bullet;
+    public GameObject camera;
     public float jumpForce = 25;
     public float moveSpeed = 80;
     public float maxMoveSpeed = 20;
     public float hookShootForce = 100;
+    public float rocketDelay = 1f;
 
 
     private PlayerControls playerControls;
     private Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
     private float horizontal = 0;
+    private float rocketTimer = 0;
+    private bool firingRocket = false;
     // Start is called before the first frame update
     void Start()
     {
         playerControls = new PlayerControls();
         rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        var cam = Instantiate(camera);
+        if(Utils.numberOfPlayers == 0)
+        {
+            Utils.InitiateMultiplayer();
+            gameObject.layer = 10;
+            cam.GetComponent<Camera>().rect = new Rect(0, 0, 0.5f, 1);
+        } else if(Utils.numberOfPlayers == 1)
+        {
+            gameObject.layer = 11;
+            cam.GetComponent<Camera>().rect = new Rect(0.5f, 0, 0.5f, 1);
+            cam.GetComponent<AudioListener>().enabled = false;
+        }
+
+        cam.GetComponent<CameraScript>().target = transform;
+        Utils.numberOfPlayers++;
     }
 
     // Update is called once per frame
@@ -32,6 +52,16 @@ public class ActorScript : MonoBehaviour
     {
         Move();
         Animate();
+
+        if(firingRocket)
+        {
+            rocketTimer += Time.deltaTime;
+        }
+        if(firingRocket && rocketTimer > rocketDelay)
+        {
+            rocketTimer = 0;
+            firingRocket = false;
+        }
     }
 
     private void OnJump()
@@ -39,6 +69,7 @@ public class ActorScript : MonoBehaviour
         if (rigidbody.velocity.y == 0 || hook.active)
         {
             hook.SetActive(false);
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
             rigidbody.velocity += Vector2.up * jumpForce; 
         }
     }
@@ -57,6 +88,7 @@ public class ActorScript : MonoBehaviour
             return;
         }
 
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookShoot();
         hook.SetActive(true);
         hook.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         hook.transform.position = transform.position;
@@ -84,7 +116,15 @@ public class ActorScript : MonoBehaviour
 
     private void OnShoot(InputValue inputValue) 
     {
+        if(firingRocket && rocketTimer < rocketDelay)
+        {
+            return;
+        }
+        firingRocket = true;
+
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayRocketFire();
         var shoot = Instantiate(bullet, transform.position, crosshair.transform.rotation);
+        shoot.layer = gameObject.layer;
 
         Vector2 target = crosshair.transform.position;
         if (!crosshair.GetComponent<SpriteRenderer>().enabled)
