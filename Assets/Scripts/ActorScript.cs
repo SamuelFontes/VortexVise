@@ -24,6 +24,7 @@ public class ActorScript : MonoBehaviour
     private float horizontal = 0;
     private float rocketTimer = 0;
     private bool firingRocket = false;
+    private GameObject playerCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +45,7 @@ public class ActorScript : MonoBehaviour
         }
 
         cam.GetComponent<CameraScript>().target = transform;
+        playerCamera = cam;
         Utils.numberOfPlayers++;
     }
 
@@ -121,10 +123,12 @@ public class ActorScript : MonoBehaviour
             return;
         }
         firingRocket = true;
+        //Gamepad.current.SetMotorSpeeds(0.123f, 0.234f);
 
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayRocketFire();
         var shoot = Instantiate(bullet, transform.position, crosshair.transform.rotation);
         shoot.layer = gameObject.layer;
+        shoot.GetComponent<RocketScript>().gamepad = Gamepad.current;
 
         Vector2 target = crosshair.transform.position;
         if (!crosshair.GetComponent<SpriteRenderer>().enabled)

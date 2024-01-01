@@ -163,3 +163,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionDuration: 0.3
   explosionSize: 10
+  explosion: {fileID: 1381288617531446802, guid: 8958f1e49c0d5844c8c6905d39a8c0cd, type: 3}
