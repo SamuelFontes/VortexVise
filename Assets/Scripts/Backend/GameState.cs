@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public static class GameState
+public class GameState
 {
-    public static Gamemode gamemode = Gamemode.MainMenu;
-    public static List<Player> localPlayers = new List<Player>(); 
-    public static List<Team> teams = new List<Team>();
+    public Gamemode Gamemode = Gamemode.MainMenu;
+    public List<Player> LocalPlayers = new List<Player>(); 
+    public List<Team> Teams = new List<Team>();
 
-    public static int GetNumberOfLocalPlayers()
+    public int GetNumberOfLocalPlayers()
     {
-        return localPlayers.Count;
+        return LocalPlayers.Count;
     }
 
 }

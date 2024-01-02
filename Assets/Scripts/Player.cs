@@ -2,8 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerScript : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public string Id;
     public GameObject hook;
     public GameObject crosshair;
     public GameObject bullet;
@@ -13,6 +14,7 @@ public class PlayerScript : MonoBehaviour
     public float maxMoveSpeed = 20;
     public float hookShootForce = 100;
     public float rocketDelay = 1f;
+    public Teams Team { get; set; } 
 
 
     private Rigidbody2D rigidbody;
@@ -24,12 +26,9 @@ public class PlayerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        name = GetInstanceID().ToString();
+        Id = GetInstanceID().ToString();
         rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        InstantiateCamera();
-        var player = new Player(name, playerCamera.name);
-        GameLogic.AddLocalPlayer(player);
     }
 
     // Update is called once per frame
@@ -161,10 +160,4 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void InstantiateCamera()
-    {
-        playerCamera = Instantiate(camera);
-        playerCamera.name = GetInstanceID().ToString();
-        playerCamera.GetComponent<CameraScript>().target = transform;
-    }
 }
