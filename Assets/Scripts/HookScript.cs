@@ -33,6 +33,7 @@ public class HookScript : MonoBehaviour
             {
                 playerRigidbody.velocity += fromPlayerToHook * hookForce * Time.deltaTime;
             }
+            // TODO: else make some streching sound
 
         }
     }
@@ -48,6 +49,7 @@ public class HookScript : MonoBehaviour
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
         //lineRenderer.positionCount = 3;
+        // TODO: Create animation and wip sound when shooting and retracting when released
         Vector3[] positions = {transform.position, player.transform.position, new Vector2(0,0)};
         lineRenderer.SetPositions(positions);
 
