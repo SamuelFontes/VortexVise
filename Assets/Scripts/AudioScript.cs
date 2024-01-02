@@ -43,6 +43,10 @@ public class AudioScript : MonoBehaviour
     {
         transform.Find("Death").GetComponent<AudioSource>().Play();
     }
+    public void PlayElastic()
+    {
+        transform.Find("Elastic").GetComponent<AudioSource>().Play();
+    }
 
  
  

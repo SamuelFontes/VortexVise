@@ -78,7 +78,7 @@ public class GameLogic : MonoBehaviour
             }
         }
 
-        var cameraDistance = 12;
+        var cameraDistance = 15;
         // Check number of players
         switch (GameState.GetNumberOfLocalPlayers())
         {

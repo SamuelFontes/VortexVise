@@ -35,6 +35,7 @@ public class HookScript : MonoBehaviour
             }
             // TODO: else make some streching sound
 
+
         }
     }
 
@@ -42,6 +43,7 @@ public class HookScript : MonoBehaviour
     {
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookHit();
         rigidbody.bodyType = RigidbodyType2D.Static;
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayElastic();
         
     }
 
