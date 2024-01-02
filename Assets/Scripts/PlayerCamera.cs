@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour
+public class PlayerCamera : MonoBehaviour
 {
     // FIXME: change levelborders accoding to level selected
     public Transform target;
@@ -57,14 +57,6 @@ public class CameraScript : MonoBehaviour
         targetPosition += offset;
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
-    }
-
-    public void SetupCamera(Rect rect, int orthographicSize, bool enableAudio)
-    {
-        cam.rect = rect;
-        cam.orthographicSize = orthographicSize;
-        // Setup audio listener, it should have only one
-        GetComponent<AudioListener>().enabled = enableAudio;
     }
 
 }

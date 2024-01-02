@@ -4169,6 +4169,7 @@ GameObject:
   - component: {fileID: 909569882240491838}
   - component: {fileID: 1785913898975356953}
   - component: {fileID: 7796992129057650926}
+  - component: {fileID: 4981230071625592818}
   m_Layer: 0
   m_Name: Sky Archipelago
   m_TagString: Untagged
@@ -4306,6 +4307,22 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &4981230071625592818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8775279246214175894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02cec47b43ac39944947afb26f86388f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: First map
+  gamemode: 1
+  topRight: {x: 0, y: 0}
+  bottomLeft: {x: 0, y: 0}
 --- !u!1 &8911860605187272917
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class GameState
+public static class GameState
 {
-    public Gamemode Gamemode = Gamemode.MainMenu;
-    public List<Player> LocalPlayers = new List<Player>(); 
-    public List<Team> Teams = new List<Team>();
+    public static Gamemode Gamemode = Gamemode.MainMenu;
+    public static List<Player> LocalPlayers = new List<Player>(); 
+    public static List<Team> Teams = new List<Team>();
+    public static Map CurrentMap; 
 
-    public int GetNumberOfLocalPlayers()
+    public static int GetNumberOfLocalPlayers()
     {
         return LocalPlayers.Count;
     }
