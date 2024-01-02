@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     private GameObject playerCamera;
     private Gamepad gamepad;
     private float rumbleTimer = 0.3f;
+    private bool canDoubleJump = true;
+    private float doubleJumpTimer = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,18 +67,37 @@ public class Player : MonoBehaviour
             rocketTimer = 0;
             firingRocket = false;
         }
+        if (!canDoubleJump && (rigidbody.velocity.y == 0 || (hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static))) 
+            doubleJumpTimer += Time.deltaTime;
+
+        if(doubleJumpTimer > 1f)
+        {
+            canDoubleJump = true;
+            doubleJumpTimer = 0;
+        }
     }
 
     private void OnJump()
     {
-        // FIXME: It should only allow the player to jump when the hook is attached
-        if (rigidbody.velocity.y == 0 || hook.active)
+        if (rigidbody.velocity.y == 0 || (hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static))
         {
             if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
+            {
                 GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
+                if(horizontal > 0)
+                    rigidbody.velocity += Vector2.right * jumpForce; 
+                else
+                    rigidbody.velocity += Vector2.left * jumpForce; 
+            }
             hook.SetActive(false);
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
             rigidbody.velocity += Vector2.up * jumpForce; 
+        }
+        else if (canDoubleJump)
+        {
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
+            rigidbody.velocity += Vector2.up * jumpForce;
+            canDoubleJump = false;
         }
     }
 
@@ -191,12 +212,17 @@ public class Player : MonoBehaviour
     {
         if (rigidbody.velocity.x < maxMoveSpeed && rigidbody.velocity.x > maxMoveSpeed * -1) 
         {
+            //var gun = transform.GetChild(2).gameObject;
             if(horizontal > 0)
             {
                 spriteRenderer.flipX = true;
+                //gun.GetComponent<SpriteRenderer>().flipX = false;
+                //gun.transform.position = new Vector2(transform.position.x+1.6f, gun.transform.position.y);
                 rigidbody.velocity += Vector2.right * (moveSpeed * Time.deltaTime * horizontal);
             } else if(horizontal < 0)
             {
+                //gun.GetComponent<SpriteRenderer>().flipX = true;
+                //gun.transform.position = new Vector2(transform.position.x-1.6f, gun.transform.position.y);
                 spriteRenderer.flipX = false;
                 rigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontal * -1));
             }
