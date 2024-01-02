@@ -59,16 +59,17 @@ public class RocketScript : MonoBehaviour
         }
         if (collision.gameObject.tag == "Player")
         {
+
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayDeath();
             Instantiate(explosion, collision.gameObject.transform.position,collision.gameObject.transform.rotation);
             explosion.GetComponent<ParticleSystem>().Play();
 
             collision.gameObject.transform.position = new Vector3(0, 0);
 
-            if (collision.gameObject.layer == 11)
-                Utils.playerOneScore++;
-            else
-                Utils.playerTwoScore++;
+            //if (collision.gameObject.layer == 11)
+                //Utils.playerOneScore++;
+            //else
+                //Utils.playerTwoScore++;
         }
         // TODO: Apply damage to things here
 

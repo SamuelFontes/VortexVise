@@ -59,6 +59,12 @@ public class CameraScript : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
 
-
+    public void SetupCamera(Rect rect, int orthographicSize, bool enableAudio)
+    {
+        cam.rect = rect;
+        cam.orthographicSize = orthographicSize;
+        // Setup audio listener, it should have only one
+        GetComponent<AudioListener>().enabled = enableAudio;
+    }
 
 }

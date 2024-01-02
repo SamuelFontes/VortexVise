@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ActorScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
     public GameObject hook;
     public GameObject crosshair;
@@ -18,7 +15,6 @@ public class ActorScript : MonoBehaviour
     public float rocketDelay = 1f;
 
 
-    private PlayerControls playerControls;
     private Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
     private float horizontal = 0;
@@ -28,31 +24,19 @@ public class ActorScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerControls = new PlayerControls();
+        name = GetInstanceID().ToString();
         rigidbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        var cam = Instantiate(camera);
-        if(Utils.numberOfPlayers == 0)
-        {
-            Utils.InitiateMultiplayer();
-            gameObject.layer = 10;
-            cam.GetComponent<Camera>().rect = new Rect(0, 0, 0.5f, 1);
-        } else if(Utils.numberOfPlayers == 1)
-        {
-            gameObject.layer = 11;
-            cam.GetComponent<Camera>().rect = new Rect(0.5f, 0, 0.5f, 1);
-            cam.GetComponent<AudioListener>().enabled = false;
-        }
-
-        cam.GetComponent<CameraScript>().target = transform;
-        playerCamera = cam;
-        Utils.numberOfPlayers++;
+        InstantiateCamera();
+        var player = new Player(name, playerCamera.name);
+        GameLogic.AddLocalPlayer(player);
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
+
         Animate();
 
         if(firingRocket)
@@ -68,6 +52,7 @@ public class ActorScript : MonoBehaviour
 
     private void OnJump()
     {
+        // FIXME: It should only allow the player to jump when the hook is attached
         if (rigidbody.velocity.y == 0 || hook.active)
         {
             hook.SetActive(false);
@@ -174,5 +159,12 @@ public class ActorScript : MonoBehaviour
         {
             GetComponent<Animator>().Play("FatsoIdle");
         }
+    }
+
+    private void InstantiateCamera()
+    {
+        playerCamera = Instantiate(camera);
+        playerCamera.name = GetInstanceID().ToString();
+        playerCamera.GetComponent<CameraScript>().target = transform;
     }
 }

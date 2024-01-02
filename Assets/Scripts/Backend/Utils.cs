@@ -10,9 +10,6 @@ using UnityEngine.UI;
 
 public static class Utils
 {
-    public static int numberOfPlayers = 0;
-    public static int playerOneScore = 0;
-    public static int playerTwoScore = 0;
     public static Vector2 GetMousePosition()
     {
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -20,10 +17,5 @@ public static class Utils
     }
     public static void InitiateMultiplayer()
     {
-        var menuThings = GameObject.FindGameObjectsWithTag("MainMenu");
-        foreach (var thing in menuThings)
-        {
-            Object.Destroy(thing);
-        }
     }
 }
