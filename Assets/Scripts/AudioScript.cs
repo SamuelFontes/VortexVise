@@ -6,12 +6,25 @@ public class AudioScript : MonoBehaviour
 {
     public void PlayHookHit()
     {
-
         transform.Find("HookHit").GetComponent<AudioSource>().Play();
     }
     public void PlayHookShoot()
     {
         transform.Find("HookShoot").GetComponent<AudioSource>().Play();
+    }
+    public void PlayHookRetract()
+    {
+        transform.Find("HookRetract").GetComponent<AudioSource>().Play();
+    }
+    public void PlayHookDelay()
+    {
+        transform.Find("HookDelay").GetComponent<AudioSource>().Play();
+    }
+    public void StopHookShoot()
+    {
+        var audio = transform.Find("HookShoot").GetComponent<AudioSource>();
+        if(audio.isPlaying)
+            StartCoroutine (FadeOut (audio, 0.2f));
     }
     public void PlayRocketFire()
     {
@@ -30,4 +43,21 @@ public class AudioScript : MonoBehaviour
     {
         transform.Find("Death").GetComponent<AudioSource>().Play();
     }
+
+ 
+ 
+    public IEnumerator FadeOut (AudioSource audioSource, float FadeTime) {
+        float startVolume = audioSource.volume;
+ 
+        while (audioSource.volume > 0) {
+            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
+ 
+            yield return null;
+        }
+ 
+        audioSource.Stop();
+        audioSource.volume = startVolume;
+    }
+ 
 }
+ 

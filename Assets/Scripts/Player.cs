@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private float horizontal = 0;
     private float rocketTimer = 0;
     private bool firingRocket = false;
+    private float hookTimer = 0.2f;
     private GameObject playerCamera;
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,8 @@ public class Player : MonoBehaviour
 
         Animate();
 
+        if(hookTimer < 0.2f)
+            hookTimer += Time.deltaTime;
         if(firingRocket)
         {
             rocketTimer += Time.deltaTime;
@@ -54,6 +57,8 @@ public class Player : MonoBehaviour
         // FIXME: It should only allow the player to jump when the hook is attached
         if (rigidbody.velocity.y == 0 || hook.active)
         {
+            if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
+                GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
             hook.SetActive(false);
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
             rigidbody.velocity += Vector2.up * jumpForce; 
@@ -69,10 +74,23 @@ public class Player : MonoBehaviour
     {
         if(input.Get() == null)
         {
+            if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
+                GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
             // This is the release of the button
-            hook.SetActive(false);
+            if (hook.active)
+            {
+                if(hookTimer < 0.2f)
+                    GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().StopHookShoot();
+                hook.SetActive(false);
+            }
             return;
         }
+        if(hookTimer < 0.2f)
+        {
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookDelay();
+            return;
+        }
+        hookTimer = 0;
 
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookShoot();
         hook.SetActive(true);

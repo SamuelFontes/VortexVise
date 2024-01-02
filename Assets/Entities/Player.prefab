@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6172291fd6d90489d0d2c0d7985f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Id: 
   hook: {fileID: 8295864247385400770}
   crosshair: {fileID: 8943341183419759886}
   bullet: {fileID: 2553905424310049896, guid: 434fc54ee3adb2c43be9a42fcb28170d, type: 3}

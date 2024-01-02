@@ -10,6 +10,7 @@ public class HookScript : MonoBehaviour
 
     public float hookForce = 10;
     public float hookPullOffset = 5;
+    public float hookAnimationTimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,8 @@ public class HookScript : MonoBehaviour
     private void RenderRope()
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        Vector3[] positions = {transform.position, player.transform.position};
+        //lineRenderer.positionCount = 3;
+        Vector3[] positions = {transform.position, player.transform.position, new Vector2(0,0)};
         lineRenderer.SetPositions(positions);
 
     }

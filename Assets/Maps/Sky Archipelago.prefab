@@ -4170,7 +4170,7 @@ GameObject:
   - component: {fileID: 1785913898975356953}
   - component: {fileID: 7796992129057650926}
   - component: {fileID: 4981230071625592818}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sky Archipelago
   m_TagString: Untagged
   m_Icon: {fileID: 0}
