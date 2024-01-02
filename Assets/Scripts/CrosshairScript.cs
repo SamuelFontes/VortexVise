@@ -13,7 +13,6 @@ public class CrosshairScript : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
     }
     private void Update()
     {
@@ -24,7 +23,17 @@ public class CrosshairScript : MonoBehaviour
     void OnAim(InputValue inputValue)
     {
         var targetDirection = inputValue.Get<Vector2>();
+        targetDirection.y = QuantizeAxis(targetDirection.y);
+        targetDirection.x = QuantizeAxis(targetDirection.x);
+
+        if (targetDirection.y == 0 && (targetDirection.x == 1 || targetDirection.x == -1))
+            targetDirection.y++;
+
+
+        //if (targetDirection == Vector2.zero) return;
+
         Vector2 offset = (Vector2)player.transform.position + (targetDirection * crossHairDistance);
+
 
         if((Vector2)player.transform.position == offset)
         {
@@ -37,6 +46,12 @@ public class CrosshairScript : MonoBehaviour
 
         transform.position = new Vector2(offset.x, offset.y);
         useMouse = false;
+    }
+    int QuantizeAxis ( float input)
+    {
+        if (input < -0.3f) return -1;
+        if (input > 0.3f) return 1;
+        return 0;
     }
 
     void OnMousePosition(InputValue inputValue)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour
     private bool firingRocket = false;
     private float hookTimer = 0.2f;
     private GameObject playerCamera;
+    private Gamepad gamepad;
+    private float rumbleTimer = 0.3f;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,8 +42,20 @@ public class Player : MonoBehaviour
 
         Animate();
 
-        if(hookTimer < 0.2f)
+        if (hookTimer < 0.2f)
+        {
             hookTimer += Time.deltaTime;
+        }
+        if (gamepad != null && rumbleTimer >= 0.3f)
+        {
+            gamepad.SetMotorSpeeds(0,0);
+            gamepad = null;
+        }
+        else
+        {
+            rumbleTimer += Time.deltaTime;
+        }
+
         if(firingRocket)
         {
             rocketTimer += Time.deltaTime;
@@ -72,7 +87,7 @@ public class Player : MonoBehaviour
 
     private void OnHook(InputValue input)
     {
-        if(input.Get() == null)
+        if(input.Get() == null) // FIXME: This don't work well with the trigger
         {
             if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
                 GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
@@ -90,7 +105,13 @@ public class Player : MonoBehaviour
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookDelay();
             return;
         }
+
         hookTimer = 0;
+        gamepad = Gamepad.current;
+        gamepad.SetMotorSpeeds(0, 0.5f);
+        rumbleTimer = 0;
+
+
 
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookShoot();
         hook.SetActive(true);
@@ -116,6 +137,23 @@ public class Player : MonoBehaviour
         fromPlayerToHook.Normalize();
 
         hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
+    }
+    private IEnumerator GamepadRumble(float lowFrequency, float highFrequency, float time)
+    {
+        var gamepad = Gamepad.current;
+        gamepad.SetMotorSpeeds(lowFrequency, highFrequency);
+        while (time < 1f) {
+            time += Time.deltaTime;
+ 
+            yield return null;
+        }
+        gamepad.SetMotorSpeeds(0f, 0f);
+    }
+
+    private static void Rumble(float motor, float motor2, float time) 
+    {
+ 
+ 
     }
 
     private void OnShoot(InputValue inputValue) 
