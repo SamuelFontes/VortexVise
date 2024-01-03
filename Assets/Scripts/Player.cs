@@ -129,7 +129,8 @@ public class Player : MonoBehaviour
 
         hookTimer = 0;
         gamepad = Gamepad.current;
-        gamepad.SetMotorSpeeds(0, 0.5f);
+        if(gamepad != null)
+            gamepad.SetMotorSpeeds(0, 0.5f);
         rumbleTimer = 0;
 
 
@@ -158,17 +159,6 @@ public class Player : MonoBehaviour
         fromPlayerToHook.Normalize();
 
         hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
-    }
-    private IEnumerator GamepadRumble(float lowFrequency, float highFrequency, float time)
-    {
-        var gamepad = Gamepad.current;
-        gamepad.SetMotorSpeeds(lowFrequency, highFrequency);
-        while (time < 1f) {
-            time += Time.deltaTime;
- 
-            yield return null;
-        }
-        gamepad.SetMotorSpeeds(0f, 0f);
     }
 
     private static void Rumble(float motor, float motor2, float time) 
