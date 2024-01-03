@@ -31,9 +31,10 @@ public class GameLogic : MonoBehaviour
         // TODO: Improve this when menu exist
         var playerObject = playerInput.gameObject;
         var player = playerObject.GetComponent<Player>();
+        var crosshair = playerObject.transform.GetChild(1);
 
         var camera = Instantiate(playerCamera);
-        camera.GetComponent<PlayerCamera>().target = player.transform;
+        camera.GetComponent<PlayerCamera>().target = crosshair.transform;
 
         player.camera = camera;
 

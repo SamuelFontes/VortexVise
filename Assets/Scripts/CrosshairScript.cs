@@ -26,9 +26,9 @@ public class CrosshairScript : MonoBehaviour
         targetDirection.y = QuantizeAxis(targetDirection.y);
         targetDirection.x = QuantizeAxis(targetDirection.x);
 
+
         if (targetDirection.y == 0 && (targetDirection.x == 1 || targetDirection.x == -1))
             targetDirection.y++;
-
 
         //if (targetDirection == Vector2.zero) return;
 
@@ -49,7 +49,7 @@ public class CrosshairScript : MonoBehaviour
     }
     int QuantizeAxis ( float input)
     {
-        if (input < -0.3f) return -1;
+        if (input < -0.5f) return -1;
         if (input > 0.3f) return 1;
         return 0;
     }
