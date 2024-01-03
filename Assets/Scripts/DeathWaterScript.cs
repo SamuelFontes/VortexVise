@@ -20,7 +20,7 @@ public class DeathWaterScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayDeath();
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayDeath();
 
             collision.gameObject.transform.position = new Vector3(0, 0);
             //if (collision.gameObject.layer == 11)

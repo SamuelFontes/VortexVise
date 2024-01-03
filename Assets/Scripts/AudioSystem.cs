@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioScript : MonoBehaviour
+public class AudioSystem : MonoBehaviour
 {
+    //FIXME: Please build a better SoundSystem
     public void PlayHookHit()
     {
         transform.Find("HookHit").GetComponent<AudioSource>().Play();

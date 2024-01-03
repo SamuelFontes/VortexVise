@@ -9,6 +9,7 @@ public class CrosshairScript : MonoBehaviour
     public float crossHairDistance = 4.5f;
 
     private bool useMouse = false;
+    public bool aiming = false;
 
 
     private void Start()
@@ -22,30 +23,24 @@ public class CrosshairScript : MonoBehaviour
     }
     void OnAim(InputValue inputValue)
     {
-        var targetDirection = inputValue.Get<Vector2>();
-        targetDirection.y = QuantizeAxis(targetDirection.y);
-        targetDirection.x = QuantizeAxis(targetDirection.x);
-
-
-        if (targetDirection.y == 0 && (targetDirection.x == 1 || targetDirection.x == -1))
-            targetDirection.y++;
-
-        //if (targetDirection == Vector2.zero) return;
-
-        Vector2 offset = (Vector2)player.transform.position + (targetDirection * crossHairDistance);
-
-
-        if((Vector2)player.transform.position == offset)
+        if (!aiming)
         {
-            GetComponent<SpriteRenderer>().enabled = false;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().enabled = true;
-        }
+            var targetDirection = inputValue.Get<Vector2>();
 
-        transform.position = new Vector2(offset.x, offset.y);
-        useMouse = false;
+            // This is for using the hook, only aim in 8ish directions
+            targetDirection.y = QuantizeAxis(targetDirection.y);
+            targetDirection.x = QuantizeAxis(targetDirection.x);
+
+
+            // When moving foward it will hook upwards
+            if (targetDirection.y == 0 && (targetDirection.x == 1 || targetDirection.x == -1))
+                targetDirection.y++;
+
+            Vector2 offset = (Vector2)player.transform.position + (targetDirection * crossHairDistance);
+
+
+            transform.position = new Vector2(offset.x, offset.y);
+        }
     }
     int QuantizeAxis ( float input)
     {

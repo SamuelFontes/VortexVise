@@ -51,7 +51,7 @@ public class RocketScript : MonoBehaviour
     {
         if (!exploded)
         {
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayRocketHit();
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayRocketHit();
             rigidbody.bodyType = RigidbodyType2D.Static;
             exploded = true;
             //Gamepad.current.SetMotorSpeeds(0.123f, 0.234f);
@@ -60,7 +60,7 @@ public class RocketScript : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
 
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayDeath();
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayDeath();
             Instantiate(explosion, collision.gameObject.transform.position,collision.gameObject.transform.rotation);
             explosion.GetComponent<ParticleSystem>().Play();
 

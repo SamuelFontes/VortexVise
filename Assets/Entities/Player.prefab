@@ -55,13 +55,11 @@ MonoBehaviour:
   Id: 
   hook: {fileID: 8295864247385400770}
   crosshair: {fileID: 8943341183419759886}
-  bullet: {fileID: 2553905424310049896, guid: 434fc54ee3adb2c43be9a42fcb28170d, type: 3}
   camera: {fileID: 4528950061139662844, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
   jumpForce: 30
   moveSpeed: 80
   maxMoveSpeed: 20
   hookShootForce: 70
-  rocketDelay: 0.5
 --- !u!50 &5455731206794010221
 Rigidbody2D:
   serializedVersion: 4
@@ -692,3 +690,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 5553962057996285219}
   crossHairDistance: 4.5
+  aiming: 0

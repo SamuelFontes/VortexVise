@@ -6,71 +6,50 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public string Id;
+    public Teams Team { get; set; } 
+
     public GameObject hook;
     public GameObject crosshair;
-    public GameObject bullet;
-    public GameObject camera;
+    public new GameObject camera;
+    
+    // Setup player movement
     public float jumpForce = 25;
     public float moveSpeed = 80;
     public float maxMoveSpeed = 20;
+
     public float hookShootForce = 100;
-    public float rocketDelay = 1f;
-    public Teams Team { get; set; } 
+    private float hookTimer = 0.2f; 
 
-
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D playerRigidbody;
+    private Rigidbody2D hookRigidbody;
     private SpriteRenderer spriteRenderer;
-    private float horizontal = 0;
-    private float rocketTimer = 0;
-    private bool firingRocket = false;
-    private float hookTimer = 0.2f;
-    private GameObject playerCamera;
-    private Gamepad gamepad;
-    private float rumbleTimer = 0.3f;
+
+    private float horizontalMovement = 0;
+
     private bool canDoubleJump = true;
     private float doubleJumpTimer = 0f;
-    // Start is called before the first frame update
+
     void Start()
     {
         Id = GetInstanceID().ToString();
-        rigidbody = GetComponent<Rigidbody2D>();
+        playerRigidbody = GetComponent<Rigidbody2D>();
+        hookRigidbody = hook.GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Move();
 
         Animate();
 
-        if (hookTimer < 0.2f)
-        {
-            hookTimer += Time.deltaTime;
-        }
-        if (gamepad != null && rumbleTimer >= 0.3f)
-        {
-            gamepad.SetMotorSpeeds(0,0);
-            gamepad = null;
-        }
-        else
-        {
-            rumbleTimer += Time.deltaTime;
-        }
+        if (hookTimer < 0.2f) 
+            hookTimer += Time.deltaTime; 
 
-        if(firingRocket)
-        {
-            rocketTimer += Time.deltaTime;
-        }
-        if(firingRocket && rocketTimer > rocketDelay)
-        {
-            rocketTimer = 0;
-            firingRocket = false;
-        }
-        if (!canDoubleJump && (rigidbody.velocity.y == 0 || (hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static))) 
+        if (!canDoubleJump && (playerRigidbody.velocity.y == 0 || IsHookAttached())) 
             doubleJumpTimer += Time.deltaTime;
 
-        if(doubleJumpTimer > 1f)
+        if(doubleJumpTimer > 0.2f)
         {
             canDoubleJump = true;
             doubleJumpTimer = 0;
@@ -79,142 +58,99 @@ public class Player : MonoBehaviour
 
     private void OnJump()
     {
-        if (rigidbody.velocity.y == 0 || (hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static))
+        if (playerRigidbody.velocity.y == 0 || IsHookAttached())
         {
-            if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
+            if(IsHookAttached())
             {
-                GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
-                if(horizontal > 0)
-                    rigidbody.velocity += Vector2.right * jumpForce; 
+                GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
+                if(horizontalMovement > 0)
+                    playerRigidbody.velocity += Vector2.right * jumpForce; 
                 else
-                    rigidbody.velocity += Vector2.left * jumpForce; 
+                    playerRigidbody.velocity += Vector2.left * jumpForce; 
             }
             hook.SetActive(false);
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
-            rigidbody.velocity += Vector2.up * jumpForce; 
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayJump();
+            playerRigidbody.velocity += Vector2.up * jumpForce; 
         }
         else if (canDoubleJump)
         {
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayJump();
-            rigidbody.velocity += Vector2.up * jumpForce;
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayJump();
+            playerRigidbody.velocity += Vector2.up * jumpForce;
             canDoubleJump = false;
         }
     }
 
     private void OnMove(InputValue inputValue)
     {
-        horizontal = inputValue.Get<Vector2>().x;
+        horizontalMovement = inputValue.Get<Vector2>().x;
     }
 
     private void OnHook(InputValue input)
     {
-        if(input.Get() == null) // FIXME: This don't work well with the trigger
+        if(input.Get() == null) 
         {
-            if(hook.active && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
-                GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookRetract();
+            // Hook button is being released
+            if(IsHookAttached())
+                GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
+
             // This is the release of the button
-            if (hook.active)
+            if (hook.activeInHierarchy)
             {
-                if(hookTimer < 0.2f)
-                    GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().StopHookShoot();
+                if(hookTimer < 0.2f) // Hook shooting, stop sound effect
+                    GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().StopHookShoot();
                 hook.SetActive(false);
             }
             return;
         }
         if(hookTimer < 0.2f)
         {
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookDelay();
+            // Hook on delay, can't shoot again
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookDelay();
             return;
         }
 
+        // Start hook delay timer
         hookTimer = 0;
-        gamepad = Gamepad.current;
-        if(gamepad != null)
-            gamepad.SetMotorSpeeds(0, 0.5f);
-        rumbleTimer = 0;
 
-
-
-        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayHookShoot();
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookShoot();
         hook.SetActive(true);
-        hook.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        hookRigidbody.bodyType = RigidbodyType2D.Dynamic;
         hook.transform.position = transform.position;
 
-
         Vector2 hookTarget = crosshair.transform.position;
-        if (!crosshair.GetComponent<SpriteRenderer>().enabled)
+        if (hookTarget == (Vector2)transform.position)
         {
             // This means there is no crosshair, so shoot upwards
             hookTarget.y += 4.5f;
-            if (spriteRenderer.flipX)
+            if (spriteRenderer.flipX) // This can't be the horizontal movement because it should work when the dude is not moving
                 hookTarget.x += 4.5f; // Loking to the right
             else
                 hookTarget.x -= 4.5f;
-
-
         }
-
 
         Vector2 fromPlayerToHook = hookTarget - (Vector2)transform.position ;
         fromPlayerToHook.Normalize();
 
+        // Shoot the hook
         hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
-    }
-
-    private static void Rumble(float motor, float motor2, float time) 
-    {
- 
- 
     }
 
     private void OnShoot(InputValue inputValue) 
     {
-        if(firingRocket && rocketTimer < rocketDelay)
-        {
-            return;
-        }
-        firingRocket = true;
-        //Gamepad.current.SetMotorSpeeds(0.123f, 0.234f);
-
-        GameObject.FindWithTag("AudioSystem").GetComponent<AudioScript>().PlayRocketFire();
-        var shoot = Instantiate(bullet, transform.position, crosshair.transform.rotation);
-        shoot.layer = gameObject.layer;
-        shoot.GetComponent<RocketScript>().gamepad = Gamepad.current;
-
-        Vector2 target = crosshair.transform.position;
-        if (!crosshair.GetComponent<SpriteRenderer>().enabled)
-        {
-            // This means there is no crosshair, so shoot upwards
-            target.y += 4.5f;
-            if (spriteRenderer.flipX)
-                target.x += 4.5f; // Loking to the right
-            else
-                target.x -= 4.5f;
-        }
-
-        Vector2 fromPlayerToTarget = target - (Vector2)transform.position ;
-        fromPlayerToTarget.Normalize();
-
-        shoot.GetComponent<Rigidbody2D>().velocity = fromPlayerToTarget * 100;
     }
 
     private void Move()
     {
-        if (rigidbody.velocity.x < maxMoveSpeed && rigidbody.velocity.x > maxMoveSpeed * -1) 
+        if (playerRigidbody.velocity.x < maxMoveSpeed && playerRigidbody.velocity.x > maxMoveSpeed * -1) 
         {
-            //var gun = transform.GetChild(2).gameObject;
-            if(horizontal > 0)
+            if(horizontalMovement > 0)
             {
                 spriteRenderer.flipX = true;
-                //gun.GetComponent<SpriteRenderer>().flipX = false;
-                //gun.transform.position = new Vector2(transform.position.x+1.6f, gun.transform.position.y);
-                rigidbody.velocity += Vector2.right * (moveSpeed * Time.deltaTime * horizontal);
-            } else if(horizontal < 0)
+                playerRigidbody.velocity += Vector2.right * (moveSpeed * Time.deltaTime * horizontalMovement);
+            } else if(horizontalMovement < 0)
             {
-                //gun.GetComponent<SpriteRenderer>().flipX = true;
-                //gun.transform.position = new Vector2(transform.position.x-1.6f, gun.transform.position.y);
                 spriteRenderer.flipX = false;
-                rigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontal * -1));
+                playerRigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontalMovement * -1));
             }
         } 
     } 
@@ -222,7 +158,7 @@ public class Player : MonoBehaviour
     private void Animate()
     {
         // TODO: Make support for multiple skins
-        if(horizontal != 0)
+        if(horizontalMovement != 0)
         {
             GetComponent<Animator>().Play("FatsoRunning");
         }
@@ -232,4 +168,8 @@ public class Player : MonoBehaviour
         }
     }
 
+    private bool IsHookAttached()
+    {
+        return hook.activeInHierarchy && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static;
+    }
 }
