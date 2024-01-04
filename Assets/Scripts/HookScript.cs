@@ -5,26 +5,35 @@ using UnityEngine.InputSystem;
 
 public class HookScript : MonoBehaviour
 {
-    public Rigidbody2D rigidbody;
+    public new Rigidbody2D rigidbody;
     public GameObject player;
     public Rigidbody2D playerRigidbody;
 
     public float hookForce = 10;
     public float hookPullOffset = 5;
-    public float hookAnimationTimer = 0;
 
-    private float originalPullOffset;
-    private float offsetChanger;
+    float originalPullOffset;
+    float offsetChanger;
+    Gamepad gamepad;
+
     // Start is called before the first frame update
     void Start()
     {
         playerRigidbody = player.GetComponent<Rigidbody2D>();
         originalPullOffset = hookPullOffset;
+        gamepad = player.GetComponent<PlayerInput>().GetDevice<Gamepad>();
     }
 
+    float gambiSoundTimer = 0; // TODO: PLEASE MOVE THIS TO SOUND SYSTEM, it should have an option to only play the sound after some time
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(gambiSoundTimer);
+        if (gambiSoundTimer > 1f)
+            gambiSoundTimer = 0; 
+        else if(gambiSoundTimer > 0)
+            gambiSoundTimer += Time.deltaTime;
+
         RenderRope();
         if(rigidbody.bodyType == RigidbodyType2D.Static)
         {
@@ -33,7 +42,18 @@ public class HookScript : MonoBehaviour
             float distance = Vector2.Distance(transform.position, player.transform.position);
 
             if((hookPullOffset > originalPullOffset && offsetChanger < 0) || (hookPullOffset < originalPullOffset * 3 && offsetChanger > 0))
+            {
                 hookPullOffset += offsetChanger * Time.deltaTime * 10;
+
+                if(gambiSoundTimer == 0) // TODO: PLEASE MOVE THIS TO SOUND SYSTEM, it should have an option to only play the sound after some time
+                {
+                    GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();// TODO: PLEASE MOVE THIS TO SOUND SYSTEM, it should have an option to only play the sound after some time
+                    gambiSoundTimer += Time.deltaTime;
+                }
+            }
+
+
+
 
             if (distance > hookPullOffset)
             {
@@ -43,13 +63,14 @@ public class HookScript : MonoBehaviour
         }
     }
 
-    private void OnMove(InputValue inputValue)
+    void OnMove(InputValue inputValue)
     {
         offsetChanger = inputValue.Get<Vector2>().y * -1;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
+        Utils.GamepadRumble(gamepad,0f,1f,0.2f);
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookHit();
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
         rigidbody.bodyType = RigidbodyType2D.Static;
@@ -57,7 +78,7 @@ public class HookScript : MonoBehaviour
         
     }
 
-    private void RenderRope()
+    void RenderRope()
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
         Vector3[] positions = { transform.position, player.transform.position };

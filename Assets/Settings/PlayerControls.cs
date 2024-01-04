@@ -64,15 +64,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""MousePosition"",
-                    ""type"": ""Value"",
-                    ""id"": ""71c064c6-6418-4a2d-b31c-f5b732fcc86a"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""87d6eb12-a48d-41dd-8019-9bcaf87710ea"",
@@ -106,7 +97,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4de8ab3c-3aac-4817-9a4d-45ac88016e22"",
-                    ""path"": ""<Keyboard>/k"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""MouseAndKeyboard"",
@@ -215,6 +206,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""2b9b56b2-1473-4ae3-9193-5312ebd1d2e8"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""c262cc62-d715-496f-b88c-6b1dbfaab95a"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
@@ -311,6 +313,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac92b084-c729-491a-bd83-5e0133caceb3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -351,7 +364,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_ActorCombat_Move = m_ActorCombat.FindAction("Move", throwIfNotFound: true);
         m_ActorCombat_Hook = m_ActorCombat.FindAction("Hook", throwIfNotFound: true);
         m_ActorCombat_Aim = m_ActorCombat.FindAction("Aim", throwIfNotFound: true);
-        m_ActorCombat_MousePosition = m_ActorCombat.FindAction("MousePosition", throwIfNotFound: true);
         m_ActorCombat_Shoot = m_ActorCombat.FindAction("Shoot", throwIfNotFound: true);
         m_ActorCombat_Join = m_ActorCombat.FindAction("Join", throwIfNotFound: true);
     }
@@ -419,7 +431,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ActorCombat_Move;
     private readonly InputAction m_ActorCombat_Hook;
     private readonly InputAction m_ActorCombat_Aim;
-    private readonly InputAction m_ActorCombat_MousePosition;
     private readonly InputAction m_ActorCombat_Shoot;
     private readonly InputAction m_ActorCombat_Join;
     public struct ActorCombatActions
@@ -430,7 +441,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_ActorCombat_Move;
         public InputAction @Hook => m_Wrapper.m_ActorCombat_Hook;
         public InputAction @Aim => m_Wrapper.m_ActorCombat_Aim;
-        public InputAction @MousePosition => m_Wrapper.m_ActorCombat_MousePosition;
         public InputAction @Shoot => m_Wrapper.m_ActorCombat_Shoot;
         public InputAction @Join => m_Wrapper.m_ActorCombat_Join;
         public InputActionMap Get() { return m_Wrapper.m_ActorCombat; }
@@ -454,9 +464,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
-            @MousePosition.started += instance.OnMousePosition;
-            @MousePosition.performed += instance.OnMousePosition;
-            @MousePosition.canceled += instance.OnMousePosition;
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
@@ -479,9 +486,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
-            @MousePosition.started -= instance.OnMousePosition;
-            @MousePosition.performed -= instance.OnMousePosition;
-            @MousePosition.canceled -= instance.OnMousePosition;
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
@@ -529,7 +533,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnHook(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
-        void OnMousePosition(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
     }

@@ -24,7 +24,7 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Utils.UpdateGamepadRumble();
     }
     void OnPlayerJoined(PlayerInput playerInput)
     {
@@ -44,6 +44,7 @@ public class GameLogic : MonoBehaviour
     //TODO: Create add menu player, after exits menu add localplayer
     private void AddLocalPlayer(Player player)
     {
+
         GameState.LocalPlayers.Add(player);
 
         SetupCameras();
@@ -51,6 +52,15 @@ public class GameLogic : MonoBehaviour
             StartDeathMatch(); // FIXME: The gamemode shouldn't be changed when adding player, it should be set on the menu
 
         SetupPlayerTeam(player);
+        SetupMousePlayer(player, true);
+    }
+
+    private void SetupMousePlayer(Player player, bool isConnecting)
+    {
+        if(player.gameObject.GetComponent<PlayerInput>().currentControlScheme == "MouseAndKeyboard")
+        {
+           Cursor.visible = !isConnecting; 
+        }
     }
     public void RemoveLocalPlayer(Player player)
     {
@@ -58,6 +68,7 @@ public class GameLogic : MonoBehaviour
         GameState.LocalPlayers.Remove(p);
         SetupCameras();
         RemovePlayerFromTeam(player);
+        SetupMousePlayer(player, true);
     }
 
     private void SetupCameras()

@@ -42,15 +42,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "MousePosition",
-                    "type": "Value",
-                    "id": "71c064c6-6418-4a2d-b31c-f5b732fcc86a",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Shoot",
                     "type": "Button",
                     "id": "87d6eb12-a48d-41dd-8019-9bcaf87710ea",
@@ -84,7 +75,7 @@
                 {
                     "name": "",
                     "id": "4de8ab3c-3aac-4817-9a4d-45ac88016e22",
-                    "path": "<Keyboard>/k",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "MouseAndKeyboard",
@@ -193,6 +184,17 @@
                 },
                 {
                     "name": "",
+                    "id": "2b9b56b2-1473-4ae3-9193-5312ebd1d2e8",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c262cc62-d715-496f-b88c-6b1dbfaab95a",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -287,6 +289,17 @@
                     "processors": "",
                     "groups": "MouseAndKeyboard",
                     "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac92b084-c729-491a-bd83-5e0133caceb3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
