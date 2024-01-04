@@ -15,7 +15,6 @@ public class HookScript : MonoBehaviour
 
     private float originalPullOffset;
     private float offsetChanger;
-    private bool isAttached = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +53,6 @@ public class HookScript : MonoBehaviour
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookHit();
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
         rigidbody.bodyType = RigidbodyType2D.Static;
-        isAttached = true;
         hookPullOffset = originalPullOffset;
         
     }
