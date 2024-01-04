@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    // FIXME: change levelborders accoding to level selected
+    // TODO: Create camera shake method
     public Transform target;
     public float smoothTime = 0.25f;
 
@@ -59,5 +59,4 @@ public class PlayerCamera : MonoBehaviour
 
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
     }
-
 }

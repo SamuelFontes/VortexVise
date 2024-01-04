@@ -13,7 +13,7 @@ public class RocketScript : MonoBehaviour
     private float timer = 0f;
     private float rumbleTimer = 0f;
     private bool exploded = false;
-    private Rigidbody2D rigidbody;
+    private new Rigidbody2D rigidbody;
     private SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update

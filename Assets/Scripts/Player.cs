@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
             if(IsHookAttached())
             {
                 GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
-                if(horizontalMovement > 0)
+                if(IsPlayerLookingToTheRight())
                     playerRigidbody.velocity += Vector2.right * jumpForce; 
                 else
                     playerRigidbody.velocity += Vector2.left * jumpForce; 
@@ -175,6 +175,7 @@ public class Player : MonoBehaviour
 
     void ProcessDoubleJump(bool playerDoubleJumped)
     {
+        //TODO: IMPORTANT: make player invecible while rotating
         var baseForce = 1125;
         if (playerDoubleJumped)
         {

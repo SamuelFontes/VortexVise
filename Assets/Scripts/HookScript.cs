@@ -70,6 +70,7 @@ public class HookScript : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // TODO: make smoke come out when contact, also make smoke when shooting, also make camera shake
         Utils.GamepadRumble(gamepad,0f,1f,0.2f);
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookHit();
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
