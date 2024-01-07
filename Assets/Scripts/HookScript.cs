@@ -28,7 +28,6 @@ public class HookScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(gambiSoundTimer);
         if (gambiSoundTimer > 1f)
             gambiSoundTimer = 0; 
         else if(gambiSoundTimer > 0)
@@ -41,7 +40,7 @@ public class HookScript : MonoBehaviour
             fromPlayerToHook.Normalize();
             float distance = Vector2.Distance(transform.position, player.transform.position);
 
-            if((hookPullOffset > originalPullOffset && offsetChanger < 0) || (hookPullOffset < originalPullOffset * 3 && offsetChanger > 0))
+            if((hookPullOffset > originalPullOffset && offsetChanger < 0) || (hookPullOffset < originalPullOffset * 6 && offsetChanger > 0))
             {
                 hookPullOffset += offsetChanger * Time.deltaTime * 10;
 

@@ -10,15 +10,15 @@ using UnityEngine.UI;
 public class GameLogic : MonoBehaviour
 {
     public GameObject playerCamera;
-    public GameObject mapLoaderObject;
     private MapLoader mapLoader;
+    private WeaponSystem weaponSystem;
     // Start is called before the first frame update
     void Start()
     {
         // Setup game start menu
         SetupGameData();
-        mapLoader = mapLoaderObject.GetComponent<MapLoader>();
-
+        mapLoader = GetComponent<MapLoader>();
+        weaponSystem = GetComponent<WeaponSystem>();   
     }
 
     // Update is called once per frame
@@ -39,6 +39,7 @@ public class GameLogic : MonoBehaviour
         player.camera = camera;
 
         AddLocalPlayer(player);
+        weaponSystem.GetWeaponByName(player.gameObject, "weapon_test");
     }
 
     //TODO: Create add menu player, after exits menu add localplayer
@@ -177,11 +178,13 @@ public class GameLogic : MonoBehaviour
 
     private void SetupGameData() 
     {
+        // Setup teams
         GameState.Teams.Add(new Team { TeamLayer = Teams.TeamOne, NumberOfActors = 0 });
         GameState.Teams.Add(new Team { TeamLayer = Teams.TeamTwo, NumberOfActors = 0 });
         GameState.Teams.Add(new Team { TeamLayer = Teams.TeamThree, NumberOfActors = 0 });
         GameState.Teams.Add(new Team { TeamLayer = Teams.TeamFour, NumberOfActors = 0 });
         GameState.Teams.Add(new Team { TeamLayer = Teams.TeamFive, NumberOfActors = 0 });
+        
     }
 
     private void SetPlayerTeam(Player player, Teams teamLayer)

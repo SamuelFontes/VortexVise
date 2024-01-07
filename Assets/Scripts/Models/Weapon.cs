@@ -14,12 +14,32 @@ public class Weapon : MonoBehaviour
     public int CurrentAmmo;
     public Ammo Ammo ;
     public GameObject WeaponOwner;
-    public Vector2 WeaponOffset;
+    public Vector3 WeaponOffset;
 
-    private void Start()
+    private SpriteRenderer parentSpriteRenderer;
+    private SpriteRenderer spriteRenderer;
+
+    
+    void Start()
     {
+        parentSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        transform.position = WeaponOffset;
     }
-    private void Update()
+    void Update()
     {
+        RenderWeapon();
+    }
+
+    bool isFlipped = false;
+    void RenderWeapon()
+    {
+        if(isFlipped != parentSpriteRenderer.flipX)
+        {
+            spriteRenderer.flipX = parentSpriteRenderer.flipX;
+            isFlipped = spriteRenderer.flipX;
+            WeaponOffset.x *= -1; // Invert number
+            transform.position = transform.parent.transform.position +  WeaponOffset;
+        }
     }
 }

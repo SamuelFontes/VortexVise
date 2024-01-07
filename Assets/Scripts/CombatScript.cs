@@ -11,4 +11,13 @@ public class CombatScript : MonoBehaviour
     public float CurrentHP;
     public bool IsAlive;
     public Weapon CurrentWeapon;
+
+
+    private void Start()
+    {
+        
+    }
+    private void Update()
+    {
+    }
 }
