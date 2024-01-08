@@ -9,6 +9,7 @@ public class HookScript : MonoBehaviour
     public Player player;
     public Rigidbody2D playerRigidbody;
     public GameObject Impact;
+    public GameObject ShootingEffect;
 
     public float hookForce = 10;
     public float hookPullOffset = 5;
@@ -87,6 +88,10 @@ public class HookScript : MonoBehaviour
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
         Vector3[] positions = { transform.position, player.transform.position };
         lineRenderer.SetPositions(positions);
+    }
+    public void PlayShootAnimataion()
+    {
+        Instantiate(ShootingEffect, transform.position, transform.rotation);
     }
 
 }

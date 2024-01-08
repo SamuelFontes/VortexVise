@@ -452,6 +452,7 @@ MonoBehaviour:
   player: {fileID: 3499581267765288195}
   playerRigidbody: {fileID: 0}
   Impact: {fileID: 1429954232896169633, guid: 83036083a4ebcd34f98131bd3cf6f4d2, type: 3}
+  ShootingEffect: {fileID: 8312258458763329035, guid: 72ff6da39b38a2f4e85f94d14a7a60b1, type: 3}
   hookForce: 150
   hookPullOffset: 3.5
   CameraShake: 0.1
