@@ -11,12 +11,14 @@ public class PlayerCamera : MonoBehaviour
     public Vector3 offset = new Vector3(0, 0, -10);
     private Vector3 velocity = Vector3.zero;
 
+    Vector3 OriginalPos; 
 
     private Camera cam;
 
     private void Start()
     {
         cam = GetComponent<Camera>();
+        OriginalPos = transform.position;
     }
 
     private void FixedUpdate()
@@ -57,6 +59,30 @@ public class PlayerCamera : MonoBehaviour
 
         targetPosition += offset;
 
+        targetPosition.z = OriginalPos.z;
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+    }
+
+    public void StartShake(float dur, float mag)
+    {
+        StartCoroutine(Shake(dur, mag));
+    }
+
+    IEnumerator Shake(float duration, float magnitude)
+    {
+        float elapsed = 0.0f;
+        while (elapsed < duration)
+        {
+
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            transform.position += new Vector3(x, y, 0);
+                
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        //transform.position = OriginalPos;
+
     }
 }

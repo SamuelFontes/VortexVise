@@ -12,12 +12,15 @@ public class Weapon : MonoBehaviour
     public bool HasScope;
     public int MaxAmmo;
     public int CurrentAmmo;
+    public float ProjectileForce;
     public Ammo Ammo ;
     public GameObject WeaponOwner;
+    public Projectile Projectile;
     public Vector3 WeaponOffset;
 
     private SpriteRenderer parentSpriteRenderer;
     private SpriteRenderer spriteRenderer;
+    private AudioSource sound;
 
     
     void Start()
@@ -25,10 +28,24 @@ public class Weapon : MonoBehaviour
         parentSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position = WeaponOffset;
+        sound = GetComponent<AudioSource>();
     }
     void Update()
     {
         RenderWeapon();
+    }
+
+    void OnShoot()
+    {
+        sound.Play();
+        var bullet = Instantiate(Projectile, transform.position, Quaternion.identity);
+        Vector2 direction;
+        if (IsLookingRight())
+            direction = Vector2.right;
+        else 
+            direction = Vector2.left;
+
+        bullet.Init(BaseDamage, null, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
     }
 
     bool isFlipped = false;
@@ -42,4 +59,6 @@ public class Weapon : MonoBehaviour
             transform.position = transform.parent.transform.position +  WeaponOffset;
         }
     }
+
+    bool IsLookingRight() { return isFlipped;}
 }

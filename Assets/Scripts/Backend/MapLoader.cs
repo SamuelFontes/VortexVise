@@ -9,10 +9,14 @@ public class MapLoader : MonoBehaviour
 
     public void LoadRandomMap(Gamemode gamemode)
     {
+        var map = maps.Where(m => m.GetComponent<Map>().gamemode == gamemode).OrderBy(m => Guid.NewGuid()).FirstOrDefault();
+        LoadMap(map.GetComponent<Map>());
+    }
+
+    public void LoadMap(Map map)
+    {
         if(GameState.CurrentMap != null)
             UnityEngine.Object.Destroy(GameState.CurrentMap);
-
-        var map = maps.Where(m => m.GetComponent<Map>().gamemode == gamemode).OrderBy(m => Guid.NewGuid()).FirstOrDefault();
 
         Instantiate(map.gameObject);
         GameState.CurrentMap = map.GetComponent<Map>();

@@ -6,11 +6,14 @@ using UnityEngine.InputSystem;
 public class HookScript : MonoBehaviour
 {
     public new Rigidbody2D rigidbody;
-    public GameObject player;
+    public Player player;
     public Rigidbody2D playerRigidbody;
+    public GameObject Impact;
 
     public float hookForce = 10;
     public float hookPullOffset = 5;
+    public float CameraShake = 0.5f;
+    public float CameraShakeDuration = 0.2f;
 
     float originalPullOffset;
     float offsetChanger;
@@ -75,7 +78,8 @@ public class HookScript : MonoBehaviour
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
         rigidbody.bodyType = RigidbodyType2D.Static;
         hookPullOffset = originalPullOffset;
-        
+        Instantiate(Impact, transform.position, transform.rotation);
+        player.camera.GetComponent<PlayerCamera>().StartShake(CameraShakeDuration, CameraShake);
     }
 
     void RenderRope()

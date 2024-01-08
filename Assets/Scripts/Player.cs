@@ -154,18 +154,50 @@ public class Player : MonoBehaviour
                 playerRigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontalMovement * -1));
             }
         } 
-    } 
+    }
 
+    float animationTimer = 0f;
+    int animationState = 0;
     void Animate()
     {
-        // TODO: Make support for multiple skins
+        // TODO: make this avaliable to every entity 
+        if(animationTimer > 0.1f)
+        {
+            if(animationState == 0)
+            {
+                skin.transform.Rotate(new Vector3(0,0,9));
+                skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
+                animationState = 1;
+            } else if(animationState == 1)
+            {
+                skin.transform.localRotation = Quaternion.identity;
+                skin.transform.localPosition = Vector3.zero;
+                animationState = 2;
+            } else if(animationState == 2)
+            {
+                skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
+                skin.transform.Rotate(new Vector3(0,0,-9));
+                animationState = 3;
+            } else if(animationState == 3)
+            {
+                skin.transform.localRotation = Quaternion.identity;
+                skin.transform.localPosition = Vector3.zero;
+                animationState = 0;
+            }
+            animationTimer = 0f;
+        }
+
         if(horizontalMovement != 0)
         {
-            skin.GetComponent<Animator>().Play("FatsoRunning");
+            animationTimer += Time.deltaTime;
         }
-        else
+        else if(doubleJumpRotationAmount == 0)
         {
-            skin.GetComponent<Animator>().Play("FatsoIdle");
+            animationTimer = 0;
+            skin.transform.Rotate(new Vector3(0,0,0));
+            animationState = 0;
+            skin.transform.localRotation = Quaternion.identity;
+            skin.transform.localPosition = Vector3.zero;
         }
     }
 

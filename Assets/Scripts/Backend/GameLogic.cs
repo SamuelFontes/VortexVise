@@ -39,7 +39,7 @@ public class GameLogic : MonoBehaviour
         player.camera = camera;
 
         AddLocalPlayer(player);
-        weaponSystem.GetWeaponByName(player.gameObject, "weapon_test");
+        weaponSystem.GetWeaponByName(player.gameObject, "Pistol");
     }
 
     //TODO: Create add menu player, after exits menu add localplayer

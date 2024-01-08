@@ -60,4 +60,7 @@ public static class Utils
         }
     }
     #endregion
+
+    #region Animation
+    #endregion
 }
