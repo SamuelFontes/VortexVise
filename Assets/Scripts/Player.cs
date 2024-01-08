@@ -25,7 +25,9 @@ public class Player : MonoBehaviour
     Rigidbody2D hookRigidbody;
     SpriteRenderer spriteRenderer;
     Gamepad gamepad;
-    
+    TrailRenderer trailRenderer;
+    AudioSource windSound;
+
 
     float horizontalMovement = 0;
 
@@ -38,6 +40,8 @@ public class Player : MonoBehaviour
         hookRigidbody = hook.GetComponent<Rigidbody2D>();
         spriteRenderer = skin.GetComponent<SpriteRenderer>();
         gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
+        trailRenderer = GetComponent<TrailRenderer>();
+        windSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -45,6 +49,7 @@ public class Player : MonoBehaviour
         Move();
 
         Animate();
+        ProcessPlayerVelocityEffects();
 
         ProcessDoubleJump(false);
 
@@ -108,6 +113,7 @@ public class Player : MonoBehaviour
         }
 
         // SHOOT HOOK
+
         Utils.GamepadRumble(gamepad,0f,0.5f,0.2f);
 
         // Start hook delay timer
@@ -208,7 +214,6 @@ public class Player : MonoBehaviour
 
     void ProcessDoubleJump(bool playerDoubleJumped)
     {
-        //TODO: IMPORTANT: make player invecible while rotating
         var baseForce = 1125;
         if (playerDoubleJumped)
         {
@@ -217,7 +222,11 @@ public class Player : MonoBehaviour
                 doubleJumpRotationForce = baseForce * -1;
             else
                 doubleJumpRotationForce = baseForce;
-            doubleJumpRotationAmount += Time.deltaTime; 
+            doubleJumpRotationAmount += Time.deltaTime;
+            spriteRenderer.color = new Color(spriteRenderer.color.r,spriteRenderer.color.g,spriteRenderer.color.b,0.8f);
+            trailRenderer.startColor = Color.black;
+            trailRenderer.endColor = Color.black;
+            //TODO: IMPORTANT: make player invecible while rotating
         }
 
         if(doubleJumpRotationAmount != 0f)
@@ -231,6 +240,9 @@ public class Player : MonoBehaviour
             skin.transform.localRotation = Quaternion.identity;
             skin.transform.localPosition = Vector3.zero;
             doubleJumpRotationAmount = 0f;
+            trailRenderer.startColor = Color.white;
+            trailRenderer.endColor = Color.white;
+            spriteRenderer.color = new Color(spriteRenderer.color.r,spriteRenderer.color.g,spriteRenderer.color.b,1f);
         }
 
         if (!canDoubleJump && (playerRigidbody.velocity.y == 0 || IsHookAttached())) 
@@ -251,5 +263,34 @@ public class Player : MonoBehaviour
     {
         // This just makes the code more readable
         return spriteRenderer.flipX;
+    }
+
+    float lastVelocity = 0f;
+    void ProcessPlayerVelocityEffects()
+    {
+        Vector2 velocity = playerRigidbody.velocity;
+        var effectPower = velocity.magnitude / 100;
+        // Trail
+        if (velocity.magnitude > 30)
+        {
+            trailRenderer.time = effectPower;
+        }
+        else if(trailRenderer.time > 0) 
+        {
+            trailRenderer.time -= Time.deltaTime;
+        }
+
+        if(lastVelocity - velocity.magnitude > 40)
+        {
+            // If the stop is too fast the dude hit his head into something
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHighSpeedHit();
+        }
+        lastVelocity = velocity.magnitude;
+        // Wind sound
+        if(velocity.magnitude < 30 && windSound.volume > 0)
+            windSound.volume -= Time.deltaTime;
+        else
+            windSound.volume += Time.deltaTime;
+
     }
 }

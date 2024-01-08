@@ -82,7 +82,5 @@ public class PlayerCamera : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-        //transform.position = OriginalPos;
-
     }
 }
