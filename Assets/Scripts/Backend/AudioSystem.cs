@@ -5,6 +5,7 @@ using UnityEngine;
 public class AudioSystem : MonoBehaviour
 {
     //FIXME: Please build a better SoundSystem
+    // TODO: Change jump sound
     public void PlayHookHit()
     {
         transform.Find("HookHit").GetComponent<AudioSource>().Play();

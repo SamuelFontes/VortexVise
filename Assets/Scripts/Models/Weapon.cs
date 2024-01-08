@@ -17,6 +17,7 @@ public class Weapon : MonoBehaviour
     public GameObject WeaponOwner;
     public Projectile Projectile;
     public Vector3 WeaponOffset;
+    public GameObject Explosion;
 
     private SpriteRenderer parentSpriteRenderer;
     private SpriteRenderer spriteRenderer;
@@ -45,7 +46,7 @@ public class Weapon : MonoBehaviour
         else 
             direction = Vector2.left;
 
-        bullet.Init(BaseDamage, null, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
+        bullet.Init(BaseDamage, Explosion, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
     }
 
     bool isFlipped = false;

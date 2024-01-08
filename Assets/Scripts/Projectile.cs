@@ -14,6 +14,7 @@ public class Projectile : MonoBehaviour
     public void Init(float baseDamage, GameObject explosion, Teams team, Vector2 direction, float force)
     {
         BaseDamage = baseDamage;
+        if(explosion != null) 
         Explosion = explosion;
         Team = team;
         Direction = direction;
@@ -27,6 +28,12 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //TODO: Apply damage
+        Instantiate(Explosion, transform.position, transform.rotation);
+        GameObject.Destroy(gameObject);
     }
 
     void ApplyForce()

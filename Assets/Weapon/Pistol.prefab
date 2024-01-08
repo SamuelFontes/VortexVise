@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b491a09cefb6bcd4697c77e4797270a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: weapon_test
+  Name: Pistol
   Description: test
   Range: 10
   AimRange: 5
@@ -108,10 +108,11 @@ MonoBehaviour:
   HasScope: 1
   MaxAmmo: 10
   CurrentAmmo: 5
-  ProjectileForce: 60
+  ProjectileForce: 100
   WeaponOwner: {fileID: 0}
   Projectile: {fileID: 1350037332825178018, guid: 3e6b09ccabe27aa4f920b6d9998b9600, type: 3}
   WeaponOffset: {x: -1.2, y: -0.3, z: 0}
+  Explosion: {fileID: 0}
 --- !u!82 &7465045549125163962
 AudioSource:
   m_ObjectHideFlags: 0
