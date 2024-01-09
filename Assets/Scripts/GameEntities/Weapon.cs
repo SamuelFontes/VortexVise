@@ -14,22 +14,22 @@ public class Weapon : MonoBehaviour
     public int CurrentAmmo;
     public float ProjectileForce;
     public Ammo Ammo ;
-    private CombatBehaviour _weaponOwner;
     public Projectile Projectile;
     public Vector3 WeaponOffset;
     public GameObject Explosion;
 
-    private SpriteRenderer parentSpriteRenderer;
-    private SpriteRenderer spriteRenderer;
-    private AudioSource sound;
+    private SpriteRenderer _parentSpriteRenderer;
+    private SpriteRenderer _spriteRenderer;
+    private AudioSource _sound;
+    private CombatBehaviour _weaponOwner;
 
     
     void Start()
     {
-        parentSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        _parentSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position = WeaponOffset;
-        sound = GetComponent<AudioSource>();
+        _sound = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -38,7 +38,7 @@ public class Weapon : MonoBehaviour
 
     void OnShoot()
     {
-        sound.Play();
+        _sound.Play();
         var bullet = Instantiate(Projectile, transform.position, Quaternion.identity);
         Vector2 direction;
         if (IsLookingRight())
@@ -52,10 +52,10 @@ public class Weapon : MonoBehaviour
     bool isFlipped = false;
     void RenderWeapon()
     {
-        if(isFlipped != parentSpriteRenderer.flipX)
+        if(isFlipped != _parentSpriteRenderer.flipX)
         {
-            spriteRenderer.flipX = parentSpriteRenderer.flipX;
-            isFlipped = spriteRenderer.flipX;
+            _spriteRenderer.flipX = _parentSpriteRenderer.flipX;
+            isFlipped = _spriteRenderer.flipX;
             WeaponOffset.x *= -1; // Invert number
             transform.position = transform.parent.transform.position +  WeaponOffset;
         }

@@ -2325,9 +2325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5892ebfd01f26b340815e7736ddfd51f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maps:
-  - {fileID: 6937000172220784846, guid: 774724f578d99c54699f85286150ebae, type: 3}
-  - {fileID: 8775279246214175894, guid: 1502ba3ed18f55a439e344930ba6aa30, type: 3}
+  _maps:
+  - {fileID: 3955093481856884624, guid: 774724f578d99c54699f85286150ebae, type: 3}
+  - {fileID: 4981230071625592818, guid: 1502ba3ed18f55a439e344930ba6aa30, type: 3}
 --- !u!114 &1894173251
 MonoBehaviour:
   m_ObjectHideFlags: 0

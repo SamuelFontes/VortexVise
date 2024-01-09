@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
 
         // Shoot the hook
         hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
-        hook.GetComponent<HookScript>().PlayShootAnimataion();
+        hook.GetComponent<Hook>().PlayShootAnimataion();
     }
 
     void OnShoot(InputValue inputValue) 

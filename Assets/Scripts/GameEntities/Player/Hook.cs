@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class HookScript : MonoBehaviour
+public class Hook : MonoBehaviour
 {
     public new Rigidbody2D rigidbody;
     public Player player;

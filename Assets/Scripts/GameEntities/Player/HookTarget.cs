@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CrosshairScript : MonoBehaviour
+public class HookTarget : MonoBehaviour
 {
     public GameObject player;
     public float crossHairDistance = 4.5f;

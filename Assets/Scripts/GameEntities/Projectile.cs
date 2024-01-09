@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     public Vector2 Direction;
     public float Force;
     
-    private Rigidbody2D Rigidbody;
+    private Rigidbody2D _rigidbody;
     public void Init(float baseDamage, GameObject explosion, Teams team, Vector2 direction, float force)
     {
         BaseDamage = baseDamage;
@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
         Team = team;
         Direction = direction;
         Force = force;
-        Rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
 
         ApplyTeam();
         ApplyForce();
@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour
 
     void ApplyForce()
     {
-        Rigidbody.velocity = Direction * Force;
+        _rigidbody.velocity = Direction * Force;
     }
     void ApplyTeam()
     {
