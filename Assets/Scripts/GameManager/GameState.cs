@@ -42,11 +42,11 @@ public class GameState : MonoBehaviour
 
     private void LoadTeamsData()
     {
-        MatchTeams.Add(new Team { TeamLayer = Teams.TeamOne, NumberOfActors = 0 });
-        MatchTeams.Add(new Team { TeamLayer = Teams.TeamTwo, NumberOfActors = 0 });
-        MatchTeams.Add(new Team { TeamLayer = Teams.TeamThree, NumberOfActors = 0 });
-        MatchTeams.Add(new Team { TeamLayer = Teams.TeamFour, NumberOfActors = 0 });
-        MatchTeams.Add(new Team { TeamLayer = Teams.TeamFive, NumberOfActors = 0 });
+        MatchTeams.Add(new Team(Teams.TeamOne));
+        MatchTeams.Add(new Team (Teams.TeamTwo));
+        MatchTeams.Add(new Team (Teams.TeamThree));
+        MatchTeams.Add(new Team (Teams.TeamFour));
+        MatchTeams.Add(new Team (Teams.TeamFive));
     }
     public void SetPlayerTeam(Player player, Teams teamLayer)
     {
@@ -54,9 +54,8 @@ public class GameState : MonoBehaviour
         player.gameObject.layer = (int)teamLayer;
 
         // Save on gamestate
-        var t = MatchTeams.Where(_ => _.TeamLayer == teamLayer).FirstOrDefault();
-        t.TeamLayer = teamLayer;
-        t.NumberOfActors++;
+        var team = MatchTeams.Where(_ => _.TeamLayer == teamLayer).FirstOrDefault();
+        team.AddActorToTeam();
 
     }
 
@@ -73,7 +72,7 @@ public class GameState : MonoBehaviour
     {
         var layer = player.gameObject.layer; 
         var team = MatchTeams.Where(t => (int)t.TeamLayer == layer).FirstOrDefault();
-        team.NumberOfActors--;
+        team.RemoveActorFromTeam();
     }
 
     public void SetCurrentMap(Map map)

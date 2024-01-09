@@ -19,25 +19,19 @@ public static class Utils
 
     #region GamepadHelper
     // This method allows us to have multiple vibrations scheduled for diffent durations
-    static List<GamepadRumbler> gamepadsVibrating = new List<GamepadRumbler>();
+    private static List<GamepadRumbler> _gamepadsVibrating = new List<GamepadRumbler>();
     public static void GamepadRumble(Gamepad gamepad,float lowFrequency, float highFrequency, float duration) {
         if (gamepad == null) 
             return; // If is keyboard and mouse there is no gamepad
 
         // Check if it is already vibrating
-        var gv = gamepadsVibrating.Where(_ => _.Gamepad == gamepad).FirstOrDefault();
-        if (gv == null) 
+        var gamepadVibrating = _gamepadsVibrating.Where(_ => _.Gamepad == gamepad).FirstOrDefault();
+        if (gamepadVibrating == null) 
         {
-            gv = new GamepadRumbler(gamepad, lowFrequency, highFrequency);
-            gamepadsVibrating.Add(gv);
+            gamepadVibrating = new GamepadRumbler(gamepad, lowFrequency, highFrequency);
+            _gamepadsVibrating.Add(gamepadVibrating);
         }
-
-        // If it is already vibrating it will add more vibration
-        gv.LowFrequency+= lowFrequency;
-        gv.HighFrequency+= highFrequency;
-        if(gv.LowFrequency > 1f) gv.LowFrequency= 1f; // 1f is the max vibration
-        if(gv.HighFrequency > 1f) gv.HighFrequency= 1f;
-        gv.TimeUntilStop += duration;
+        gamepadVibrating.AddFrequency(lowFrequency, highFrequency, duration);    
 
         // Make it go bruummmmmmmmmmmmmmmmmm
         gamepad.SetMotorSpeeds(lowFrequency, highFrequency);
@@ -45,18 +39,9 @@ public static class Utils
     
     public static void UpdateGamepadRumble()
     {
-        foreach (var g in gamepadsVibrating)
+        for(var i = 0; i < _gamepadsVibrating.Count; i++)
         {
-            if(g.TimeUntilStop <= 0)
-                continue;
-
-            g.TimeUntilStop -= Time.deltaTime;
-            if(g.TimeUntilStop < 0f)
-            {
-                g.Gamepad.SetMotorSpeeds(0f, 0f);
-                g.TimeUntilStop = 0f;
-            }
-
+            _gamepadsVibrating[i].UpdateGamepadVibration();
         }
     }
     #endregion
