@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    public string description;
-    public Gamemode gamemode;
-    public Vector2 topRight; // Used to stop the camera and stuff going outside the map
-    public Vector2 bottomLeft;
+    public string Description;
+    public Gamemode Gamemode;
+    public Vector2 TopRight; // Used to stop the camera and stuff going outside the map
+    public Vector2 BottomLeft;
 }

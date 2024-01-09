@@ -66,10 +66,10 @@ public class PlayerCamera : MonoBehaviour
     private Vector3 CorrectIfOutsideTheMap(Vector3 targetPosition)
     {
         // Check if Camera is outside map, if it is it will move the camera back to the map
-        float maxLevelBorderX = GameState.Instance.CurrentMap.topRight.x;
-        float minLevelBorderX = GameState.Instance.CurrentMap.bottomLeft.x;
-        float maxLevelBorderY = GameState.Instance.CurrentMap.topRight.y;
-        float minLevelBorderY = GameState.Instance.CurrentMap.bottomLeft.y;
+        float maxLevelBorderX = GameState.Instance.CurrentMap.TopRight.x;
+        float minLevelBorderX = GameState.Instance.CurrentMap.BottomLeft.x;
+        float maxLevelBorderY = GameState.Instance.CurrentMap.TopRight.y;
+        float minLevelBorderY = GameState.Instance.CurrentMap.BottomLeft.y;
         var rightTop = _camera.ScreenToWorldPoint(new Vector3(_camera.pixelWidth,_camera.pixelHeight,_camera.nearClipPlane));  
         var cameraOffsetX = Vector2.Distance(new Vector2(transform.position.x,0),  new Vector2(rightTop.x,0));
         var cameraOffsetY = Vector2.Distance(new Vector2(transform.position.y,0),  new Vector2(rightTop.y,0));

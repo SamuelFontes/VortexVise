@@ -12,15 +12,6 @@ public class CombatBehaviour : MonoBehaviour
     private Weapon _currentWeapon;
     private Teams _team;
 
-
-    private void Start()
-    {
-        
-    }
-    private void Update()
-    {
-    }
-
     public void AddWeapon(Weapon weapon)
     {
         _weapons.Add(weapon);

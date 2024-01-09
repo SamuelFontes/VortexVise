@@ -884,15 +884,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cec47b43ac39944947afb26f86388f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Cogsworth Citadel, a sprawling metropolis suspended in the clouds,
+  Description: Cogsworth Citadel, a sprawling metropolis suspended in the clouds,
     where the clinking of gears and hissing of steam echo through the intricate maze
     of brass and iron. Navigate the labyrinthine walkways adorned with ornate clockwork,
     where colossal dirigibles drift lazily in the sky. Encounter towering mechanical
     guardians and unravel the secrets of this steampunk realm, where innovation meets
     Victorian aesthetics in a mesmerizing dance of gears and steam.
-  gamemode: 1
-  topRight: {x: 51.2, y: 51.2}
-  bottomLeft: {x: -51.2, y: -51.2}
+  Gamemode: 1
+  TopRight: {x: 51.2, y: 51.2}
+  BottomLeft: {x: -51.2, y: -51.2}
 --- !u!68 &7656908385747655337
 EdgeCollider2D:
   m_ObjectHideFlags: 0

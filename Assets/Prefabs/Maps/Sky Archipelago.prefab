@@ -4398,10 +4398,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cec47b43ac39944947afb26f86388f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: First map
-  gamemode: 1
-  topRight: {x: 41, y: 41}
-  bottomLeft: {x: -41, y: -41}
+  Description: Sky Archipelago, the game's first marvel, unfolds a skyward adventure. Navigate interconnected floating islands, each with unique wonders. Glide through floating gardens, perilous canyons, and discover secrets amid glowing crystals. Uncover ancient temples, face gravity-defying challenges, and watch out for mythical Skywhispers. This inaugural map is a testament to boundless imagination, inviting pioneers to explore the enchanting realms of Sky Archipelago.
+  Gamemode: 1
+  TopRight: {x: 41, y: 41}
+  BottomLeft: {x: -41, y: -41}
 --- !u!82 &4890049620105954459
 AudioSource:
   m_ObjectHideFlags: 0

@@ -2340,8 +2340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008287e3d37af0e4d8792263f0cfc78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 283754176080532401, guid: 3dd1952603a65f74dbd7ad4be51319e7, type: 3}
+  _weapons:
+  - {fileID: 578581695433766628, guid: 3dd1952603a65f74dbd7ad4be51319e7, type: 3}
 --- !u!114 &1894173252
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,13 +10,13 @@ using UnityEngine.UI;
 public class GameLogic : MonoBehaviour
 {
     [SerializeField] private PlayerCamera _playerCameraPrefab;
-    private MapLoader _mapLoader;
+    private MapLoaderSystem _mapLoader;
     private WeaponSystem _weaponSystem;
 
     // Start is called before the first frame update
     void Start()
     {
-        _mapLoader = GetComponent<MapLoader>();
+        _mapLoader = GetComponent<MapLoaderSystem>();
         _weaponSystem = GetComponent<WeaponSystem>();   
     }
 

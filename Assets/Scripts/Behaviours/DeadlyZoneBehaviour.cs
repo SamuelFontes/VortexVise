@@ -3,21 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 
-public class DeathWaterScript : MonoBehaviour
+public class DeadlyZoneBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-        
-    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // TODO: Cause some damage on the entity that enters this zone, also teleports if necessary
         if (collision.gameObject.tag == "Player")
         {
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayDeath();
