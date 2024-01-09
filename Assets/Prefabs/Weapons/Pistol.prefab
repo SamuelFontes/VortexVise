@@ -98,21 +98,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b491a09cefb6bcd4697c77e4797270a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Pistol
-  Description: test
-  Range: 10
-  AimRange: 5
-  BaseDamage: 10
-  TargetKnockback: 10
-  SelfKnockback: 10
-  HasScope: 1
-  MaxAmmo: 10
-  CurrentAmmo: 5
-  ProjectileForce: 100
-  WeaponOwner: {fileID: 0}
-  Projectile: {fileID: 1350037332825178018, guid: 3e6b09ccabe27aa4f920b6d9998b9600, type: 3}
-  WeaponOffset: {x: -1.2, y: -0.3, z: 0}
-  Explosion: {fileID: 0}
+  <Name>k__BackingField: Pistol
+  <Description>k__BackingField: Regular gun.
+  <Range>k__BackingField: 10
+  <BaseDamage>k__BackingField: 10
+  <SelfKnockback>k__BackingField: 3
+  <HasLaser>k__BackingField: 0
+  <MaxAmmo>k__BackingField: 7
+  <CurrentAmmo>k__BackingField: 7
+  <ProjectileForce>k__BackingField: 100
+  _projectile: {fileID: 1350037332825178018, guid: 3e6b09ccabe27aa4f920b6d9998b9600, type: 3}
+  _weaponOffset: {x: -1.2, y: -0.3, z: 0}
+  _explosion: {fileID: 0}
 --- !u!82 &7465045549125163962
 AudioSource:
   m_ObjectHideFlags: 0

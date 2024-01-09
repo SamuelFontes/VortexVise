@@ -2,22 +2,20 @@
 
 public class Weapon : MonoBehaviour
 {
-    public string Name;
-    public string Description;
-    public float Range;
-    public float AimRange;
-    public float BaseDamage;  
-    public float TargetKnockback;
-    public float SelfKnockback;
-    public bool HasScope;
-    public int MaxAmmo;
-    public int CurrentAmmo;
-    public float ProjectileForce;
-    public Ammo Ammo ;
-    public Projectile Projectile;
-    public Vector3 WeaponOffset;
-    public GameObject Explosion;
+    [field: SerializeField] public string Name { get; private set; }
+    [field:SerializeField] public string Description { get; private set; }
+    [field: SerializeField] public float Range { get; private set; }
+    [field:SerializeField] public float BaseDamage { get; private set; }
+    [field:SerializeField] public float SelfKnockback { get; private set; }
+    [field:SerializeField] public bool HasLaser { get; private set; }
+    [field:SerializeField] public int MaxAmmo { get; private set; }
+    [field:SerializeField] public int CurrentAmmo { get; private set; }
+    [field:SerializeField] public float ProjectileForce { get; private set; }
+    [field:SerializeField] public Ammo AmmoType  { get; private set; }
 
+    [SerializeField] private Projectile _projectile;
+    [SerializeField] private Vector3 _weaponOffset;
+    [SerializeField] private GameObject _explosion;
     private SpriteRenderer _parentSpriteRenderer;
     private SpriteRenderer _spriteRenderer;
     private AudioSource _sound;
@@ -28,7 +26,7 @@ public class Weapon : MonoBehaviour
     {
         _parentSpriteRenderer = transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        transform.position = WeaponOffset;
+        transform.position = _weaponOffset;
         _sound = GetComponent<AudioSource>();
     }
     void Update()
@@ -39,14 +37,14 @@ public class Weapon : MonoBehaviour
     void OnShoot()
     {
         _sound.Play();
-        var bullet = Instantiate(Projectile, transform.position, Quaternion.identity);
+        var bullet = Instantiate(_projectile, transform.position, Quaternion.identity);
         Vector2 direction;
         if (IsLookingRight())
             direction = Vector2.right;
         else 
             direction = Vector2.left;
 
-        bullet.Init(BaseDamage, Explosion, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
+        bullet.Init(BaseDamage, _explosion, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
     }
 
     bool isFlipped = false;
@@ -56,12 +54,15 @@ public class Weapon : MonoBehaviour
         {
             _spriteRenderer.flipX = _parentSpriteRenderer.flipX;
             isFlipped = _spriteRenderer.flipX;
-            WeaponOffset.x *= -1; // Invert number
-            transform.position = transform.parent.transform.position +  WeaponOffset;
+            _weaponOffset.x *= -1; // Invert number
+            transform.position = transform.parent.transform.position +  _weaponOffset;
         }
     }
 
-    bool IsLookingRight() { return isFlipped;}
+    bool IsLookingRight() 
+    {
+        return isFlipped;
+    }
 
     public void SetWeaponOwner(CombatBehaviour combatant)
     {
