@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     public int CurrentAmmo;
     public float ProjectileForce;
     public Ammo Ammo ;
-    public GameObject WeaponOwner;
+    private CombatBehaviour _weaponOwner;
     public Projectile Projectile;
     public Vector3 WeaponOffset;
     public GameObject Explosion;
@@ -62,4 +62,9 @@ public class Weapon : MonoBehaviour
     }
 
     bool IsLookingRight() { return isFlipped;}
+
+    public void SetWeaponOwner(CombatBehaviour combatant)
+    {
+        _weaponOwner = combatant;
+    }
 }

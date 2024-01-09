@@ -38,7 +38,7 @@ public class GameLogic : MonoBehaviour
         player.camera = camera;
 
         AddLocalPlayer(player);
-        _weaponSystem.GetWeaponByName(player.gameObject, "Pistol");
+        _weaponSystem.GetWeaponByName(player.GetComponent<CombatBehaviour>(), "Pistol");
     }
 
     private void AddLocalPlayer(Player player)

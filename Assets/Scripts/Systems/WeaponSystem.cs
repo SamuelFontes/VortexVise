@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour
 {
-    public List<GameObject> weapons = new List<GameObject>();
-    public void GetWeaponByName(GameObject entity, string weapon) 
-    {
-        var w = weapons.Where(_ => _.name == weapon).OrderBy(m => Guid.NewGuid()).FirstOrDefault();
+    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
 
-        Instantiate(w.gameObject,entity.transform,worldPositionStays:false);
-        var ws = w.GetComponent<Weapon>();
-        ws.WeaponOwner = entity;
-        entity.GetComponent<CombatScript>().CurrentWeapon = ws;
-        entity.GetComponent<CombatScript>().weapons.Add(ws);
+    public void GetWeaponByName(CombatBehaviour combatant, string weaponName) 
+    {
+        var weapon = _weapons.Where(_ => _.name == weaponName).OrderBy(m => Guid.NewGuid()).FirstOrDefault();
+
+        Instantiate(weapon.gameObject, combatant.transform, worldPositionStays:false);
+        combatant.AddWeapon(weapon);
     }
 }
