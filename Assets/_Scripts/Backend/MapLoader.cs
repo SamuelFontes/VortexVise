@@ -15,10 +15,10 @@ public class MapLoader : MonoBehaviour
 
     public void LoadMap(Map map)
     {
-        if(GameState.CurrentMap != null)
-            UnityEngine.Object.Destroy(GameState.CurrentMap);
+        if(GameState.Instance.CurrentMap != null)
+            UnityEngine.Object.Destroy(GameState.Instance.CurrentMap);
 
         Instantiate(map.gameObject);
-        GameState.CurrentMap = map.GetComponent<Map>();
+        GameState.Instance.SetCurrentMap(map.GetComponent<Map>());
     }
 }

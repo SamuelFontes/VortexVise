@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 
     public GameObject hook;
     public GameObject crosshair;
-    public new GameObject camera;
+    public PlayerCamera camera;
     public GameObject skin;
     
     // Setup player movement

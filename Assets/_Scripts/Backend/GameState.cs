@@ -1,19 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UnityEngine;
 
-public static class GameState
+public class GameState : MonoBehaviour
 {
-    public static Gamemode Gamemode = Gamemode.MainMenu;
-    public static List<Player> LocalPlayers = new List<Player>(); 
-    public static List<Team> Teams = new List<Team>();
-    public static Map CurrentMap; 
+    public static GameState Instance { get; private set; }
+    public Gamemode Gamemode {  get; private set; }
+    public List<Player> LocalPlayers { get; private set; }
+    public List<Team> MatchTeams { get; private set; } 
+    public Map CurrentMap { get; private set; }
 
-    public static int GetNumberOfLocalPlayers()
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
+
+    void Start()
+    {
+        Gamemode = Gamemode.MainMenu;
+        LocalPlayers = new List<Player>(); 
+        MatchTeams = new List<Team>();
+        LoadTeamsData();
+   }
+
+    public int GetNumberOfLocalPlayers()
     {
         return LocalPlayers.Count;
     }
+    public void SetGamemode(Gamemode gamemode)
+    {
+        Gamemode = gamemode;
+    }
 
+    public void AddLocalPlayer(Player player)
+    {
+        LocalPlayers.Add(player);
+    }
+
+    private void LoadTeamsData()
+    {
+        MatchTeams.Add(new Team { TeamLayer = Teams.TeamOne, NumberOfActors = 0 });
+        MatchTeams.Add(new Team { TeamLayer = Teams.TeamTwo, NumberOfActors = 0 });
+        MatchTeams.Add(new Team { TeamLayer = Teams.TeamThree, NumberOfActors = 0 });
+        MatchTeams.Add(new Team { TeamLayer = Teams.TeamFour, NumberOfActors = 0 });
+        MatchTeams.Add(new Team { TeamLayer = Teams.TeamFive, NumberOfActors = 0 });
+    }
+    public void SetPlayerTeam(Player player, Teams teamLayer)
+    {
+        // Set the layer on unity
+        player.gameObject.layer = (int)teamLayer;
+
+        // Save on gamestate
+        var t = MatchTeams.Where(_ => _.TeamLayer == teamLayer).FirstOrDefault();
+        t.TeamLayer = teamLayer;
+        t.NumberOfActors++;
+
+    }
+
+    public void AutoBalancePlayer(Player player)
+    {
+        // This should be used only on modes where the player can join a random team
+        var leastPlayers = MatchTeams.Min(x => x.NumberOfActors);
+        var bestTeamToJoin = MatchTeams.Where(_ => _.NumberOfActors == leastPlayers).FirstOrDefault(); // Any team with less players will do
+
+        SetPlayerTeam(player, bestTeamToJoin.TeamLayer);
+    }
+
+    public void RemovePlayerFromTeam(Player player)
+    {
+        var layer = player.gameObject.layer; 
+        var team = MatchTeams.Where(t => (int)t.TeamLayer == layer).FirstOrDefault();
+        team.NumberOfActors--;
+    }
+
+    public void SetCurrentMap(Map map)
+    {
+        CurrentMap = map;
+    }
 }

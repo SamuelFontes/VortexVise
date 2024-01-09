@@ -150,6 +150,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ae9a49820bbc84da6c706553ac3ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  smoothTime: 0.35
-  offset: {x: 0, y: 0, z: -10}
+  _cameraSmoothDelay: 0.35
