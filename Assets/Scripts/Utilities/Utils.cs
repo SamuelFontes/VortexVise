@@ -40,6 +40,11 @@ public static class Utils
     }
     #endregion
 
-    #region Animation
-    #endregion
+    public static bool CheckIfItIsOusideTheMap(Transform transform) 
+    {
+        return (transform.position.x > GameState.Instance.CurrentMap.TopRight.x
+        || transform.position.y > GameState.Instance.CurrentMap.TopRight.y
+        || transform.position.x < GameState.Instance.CurrentMap.BottomLeft.x
+        || transform.position.y < GameState.Instance.CurrentMap.BottomLeft.y);
+    }
 }

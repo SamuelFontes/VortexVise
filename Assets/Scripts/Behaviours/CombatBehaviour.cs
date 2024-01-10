@@ -12,11 +12,27 @@ public class CombatBehaviour : MonoBehaviour
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
     [SerializeField] private Weapon _currentWeapon;
     [SerializeField] private Team _team;
+    private Transform _transform;
+
+    private void Update()
+    {
+        HandleIfOutsideTheMap();
+    }
 
     public void AddWeapon(Weapon weapon)
     {
         weapon.SetWeaponOwner(this);
         _weapons.Add(weapon);
         _currentWeapon = weapon;
+        _transform = transform;
     }
+
+    private void HandleIfOutsideTheMap()
+    {
+        if (Utils.CheckIfItIsOusideTheMap(_transform))
+        {
+            CurrentHP -= 10;
+            transform.position = Vector2.zero;
+        }
+    } 
 }

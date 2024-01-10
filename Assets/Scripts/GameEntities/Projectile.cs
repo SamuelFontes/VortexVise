@@ -47,10 +47,7 @@ public class Projectile : MonoBehaviour
 
     void DestroyWhenOutsideTheMap()
     {
-        if (_transform.position.x > GameState.Instance.CurrentMap.TopRight.x
-        || _transform.position.y > GameState.Instance.CurrentMap.TopRight.y
-        || _transform.position.x < GameState.Instance.CurrentMap.BottomLeft.x
-        || _transform.position.y < GameState.Instance.CurrentMap.BottomLeft.y)
+        if (Utils.CheckIfItIsOusideTheMap(_transform))
         {
             GameObject.Destroy(gameObject);
         }
