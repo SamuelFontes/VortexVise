@@ -15,8 +15,8 @@ public class CombatBehaviour : MonoBehaviour
 
     public void AddWeapon(Weapon weapon)
     {
+        weapon.SetWeaponOwner(this);
         _weapons.Add(weapon);
         _currentWeapon = weapon;
-        weapon.SetWeaponOwner(this);
     }
 }

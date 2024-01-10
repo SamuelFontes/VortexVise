@@ -20,6 +20,7 @@ public class Weapon : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private AudioSource _sound;
     private CombatBehaviour _weaponOwner;
+    private Player _player;
 
     
     void Start()
@@ -37,6 +38,8 @@ public class Weapon : MonoBehaviour
     void OnShoot()
     {
         _sound.Play();
+        if (_player != null)
+            Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.3f);
         var bullet = Instantiate(_projectile, transform.position, Quaternion.identity);
         Vector2 direction;
         if (IsLookingRight())
@@ -67,5 +70,6 @@ public class Weapon : MonoBehaviour
     public void SetWeaponOwner(CombatBehaviour combatant)
     {
         _weaponOwner = combatant;
+        _player = _weaponOwner.gameObject.GetComponent<Player>();
     }
 }

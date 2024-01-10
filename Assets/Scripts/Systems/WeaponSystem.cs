@@ -11,7 +11,7 @@ public class WeaponSystem : MonoBehaviour
     {
         var weapon = _weapons.Where(_ => _.name == weaponName).OrderBy(m => Guid.NewGuid()).FirstOrDefault();
 
-        Instantiate(weapon.gameObject, combatant.transform, worldPositionStays:false);
-        combatant.AddWeapon(weapon);
+        var combatantWeapon = Instantiate(weapon, combatant.transform, worldPositionStays:false);
+        combatant.AddWeapon(combatantWeapon);
     }
 }
