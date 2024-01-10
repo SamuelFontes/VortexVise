@@ -159,13 +159,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6172291fd6d90489d0d2c0d7985f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 
   _hook: {fileID: 1987999837595103230}
-  camera: {fileID: 692886450353534366, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
-  skin: {fileID: 5264950938015442179}
-  jumpForce: 30
-  moveSpeed: 80
-  maxMoveSpeed: 20
+  _skin: {fileID: 5264950938015442179}
+  _jumpForce: 30
+  _moveSpeed: 80
+  _maxMoveSpeed: 20
 --- !u!50 &5455731206794010221
 Rigidbody2D:
   serializedVersion: 4

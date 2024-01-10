@@ -96,7 +96,7 @@ public class Hook : MonoBehaviour
         _rigidbody.bodyType = RigidbodyType2D.Static;
         _hookPullOffset = _originalPullOffset;
         Instantiate(_impactPrefab, _transform.position, _transform.rotation);
-        _player.camera.GetComponent<PlayerCamera>().StartShake(_cameraShakeDuration, _cameraShake);
+        _player.Camera.GetComponent<PlayerCamera>().StartShake(_cameraShakeDuration, _cameraShake);
     }
 
     void RenderRope()

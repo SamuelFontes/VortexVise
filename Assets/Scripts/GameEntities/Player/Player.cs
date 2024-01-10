@@ -3,36 +3,37 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public string Id;
-    public Team Team { get; set; }
+    public string Id { get; private set; }
+    public Team Team { get; private set; }
+    public Gamepad Gamepad { get; private set; }
+    public PlayerCamera Camera { get; private set; }
 
     [SerializeField] private Hook _hook;
-    public PlayerCamera camera;
-    public GameObject skin;
-
-    // Setup player movement
-    public float jumpForce = 25;
-    public float moveSpeed = 80;
-    public float maxMoveSpeed = 20;
-    Rigidbody2D playerRigidbody;
-    SpriteRenderer spriteRenderer;
-    public Gamepad Gamepad { get; private set; }
-    TrailRenderer trailRenderer;
-    AudioSource windSound;
-
-
-    float horizontalMovement = 0;
-
-    bool canDoubleJump = true;
+    [SerializeField] private GameObject _skin;
+    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _maxMoveSpeed;
+    private Rigidbody2D _playerRigidbody;
+    private SpriteRenderer _spriteRenderer;
+    private TrailRenderer _trailRenderer;
+    private AudioSource _windSound;
+    private float _lastVelocity = 0f;
+    private float _doubleJumpTimer = 0f;
+    private float _doubleJumpRotationAmount = 0f;
+    private float _doubleJumpRotationForce;
+    private float _animationTimer = 0f;
+    private int _animationState = 0;
+    private float _horizontalMovement = 0;
+    private bool _canDoubleJump = true;
 
     void Start()
     {
         Id = GetInstanceID().ToString();
-        playerRigidbody = GetComponent<Rigidbody2D>();
-        spriteRenderer = skin.GetComponent<SpriteRenderer>();
+        _playerRigidbody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = _skin.GetComponent<SpriteRenderer>();
         Gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
-        trailRenderer = GetComponent<TrailRenderer>();
-        windSound = GetComponent<AudioSource>();
+        _trailRenderer = GetComponent<TrailRenderer>();
+        _windSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -48,182 +49,178 @@ public class Player : MonoBehaviour
 
     void OnJump()
     {
-        if (playerRigidbody.velocity.y == 0 || _hook.IsHookAttached())
+        if (_playerRigidbody.velocity.y == 0 || _hook.IsHookAttached())
         {
             if (_hook.IsHookAttached())
             {
                 if (IsPlayerLookingToTheRight())
-                    playerRigidbody.velocity += Vector2.right * jumpForce;
+                    _playerRigidbody.velocity += Vector2.right * _jumpForce;
                 else
-                    playerRigidbody.velocity += Vector2.left * jumpForce;
+                    _playerRigidbody.velocity += Vector2.left * _jumpForce;
                 ProcessDoubleJump(true);
             }
             _hook.InactivateHook();
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayJump();
-            playerRigidbody.velocity += Vector2.up * jumpForce;
+            _playerRigidbody.velocity += Vector2.up * _jumpForce;
         }
-        else if (canDoubleJump)
+        else if (_canDoubleJump)
         {
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayJump();
-            playerRigidbody.velocity += Vector2.up * jumpForce;
+            _playerRigidbody.velocity += Vector2.up * _jumpForce;
             ProcessDoubleJump(true);
         }
     }
 
     void OnMove(InputValue inputValue)
     {
-        horizontalMovement = inputValue.Get<Vector2>().x;
-    }
-
-
-    void OnShoot(InputValue inputValue)
-    {
+        _horizontalMovement = inputValue.Get<Vector2>().x;
     }
 
     void Move()
     {
-        if (playerRigidbody.velocity.x < maxMoveSpeed && playerRigidbody.velocity.x > maxMoveSpeed * -1)
+        if (_playerRigidbody.velocity.x < _maxMoveSpeed && _playerRigidbody.velocity.x > _maxMoveSpeed * -1)
         {
-            if (horizontalMovement > 0)
+            if (_horizontalMovement > 0)
             {
-                spriteRenderer.flipX = true;
-                playerRigidbody.velocity += Vector2.right * (moveSpeed * Time.deltaTime * horizontalMovement);
+                _spriteRenderer.flipX = true;
+                _playerRigidbody.velocity += Vector2.right * (_moveSpeed * Time.deltaTime * _horizontalMovement);
             }
-            else if (horizontalMovement < 0)
+            else if (_horizontalMovement < 0)
             {
-                spriteRenderer.flipX = false;
-                playerRigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontalMovement * -1));
+                _spriteRenderer.flipX = false;
+                _playerRigidbody.velocity += Vector2.left * (_moveSpeed * Time.deltaTime * (_horizontalMovement * -1));
             }
         }
     }
 
-    float animationTimer = 0f;
-    int animationState = 0;
     void Animate()
     {
         // TODO: make this avaliable to every entity 
-        if (animationTimer > 0.1f)
+        if (_animationTimer > 0.1f)
         {
-            if (animationState == 0)
+            if (_animationState == 0)
             {
-                skin.transform.Rotate(new Vector3(0, 0, 9));
-                skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
-                animationState = 1;
+                _skin.transform.Rotate(new Vector3(0, 0, 9));
+                _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
+                _animationState = 1;
             }
-            else if (animationState == 1)
+            else if (_animationState == 1)
             {
-                skin.transform.localRotation = Quaternion.identity;
-                skin.transform.localPosition = Vector3.zero;
-                animationState = 2;
+                _skin.transform.localRotation = Quaternion.identity;
+                _skin.transform.localPosition = Vector3.zero;
+                _animationState = 2;
             }
-            else if (animationState == 2)
+            else if (_animationState == 2)
             {
-                skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
-                skin.transform.Rotate(new Vector3(0, 0, -9));
-                animationState = 3;
+                _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
+                _skin.transform.Rotate(new Vector3(0, 0, -9));
+                _animationState = 3;
             }
-            else if (animationState == 3)
+            else if (_animationState == 3)
             {
-                skin.transform.localRotation = Quaternion.identity;
-                skin.transform.localPosition = Vector3.zero;
-                animationState = 0;
+                _skin.transform.localRotation = Quaternion.identity;
+                _skin.transform.localPosition = Vector3.zero;
+                _animationState = 0;
             }
-            animationTimer = 0f;
+            _animationTimer = 0f;
         }
 
-        if (horizontalMovement != 0)
+        if (_horizontalMovement != 0)
         {
-            animationTimer += Time.deltaTime;
+            _animationTimer += Time.deltaTime;
         }
-        else if (doubleJumpRotationAmount == 0)
+        else if (_doubleJumpRotationAmount == 0)
         {
-            animationTimer = 0;
-            skin.transform.Rotate(new Vector3(0, 0, 0));
-            animationState = 0;
-            skin.transform.localRotation = Quaternion.identity;
-            skin.transform.localPosition = Vector3.zero;
+            _animationTimer = 0;
+            _skin.transform.Rotate(new Vector3(0, 0, 0));
+            _animationState = 0;
+            _skin.transform.localRotation = Quaternion.identity;
+            _skin.transform.localPosition = Vector3.zero;
         }
     }
-
-    float doubleJumpTimer = 0f;
-    float doubleJumpRotationAmount = 0f;
-    float doubleJumpRotationForce;
 
     void ProcessDoubleJump(bool playerDoubleJumped)
     {
         var baseForce = 1125;
         if (playerDoubleJumped)
         {
-            canDoubleJump = false;
+            _canDoubleJump = false;
             if (IsPlayerLookingToTheRight())
-                doubleJumpRotationForce = baseForce * -1;
+                _doubleJumpRotationForce = baseForce * -1;
             else
-                doubleJumpRotationForce = baseForce;
-            doubleJumpRotationAmount += Time.deltaTime;
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.8f);
-            trailRenderer.startColor = Color.black;
-            trailRenderer.endColor = Color.black;
+                _doubleJumpRotationForce = baseForce;
+            _doubleJumpRotationAmount += Time.deltaTime;
+            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.8f);
+            _trailRenderer.startColor = Color.black;
+            _trailRenderer.endColor = Color.black;
             //TODO: IMPORTANT: make player invecible while rotating
         }
 
-        if (doubleJumpRotationAmount != 0f)
+        if (_doubleJumpRotationAmount != 0f)
         {
-            var rotationAmount = doubleJumpRotationForce * Time.deltaTime;
-            doubleJumpRotationAmount += rotationAmount;
-            skin.transform.Rotate(new Vector3(0, 0, rotationAmount));
+            var rotationAmount = _doubleJumpRotationForce * Time.deltaTime;
+            _doubleJumpRotationAmount += rotationAmount;
+            _skin.transform.Rotate(new Vector3(0, 0, rotationAmount));
         }
-        if (doubleJumpRotationAmount > 360f || doubleJumpRotationAmount < -360f)
+        if (_doubleJumpRotationAmount > 360f || _doubleJumpRotationAmount < -360f)
         {
-            skin.transform.localRotation = Quaternion.identity;
-            skin.transform.localPosition = Vector3.zero;
-            doubleJumpRotationAmount = 0f;
-            trailRenderer.startColor = Color.white;
-            trailRenderer.endColor = Color.white;
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
+            _skin.transform.localRotation = Quaternion.identity;
+            _skin.transform.localPosition = Vector3.zero;
+            _doubleJumpRotationAmount = 0f;
+            _trailRenderer.startColor = Color.white;
+            _trailRenderer.endColor = Color.white;
+            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 1f);
         }
 
-        if (!canDoubleJump && (playerRigidbody.velocity.y == 0 || _hook.IsHookAttached()))
-            doubleJumpTimer += Time.deltaTime;
+        if (!_canDoubleJump && (_playerRigidbody.velocity.y == 0 || _hook.IsHookAttached()))
+            _doubleJumpTimer += Time.deltaTime;
 
-        if (doubleJumpTimer > 0.1f)
+        if (_doubleJumpTimer > 0.1f)
         {
-            canDoubleJump = true;
-            doubleJumpTimer = 0;
+            _canDoubleJump = true;
+            _doubleJumpTimer = 0;
         }
     }
 
     public bool IsPlayerLookingToTheRight()
     {
         // This just makes the code more readable
-        return spriteRenderer.flipX;
+        return _spriteRenderer.flipX;
     }
 
-    float lastVelocity = 0f;
     void ProcessPlayerVelocityEffects()
     {
-        Vector2 velocity = playerRigidbody.velocity;
+        Vector2 velocity = _playerRigidbody.velocity;
         var effectPower = velocity.magnitude / 100;
         // Trail
         if (velocity.magnitude > 30)
         {
-            trailRenderer.time = effectPower;
+            _trailRenderer.time = effectPower;
         }
-        else if (trailRenderer.time > 0)
+        else if (_trailRenderer.time > 0)
         {
-            trailRenderer.time -= Time.deltaTime;
+            _trailRenderer.time -= Time.deltaTime;
         }
 
-        if (lastVelocity - velocity.magnitude > 40)
+        if (_lastVelocity - velocity.magnitude > 40)
         {
             // If the stop is too fast the dude hit his head into something
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHighSpeedHit();
         }
-        lastVelocity = velocity.magnitude;
+        _lastVelocity = velocity.magnitude;
         // Wind sound
-        if (velocity.magnitude < 30 && windSound.volume > 0)
-            windSound.volume -= Time.deltaTime;
+        if (velocity.magnitude < 30 && _windSound.volume > 0)
+            _windSound.volume -= Time.deltaTime;
         else
-            windSound.volume += Time.deltaTime;
+            _windSound.volume += Time.deltaTime;
+    }
+    public void SetPlayerCamera(PlayerCamera camera)
+    {
+        Camera = camera;
+    }
 
+    public void SetPlayerTeam(Team team) 
+    {
+        Team = team;    
     }
 }

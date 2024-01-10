@@ -31,7 +31,7 @@ public class GameLogic : MonoBehaviour
         var camera = Instantiate(_playerCameraPrefab);
         camera.SetTarget(crosshair.transform);
 
-        player.camera = camera;
+        player.SetPlayerCamera(camera);
 
         AddLocalPlayer(player);
         _weaponSystem.GetWeaponByName(player.GetComponent<CombatBehaviour>(), "Pistol");
@@ -75,25 +75,25 @@ public class GameLogic : MonoBehaviour
             case 0:
                 throw new Exception("Can't setup camera if there are no players");
             case 1:
-                GameState.Instance.LocalPlayers[0].camera.SetupCamera(new Rect(0f, 0f, 1f, 1f), cameraDistance, true);
+                GameState.Instance.LocalPlayers[0].Camera.SetupCamera(new Rect(0f, 0f, 1f, 1f), cameraDistance, true);
                 break;
             case 2:
                 cameraDistance = 20;
-                GameState.Instance.LocalPlayers[0].camera.SetupCamera(new Rect(0f, 0f, 0.5f, 1f), cameraDistance, true);
-                GameState.Instance.LocalPlayers[1].camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 1f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[0].Camera.SetupCamera(new Rect(0f, 0f, 0.5f, 1f), cameraDistance, true);
+                GameState.Instance.LocalPlayers[1].Camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 1f), cameraDistance, false);
                 break; 
             case 3: 
                 cameraDistance = 20;
-                GameState.Instance.LocalPlayers[0].camera.SetupCamera(new Rect(0f, 0f, 0.5f, 1f), cameraDistance, true); // This man has half of the screen, it's good to be player one
-                GameState.Instance.LocalPlayers[1].camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 0.5f), cameraDistance, false);
-                GameState.Instance.LocalPlayers[2].camera.SetupCamera(new Rect(0.5f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[0].Camera.SetupCamera(new Rect(0f, 0f, 0.5f, 1f), cameraDistance, true); // This man has half of the screen, it's good to be player one
+                GameState.Instance.LocalPlayers[1].Camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 0.5f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[2].Camera.SetupCamera(new Rect(0.5f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
                 break;
             case 4:
                 cameraDistance = 20;
-                GameState.Instance.LocalPlayers[0].camera.SetupCamera(new Rect(0f, 0f, 0.5f, 0.5f), cameraDistance, true); // This man has half of the screen, it's good to be player one
-                GameState.Instance.LocalPlayers[1].camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 0.5f), cameraDistance, false);
-                GameState.Instance.LocalPlayers[2].camera.SetupCamera(new Rect(0f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
-                GameState.Instance.LocalPlayers[3].camera.SetupCamera(new Rect(0.5f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[0].Camera.SetupCamera(new Rect(0f, 0f, 0.5f, 0.5f), cameraDistance, true); // This man has half of the screen, it's good to be player one
+                GameState.Instance.LocalPlayers[1].Camera.SetupCamera(new Rect(0.5f, 0f, 0.5f, 0.5f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[2].Camera.SetupCamera(new Rect(0f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
+                GameState.Instance.LocalPlayers[3].Camera.SetupCamera(new Rect(0.5f, 0.5f, 0.5f, 0.5f), cameraDistance, false);
                 break;
             default: 
                 break;

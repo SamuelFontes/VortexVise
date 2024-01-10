@@ -5,7 +5,6 @@ public class HookTarget : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private float _crossHairDistance = 4.5f;
-    private bool _useMouse = false;
 
     private void OnAim(InputValue inputValue)
     {
