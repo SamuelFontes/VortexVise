@@ -85,6 +85,17 @@
                 },
                 {
                     "name": "",
+                    "id": "01b418ba-b984-4274-9bcb-4176ae1d3a7f",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "b0c86b38-c1e6-4627-9431-cfa1c6587c23",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -307,6 +318,17 @@
                     "name": "",
                     "id": "277e13e9-0486-4f24-8718-f399b7ce81ec",
                     "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f5d05d64-f237-4805-b6ae-102abce64c64",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
