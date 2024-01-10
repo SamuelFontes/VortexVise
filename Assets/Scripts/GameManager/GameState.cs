@@ -42,11 +42,11 @@ public class GameState : MonoBehaviour
 
     private void LoadTeamsData()
     {
-        MatchTeams.Add(new Team(TeamLayer.TeamOne,ProjectileTeamLayer.TeamOne));
-        MatchTeams.Add(new Team (TeamLayer.TeamTwo, ProjectileTeamLayer.TeamTwo));
-        MatchTeams.Add(new Team (TeamLayer.TeamThree, ProjectileTeamLayer.TeamThree));
-        MatchTeams.Add(new Team (TeamLayer.TeamFour, ProjectileTeamLayer.TeamFour));
-        MatchTeams.Add(new Team (TeamLayer.TeamFive, ProjectileTeamLayer.TeamFive));
+        MatchTeams.Add(new Team(TeamLayer.TeamOne, ProjectileTeamLayer.TeamOne));
+        MatchTeams.Add(new Team (TeamLayer.TeamTwo,  ProjectileTeamLayer.TeamTwo));
+        MatchTeams.Add(new Team (TeamLayer.TeamThree,  ProjectileTeamLayer.TeamThree));
+        MatchTeams.Add(new Team (TeamLayer.TeamFour,  ProjectileTeamLayer.TeamFour));
+        MatchTeams.Add(new Team (TeamLayer.TeamFive,  ProjectileTeamLayer.TeamFive));
     }
     public void SetPlayerTeam(Player player, TeamLayer teamLayer)
     {
