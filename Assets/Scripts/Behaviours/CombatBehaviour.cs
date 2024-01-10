@@ -4,13 +4,14 @@ using UnityEngine;
 public class CombatBehaviour : MonoBehaviour
 {
     // If you put this into an object it will turn on combat on it
-    public float MaxHP { get; private set; }
-    public float CurrentHP {  get; private set; }
+    [field:SerializeField] public float MaxHP { get; private set; }
+    [field:SerializeField] public float CurrentHP {  get; private set; }
     public bool IsAlive {  get; private set; }
+    public bool IsImortal {  get; private set; }
 
-    private List<Weapon> _weapons = new List<Weapon>();
-    private Weapon _currentWeapon;
-    private Team _team;
+    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
+    [SerializeField] private Weapon _currentWeapon;
+    [SerializeField] private Team _team;
 
     public void AddWeapon(Weapon weapon)
     {

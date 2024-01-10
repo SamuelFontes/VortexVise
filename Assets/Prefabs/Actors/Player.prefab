@@ -162,7 +162,7 @@ MonoBehaviour:
   Id: 
   hook: {fileID: 8295864247385400770}
   crosshair: {fileID: 8943341183419759886}
-  camera: {fileID: 4528950061139662844, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
+  camera: {fileID: 692886450353534366, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
   skin: {fileID: 5264950938015442179}
   jumpForce: 30
   moveSpeed: 80
@@ -282,12 +282,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 043dc746a1a453141986bd9ac265efef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapons: []
-  team: 10
-  MaxHP: 100
-  CurrentHP: 100
-  IsAlive: 1
-  CurrentWeapon: {fileID: 0}
+  <MaxHP>k__BackingField: 100
+  <CurrentHP>k__BackingField: 100
+  _weapons: []
+  _currentWeapon: {fileID: 0}
 --- !u!96 &1374662673421214663
 TrailRenderer:
   serializedVersion: 3
@@ -650,15 +648,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c892c658b6aeada40a30dda3f69a365f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 7684653115207423041}
-  player: {fileID: 3499581267765288195}
-  playerRigidbody: {fileID: 0}
-  Impact: {fileID: 6734857270616595028, guid: 5cd569ecf0cda894c8c40a4f04ec1ea3, type: 3}
-  ShootingEffect: {fileID: 8312258458763329035, guid: 72ff6da39b38a2f4e85f94d14a7a60b1, type: 3}
-  hookForce: 150
-  hookPullOffset: 3.5
-  CameraShake: 0.1
-  CameraShakeDuration: 0.1
+  _impactPrefab: {fileID: 6734857270616595028, guid: 5cd569ecf0cda894c8c40a4f04ec1ea3, type: 3}
+  _shootingEffectPrefab: {fileID: 8312258458763329035, guid: 72ff6da39b38a2f4e85f94d14a7a60b1, type: 3}
+  _hookForce: 150
+  _hookPullOffset: 3.5
+  _cameraShake: 0.1
+  _cameraShakeDuration: 0.1
 --- !u!120 &5053353799809020993
 LineRenderer:
   serializedVersion: 2
