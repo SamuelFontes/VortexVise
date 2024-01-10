@@ -1,11 +1,13 @@
 ﻿
 public class Team
 {
-    public Teams TeamLayer { get; private set; }
+    public TeamLayer TeamLayer { get; private set; }
+    public ProjectileTeamLayer ProjectileTeamLayer { get; private set; }
     public int NumberOfActors { get; private set; }
-    public Team(Teams team)
+    public Team(TeamLayer teamLayer, ProjectileTeamLayer projectileTeamLayer)
     {
-        TeamLayer = team;
+        TeamLayer = teamLayer;
+        ProjectileTeamLayer = projectileTeamLayer;
         NumberOfActors = 0;
     }
 
@@ -16,5 +18,20 @@ public class Team
     public void RemoveActorFromTeam()
     {
         NumberOfActors--;
+    }
+    public int GetTeamLayer()
+    {
+        return (int)TeamLayer;
+    }
+    public int GetProjectileTeamLayer()
+    {
+        return (int)ProjectileTeamLayer;
+    }
+    public void AddPlayerToTeam(Player player)
+    {
+        player.Team = this;
+        // Set the layer on unity
+        player.gameObject.layer = GetTeamLayer();
+        AddActorToTeam();
     }
 }

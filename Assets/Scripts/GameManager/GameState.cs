@@ -42,21 +42,17 @@ public class GameState : MonoBehaviour
 
     private void LoadTeamsData()
     {
-        MatchTeams.Add(new Team(Teams.TeamOne));
-        MatchTeams.Add(new Team (Teams.TeamTwo));
-        MatchTeams.Add(new Team (Teams.TeamThree));
-        MatchTeams.Add(new Team (Teams.TeamFour));
-        MatchTeams.Add(new Team (Teams.TeamFive));
+        MatchTeams.Add(new Team(TeamLayer.TeamOne,ProjectileTeamLayer.TeamOne));
+        MatchTeams.Add(new Team (TeamLayer.TeamTwo, ProjectileTeamLayer.TeamTwo));
+        MatchTeams.Add(new Team (TeamLayer.TeamThree, ProjectileTeamLayer.TeamThree));
+        MatchTeams.Add(new Team (TeamLayer.TeamFour, ProjectileTeamLayer.TeamFour));
+        MatchTeams.Add(new Team (TeamLayer.TeamFive, ProjectileTeamLayer.TeamFive));
     }
-    public void SetPlayerTeam(Player player, Teams teamLayer)
+    public void SetPlayerTeam(Player player, TeamLayer teamLayer)
     {
-        // Set the layer on unity
-        player.gameObject.layer = (int)teamLayer;
-
         // Save on gamestate
         var team = MatchTeams.Where(_ => _.TeamLayer == teamLayer).FirstOrDefault();
-        team.AddActorToTeam();
-
+        team.AddPlayerToTeam(player);   
     }
 
     public void AutoBalancePlayer(Player player)
@@ -64,8 +60,7 @@ public class GameState : MonoBehaviour
         // This should be used only on modes where the player can join a random team
         var leastPlayers = MatchTeams.Min(x => x.NumberOfActors);
         var bestTeamToJoin = MatchTeams.Where(_ => _.NumberOfActors == leastPlayers).FirstOrDefault(); // Any team with less players will do
-
-        SetPlayerTeam(player, bestTeamToJoin.TeamLayer);
+        bestTeamToJoin.AddPlayerToTeam(player);
     }
 
     public void RemovePlayerFromTeam(Player player)

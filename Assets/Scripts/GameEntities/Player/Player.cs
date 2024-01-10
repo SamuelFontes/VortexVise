@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public string Id;
-    public Teams Team { get; set; } 
+    public Team Team { get; set; } 
 
     public GameObject hook;
     public GameObject crosshair;

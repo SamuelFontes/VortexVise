@@ -4,11 +4,19 @@
     Mission = 2,
 }
 
-public enum Teams
+public enum TeamLayer
 {
     TeamOne = 10, 
     TeamTwo = 11, 
     TeamThree = 12, 
     TeamFour = 13, 
     TeamFive = 14
+}
+public enum ProjectileTeamLayer
+{
+    TeamOne = 15, 
+    TeamTwo = 16, 
+    TeamThree = 17, 
+    TeamFour = 18, 
+    TeamFive = 19
 }

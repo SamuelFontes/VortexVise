@@ -123,7 +123,7 @@ public class GameLogic : MonoBehaviour
                 GameState.Instance.AutoBalancePlayer(player);
                 break;
             case Gamemode.Mission:
-                GameState.Instance.SetPlayerTeam(player, Teams.TeamOne);
+                GameState.Instance.SetPlayerTeam(player, TeamLayer.TeamOne);
                 break;
         }
     }

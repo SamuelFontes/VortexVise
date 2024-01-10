@@ -10,7 +10,7 @@ public class CombatBehaviour : MonoBehaviour
 
     private List<Weapon> _weapons = new List<Weapon>();
     private Weapon _currentWeapon;
-    private Teams _team;
+    private Team _team;
 
     public void AddWeapon(Weapon weapon)
     {
