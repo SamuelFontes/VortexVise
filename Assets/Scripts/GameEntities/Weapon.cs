@@ -15,7 +15,8 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] private Projectile _projectile;
     [SerializeField] private Vector3 _weaponOffset;
-    [SerializeField] private GameObject _explosion;
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private GameObject _shootingEffectPrefab;
     [SerializeField] private float _timeBetweenShots;
     [SerializeField] private float _timeToReload;
     private float _timeUntilNextShot;
@@ -70,7 +71,7 @@ public class Weapon : MonoBehaviour
         else 
             direction = Vector2.left;
 
-        bullet.Init(BaseDamage, _explosion, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
+        bullet.Init(BaseDamage, _explosionPrefab, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
     }
 
     bool isFlipped = false;
@@ -104,6 +105,7 @@ public class Weapon : MonoBehaviour
             Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.3f);
             _player.Camera.StartShake(0.1f,0.1f);
         }
+        Instantiate(_shootingEffectPrefab, transform.position, transform.rotation);
     }
 
     private void OnReload()

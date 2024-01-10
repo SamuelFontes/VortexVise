@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private int _animationState = 0;
     private float _horizontalMovement = 0;
     private bool _canDoubleJump = true;
+    private bool _lockAimSide = false;
 
     void Start()
     {
@@ -83,12 +84,14 @@ public class Player : MonoBehaviour
         {
             if (_horizontalMovement > 0)
             {
-                _spriteRenderer.flipX = true;
+                if(!_lockAimSide)
+                    _spriteRenderer.flipX = true;
                 _playerRigidbody.velocity += Vector2.right * (_moveSpeed * Time.deltaTime * _horizontalMovement);
             }
             else if (_horizontalMovement < 0)
             {
-                _spriteRenderer.flipX = false;
+                if(!_lockAimSide)
+                    _spriteRenderer.flipX = false;
                 _playerRigidbody.velocity += Vector2.left * (_moveSpeed * Time.deltaTime * (_horizontalMovement * -1));
             }
         }
@@ -224,4 +227,11 @@ public class Player : MonoBehaviour
     {
         Team = team;    
     }
+    void OnLockAim(InputValue input)
+    {
+        if (input.Get() == null)
+            _lockAimSide = false;
+        else
+            _lockAimSide = true;
+    } 
 }

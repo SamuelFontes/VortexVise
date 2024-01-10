@@ -89,6 +89,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LockAim"",
+                    ""type"": ""Value"",
+                    ""id"": ""daecd60d-ff8b-4d99-80c1-a4147ec5ceb4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -388,6 +397,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d30310c-610d-4178-ad52-b21ffb8d43f9"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseAndKeyboard"",
+                    ""action"": ""LockAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dbe7088-c602-4730-bd8c-4f4e5175c9e4"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""LockAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -431,6 +462,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_ActorCombat_Shoot = m_ActorCombat.FindAction("Shoot", throwIfNotFound: true);
         m_ActorCombat_Join = m_ActorCombat.FindAction("Join", throwIfNotFound: true);
         m_ActorCombat_Reload = m_ActorCombat.FindAction("Reload", throwIfNotFound: true);
+        m_ActorCombat_LockAim = m_ActorCombat.FindAction("LockAim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -499,6 +531,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ActorCombat_Shoot;
     private readonly InputAction m_ActorCombat_Join;
     private readonly InputAction m_ActorCombat_Reload;
+    private readonly InputAction m_ActorCombat_LockAim;
     public struct ActorCombatActions
     {
         private @PlayerControls m_Wrapper;
@@ -510,6 +543,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_ActorCombat_Shoot;
         public InputAction @Join => m_Wrapper.m_ActorCombat_Join;
         public InputAction @Reload => m_Wrapper.m_ActorCombat_Reload;
+        public InputAction @LockAim => m_Wrapper.m_ActorCombat_LockAim;
         public InputActionMap Get() { return m_Wrapper.m_ActorCombat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -540,6 +574,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @LockAim.started += instance.OnLockAim;
+            @LockAim.performed += instance.OnLockAim;
+            @LockAim.canceled += instance.OnLockAim;
         }
 
         private void UnregisterCallbacks(IActorCombatActions instance)
@@ -565,6 +602,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @LockAim.started -= instance.OnLockAim;
+            @LockAim.performed -= instance.OnLockAim;
+            @LockAim.canceled -= instance.OnLockAim;
         }
 
         public void RemoveCallbacks(IActorCombatActions instance)
@@ -609,5 +649,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnJoin(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnLockAim(InputAction.CallbackContext context);
     }
 }

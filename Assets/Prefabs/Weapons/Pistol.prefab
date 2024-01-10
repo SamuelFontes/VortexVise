@@ -109,7 +109,8 @@ MonoBehaviour:
   <ProjectileForce>k__BackingField: 100
   _projectile: {fileID: 1350037332825178018, guid: 3e6b09ccabe27aa4f920b6d9998b9600, type: 3}
   _weaponOffset: {x: -1.2, y: -0.3, z: 0}
-  _explosion: {fileID: 9103940480598292605, guid: 5af6d5376f10364408be78dcae1689c6, type: 3}
+  _explosionPrefab: {fileID: 9103940480598292605, guid: 5af6d5376f10364408be78dcae1689c6, type: 3}
+  _shootingEffectPrefab: {fileID: 3680845812934608677, guid: 28f93341980ee944cb14fe1b37aaaa7e, type: 3}
   _timeBetweenShots: 0.12
   _timeToReload: 1
 --- !u!82 &7465045549125163962
