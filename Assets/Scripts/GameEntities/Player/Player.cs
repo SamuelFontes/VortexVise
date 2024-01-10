@@ -29,9 +29,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         Id = GetInstanceID().ToString();
+        Gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
+
         _playerRigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = _skin.GetComponent<SpriteRenderer>();
-        Gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
         _trailRenderer = GetComponent<TrailRenderer>();
         _windSound = GetComponent<AudioSource>();
     }

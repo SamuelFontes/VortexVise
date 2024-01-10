@@ -21,6 +21,10 @@ public class AudioSystem : MonoBehaviour
     {
         transform.Find("HookDelay").GetComponent<AudioSource>().Play();
     }
+    public void PlayReload()
+    {
+        transform.Find("Reload").GetComponent<AudioSource>().Play();
+    }
     public void PlayHighSpeedHit()
     {
         transform.Find("HighSpeedHit").GetComponent<AudioSource>().Play();

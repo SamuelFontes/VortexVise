@@ -102,7 +102,7 @@ MonoBehaviour:
   <Description>k__BackingField: Regular gun.
   <Range>k__BackingField: 10
   <BaseDamage>k__BackingField: 10
-  <SelfKnockback>k__BackingField: 3
+  <SelfKnockback>k__BackingField: 5
   <HasLaser>k__BackingField: 0
   <MaxAmmo>k__BackingField: 7
   <CurrentAmmo>k__BackingField: 7
@@ -110,6 +110,8 @@ MonoBehaviour:
   _projectile: {fileID: 1350037332825178018, guid: 3e6b09ccabe27aa4f920b6d9998b9600, type: 3}
   _weaponOffset: {x: -1.2, y: -0.3, z: 0}
   _explosion: {fileID: 9103940480598292605, guid: 5af6d5376f10364408be78dcae1689c6, type: 3}
+  _timeBetweenShots: 0.12
+  _timeToReload: 1
 --- !u!82 &7465045549125163962
 AudioSource:
   m_ObjectHideFlags: 0

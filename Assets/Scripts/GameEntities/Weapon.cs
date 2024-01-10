@@ -16,10 +16,15 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Projectile _projectile;
     [SerializeField] private Vector3 _weaponOffset;
     [SerializeField] private GameObject _explosion;
+    [SerializeField] private float _timeBetweenShots;
+    [SerializeField] private float _timeToReload;
+    private float _timeUntilNextShot;
+    private float _timeUntilReloadFinishes;
     private SpriteRenderer _parentSpriteRenderer;
     private SpriteRenderer _spriteRenderer;
     private AudioSource _sound;
     private CombatBehaviour _weaponOwner;
+    private Rigidbody2D _ownerRigidbody;
     private Player _player;
 
     
@@ -29,17 +34,35 @@ public class Weapon : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         transform.position = _weaponOffset;
         _sound = GetComponent<AudioSource>();
+        _timeUntilNextShot = _timeBetweenShots;
+        _timeUntilReloadFinishes = _timeToReload;
+        _ownerRigidbody = _weaponOwner.GetComponent<Rigidbody2D>();
     }
     void Update()
     {
+        if(_timeUntilNextShot < _timeBetweenShots)
+            _timeUntilNextShot += Time.deltaTime;
+        if(_timeUntilReloadFinishes < _timeToReload)
+            _timeUntilReloadFinishes += Time.deltaTime;
+
         RenderWeapon();
     }
 
     void OnShoot()
     {
-        _sound.Play();
-        if (_player != null)
-            Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.3f);
+        if (_timeUntilNextShot < _timeBetweenShots)
+            return;
+        if (_timeUntilReloadFinishes < _timeToReload)
+            return;
+        if(CurrentAmmo <= 0)
+        {
+            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookDelay();
+            return;
+        }
+        _timeUntilNextShot = 0;
+        CurrentAmmo--;
+        ApplyShootEffects();
+        ApplySelfKnockback();
         var bullet = Instantiate(_projectile, transform.position, Quaternion.identity);
         Vector2 direction;
         if (IsLookingRight())
@@ -71,5 +94,34 @@ public class Weapon : MonoBehaviour
     {
         _weaponOwner = combatant;
         _player = _weaponOwner.gameObject.GetComponent<Player>();
+    }
+
+    private void ApplyShootEffects()
+    {
+        _sound.Play();
+        if (_player != null)
+        {
+            Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.3f);
+            _player.Camera.StartShake(0.1f,0.1f);
+        }
+    }
+
+    private void OnReload()
+    {
+        if (_timeUntilReloadFinishes < _timeToReload || CurrentAmmo == MaxAmmo)
+            return;
+        // TODO: create reload bar with timing minigame
+        GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayReload();
+        CurrentAmmo = MaxAmmo;
+        _timeUntilReloadFinishes = 0;
+    }
+
+
+    private void ApplySelfKnockback() 
+    {
+        if (IsLookingRight())
+            _ownerRigidbody.velocity += Vector2.left * SelfKnockback;
+        else 
+            _ownerRigidbody.velocity += Vector2.right * SelfKnockback;
     }
 }
