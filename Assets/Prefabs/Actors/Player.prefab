@@ -160,14 +160,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 
-  hook: {fileID: 8295864247385400770}
-  crosshair: {fileID: 8943341183419759886}
+  _hook: {fileID: 1987999837595103230}
   camera: {fileID: 692886450353534366, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
   skin: {fileID: 5264950938015442179}
   jumpForce: 30
   moveSpeed: 80
   maxMoveSpeed: 20
-  hookShootForce: 70
 --- !u!50 &5455731206794010221
 Rigidbody2D:
   serializedVersion: 4
@@ -506,7 +504,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8356884318936785628
 Transform:
   m_ObjectHideFlags: 0
@@ -529,7 +527,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8295864247385400770}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -608,7 +606,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8295864247385400770}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -654,6 +652,8 @@ MonoBehaviour:
   _hookPullOffset: 3.5
   _cameraShake: 0.1
   _cameraShakeDuration: 0.1
+  _hookTarget: {fileID: 6456138821524484516}
+  _hookShootForce: 70
 --- !u!120 &5053353799809020993
 LineRenderer:
   serializedVersion: 2
@@ -662,7 +662,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8295864247385400770}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -770,7 +770,7 @@ GameObject:
   - component: {fileID: 5307854034238254697}
   - component: {fileID: 6456138821524484516}
   m_Layer: 3
-  m_Name: CrossHair
+  m_Name: HookTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

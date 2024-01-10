@@ -4,25 +4,19 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public string Id;
-    public Team Team { get; set; } 
+    public Team Team { get; set; }
 
-    public GameObject hook;
-    public GameObject crosshair;
+    [SerializeField] private Hook _hook;
     public PlayerCamera camera;
     public GameObject skin;
-    
+
     // Setup player movement
     public float jumpForce = 25;
     public float moveSpeed = 80;
     public float maxMoveSpeed = 20;
-
-    public float hookShootForce = 100;
-    float hookTimer = 0.2f; 
-
     Rigidbody2D playerRigidbody;
-    Rigidbody2D hookRigidbody;
     SpriteRenderer spriteRenderer;
-    Gamepad gamepad;
+    public Gamepad Gamepad { get; private set; }
     TrailRenderer trailRenderer;
     AudioSource windSound;
 
@@ -35,9 +29,8 @@ public class Player : MonoBehaviour
     {
         Id = GetInstanceID().ToString();
         playerRigidbody = GetComponent<Rigidbody2D>();
-        hookRigidbody = hook.GetComponent<Rigidbody2D>();
         spriteRenderer = skin.GetComponent<SpriteRenderer>();
-        gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
+        Gamepad = GetComponent<PlayerInput>().GetDevice<Gamepad>();
         trailRenderer = GetComponent<TrailRenderer>();
         windSound = GetComponent<AudioSource>();
     }
@@ -51,27 +44,23 @@ public class Player : MonoBehaviour
 
         ProcessDoubleJump(false);
 
-        if (hookTimer < 0.2f) 
-            hookTimer += Time.deltaTime; 
-
     }
 
     void OnJump()
     {
-        if (playerRigidbody.velocity.y == 0 || IsHookAttached())
+        if (playerRigidbody.velocity.y == 0 || _hook.IsHookAttached())
         {
-            if(IsHookAttached())
+            if (_hook.IsHookAttached())
             {
-                GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
-                if(IsPlayerLookingToTheRight())
-                    playerRigidbody.velocity += Vector2.right * jumpForce; 
+                if (IsPlayerLookingToTheRight())
+                    playerRigidbody.velocity += Vector2.right * jumpForce;
                 else
-                    playerRigidbody.velocity += Vector2.left * jumpForce; 
+                    playerRigidbody.velocity += Vector2.left * jumpForce;
                 ProcessDoubleJump(true);
             }
-            hook.SetActive(false);
+            _hook.InactivateHook();
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayJump();
-            playerRigidbody.velocity += Vector2.up * jumpForce; 
+            playerRigidbody.velocity += Vector2.up * jumpForce;
         }
         else if (canDoubleJump)
         {
@@ -86,79 +75,26 @@ public class Player : MonoBehaviour
         horizontalMovement = inputValue.Get<Vector2>().x;
     }
 
-    void OnHook(InputValue input)
-    {
-        if(input.Get() == null) 
-        {
-            // Hook button is being released
-            if(IsHookAttached())
-                GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
 
-            // This is the release of the button
-            if (hook.activeInHierarchy)
-            {
-                if(hookTimer < 0.2f) // Hook shooting, stop sound effect
-                    GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().StopHookShoot();
-                hook.SetActive(false);
-            }
-            return;
-        }
-        if(hookTimer < 0.2f)
-        {
-            // Hook on delay, can't shoot again
-            GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookDelay();
-            return;
-        }
-
-        // SHOOT HOOK
-
-        Utils.GamepadRumble(gamepad,0f,0.5f,0.2f);
-
-        // Start hook delay timer
-        hookTimer = 0;
-
-        GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookShoot();
-        hook.SetActive(true);
-        hookRigidbody.bodyType = RigidbodyType2D.Dynamic;
-        hook.transform.position = transform.position;
-
-        Vector2 hookTarget = crosshair.transform.position;
-        if (hookTarget == (Vector2)transform.position)
-        {
-            // This means there is no crosshair, so shoot upwards
-            hookTarget.y += 4.5f;
-            if (IsPlayerLookingToTheRight()) // This can't be the horizontal movement because it should work when the dude is not moving
-                hookTarget.x += 4.5f; // Loking to the right
-            else
-                hookTarget.x -= 4.5f;
-        }
-
-        Vector2 fromPlayerToHook = hookTarget - (Vector2)transform.position ;
-        fromPlayerToHook.Normalize();
-
-        // Shoot the hook
-        hook.GetComponent<Rigidbody2D>().velocity = fromPlayerToHook * hookShootForce;
-        hook.GetComponent<Hook>().PlayShootAnimataion();
-    }
-
-    void OnShoot(InputValue inputValue) 
+    void OnShoot(InputValue inputValue)
     {
     }
 
     void Move()
     {
-        if (playerRigidbody.velocity.x < maxMoveSpeed && playerRigidbody.velocity.x > maxMoveSpeed * -1) 
+        if (playerRigidbody.velocity.x < maxMoveSpeed && playerRigidbody.velocity.x > maxMoveSpeed * -1)
         {
-            if(horizontalMovement > 0)
+            if (horizontalMovement > 0)
             {
                 spriteRenderer.flipX = true;
                 playerRigidbody.velocity += Vector2.right * (moveSpeed * Time.deltaTime * horizontalMovement);
-            } else if(horizontalMovement < 0)
+            }
+            else if (horizontalMovement < 0)
             {
                 spriteRenderer.flipX = false;
                 playerRigidbody.velocity += Vector2.left * (moveSpeed * Time.deltaTime * (horizontalMovement * -1));
             }
-        } 
+        }
     }
 
     float animationTimer = 0f;
@@ -166,24 +102,27 @@ public class Player : MonoBehaviour
     void Animate()
     {
         // TODO: make this avaliable to every entity 
-        if(animationTimer > 0.1f)
+        if (animationTimer > 0.1f)
         {
-            if(animationState == 0)
+            if (animationState == 0)
             {
-                skin.transform.Rotate(new Vector3(0,0,9));
+                skin.transform.Rotate(new Vector3(0, 0, 9));
                 skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
                 animationState = 1;
-            } else if(animationState == 1)
+            }
+            else if (animationState == 1)
             {
                 skin.transform.localRotation = Quaternion.identity;
                 skin.transform.localPosition = Vector3.zero;
                 animationState = 2;
-            } else if(animationState == 2)
+            }
+            else if (animationState == 2)
             {
                 skin.transform.localPosition = skin.transform.localPosition + Vector3.up * 0.1f;
-                skin.transform.Rotate(new Vector3(0,0,-9));
+                skin.transform.Rotate(new Vector3(0, 0, -9));
                 animationState = 3;
-            } else if(animationState == 3)
+            }
+            else if (animationState == 3)
             {
                 skin.transform.localRotation = Quaternion.identity;
                 skin.transform.localPosition = Vector3.zero;
@@ -192,14 +131,14 @@ public class Player : MonoBehaviour
             animationTimer = 0f;
         }
 
-        if(horizontalMovement != 0)
+        if (horizontalMovement != 0)
         {
             animationTimer += Time.deltaTime;
         }
-        else if(doubleJumpRotationAmount == 0)
+        else if (doubleJumpRotationAmount == 0)
         {
             animationTimer = 0;
-            skin.transform.Rotate(new Vector3(0,0,0));
+            skin.transform.Rotate(new Vector3(0, 0, 0));
             animationState = 0;
             skin.transform.localRotation = Quaternion.identity;
             skin.transform.localPosition = Vector3.zero;
@@ -221,43 +160,39 @@ public class Player : MonoBehaviour
             else
                 doubleJumpRotationForce = baseForce;
             doubleJumpRotationAmount += Time.deltaTime;
-            spriteRenderer.color = new Color(spriteRenderer.color.r,spriteRenderer.color.g,spriteRenderer.color.b,0.8f);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.8f);
             trailRenderer.startColor = Color.black;
             trailRenderer.endColor = Color.black;
             //TODO: IMPORTANT: make player invecible while rotating
         }
 
-        if(doubleJumpRotationAmount != 0f)
+        if (doubleJumpRotationAmount != 0f)
         {
             var rotationAmount = doubleJumpRotationForce * Time.deltaTime;
             doubleJumpRotationAmount += rotationAmount;
-            skin.transform.Rotate(new Vector3(0,0,rotationAmount));
+            skin.transform.Rotate(new Vector3(0, 0, rotationAmount));
         }
-        if(doubleJumpRotationAmount > 360f || doubleJumpRotationAmount < -360f)
+        if (doubleJumpRotationAmount > 360f || doubleJumpRotationAmount < -360f)
         {
             skin.transform.localRotation = Quaternion.identity;
             skin.transform.localPosition = Vector3.zero;
             doubleJumpRotationAmount = 0f;
             trailRenderer.startColor = Color.white;
             trailRenderer.endColor = Color.white;
-            spriteRenderer.color = new Color(spriteRenderer.color.r,spriteRenderer.color.g,spriteRenderer.color.b,1f);
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
         }
 
-        if (!canDoubleJump && (playerRigidbody.velocity.y == 0 || IsHookAttached())) 
+        if (!canDoubleJump && (playerRigidbody.velocity.y == 0 || _hook.IsHookAttached()))
             doubleJumpTimer += Time.deltaTime;
 
-        if(doubleJumpTimer > 0.1f)
+        if (doubleJumpTimer > 0.1f)
         {
             canDoubleJump = true;
             doubleJumpTimer = 0;
         }
     }
 
-    bool IsHookAttached()
-    {
-        return hook.activeInHierarchy && hook.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static;
-    }
-    bool IsPlayerLookingToTheRight()
+    public bool IsPlayerLookingToTheRight()
     {
         // This just makes the code more readable
         return spriteRenderer.flipX;
@@ -273,19 +208,19 @@ public class Player : MonoBehaviour
         {
             trailRenderer.time = effectPower;
         }
-        else if(trailRenderer.time > 0) 
+        else if (trailRenderer.time > 0)
         {
             trailRenderer.time -= Time.deltaTime;
         }
 
-        if(lastVelocity - velocity.magnitude > 40)
+        if (lastVelocity - velocity.magnitude > 40)
         {
             // If the stop is too fast the dude hit his head into something
             GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHighSpeedHit();
         }
         lastVelocity = velocity.magnitude;
         // Wind sound
-        if(velocity.magnitude < 30 && windSound.volume > 0)
+        if (velocity.magnitude < 30 && windSound.volume > 0)
             windSound.volume -= Time.deltaTime;
         else
             windSound.volume += Time.deltaTime;
