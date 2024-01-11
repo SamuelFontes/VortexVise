@@ -215,7 +215,7 @@ public class Player : MonoBehaviour
         // Wind sound
         if (velocity.magnitude < 30 && _windSound.volume > 0)
             _windSound.volume -= Time.deltaTime;
-        else
+        else if(velocity.magnitude > 30)
             _windSound.volume += Time.deltaTime;
     }
     public void SetPlayerCamera(PlayerCamera camera)
