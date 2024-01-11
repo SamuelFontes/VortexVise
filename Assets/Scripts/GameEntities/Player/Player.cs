@@ -80,20 +80,19 @@ public class Player : MonoBehaviour
 
     void Move()
     {
-        if (_playerRigidbody.velocity.x < _maxMoveSpeed && _playerRigidbody.velocity.x > _maxMoveSpeed * -1)
+        if (_horizontalMovement > 0)
         {
-            if (_horizontalMovement > 0)
-            {
-                if(!_lockAimSide)
-                    _spriteRenderer.flipX = true;
+            if(!_lockAimSide)
+                _spriteRenderer.flipX = true;
+            if (_playerRigidbody.velocity.x < _maxMoveSpeed && _playerRigidbody.velocity.x > _maxMoveSpeed * -1)
                 _playerRigidbody.velocity += Vector2.right * (_moveSpeed * Time.deltaTime * _horizontalMovement);
-            }
-            else if (_horizontalMovement < 0)
-            {
-                if(!_lockAimSide)
-                    _spriteRenderer.flipX = false;
+        }
+        else if (_horizontalMovement < 0)
+        {
+            if(!_lockAimSide)
+                _spriteRenderer.flipX = false;
+            if (_playerRigidbody.velocity.x < _maxMoveSpeed && _playerRigidbody.velocity.x > _maxMoveSpeed * -1)
                 _playerRigidbody.velocity += Vector2.left * (_moveSpeed * Time.deltaTime * (_horizontalMovement * -1));
-            }
         }
     }
 
@@ -157,7 +156,8 @@ public class Player : MonoBehaviour
             _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.8f);
             _trailRenderer.startColor = Color.black;
             _trailRenderer.endColor = Color.black;
-            //TODO: IMPORTANT: make player invecible while rotating
+            // MAKE PLAYER IMMORTAL WHILE ROLLING
+            gameObject.layer = Team.GetImmortalTeamLayer();
         }
 
         if (_doubleJumpRotationAmount != 0f)
@@ -174,6 +174,8 @@ public class Player : MonoBehaviour
             _trailRenderer.startColor = Color.white;
             _trailRenderer.endColor = Color.white;
             _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 1f);
+            // Make player mortal again
+            gameObject.layer = Team.GetTeamLayer();
         }
 
         if (!_canDoubleJump && (_playerRigidbody.velocity.y == 0 || _hook.IsHookAttached()))

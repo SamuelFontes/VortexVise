@@ -23,6 +23,10 @@ public class Team
     {
         return (int)TeamLayer;
     }
+    public int GetImmortalTeamLayer()
+    {
+        return (int)TeamLayer.Immortal;
+    }
     public int GetProjectileTeamLayer()
     {
         return (int)ProjectileTeamLayer;

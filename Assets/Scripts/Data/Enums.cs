@@ -10,7 +10,8 @@ public enum TeamLayer
     TeamTwo = 11, 
     TeamThree = 12, 
     TeamFour = 13, 
-    TeamFive = 14
+    TeamFive = 14,
+    Immortal = 20
 }
 public enum ProjectileTeamLayer
 {
