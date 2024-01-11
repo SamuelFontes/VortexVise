@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour
 {
@@ -27,6 +28,10 @@ public class Weapon : MonoBehaviour
     private CombatBehaviour _weaponOwner;
     private Rigidbody2D _ownerRigidbody;
     private Player _player;
+    private LineRenderer _lineRenderer;
+    private Transform _transform;
+    private bool _isFlipped = false;
+    private bool _isAiming = false;
 
     
     void Start()
@@ -38,9 +43,12 @@ public class Weapon : MonoBehaviour
         _timeUntilNextShot = _timeBetweenShots;
         _timeUntilReloadFinishes = _timeToReload;
         _ownerRigidbody = _weaponOwner.GetComponent<Rigidbody2D>();
+        _lineRenderer = GetComponent<LineRenderer>();
     }
     void Update()
     {
+        _transform = transform;
+
         if(_timeUntilNextShot < _timeBetweenShots)
             _timeUntilNextShot += Time.deltaTime;
         if(_timeUntilReloadFinishes < _timeToReload)
@@ -74,21 +82,30 @@ public class Weapon : MonoBehaviour
         bullet.Init(BaseDamage, _explosionPrefab, transform.parent.GetComponent<Player>().Team,direction,ProjectileForce);
     }
 
-    bool isFlipped = false;
     void RenderWeapon()
     {
-        if(isFlipped != _parentSpriteRenderer.flipX)
+        if(_isFlipped != _parentSpriteRenderer.flipX)
         {
             _spriteRenderer.flipX = _parentSpriteRenderer.flipX;
-            isFlipped = _spriteRenderer.flipX;
+            _isFlipped = _spriteRenderer.flipX;
             _weaponOffset.x *= -1; // Invert number
             transform.position = transform.parent.transform.position +  _weaponOffset;
+        }
+        if (_isAiming)
+        {
+            var x = _transform.position.x;
+            if (IsLookingRight())
+                x += Range;
+            else
+                x -= Range;
+            Vector3[] positions = { _transform.position,  new Vector3(x,_transform.position.y)};
+            _lineRenderer.SetPositions(positions);
         }
     }
 
     bool IsLookingRight() 
     {
-        return isFlipped;
+        return _isFlipped;
     }
 
     public void SetWeaponOwner(CombatBehaviour combatant)
@@ -107,6 +124,20 @@ public class Weapon : MonoBehaviour
         }
         Instantiate(_shootingEffectPrefab, transform.position, transform.rotation);
     }
+
+    void OnLockAim(InputValue input)
+    {
+        if (input.Get() == null)
+        {
+            _isAiming = false;
+            _lineRenderer.enabled = false;
+        }
+        else
+        {
+            _isAiming = true;
+            _lineRenderer.enabled = true;
+        }
+    } 
 
     private void OnReload()
     {

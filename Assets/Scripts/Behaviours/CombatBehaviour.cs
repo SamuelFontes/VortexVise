@@ -16,6 +16,7 @@ public class CombatBehaviour : MonoBehaviour
 
     private void Update()
     {
+        _transform = transform;
         HandleIfOutsideTheMap();
     }
 
@@ -24,7 +25,6 @@ public class CombatBehaviour : MonoBehaviour
         weapon.SetWeaponOwner(this);
         _weapons.Add(weapon);
         _currentWeapon = weapon;
-        _transform = transform;
     }
 
     private void HandleIfOutsideTheMap()
