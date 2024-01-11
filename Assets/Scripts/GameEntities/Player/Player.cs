@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
         {
             if (_hook.IsHookAttached())
             {
-                if (IsPlayerLookingToTheRight())
+                if (IsPlayerLookingToTheRight() || _horizontalMovement > 0)
                     _playerRigidbody.velocity += Vector2.right * _jumpForce;
                 else
                     _playerRigidbody.velocity += Vector2.left * _jumpForce;
