@@ -25,6 +25,7 @@ public class Hook : MonoBehaviour
     private LineRenderer _lineRenderer;
     private SpriteRenderer _spriteRenderer;
     private CircleCollider2D _collider;
+    private bool _pressingHookKey = false;
 
     // Start is called before the first frame update
     void Start()
@@ -135,10 +136,11 @@ public class Hook : MonoBehaviour
         _transform.position = _playerTransform.position;
     }
 
-    void OnHook(InputValue input)
+    void OnHook(InputValue inputValue)
     {
-        if(input.Get() == null) 
+        if(inputValue.Get() == null) 
         {
+            _pressingHookKey = false;
             // Hook button is being released
             if(IsHookAttached())
                 GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookRetract();
@@ -152,6 +154,10 @@ public class Hook : MonoBehaviour
             }
             return;
         }
+        if (_pressingHookKey)
+            return;
+        if(!_pressingHookKey)
+            _pressingHookKey = true;
         if(_hookTimeout < 0.2f)
         {
             // Hook on delay, can't shoot again
