@@ -55,9 +55,9 @@ public class Player : MonoBehaviour
         {
             if (_hook.IsHookAttached())
             {
-                if (IsPlayerLookingToTheRight() || _horizontalMovement > 0)
+                if (_horizontalMovement > 0 || (_horizontalMovement == 0 && IsPlayerLookingToTheRight()))
                     _playerRigidbody.velocity += Vector2.right * _jumpForce;
-                else
+                else if(_horizontalMovement < 0|| (_horizontalMovement == 0 && !IsPlayerLookingToTheRight()))
                     _playerRigidbody.velocity += Vector2.left * _jumpForce;
                 ProcessDoubleJump(true);
             }

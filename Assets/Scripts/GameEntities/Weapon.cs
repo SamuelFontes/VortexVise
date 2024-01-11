@@ -119,7 +119,7 @@ public class Weapon : MonoBehaviour
         _sound.Play();
         if (_player != null)
         {
-            Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.3f);
+            Utils.GamepadRumble(_player.Gamepad, 1f, 1f, 0.1f);
             _player.Camera.StartShake(0.1f,0.1f);
         }
         Instantiate(_shootingEffectPrefab, transform.position, transform.rotation);

@@ -5,10 +5,16 @@ public class HookTarget : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private float _crossHairDistance = 4.5f;
+    private bool _isAiming = false;
 
     private void OnAim(InputValue inputValue)
     {
-        var targetDirection = inputValue.Get<Vector2>();
+
+        Vector2 targetDirection;
+        if(inputValue != null) 
+            targetDirection = inputValue.Get<Vector2>();
+        else
+            targetDirection = Vector2.zero;
 
         // This is for using the hook, only aim in 8ish directions
         targetDirection.y = QuantizeAxis(targetDirection.y);
@@ -17,6 +23,14 @@ public class HookTarget : MonoBehaviour
         // When moving foward it will hook upwards
         if (targetDirection.y == 0 && (targetDirection.x == 1 || targetDirection.x == -1))
             targetDirection.y++;
+
+        if(targetDirection.y == 0 && targetDirection.x == 0 && _isAiming)
+        {
+            if (_player.IsPlayerLookingToTheRight())
+                targetDirection.x += 1;
+            else
+                targetDirection.x -= 1;
+        }
 
         Vector2 offset = (Vector2)_player.transform.position + (targetDirection * _crossHairDistance);
 
@@ -30,4 +44,17 @@ public class HookTarget : MonoBehaviour
         return 0;
     }
 
+    void OnLockAim(InputValue input)
+    {
+        if (input.Get() == null)
+            _isAiming = false;
+        else
+            _isAiming = true;
+        OnAim(null);
+    } 
+
+    public float GetDefaultTargetDistance()
+    {
+        return _crossHairDistance;
+    }
 }

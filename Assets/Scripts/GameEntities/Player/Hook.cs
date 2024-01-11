@@ -91,7 +91,7 @@ public class Hook : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Utils.GamepadRumble(_gamepad,0f,1f,0.2f);
+        Utils.GamepadRumble(_gamepad,0f,1f,0.1f);
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookHit();
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
         _rigidbody.bodyType = RigidbodyType2D.Static;
@@ -166,23 +166,23 @@ public class Hook : MonoBehaviour
         }
 
         // SHOOT HOOK
-        Utils.GamepadRumble(_player.Gamepad,0f,0.5f,0.2f);
+        Utils.GamepadRumble(_player.Gamepad,0f,0.5f,0.1f);
 
         // Start hook delay timer
         _hookTimeout = 0;
 
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayHookShoot();
         ActivateHook();
-
+        var distance = _hookTarget.GetDefaultTargetDistance();
         Vector2 hookTarget = _hookTarget.transform.position;
-        if (hookTarget == (Vector2)_transform.position)
+        if (hookTarget == (Vector2)_transform.position || ((_hookTarget.transform.localPosition.x == distance || _hookTarget.transform.localPosition.x == distance * -1) && _hookTarget.transform.localPosition.y == 0))
         {
             // This means there is no crosshair, so shoot upwards
-            hookTarget.y += 4.5f;
+            hookTarget.y += distance;
             if (_player.IsPlayerLookingToTheRight()) // This can't be the horizontal movement because it should work when the dude is not moving
-                hookTarget.x += 4.5f; // Loking to the right
+                hookTarget.x += distance; // Loking to the right
             else
-                hookTarget.x -= 4.5f;
+                hookTarget.x -= distance;
         }
 
         Vector2 fromPlayerToHook = hookTarget - (Vector2)_transform.position ;
