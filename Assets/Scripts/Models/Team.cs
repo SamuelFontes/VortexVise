@@ -34,8 +34,6 @@ public class Team
     public void AddPlayerToTeam(Player player)
     {
         player.SetPlayerTeam(this);
-        // Set the layer on unity
-        player.gameObject.layer = GetTeamLayer();
         AddActorToTeam();
     }
 }

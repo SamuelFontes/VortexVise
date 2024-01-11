@@ -228,6 +228,8 @@ public class Player : MonoBehaviour
     public void SetPlayerTeam(Team team) 
     {
         Team = team;    
+        // Set the layer on unity
+        gameObject.layer = Team.GetTeamLayer();
     }
     void OnLockAim(InputValue input)
     {
