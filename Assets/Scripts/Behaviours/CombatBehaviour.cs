@@ -13,6 +13,8 @@ public class CombatBehaviour : MonoBehaviour
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
     [SerializeField] private Weapon _currentWeapon;
     [SerializeField] private Team _team;
+    [SerializeField] private GameObject _damagePrefab;
+    [SerializeField] private GameObject _deathPrefab;
     private Transform _transform;
     private Rigidbody2D _rigidbody;
     private Player _player;
@@ -55,6 +57,7 @@ public class CombatBehaviour : MonoBehaviour
         }
         damage -= Defense;
         CurrentHP -= damage;
+        Instantiate(_damagePrefab, _transform.position, _transform.rotation);
         CheckIfDied();
     }
 
@@ -63,6 +66,7 @@ public class CombatBehaviour : MonoBehaviour
         if(CurrentHP < 0)
         {
             IsAlive = false;
+            Instantiate(_deathPrefab, _transform.position, _transform.rotation);
         }
     }
 

@@ -280,8 +280,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxHP>k__BackingField: 100
   <CurrentHP>k__BackingField: 100
+  <Defense>k__BackingField: 0
   _weapons: []
   _currentWeapon: {fileID: 0}
+  _damagePrefab: {fileID: 2585848312031989349, guid: 513bbf4aaa14d1b46baef18eec6230ea, type: 3}
+  _deathPrefab: {fileID: 59417725347357024, guid: 2b6a834a16471ce4f8a6ae0459f13df1, type: 3}
 --- !u!96 &1374662673421214663
 TrailRenderer:
   serializedVersion: 3
