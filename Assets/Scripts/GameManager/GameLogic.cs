@@ -8,25 +8,34 @@ public class GameLogic : MonoBehaviour
     [SerializeField] private PlayerCamera _playerCameraPrefab;
     private MapLoaderSystem _mapLoader;
     private WeaponSystem _weaponSystem;
+    private CombatSystem _combatSystem;
 
     // Start is called before the first frame update
     void Start()
     {
         _mapLoader = GetComponent<MapLoaderSystem>();
         _weaponSystem = GetComponent<WeaponSystem>();   
+        _combatSystem = GetComponent<CombatSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Utils.UpdateGamepadRumble();
+        _combatSystem.ProcessGameMode();
     }
     void OnPlayerJoined(PlayerInput playerInput)
     {
         // TODO: Improve this when main menu exist
         var playerObject = playerInput.gameObject;
         var player = playerObject.GetComponent<Player>();
-        var crosshair = playerObject.transform.GetChild(1);
+
+        // Check if player already exists, this is to avoid problems when respawning the player
+        var existingPlayer = GameState.Instance.LocalPlayers.Where(p => p.Id == player.Id).FirstOrDefault();
+        if (existingPlayer != null)
+            return;
+
+        var crosshair = playerObject.transform.GetChild(1); // TODO: This feels like is a bad way of getting the hookTarget
 
         var camera = Instantiate(_playerCameraPrefab);
         camera.SetTarget(crosshair.transform);
@@ -48,6 +57,7 @@ public class GameLogic : MonoBehaviour
 
         SetupPlayerTeam(player);
         SetupMousePlayer(player, true);
+        _combatSystem.AddCombatant(player.GetComponent<CombatBehaviour>());  
     }
 
     private void SetupMousePlayer(Player player, bool isConnecting)
@@ -64,6 +74,7 @@ public class GameLogic : MonoBehaviour
         SetupCameras();
         GameState.Instance.RemovePlayerFromTeam(player);
         SetupMousePlayer(player, true);
+        _combatSystem.RemoveCombatant(player.GetComponent<CombatBehaviour>());  
     }
 
     private void SetupCameras()

@@ -21,3 +21,9 @@ public enum ProjectileTeamLayer
     TeamFour = 18, 
     TeamFive = 19
 }
+
+public enum CombatantType
+{
+    Player = 0,
+    Enemy = 1,
+}
