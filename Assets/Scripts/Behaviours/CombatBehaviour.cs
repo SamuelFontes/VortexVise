@@ -15,10 +15,12 @@ public class CombatBehaviour : MonoBehaviour
     [SerializeField] private Team _team;
     private Transform _transform;
     private Rigidbody2D _rigidbody;
+    private Player _player;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _player = GetComponent<Player>();
     }
 
     private void Update()
@@ -64,13 +66,17 @@ public class CombatBehaviour : MonoBehaviour
         }
     }
 
-    public void GetReadyToSpawn()
+    public void ResetCombatant()
     {
-        // TODO: Setup weapons here
         CurrentHP = MaxHP;
         IsAlive = true;
         // TODO: After implementing spawnzone choose one and respawn the entity there
         _transform.position = Vector3.zero; 
         _rigidbody.velocity = Vector3.zero;
+        // TODO: Setup weapons here
+        if(_player != null)
+        {
+            _player.ResetPlayer();
+        }
     }
 }

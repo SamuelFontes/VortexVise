@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -238,4 +239,10 @@ public class Player : MonoBehaviour
         else
             _lockAimSide = true;
     } 
+
+    public void ResetPlayer()
+    {
+        _hook.InactivateHook();
+        _horizontalMovement = 0;
+    }
 }

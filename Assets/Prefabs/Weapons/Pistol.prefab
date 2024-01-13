@@ -103,7 +103,7 @@ MonoBehaviour:
   <Name>k__BackingField: Pistol
   <Description>k__BackingField: Regular gun.
   <Range>k__BackingField: 10
-  <BaseDamage>k__BackingField: 10
+  <BaseDamage>k__BackingField: 25
   <SelfKnockback>k__BackingField: 5
   <HasLaser>k__BackingField: 0
   <MaxAmmo>k__BackingField: 7

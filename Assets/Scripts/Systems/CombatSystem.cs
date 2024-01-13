@@ -52,7 +52,7 @@ public class CombatSystem : MonoBehaviour
             yield return null;
         }
         combatant.gameObject.SetActive(true);
-        combatant.GetReadyToSpawn();
+        combatant.ResetCombatant();
     }
     public void AddCombatant(CombatBehaviour combatant)
     {
