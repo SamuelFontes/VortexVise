@@ -7,6 +7,13 @@ using UnityEngine;
 public class CombatSystem : MonoBehaviour
 {
     private List<CombatBehaviour> _combatants = new List<CombatBehaviour>();
+    private WeaponSystem _weaponSystem;
+
+    private void Start()
+    {
+        _weaponSystem = GetComponent<WeaponSystem>();
+    }
+
     // This should spawn, deactive when killed, and activate entities on respawn
     public void ProcessGameMode()
     {
@@ -53,6 +60,7 @@ public class CombatSystem : MonoBehaviour
         }
         combatant.gameObject.SetActive(true);
         combatant.ResetCombatant();
+        _weaponSystem.GetDefaultWeapons(combatant);
     }
     public void AddCombatant(CombatBehaviour combatant)
     {

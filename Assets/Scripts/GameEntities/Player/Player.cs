@@ -244,5 +244,6 @@ public class Player : MonoBehaviour
     {
         _hook.InactivateHook();
         _horizontalMovement = 0;
+        _lockAimSide = false;
     }
 }

@@ -65,9 +65,20 @@ public class CombatBehaviour : MonoBehaviour
     {
         if(CurrentHP < 0)
         {
-            IsAlive = false;
-            Instantiate(_deathPrefab, _transform.position, _transform.rotation);
+            Death();
         }
+    }
+
+    void Death()
+    {
+        IsAlive = false;
+        Instantiate(_deathPrefab, _transform.position, _transform.rotation);
+        foreach(var weapon in _weapons)
+        {
+            GameObject.Destroy(weapon.gameObject);
+            _weapons.Remove(weapon);
+        }
+        _currentWeapon = null;
     }
 
     public void ResetCombatant()

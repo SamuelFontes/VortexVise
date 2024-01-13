@@ -43,7 +43,7 @@ public class GameLogic : MonoBehaviour
         player.SetPlayerCamera(camera);
 
         AddLocalPlayer(player);
-        _weaponSystem.GetWeaponByName(player.GetComponent<CombatBehaviour>(), "Pistol"); //TODO: remove
+        _weaponSystem.GetDefaultWeapons(player.GetComponent<CombatBehaviour>()); 
     }
 
     private void AddLocalPlayer(Player player)

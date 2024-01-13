@@ -51,8 +51,17 @@ public class Weapon : MonoBehaviour
 
         if(_timeUntilNextShot < _timeBetweenShots)
             _timeUntilNextShot += Time.deltaTime;
+
         if(_timeUntilReloadFinishes < _timeToReload)
             _timeUntilReloadFinishes += Time.deltaTime;
+
+        if (!_spriteRenderer.enabled && _timeUntilReloadFinishes > _timeToReload)
+        {
+            _spriteRenderer.enabled = true;
+            if(_isAiming)
+                _lineRenderer.enabled = true;
+
+        }
 
         RenderWeapon();
     }
@@ -135,7 +144,8 @@ public class Weapon : MonoBehaviour
         else
         {
             _isAiming = true;
-            _lineRenderer.enabled = true;
+            if(_spriteRenderer.enabled)
+                _lineRenderer.enabled = true;
         }
     } 
 
@@ -147,6 +157,8 @@ public class Weapon : MonoBehaviour
         GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayReload();
         CurrentAmmo = MaxAmmo;
         _timeUntilReloadFinishes = 0;
+        _spriteRenderer.enabled = false;
+        _lineRenderer.enabled = false;
     }
 
 

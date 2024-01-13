@@ -31,7 +31,6 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //TODO: Apply damage
         var hitCombatant = collision.gameObject.GetComponent<CombatBehaviour>();
         if(hitCombatant != null )
         {
