@@ -1,0 +1,36 @@
+.button {
+    max-width: 70%;
+    min-width: auto;
+    max-height: 8%;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    -unity-font: url('project://database/Assets/Fonts/moltors.ttf?fileID=12800000&guid=244b2bf0b7bb28e478ed8eda425c731c&type=3#moltors');
+    -unity-font-definition: initial;
+    -unity-text-align: middle-center;
+    color: rgb(255, 166, 76);
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.71);
+    background-color: rgb(198, 189, 195);
+    border-left-color: rgb(11, 1, 11);
+    border-right-color: rgb(11, 1, 11);
+    border-top-color: rgb(11, 1, 11);
+    border-bottom-color: rgb(11, 1, 11);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    display: flex;
+    visibility: visible;
+    overflow: visible;
+    letter-spacing: 4px;
+    -unity-text-outline-width: 8px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    background-image: none;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.43);
+    -unity-font-style: normal;
+}
