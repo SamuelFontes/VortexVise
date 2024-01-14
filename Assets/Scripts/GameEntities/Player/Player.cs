@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public Team Team { get; private set; }
     public Gamepad Gamepad { get; private set; }
     public PlayerCamera Camera { get; private set; }
+    public bool IsAlive { get; private set; } = true;
 
     [SerializeField] private Hook _hook;
     [SerializeField] private GameObject _skin;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private TrailRenderer _trailRenderer;
     private AudioSource _windSound;
+    private CombatBehaviour _combatBehaviour;
     private float _lastVelocity = 0f;
     private float _doubleJumpTimer = 0f;
     private float _doubleJumpRotationAmount = 0f;
@@ -37,21 +39,23 @@ public class Player : MonoBehaviour
         _spriteRenderer = _skin.GetComponent<SpriteRenderer>();
         _trailRenderer = GetComponent<TrailRenderer>();
         _windSound = GetComponent<AudioSource>();
+        _combatBehaviour = GetComponent<CombatBehaviour>();
     }
 
     void Update()
     {
-        Move();
-
+        if (IsAlive)
+            Move();
         Animate();
         ProcessPlayerVelocityEffects();
-
         ProcessDoubleJump(false);
 
     }
 
     void OnJump()
     {
+        if (!IsAlive)
+            return;
         if (_playerRigidbody.velocity.y == 0 || _hook.IsHookAttached())
         {
             if (_hook.IsHookAttached())
@@ -245,5 +249,25 @@ public class Player : MonoBehaviour
         _hook.InactivateHook();
         _horizontalMovement = 0;
         _lockAimSide = false;
+        SetAsDeadOrAlive(true);
+    }
+
+    public void SetAsDeadOrAlive(bool isAlive)
+    {
+        _spriteRenderer.enabled = isAlive;
+        IsAlive = isAlive;
+        _hook.enabled = isAlive;
+        if (isAlive)
+        {
+            gameObject.layer = Team.GetTeamLayer();
+            _playerRigidbody.bodyType = RigidbodyType2D.Dynamic;
+        }
+        else
+        {
+            // Player is dead
+            _playerRigidbody.bodyType = RigidbodyType2D.Static;
+            gameObject.layer = _hook.gameObject.layer; // HACK: I mean, this will disable the collisions when the player is dead, but if there is any other implementation to the hook this should probably be checked to see if it works properly.
+            _hook.InactivateHook();
+        }
     }
 }

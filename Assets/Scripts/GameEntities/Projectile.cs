@@ -31,13 +31,14 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Instantiate(_explosion, transform.position, transform.rotation);
+        GameObject.Destroy(gameObject);
+
         var hitCombatant = collision.gameObject.GetComponent<CombatBehaviour>();
         if(hitCombatant != null )
         {
             hitCombatant.ApplyDamage(_baseDamage);
         }
-        Instantiate(_explosion, transform.position, transform.rotation);
-        GameObject.Destroy(gameObject);
     }
 
     void ApplyForce()

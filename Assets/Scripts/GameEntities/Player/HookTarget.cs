@@ -9,6 +9,8 @@ public class HookTarget : MonoBehaviour
 
     private void OnAim(InputValue inputValue)
     {
+        if (!_player.IsAlive)
+            return;
 
         Vector2 targetDirection;
         if(inputValue != null) 

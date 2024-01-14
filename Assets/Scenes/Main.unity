@@ -2472,6 +2472,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weapons:
   - {fileID: 578581695433766628, guid: 3dd1952603a65f74dbd7ad4be51319e7, type: 3}
+  _startingWeaponsDeathMatch:
+  - {fileID: 578581695433766628, guid: 3dd1952603a65f74dbd7ad4be51319e7, type: 3}
 --- !u!114 &1894173252
 MonoBehaviour:
   m_ObjectHideFlags: 0

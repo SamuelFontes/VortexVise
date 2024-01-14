@@ -38,7 +38,7 @@ public class CombatSystem : MonoBehaviour
         var deadPlayers = GetDeadEntities();
         for(int i = 0; i < deadPlayers.Count; i++)
         {
-            deadPlayers[i].gameObject.SetActive(false);
+            deadPlayers[i].SetAsDead();
             StartCoroutine(Respawn(deadPlayers[i], 3f));// TODO: set respawn timer to use current game configuration
         }
     }
@@ -46,7 +46,7 @@ public class CombatSystem : MonoBehaviour
 
     List<CombatBehaviour> GetDeadEntities()
     {
-        var deadThings = _combatants.Where(c => !c.IsAlive && c.gameObject.activeSelf).ToList();
+        var deadThings = _combatants.Where(c => !c.IsAlive && !c.IsDead).ToList();
         return deadThings;
     }
 
@@ -58,7 +58,6 @@ public class CombatSystem : MonoBehaviour
  
             yield return null;
         }
-        combatant.gameObject.SetActive(true);
         combatant.ResetCombatant();
         _weaponSystem.GetDefaultWeapons(combatant);
     }

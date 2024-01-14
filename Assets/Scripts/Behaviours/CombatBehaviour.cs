@@ -8,6 +8,7 @@ public class CombatBehaviour : MonoBehaviour
     [field:SerializeField] public float CurrentHP {  get; private set; }
     [field:SerializeField] public float Defense {  get; private set; }
     public bool IsAlive { get; private set; } = true;
+    public bool IsDead { get; private set; } = false;
     public CombatantType Type { get; private set; }
 
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
@@ -65,26 +66,35 @@ public class CombatBehaviour : MonoBehaviour
     {
         if(CurrentHP < 0)
         {
-            Death();
+            ProcessDeath();
         }
     }
 
-    void Death()
+    void ProcessDeath()
     {
         IsAlive = false;
         Instantiate(_deathPrefab, _transform.position, _transform.rotation);
         foreach(var weapon in _weapons)
         {
             GameObject.Destroy(weapon.gameObject);
-            _weapons.Remove(weapon);
         }
+        _weapons.Clear();
         _currentWeapon = null;
+        if(_player != null)
+        {
+            _player.SetAsDeadOrAlive(false);
+        }
+    }
+    public void SetAsDead()
+    {
+        IsDead = true;
     }
 
     public void ResetCombatant()
     {
         CurrentHP = MaxHP;
         IsAlive = true;
+        IsDead = false;
         // TODO: After implementing spawnzone choose one and respawn the entity there
         _transform.position = Vector3.zero; 
         _rigidbody.velocity = Vector3.zero;
