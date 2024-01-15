@@ -270,4 +270,9 @@ public class Player : MonoBehaviour
             _hook.InactivateHook();
         }
     }
+
+    void OnJoin() 
+    {
+        UISystem.Instance.ShowHidePauseMenu();
+    }
 }
