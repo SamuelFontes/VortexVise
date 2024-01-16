@@ -98,7 +98,11 @@ public class PauseMenu : MonoBehaviour
         foreach(var map in maps)
         {
             var b = CreateButton(map.name);
-            b.clicked += () => MapLoaderSystem.Instance.LoadMap(map);
+            b.clicked += () =>
+            {
+                MapLoaderSystem.Instance.LoadMap(map);
+                UISystem.Instance.ShowHidePauseMenu();
+            };
             div.Add(b);
         }
 

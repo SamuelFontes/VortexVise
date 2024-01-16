@@ -44,13 +44,13 @@ public class UISystem : MonoBehaviour
         // Disable controls
         foreach(var player in GameState.Instance.LocalPlayers)
         {
-            player.GetComponent<PlayerInput>().enabled = !_paused;
-            //if(_paused)
-                //player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-            //else
-                //player.GetComponent<PlayerInput>().SwitchCurrentActionMap("ActorAction");
+            //player.GetComponent<PlayerInput>().enabled = !_paused;
+            if(_paused)
+                player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+            else
+                player.GetComponent<PlayerInput>().SwitchCurrentActionMap("ActorCombat");
         }
-        GetComponent<PlayerInputManager>().enabled = !_paused;
+        //GetComponent<PlayerInputManager>().enabled = !_paused;
 
         // Pause game
         if (_paused)
