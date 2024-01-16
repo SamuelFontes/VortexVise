@@ -701,79 +701,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660291650}
   m_CullTransparentMesh: 1
---- !u!1001 &820047655
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8775386317906307846, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: <TopRight>k__BackingField.x
-      value: 160
-      objectReference: {fileID: 0}
-    - target: {fileID: -8775386317906307846, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: <TopRight>k__BackingField.y
-      value: 160
-      objectReference: {fileID: 0}
-    - target: {fileID: -8775386317906307846, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: <BottomLeft>k__BackingField.x
-      value: -160
-      objectReference: {fileID: 0}
-    - target: {fileID: -8775386317906307846, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: <BottomLeft>k__BackingField.y
-      value: -160
-      objectReference: {fileID: 0}
-    - target: {fileID: 1426632937744764079, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_Name
-      value: JujubaLand
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3003172611127522215, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 615aa67cff6af10488fb1bc4bdf1bd23, type: 3}
 --- !u!1 &946994425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2531,6 +2458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCameraPrefab: {fileID: 692886450353534366, guid: 0ff7cafb1129ff346a82503ebbb7287f, type: 3}
+  _maxFPS: 0
 --- !u!4 &1894173248
 Transform:
   m_ObjectHideFlags: 0
@@ -2831,4 +2759,3 @@ SceneRoots:
   - {fileID: 1808420797}
   - {fileID: 459461951}
   - {fileID: 958617937}
-  - {fileID: 820047655}

@@ -166,6 +166,7 @@ MonoBehaviour:
   _maxMoveSpeed: 20
   _bounciness: 0.1
   _animationSpeed: 0.05
+  _baseRotationForce: 900
 --- !u!50 &5455731206794010221
 Rigidbody2D:
   serializedVersion: 4

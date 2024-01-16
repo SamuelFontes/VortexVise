@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _maxMoveSpeed;
     [SerializeField] private float _bounciness;
     [SerializeField] private float _animationSpeed;
+    [SerializeField] private float _baseRotationForce = 650;
     private Rigidbody2D _playerRigidbody;
     private SpriteRenderer _spriteRenderer;
     private TrailRenderer _trailRenderer;
@@ -49,7 +50,6 @@ public class Player : MonoBehaviour
         if (IsAlive)
             Move();
         Animate();
-        AnimationBounce();
         ProcessPlayerVelocityEffects();
         ProcessDoubleJump(false);
 
@@ -140,8 +140,10 @@ public class Player : MonoBehaviour
     }
     void Animate()
     {
+        if (_doubleJumpRotationAmount != 0f)
+            return;
         var animationVelocity = 0.1f; 
-        if (_playerRigidbody.velocity.magnitude > 15f) animationVelocity = 0.05f;
+        if (_playerRigidbody.velocity.magnitude > 20f) animationVelocity = 0.05f;
         // TODO: make this avaliable to every entity 
         if (_animationTimer > animationVelocity)
         {
@@ -188,20 +190,20 @@ public class Player : MonoBehaviour
             _skin.transform.localRotation = Quaternion.identity;
             _skin.transform.localPosition = Vector3.zero;
         }
+        AnimationBounce();
     }
 
     void ProcessDoubleJump(bool playerDoubleJumped)
     {
-        var baseForce = 1125;
         if (playerDoubleJumped)
         {
             _canDoubleJump = false;
             if (IsPlayerLookingToTheRight())
-                _doubleJumpRotationForce = baseForce * -1;
+                _doubleJumpRotationForce = _baseRotationForce * -1;
             else
-                _doubleJumpRotationForce = baseForce;
+                _doubleJumpRotationForce = _baseRotationForce;
             _doubleJumpRotationAmount += Time.deltaTime;
-            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.8f);
+            _spriteRenderer.color = new Color(_spriteRenderer.color.r, _spriteRenderer.color.g, _spriteRenderer.color.b, 0.6f);
             _trailRenderer.startColor = Color.black;
             _trailRenderer.endColor = Color.black;
             // MAKE PLAYER IMMORTAL WHILE ROLLING
