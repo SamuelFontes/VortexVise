@@ -86,7 +86,7 @@ public class GameLogic : MonoBehaviour
 
     private void SetupCameras()
     {
-        var cameraDistance = 15;
+        var cameraDistance = 20;
         // Check number of players
         switch (GameState.Instance.GetNumberOfLocalPlayers())
         {

@@ -33,6 +33,15 @@ public class HookTarget : MonoBehaviour
             else
                 targetDirection.x -= 1;
         }
+        // this below make upwards have 5 hook directions
+        Debug.Log(inputValue.Get<Vector2>());
+        if(QuantizeAxis(inputValue.Get<Vector2>().x) > 0 && inputValue.Get<Vector2>().y > 0)
+        {
+            targetDirection.x -= 0.5f;
+        } else if(QuantizeAxis(inputValue.Get<Vector2>().x) < 0 && inputValue.Get<Vector2>().y > 0)
+        {
+            targetDirection.x += 0.5f;
+        }
 
         Vector2 offset = (Vector2)_player.transform.position + (targetDirection * _crossHairDistance);
 
@@ -42,7 +51,7 @@ public class HookTarget : MonoBehaviour
     private int QuantizeAxis ( float input)
     {
         if (input < -0.5f) return -1;
-        if (input > 0.3f) return 1;
+        if (input > 0.5f) return 1;
         return 0;
     }
 
