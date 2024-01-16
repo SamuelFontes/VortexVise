@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _maxMoveSpeed;
+    [SerializeField] private float _bounciness;
+    [SerializeField] private float _animationSpeed;
     private Rigidbody2D _playerRigidbody;
     private SpriteRenderer _spriteRenderer;
     private TrailRenderer _trailRenderer;
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
         if (IsAlive)
             Move();
         Animate();
+        AnimationBounce();
         ProcessPlayerVelocityEffects();
         ProcessDoubleJump(false);
 
@@ -101,34 +104,74 @@ public class Player : MonoBehaviour
         }
     }
 
+    void AnimationBounce()
+    {
+        var defaultScaleX = 0.5f;
+        var defaultScaleY = 0.5f;
+        var amount = Time.deltaTime * _bounciness;
+        if(_horizontalMovement != 0)
+        {
+            if (_animationState == 0 || _animationState == 2)
+            {
+                _skin.transform.localScale += new Vector3(amount,0f);
+                if(_skin.transform.localScale.y >= defaultScaleY)
+                    _skin.transform.localScale += new Vector3(0,-(amount * 2));
+            }
+            else if (_animationState == 1 || _animationState == 3)
+            {
+                if(_skin.transform.localScale.x >= defaultScaleX)
+                    _skin.transform.localScale += new Vector3(-(amount * 2),0f);
+                _skin.transform.localScale += new Vector3(0,amount);
+            }
+        }
+        else
+        {
+            if(_skin.transform.localScale.x >= defaultScaleX)
+                _skin.transform.localScale += new Vector3(-amount,0f);
+            if(_skin.transform.localScale.y >= defaultScaleY)
+                _skin.transform.localScale += new Vector3(0,-amount);
+            if(_skin.transform.localScale.x <= defaultScaleX)
+                _skin.transform.localScale += new Vector3(amount,0f);
+            if(_skin.transform.localScale.y <= defaultScaleY)
+                _skin.transform.localScale += new Vector3(0,amount);
+
+        }
+
+    }
     void Animate()
     {
+        var animationVelocity = 0.1f; 
+        if (_playerRigidbody.velocity.magnitude > 15f) animationVelocity = 0.05f;
         // TODO: make this avaliable to every entity 
-        if (_animationTimer > 0.1f)
+        if (_animationTimer > animationVelocity)
         {
             if (_animationState == 0)
             {
                 _skin.transform.Rotate(new Vector3(0, 0, 9));
                 _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
                 _animationState = 1;
+                _skin.transform.localScale = new Vector3(0.5f,0.55f);
             }
             else if (_animationState == 1)
             {
                 _skin.transform.localRotation = Quaternion.identity;
                 _skin.transform.localPosition = Vector3.zero;
                 _animationState = 2;
+                _skin.transform.localScale = new Vector3(0.55f,0.5f);
             }
             else if (_animationState == 2)
             {
                 _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
                 _skin.transform.Rotate(new Vector3(0, 0, -9));
                 _animationState = 3;
+                _skin.transform.localScale = new Vector3(0.5f,0.55f);
             }
             else if (_animationState == 3)
             {
                 _skin.transform.localRotation = Quaternion.identity;
                 _skin.transform.localPosition = Vector3.zero;
                 _animationState = 0;
+                _skin.transform.localScale = new Vector3(0.5f,0.5f);
             }
             _animationTimer = 0f;
         }

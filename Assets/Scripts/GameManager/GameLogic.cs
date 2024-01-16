@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 public class GameLogic : MonoBehaviour
 {
     [SerializeField] private PlayerCamera _playerCameraPrefab;
+    [SerializeField] private int _maxFPS;
     private MapLoaderSystem _mapLoader;
     private WeaponSystem _weaponSystem;
     private CombatSystem _combatSystem;
+    private int _lastFPSChange = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +23,11 @@ public class GameLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_maxFPS != _lastFPSChange)
+        {
+            Application.targetFrameRate = _maxFPS;
+            _lastFPSChange = _maxFPS;
+        }
         Utils.UpdateGamepadRumble();
         _combatSystem.ProcessGameMode();
     }
