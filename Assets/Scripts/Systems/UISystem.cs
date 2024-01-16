@@ -41,11 +41,14 @@ public class UISystem : MonoBehaviour
     void PauseGame()
     {
         // TODO: change this to the UI scheme
+        // Disable controls
         foreach(var player in GameState.Instance.LocalPlayers)
         {
             player.GetComponent<PlayerInput>().enabled = !_paused;
         }
         GetComponent<PlayerInputManager>().enabled = !_paused;
+
+        // Pause game
         if (_paused)
             Time.timeScale = 0f;
         else
