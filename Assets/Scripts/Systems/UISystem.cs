@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class UISystem : MonoBehaviour
@@ -33,6 +34,16 @@ public class UISystem : MonoBehaviour
             _paused = false;
             _pauseMenu.HideMenu();
         }
+        DisablePlayerInput();
 
+    }
+
+    void DisablePlayerInput()
+    {
+        // TODO: change this to the UI scheme
+        foreach(var player in GameState.Instance.LocalPlayers)
+        {
+            player.GetComponent<PlayerInput>().enabled = !_paused;
+        }
     }
 }

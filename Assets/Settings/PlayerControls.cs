@@ -98,6 +98,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""72e57645-71f2-4ddc-b4eb-d7531f264fc5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -419,6 +428,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""LockAim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c4a742f-c928-4b27-875c-219a3e25e945"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06f2017d-fdfd-4e6a-b737-3eb4fed62fea"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MouseAndKeyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -463,6 +494,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_ActorCombat_Join = m_ActorCombat.FindAction("Join", throwIfNotFound: true);
         m_ActorCombat_Reload = m_ActorCombat.FindAction("Reload", throwIfNotFound: true);
         m_ActorCombat_LockAim = m_ActorCombat.FindAction("LockAim", throwIfNotFound: true);
+        m_ActorCombat_Pause = m_ActorCombat.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -532,6 +564,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_ActorCombat_Join;
     private readonly InputAction m_ActorCombat_Reload;
     private readonly InputAction m_ActorCombat_LockAim;
+    private readonly InputAction m_ActorCombat_Pause;
     public struct ActorCombatActions
     {
         private @PlayerControls m_Wrapper;
@@ -544,6 +577,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Join => m_Wrapper.m_ActorCombat_Join;
         public InputAction @Reload => m_Wrapper.m_ActorCombat_Reload;
         public InputAction @LockAim => m_Wrapper.m_ActorCombat_LockAim;
+        public InputAction @Pause => m_Wrapper.m_ActorCombat_Pause;
         public InputActionMap Get() { return m_Wrapper.m_ActorCombat; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -577,6 +611,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @LockAim.started += instance.OnLockAim;
             @LockAim.performed += instance.OnLockAim;
             @LockAim.canceled += instance.OnLockAim;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IActorCombatActions instance)
@@ -605,6 +642,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @LockAim.started -= instance.OnLockAim;
             @LockAim.performed -= instance.OnLockAim;
             @LockAim.canceled -= instance.OnLockAim;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IActorCombatActions instance)
@@ -650,5 +690,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnJoin(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnLockAim(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

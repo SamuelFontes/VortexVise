@@ -37,8 +37,11 @@ public class PauseMenu : MonoBehaviour
         var div = new VisualElement();
         div.AddToClassList("div");
 
-        
-        div.Add(CreateButton("Continue"));
+
+        var b = CreateButton("Continue");
+        b.clicked += UISystem.Instance.ShowHidePauseMenu;
+
+        div.Add(b);
         div.Add(CreateButton("Options"));
         div.Add(CreateButton("Change Level"));
         div.Add(CreateButton("Quit"));

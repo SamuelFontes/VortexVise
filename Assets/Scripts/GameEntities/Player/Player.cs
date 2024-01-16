@@ -271,7 +271,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnJoin() 
+    void OnPause() 
     {
         UISystem.Instance.ShowHidePauseMenu();
     }
