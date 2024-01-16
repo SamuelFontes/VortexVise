@@ -45,6 +45,10 @@ public class UISystem : MonoBehaviour
         foreach(var player in GameState.Instance.LocalPlayers)
         {
             player.GetComponent<PlayerInput>().enabled = !_paused;
+            //if(_paused)
+                //player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+            //else
+                //player.GetComponent<PlayerInput>().SwitchCurrentActionMap("ActorAction");
         }
         GetComponent<PlayerInputManager>().enabled = !_paused;
 

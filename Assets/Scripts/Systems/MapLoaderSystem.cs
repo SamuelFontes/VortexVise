@@ -5,7 +5,16 @@ using UnityEngine;
 
 public class MapLoaderSystem : MonoBehaviour
 {
+    public static MapLoaderSystem Instance { get; private set; }
     [SerializeField] private List<Map> _maps = new List<Map>();
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
 
     public void LoadRandomMap(Gamemode gamemode)
     {
@@ -15,10 +24,17 @@ public class MapLoaderSystem : MonoBehaviour
 
     public void LoadMap(Map map)
     {
-        if(GameState.Instance.CurrentMap != null)
-            UnityEngine.Object.Destroy(GameState.Instance.CurrentMap);
+        var currentMap = GameState.Instance.CurrentMap;
+        if(currentMap != null)
+            GameObject.Destroy(currentMap.gameObject);
 
-        Instantiate(map.gameObject);
-        GameState.Instance.SetCurrentMap(map);
+        var newMap = Instantiate(map);
+        GameState.Instance.SetCurrentMap(newMap);
+    }
+
+    public List<Map> GetMapList(Gamemode gamemode)
+    {
+        var maps = _maps.Where(m => m.Gamemode == gamemode).ToList();
+        return maps;
     }
 }

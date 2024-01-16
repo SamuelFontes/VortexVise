@@ -39,6 +39,12 @@
     -unity-background-image-tint-color: rgba(255, 255, 255, 0.43);
     -unity-font-style: normal;
 }
+.btn:checked{
+    color: rgb(255, 255, 0);
+}
+.btn:hover{
+    color: rgb(255, 255, 0);
+}
 
 .div{
     width:80%;

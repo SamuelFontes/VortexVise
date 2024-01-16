@@ -13,7 +13,7 @@ public class GameLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _mapLoader = GetComponent<MapLoaderSystem>();
+        _mapLoader = MapLoaderSystem.Instance;
         _weaponSystem = GetComponent<WeaponSystem>();   
         _combatSystem = GetComponent<CombatSystem>();
     }
