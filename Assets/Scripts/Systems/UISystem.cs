@@ -34,16 +34,21 @@ public class UISystem : MonoBehaviour
             _paused = false;
             _pauseMenu.HideMenu();
         }
-        DisablePlayerInput();
+        PauseGame();
 
     }
 
-    void DisablePlayerInput()
+    void PauseGame()
     {
         // TODO: change this to the UI scheme
         foreach(var player in GameState.Instance.LocalPlayers)
         {
             player.GetComponent<PlayerInput>().enabled = !_paused;
         }
+        GetComponent<PlayerInputManager>().enabled = !_paused;
+        if (_paused)
+            Time.timeScale = 0f;
+        else
+            Time.timeScale = 1f;
     }
 }
