@@ -144,28 +144,24 @@ public class Player : MonoBehaviour
                 _skin.transform.Rotate(new Vector3(0, 0, 9));
                 _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
                 _animationState = 1;
-                _skin.transform.localScale = new Vector3(0.5f,0.55f);
             }
             else if (_animationState == 1)
             {
                 _skin.transform.localRotation = Quaternion.identity;
                 _skin.transform.localPosition = Vector3.zero;
                 _animationState = 2;
-                _skin.transform.localScale = new Vector3(0.55f,0.5f);
             }
             else if (_animationState == 2)
             {
                 _skin.transform.localPosition = _skin.transform.localPosition + Vector3.up * 0.1f;
                 _skin.transform.Rotate(new Vector3(0, 0, -9));
                 _animationState = 3;
-                _skin.transform.localScale = new Vector3(0.5f,0.55f);
             }
             else if (_animationState == 3)
             {
                 _skin.transform.localRotation = Quaternion.identity;
                 _skin.transform.localPosition = Vector3.zero;
                 _animationState = 0;
-                _skin.transform.localScale = new Vector3(0.5f,0.5f);
             }
             _animationTimer = 0f;
         }
