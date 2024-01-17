@@ -124,17 +124,9 @@ public class Player : MonoBehaviour
                 _skin.transform.localScale += new Vector3(0,amount);
             }
         }
-        else
+        else if(_skin.transform.localScale != new Vector3(defaultScaleX,defaultScaleY))
         {
-            if(_skin.transform.localScale.x >= defaultScaleX)
-                _skin.transform.localScale += new Vector3(-amount,0f);
-            if(_skin.transform.localScale.y >= defaultScaleY)
-                _skin.transform.localScale += new Vector3(0,-amount);
-            if(_skin.transform.localScale.x <= defaultScaleX)
-                _skin.transform.localScale += new Vector3(amount,0f);
-            if(_skin.transform.localScale.y <= defaultScaleY)
-                _skin.transform.localScale += new Vector3(0,amount);
-
+            _skin.transform.localScale = new Vector3(defaultScaleX,defaultScaleY);
         }
 
     }
