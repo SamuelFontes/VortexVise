@@ -164,7 +164,7 @@ MonoBehaviour:
   _jumpForce: 30
   _moveSpeed: 80
   _maxMoveSpeed: 20
-  _bounciness: 0.1
+  _bounciness: 1
   _animationSpeed: 0.05
   _baseRotationForce: 1100
 --- !u!50 &5455731206794010221

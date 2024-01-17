@@ -50,12 +50,13 @@ public class UISystem : MonoBehaviour
             else
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("ActorCombat");
         }
+        UnityEngine.Cursor.visible = _paused; 
         //GetComponent<PlayerInputManager>().enabled = !_paused;
 
         // Pause game
-        if (_paused)
-            Time.timeScale = 0f;
-        else
-            Time.timeScale = 1f;
+        //if (_paused)
+            //Time.timeScale = 0f;
+        //else
+            //Time.timeScale = 1f;
     }
 }
