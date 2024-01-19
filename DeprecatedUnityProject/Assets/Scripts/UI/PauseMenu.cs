@@ -10,11 +10,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private StyleSheet _styleSheet;
     private VisualElement _root;
 
-    private void Start()
-    {
-        Generate();
-    }
-
     void Generate()
     {
 
@@ -38,27 +33,27 @@ public class PauseMenu : MonoBehaviour
 
         div.Add(b);
 
-        b = CreateButton("Server");
-        b.clicked += () =>
-        {
-            NetworkManager.Singleton.StartServer();
-            UISystem.Instance.ShowHidePauseMenu();
-        };
-        div.Add(b);
-        b = CreateButton("Host");
-        b.clicked += () =>
-        {
-            NetworkManager.Singleton.StartHost();
-            UISystem.Instance.ShowHidePauseMenu();
-        };
-        div.Add(b);
-        b = CreateButton("Client");
-        b.clicked += () =>
-        {
-            NetworkManager.Singleton.StartClient();
-            UISystem.Instance.ShowHidePauseMenu();
-        };
-        div.Add(b);
+        //b = CreateButton("Server");
+        //b.clicked += () =>
+        //{
+            //NetworkManager.Singleton.StartServer();
+            //UISystem.Instance.ShowHidePauseMenu();
+        //};
+        //div.Add(b);
+        //b = CreateButton("Host");
+        //b.clicked += () =>
+        //{
+            //NetworkManager.Singleton.StartHost();
+            //UISystem.Instance.ShowHidePauseMenu();
+        //};
+        //div.Add(b);
+        //b = CreateButton("Client");
+        //b.clicked += () =>
+        //{
+            //NetworkManager.Singleton.StartClient();
+            //UISystem.Instance.ShowHidePauseMenu();
+        //};
+        //div.Add(b);
 
         b = CreateButton("Change Level");
         b.clicked += RenderLevelLoader;

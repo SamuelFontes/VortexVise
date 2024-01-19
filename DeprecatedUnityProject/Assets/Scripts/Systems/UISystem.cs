@@ -7,7 +7,7 @@ public class UISystem : MonoBehaviour
     public static UISystem Instance { get; private set; }
     [SerializeField] private UIDocument _uiDocument;
     private PauseMenu _pauseMenu;
-    private bool _paused = true;
+    private bool _paused = false;
 
     private void Awake()
     {
