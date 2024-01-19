@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VortexVise": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\samug\\source\\VortexVise\\VortexVise"
+    }
+  }
+}
