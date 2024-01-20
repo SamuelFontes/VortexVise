@@ -36,7 +36,7 @@ int main()
 	player.gravitacionalForce = 0;
 	player.direction = 1;
 	player.moveSpeed = 0;
-	player.maxMoveSpeed = 600;
+	player.maxMoveSpeed = 700;
 	player.acceleration = 1500;
 
 	while (!WindowShouldClose())
@@ -51,7 +51,7 @@ int main()
 		auto playerFeet = player.position.y - player.texture.height; 
 
 		auto screenBottom = (screenHeight / 2 * -1);
-		if(playerFeet <= screenBottom )
+		if(playerFeet <= screenBottom)
 		{
 			if(player.gravitacionalForce > 0)
 				player.gravitacionalForce = 0;
@@ -67,7 +67,7 @@ int main()
 				player.moveSpeed = 0;
 			}
 			player.moveSpeed += player.acceleration * deltaTime;
-			if (player.moveSpeed > player.maxMoveSpeed)
+			if (player.moveSpeed > player.maxMoveSpeed && player.gravitacionalForce == 0)
 				player.moveSpeed = player.maxMoveSpeed;
 			player.direction = -1;
 		} else if (IsKeyDown(KEY_A))
@@ -78,13 +78,16 @@ int main()
 				player.moveSpeed = 0;
 			}
 			player.moveSpeed += player.acceleration * deltaTime;
-			if (player.moveSpeed > player.maxMoveSpeed)
+			if (player.moveSpeed > player.maxMoveSpeed && player.gravitacionalForce == 0)
 				player.moveSpeed = player.maxMoveSpeed;
 			player.direction = 1;
 		}
 		else
 		{
-			player.moveSpeed -= player.acceleration * deltaTime * 3;  
+			if (player.gravitacionalForce != 0)
+				player.moveSpeed -= player.acceleration * deltaTime / 5;
+			else
+				player.moveSpeed -= player.acceleration * deltaTime * 2;
 			if(player.moveSpeed < 0)
 			{
 				player.moveSpeed = 0;
@@ -100,10 +103,9 @@ int main()
 			player.position.x -= player.moveSpeed * deltaTime;
 		}
 
-		if (IsKeyDown(KEY_SPACE))
+		if (IsKeyDown(KEY_SPACE) && player.gravitacionalForce == 0 && playerFeet <= screenBottom )
 		{
-			//player.position.y += 1500 * deltaTime;
-			player.gravitacionalForce = -(1000 * deltaTime);
+			player.gravitacionalForce = -0.2;
 		}
 
 		BeginDrawing();
