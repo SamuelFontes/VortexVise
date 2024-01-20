@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Combatant.cpp" />
     <ClCompile Include="VortexVise.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Combatant.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
