@@ -97,6 +97,14 @@ void Combatant::CheckCollisions(int screenHeight)
 	}
 }
 
+void Combatant::ProcessCamera()
+{
+	if (hasCamera) {
+		camera.offset = position;
+		BeginMode2D(camera);
+	}
+}
+
 void Combatant::Draw(int screenWidth, int screenHeight)
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)texture.width * direction, (float)texture.height };
@@ -105,3 +113,4 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
 }
+

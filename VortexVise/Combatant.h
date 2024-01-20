@@ -3,9 +3,14 @@
 class Combatant {
 public:
 	// Constructor
-	Combatant() {
+	Combatant(bool _hasCamera) {
 		texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		position = Vector2{ 0,0 };
+
+		if (_hasCamera) 
+		{
+			camera = Camera2D { position,position,0,1 };
+		}
 	}
 private: 
 	Vector2 position;
@@ -15,6 +20,8 @@ private:
 	float moveSpeed = 0;
 	float maxMoveSpeed = 700;
 	float acceleration = 1500;
+	Camera2D camera;
+	bool hasCamera;
 
 public:
 	void ProcessInput(float deltaTime);
@@ -26,4 +33,5 @@ public:
 	float GetGravitationalForce();
 	void CheckCollisions(int screenHeight);
 	void Draw(int screenWidth, int screenHeight);
+	void ProcessCamera();
 };
