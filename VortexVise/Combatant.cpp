@@ -49,7 +49,7 @@ void Combatant::ProcessInput(float deltaTime)
 
 	if (IsKeyDown(KEY_SPACE) && gravitationalForce == 0)
 	{
-		gravitationalForce = -0.2;
+		gravitationalForce = -0.24;
 	}
 
 }
