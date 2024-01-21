@@ -86,12 +86,29 @@ float Combatant::GetGravitationalForce() const
 
 void Combatant::ApplyCollisions(Map* map)
 {
+	Vector2 collisionOffset = { 20,12 };
+	collisionBox = { position.x * -1 + collisionOffset.x,position.y * -1 + collisionOffset.y,25,40 }; 
+
 	Vector2 mapSize = map->GetMapSize();
 	// Apply ouside map collisions
-	//if (collisionBox.y < 0)
-	//{
-	//	position.y = 0;
-	//}
+	if (collisionBox.y <= 0)
+	{
+		position.y = 11.9;
+		gravitationalForce = 0;
+	}
+	else if (collisionBox.y > mapSize.y) {
+		// TODO: Kill the player
+
+	}
+	if (collisionBox.x <= 0)
+	{
+		position.x = 0 - (collisionBox.x *-1 - position.x);
+		moveSpeed = 0;
+	}else if (collisionBox.x + collisionBox.width >= mapSize.x)
+	{
+		position.x = (mapSize.x - collisionBox.width - collisionOffset.x) * -1;
+		moveSpeed = 0;
+	}
 
 	// Apply map collisions
 	for (const auto& collision : map->GetCollisions())
@@ -135,9 +152,6 @@ void Combatant::ApplyCollisions(Map* map)
 				}
 
 			}
-
-
-
 		}
 	}
 }
@@ -146,11 +160,13 @@ void Combatant::ProcessCamera()
 {
 	if (hasCamera) {
 		camera.target = { position.x * -1,position.y * -1 };// WHY IT IS INVERTED??????????
+		if (camera.target.x <= 0)
+			camera.target.x = 0;
 		BeginMode2D(camera);
 	}
 }
 
-void Combatant::Draw(int screenWidth, int screenHeight)
+void Combatant::Draw()
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)texture.width * direction, (float)texture.height };
 
@@ -159,7 +175,6 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
 
 
-	collisionBox = { position.x * -1 + 20,position.y * -1 + 12,25,40 }; // TODO: move this 
 	DrawRectangleRec(collisionBox, PURPLE); // Debug
 }
 

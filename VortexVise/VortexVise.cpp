@@ -18,7 +18,7 @@ int main()
 	Map* map = new Map();
 	map->LoadMap("SkyArchipelago");
 
-	Combatant* player = new Combatant(true, screenWidth, screenHeight);
+	Combatant* player = new Combatant(true);
 
 	//SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
@@ -41,7 +41,7 @@ int main()
 		player->ProcessCamera();
 
 		map->Draw();
-		player->Draw(screenWidth, screenHeight);
+		player->Draw();
 
 #pragma region Debug
 		// DEBUG

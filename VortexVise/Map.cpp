@@ -46,5 +46,5 @@ std::list<Rectangle> Map::GetCollisions()
 
 Vector2 Map::GetMapSize()
 {
-	return Vector2{(float)mapTexture.height,(float)mapTexture.width};
+	return Vector2{(float)mapTexture.width,(float)mapTexture.height};
 }

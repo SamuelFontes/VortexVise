@@ -4,10 +4,10 @@
 class Combatant {
 public:
 	// Constructor
-	Combatant(bool _hasCamera, int screenWidth, int screenHeight) {
+	Combatant(bool _hasCamera) {
 		texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-		auto spawnPoint = Vector2{ screenWidth / 2.0f,screenHeight / 2.0f };
-		position = { 0,0 };
+		auto spawnPoint = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+		position = { 30,30 };
 
 		if (_hasCamera)
 		{
@@ -35,6 +35,6 @@ public:
 	float GetY() const;
 	float GetGravitationalForce() const;
 	void ApplyCollisions(Map* map);
-	void Draw(int screenWidth, int screenHeight);
+	void Draw();
 	void ProcessCamera();
 };
