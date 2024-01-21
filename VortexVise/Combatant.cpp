@@ -47,7 +47,7 @@ void Combatant::ProcessInput(float deltaTime)
 		position.x -= moveSpeed * deltaTime;
 	}
 
-	if (IsKeyDown(KEY_SPACE) )//&& gravitationalForce == 0)
+	if (IsKeyDown(KEY_SPACE))//&& gravitationalForce == 0)
 	{
 		gravitationalForce = -0.24;
 	}
@@ -64,29 +64,31 @@ void Combatant::ApplyGravitationalForce()
 	position.y -= gravitationalForce;
 }
 
-Vector2 Combatant::GetPosition()
+Vector2 Combatant::GetPosition() const
 {
 	return position;
 }
 
-float Combatant::GetX()
+float Combatant::GetX() const
 {
 	return position.x;
 }
 
-float Combatant::GetY()
+float Combatant::GetY() const
 {
 	return position.y;
 }
 
-float Combatant::GetGravitationalForce()
+float Combatant::GetGravitationalForce() const
 {
 	return gravitationalForce;
 }
 
-void Combatant::ApplyCollisions(Map *map)
+void Combatant::ApplyCollisions(Map* map)
 {
 	// Check Bottom of screen for collision
+
+		// Get collision rectangle (only on collision)
 	//float playerFeet = position.y - texture.height;
 	//auto screenBottom = (screenHeight / 2 * -1);
 	//if (playerFeet <= screenBottom)
@@ -95,6 +97,15 @@ void Combatant::ApplyCollisions(Map *map)
 	//		gravitationalForce = 0;
 	//	position.y = screenBottom + texture.height;
 	//}
+
+	for (const auto& collision : map->GetCollisions()) 
+	{
+		if (CheckCollisionRecs(collisionBox, collision)) 
+		{
+			// This means the player is inside the thing 
+			auto collisionOverlap = GetCollisionRec(collisionBox, collision);
+		}
+	}
 }
 
 void Combatant::ProcessCamera()
@@ -114,7 +125,7 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
 
 
-	collisionBox = {position.x *-1 + destRec.x,position.y *-1 + destRec.y,50,50}; // TODO: move this 
+	collisionBox = { position.x * -1 + destRec.x,position.y * -1 + destRec.y,50,50 }; // TODO: move this 
 	DrawRectangleRec(collisionBox, PURPLE);
 }
 

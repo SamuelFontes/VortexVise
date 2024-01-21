@@ -29,10 +29,10 @@ public:
 	void ProcessInput(float deltaTime);
 	void ApplyGravitationalForce();
 	void CalculateGravitationalForce(float force, float deltaTime);
-	Vector2 GetPosition();
-	float GetX();
-	float GetY();
-	float GetGravitationalForce();
+	Vector2 GetPosition() const;
+	float GetX() const;
+	float GetY() const;
+	float GetGravitationalForce() const;
 	void ApplyCollisions(Map *map);
 	void Draw(int screenWidth, int screenHeight);
 	void ProcessCamera();
