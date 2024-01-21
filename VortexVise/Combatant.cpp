@@ -10,7 +10,7 @@ void Combatant::ProcessInput(float deltaTime)
 			moveSpeed = 0;
 		}
 		moveSpeed += acceleration * deltaTime;
-		if (moveSpeed > maxMoveSpeed && gravitationalForce == 0)
+		if (moveSpeed > maxMoveSpeed)// && gravitationalForce == 0)
 			moveSpeed = maxMoveSpeed;
 		direction = -1;
 	}
@@ -22,7 +22,7 @@ void Combatant::ProcessInput(float deltaTime)
 			moveSpeed = 0;
 		}
 		moveSpeed += acceleration * deltaTime;
-		if (moveSpeed > maxMoveSpeed && gravitationalForce == 0)
+		if (moveSpeed > maxMoveSpeed)// && gravitationalForce == 0)
 			moveSpeed = maxMoveSpeed;
 		direction = 1;
 	}
@@ -87,7 +87,7 @@ float Combatant::GetGravitationalForce() const
 void Combatant::ApplyCollisions(Map* map)
 {
 	Vector2 collisionOffset = { 20,12 };
-	collisionBox = { position.x * -1 + collisionOffset.x,position.y * -1 + collisionOffset.y,25,40 }; 
+	collisionBox = { position.x * -1 + collisionOffset.x,position.y * -1 + collisionOffset.y,25,40 };
 
 	Vector2 mapSize = map->GetMapSize();
 	// Apply ouside map collisions
@@ -102,9 +102,10 @@ void Combatant::ApplyCollisions(Map* map)
 	}
 	if (collisionBox.x <= 0)
 	{
-		position.x = 0 - (collisionBox.x *-1 - position.x);
+		position.x = 0 - (collisionBox.x * -1 - position.x);
 		moveSpeed = 0;
-	}else if (collisionBox.x + collisionBox.width >= mapSize.x)
+	}
+	else if (collisionBox.x + collisionBox.width >= mapSize.x)
 	{
 		position.x = (mapSize.x - collisionBox.width - collisionOffset.x) * -1;
 		moveSpeed = 0;
@@ -156,12 +157,20 @@ void Combatant::ApplyCollisions(Map* map)
 	}
 }
 
-void Combatant::ProcessCamera()
+void Combatant::ProcessCamera(Map* map)
 {
 	if (hasCamera) {
 		camera.target = { position.x * -1,position.y * -1 };// WHY IT IS INVERTED??????????
-		if (camera.target.x <= 0)
-			camera.target.x = 0;
+		if (camera.target.x - GetScreenWidth() / 2 <= 0)
+			camera.target.x = GetScreenWidth() / 2;
+		else if (camera.target.x + GetScreenWidth() / 2 >= map->GetMapSize().x)
+			camera.target.x = map->GetMapSize().x - GetScreenWidth() / 2;
+
+		if (camera.target.y - GetScreenHeight() / 2 <= 0)
+			camera.target.y = GetScreenHeight() / 2;
+		else if (camera.target.y + GetScreenHeight() / 2 >= map->GetMapSize().y)
+			camera.target.y = map->GetMapSize().y - GetScreenHeight() / 2;
+
 		BeginMode2D(camera);
 	}
 }

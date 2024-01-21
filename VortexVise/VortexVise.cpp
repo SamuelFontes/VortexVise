@@ -38,7 +38,7 @@ int main()
 
 		BeginDrawing();
 		ClearBackground(BLACK);
-		player->ProcessCamera();
+		player->ProcessCamera(map);
 
 		map->Draw();
 		player->Draw();

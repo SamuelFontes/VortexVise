@@ -36,5 +36,5 @@ public:
 	float GetGravitationalForce() const;
 	void ApplyCollisions(Map* map);
 	void Draw();
-	void ProcessCamera();
+	void ProcessCamera(Map* map);
 };
