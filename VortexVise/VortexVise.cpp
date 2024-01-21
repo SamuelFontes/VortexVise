@@ -30,7 +30,7 @@ int main()
 
 		player->CalculateGravitationalForce(gravity, deltaTime);
 
-		player->CheckCollisions(screenHeight);
+		player->ApplyCollisions(map);
 		player->ApplyGravitationalForce();
 
 		player->ProcessInput(deltaTime);
@@ -50,6 +50,7 @@ int main()
 		DrawText(TextFormat("FPS: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
 		DrawText(TextFormat("player gravityForce: %04f", player->GetGravitationalForce()), 12, 32, 20, BLACK);
 		DrawText(TextFormat("player position: %02i %02i", (int)player->GetX(), (int)player->GetY()), 12, 64, 20, BLACK);
+		DrawText(TextFormat("collision position: %02i %02i", (int)player->collisionBox.x, (int)player->collisionBox.y), 12, 129, 20, BLACK);
 		EndTextureMode();
 
 		auto rec = Rectangle{0,0, (float)target.texture.width,(float)target.texture.height };

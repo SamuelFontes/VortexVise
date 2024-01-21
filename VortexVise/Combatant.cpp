@@ -47,7 +47,7 @@ void Combatant::ProcessInput(float deltaTime)
 		position.x -= moveSpeed * deltaTime;
 	}
 
-	if (IsKeyDown(KEY_SPACE) && gravitationalForce == 0)
+	if (IsKeyDown(KEY_SPACE) )//&& gravitationalForce == 0)
 	{
 		gravitationalForce = -0.24;
 	}
@@ -84,17 +84,17 @@ float Combatant::GetGravitationalForce()
 	return gravitationalForce;
 }
 
-void Combatant::CheckCollisions(int screenHeight)
+void Combatant::ApplyCollisions(Map *map)
 {
 	// Check Bottom of screen for collision
-	float playerFeet = position.y - texture.height;
-	auto screenBottom = (screenHeight / 2 * -1);
-	if (playerFeet <= screenBottom)
-	{
-		if (gravitationalForce > 0)
-			gravitationalForce = 0;
-		position.y = screenBottom + texture.height;
-	}
+	//float playerFeet = position.y - texture.height;
+	//auto screenBottom = (screenHeight / 2 * -1);
+	//if (playerFeet <= screenBottom)
+	//{
+	//	if (gravitationalForce > 0)
+	//		gravitationalForce = 0;
+	//	position.y = screenBottom + texture.height;
+	//}
 }
 
 void Combatant::ProcessCamera()
@@ -112,5 +112,9 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 	Rectangle destRec = Rectangle{ screenWidth / 2.0f, screenHeight / 2.0f, (float)texture.width, (float)texture.height };
 
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
+
+
+	collisionBox = {position.x *-1 + destRec.x,position.y *-1 + destRec.y,50,50}; // TODO: move this 
+	DrawRectangleRec(collisionBox, PURPLE);
 }
 

@@ -11,8 +11,6 @@ public:
 	};
 
 private:
-	Vector2 topRight;
-	Vector2 bottomRight;
 	std::string mapName;
 	std::string mapDescription;
 	std::string texturePath;

@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include "Map.h"
 class Combatant {
 public:
 	// Constructor
@@ -24,6 +25,7 @@ private:
 	bool hasCamera;
 
 public:
+	Rectangle collisionBox;
 	void ProcessInput(float deltaTime);
 	void ApplyGravitationalForce();
 	void CalculateGravitationalForce(float force, float deltaTime);
@@ -31,7 +33,7 @@ public:
 	float GetX();
 	float GetY();
 	float GetGravitationalForce();
-	void CheckCollisions(int screenHeight);
+	void ApplyCollisions(Map *map);
 	void Draw(int screenWidth, int screenHeight);
 	void ProcessCamera();
 };
