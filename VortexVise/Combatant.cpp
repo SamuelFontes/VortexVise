@@ -98,12 +98,51 @@ void Combatant::ApplyCollisions(Map* map)
 	//	position.y = screenBottom + texture.height;
 	//}
 
-	for (const auto& collision : map->GetCollisions()) 
+	for (const auto& collision : map->GetCollisions())
 	{
-		if (CheckCollisionRecs(collisionBox, collision)) 
+		if (CheckCollisionRecs(collisionBox, collision))
 		{
+			// OMG THIS WORKS :)
 			// This means the player is inside the thing 
 			auto collisionOverlap = GetCollisionRec(collisionBox, collision);
+
+			if (collisionOverlap.height < collisionOverlap.width)
+			{
+				if (collisionOverlap.y < collision.y + collision.height / 2)
+				{
+					// Feet collision
+					position.y += collisionOverlap.height;
+					collisionBox.y += collisionOverlap.height;
+					gravitationalForce = 0;
+				}
+				else
+				{
+					// Head collision
+					position.y -= collisionOverlap.height;
+					collisionBox.y -= collisionOverlap.height;
+					gravitationalForce = 0;
+				}
+			}
+			else 
+			{
+
+				if (collisionOverlap.x > collision.x)
+				{
+					// Right collision
+					position.x -= collisionOverlap.width;
+					collisionBox.x -= collisionOverlap.width;
+				}
+				else 
+				{
+					// Left collision
+					position.x += collisionOverlap.width;
+					collisionBox.x += collisionOverlap.width;
+				}
+
+			}
+
+
+
 		}
 	}
 }
