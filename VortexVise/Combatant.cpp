@@ -108,24 +108,23 @@ void Combatant::ApplyCollisions(Map* map)
 
 			if (collisionOverlap.height < collisionOverlap.width)
 			{
+				gravitationalForce = 0;
 				if (collisionOverlap.y < collision.y + collision.height / 2)
 				{
 					// Feet collision
 					position.y += collisionOverlap.height;
 					collisionBox.y += collisionOverlap.height;
-					gravitationalForce = 0;
 				}
 				else
 				{
 					// Head collision
 					position.y -= collisionOverlap.height;
 					collisionBox.y -= collisionOverlap.height;
-					gravitationalForce = 0;
 				}
 			}
 			else 
 			{
-
+				moveSpeed = 0;
 				if (collisionOverlap.x > collision.x)
 				{
 					// Right collision
@@ -164,7 +163,7 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
 
 
-	collisionBox = { position.x * -1 + destRec.x,position.y * -1 + destRec.y,50,50 }; // TODO: move this 
-	DrawRectangleRec(collisionBox, PURPLE);
+	collisionBox = { position.x * -1 + destRec.x+20,position.y * -1 + destRec.y+12,25,40 }; // TODO: move this 
+	//DrawRectangleRec(collisionBox, PURPLE); // Debug
 }
 
