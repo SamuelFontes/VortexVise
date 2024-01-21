@@ -1,4 +1,5 @@
 #include "Combatant.h"
+#include <raymath.h>
 
 void Combatant::ProcessInput(float deltaTime)
 {
@@ -160,16 +161,22 @@ void Combatant::ApplyCollisions(Map* map)
 void Combatant::ProcessCamera(Map* map)
 {
 	if (hasCamera) {
-		camera.target = { position.x * -1,position.y * -1 };// WHY IT IS INVERTED??????????
-		if (camera.target.x - GetScreenWidth() / 2 <= 0)
-			camera.target.x = GetScreenWidth() / 2;
-		else if (camera.target.x + GetScreenWidth() / 2 >= map->GetMapSize().x)
-			camera.target.x = map->GetMapSize().x - GetScreenWidth() / 2;
+		Vector2 target = { position.x * -1,position.y * -1 };// WHY IT IS INVERTED??????????
 
-		if (camera.target.y - GetScreenHeight() / 2 <= 0)
-			camera.target.y = GetScreenHeight() / 2;
-		else if (camera.target.y + GetScreenHeight() / 2 >= map->GetMapSize().y)
-			camera.target.y = map->GetMapSize().y - GetScreenHeight() / 2;
+		// Make it stay inside the map
+		if (target.x - GetScreenWidth() / 2 <= 0)
+			target.x = GetScreenWidth() / 2;
+		else if (target.x + GetScreenWidth() / 2 >= map->GetMapSize().x)
+			target.x = map->GetMapSize().x - GetScreenWidth() / 2;
+
+		if (target.y - GetScreenHeight() / 2 <= 0)
+			target.y = GetScreenHeight() / 2;
+		else if (target.y + GetScreenHeight() / 2 >= map->GetMapSize().y)
+			target.y = map->GetMapSize().y - GetScreenHeight() / 2;
+
+		// Make camera smooth
+		camera.target.x = Lerp(camera.target.x, target.x,1 - expf(-3 * GetFrameTime()));
+		camera.target.y = Lerp(camera.target.y, target.y,1 - expf(-3 * GetFrameTime()));
 
 		BeginMode2D(camera);
 	}
