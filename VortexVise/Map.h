@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <string>
 #include <iostream>
+#include <list>
 class Map {
 public:
 	// Constructor
@@ -16,9 +17,11 @@ private:
 	std::string mapDescription;
 	std::string texturePath;
 	Texture2D mapTexture; // This is the whole map backed in an image
+	std::list<Rectangle> collisions;
 
 public:
 	void LoadMap(std::string mapName);
 	void Draw();
+	std::list<Rectangle> GetCollisions();
 
 };

@@ -42,17 +42,20 @@ int main()
 		map->Draw();
 		player->Draw(screenWidth, screenHeight);
 
+#pragma region Debug
 		// DEBUG
 		BeginTextureMode(target);
 		ClearBackground(WHITE);
 		DrawFPS(128, 12);
 		DrawText(TextFormat("FPS: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
-		DrawText(TextFormat("gravityForce: %04f", player->GetGravitationalForce()), 12, 32, 20, BLACK);
-		DrawText(TextFormat("position: %02i %02i", (int)player->GetX(), (int)player->GetY()), 12, 64, 20, BLACK);
+		DrawText(TextFormat("player gravityForce: %04f", player->GetGravitationalForce()), 12, 32, 20, BLACK);
+		DrawText(TextFormat("player position: %02i %02i", (int)player->GetX(), (int)player->GetY()), 12, 64, 20, BLACK);
 		EndTextureMode();
 
 		auto rec = Rectangle{0,0, (float)target.texture.width,(float)target.texture.height };
 		DrawTexturePro(target.texture,Rectangle{0,0, (float)target.texture.width,(float)target.texture.height * -1}, rec, Vector2{0,0}, 0, WHITE);
+#pragma endregion
+
 		EndDrawing();
 
 	}
