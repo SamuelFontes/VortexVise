@@ -8,12 +8,12 @@ public:
 		texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		position = Vector2{ 0,0 };
 
-		if (_hasCamera) 
+		if (_hasCamera)
 		{
-			camera = Camera2D { position,position,0,1 };
+			camera = Camera2D{ position,position,0,1 };
 		}
 	}
-private: 
+private:
 	Vector2 position;
 	float gravitationalForce = 0;
 	int direction = 1;
@@ -33,7 +33,7 @@ public:
 	float GetX() const;
 	float GetY() const;
 	float GetGravitationalForce() const;
-	void ApplyCollisions(Map *map);
+	void ApplyCollisions(Map* map);
 	void Draw(int screenWidth, int screenHeight);
 	void ProcessCamera();
 };

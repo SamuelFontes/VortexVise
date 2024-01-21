@@ -15,10 +15,11 @@ int main()
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
 	ToggleFullscreen();
 
-	Combatant* player = new Combatant(true);
 	Map* map = new Map();
-
 	map->LoadMap("SkyArchipelago");
+
+	Combatant* player = new Combatant(true);
+
 	//SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
@@ -36,7 +37,7 @@ int main()
 		player->ProcessInput(deltaTime);
 
 		BeginDrawing();
-		ClearBackground(WHITE);
+		ClearBackground(BLACK);
 		player->ProcessCamera();
 
 		map->Draw();
@@ -53,8 +54,8 @@ int main()
 		DrawText(TextFormat("collision position: %02i %02i", (int)player->collisionBox.x, (int)player->collisionBox.y), 12, 129, 20, BLACK);
 		EndTextureMode();
 
-		auto rec = Rectangle{0,0, (float)target.texture.width,(float)target.texture.height };
-		DrawTexturePro(target.texture,Rectangle{0,0, (float)target.texture.width,(float)target.texture.height * -1}, rec, Vector2{0,0}, 0, WHITE);
+		auto rec = Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height };
+		DrawTexturePro(target.texture, Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height * -1 }, rec, Vector2{ 0,0 }, 0, WHITE);
 #pragma endregion
 
 		EndDrawing();

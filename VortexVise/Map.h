@@ -21,5 +21,6 @@ public:
 	void LoadMap(std::string mapName);
 	void Draw();
 	std::list<Rectangle> GetCollisions();
+	Vector2 GetMapSize();
 
 };

@@ -86,18 +86,14 @@ float Combatant::GetGravitationalForce() const
 
 void Combatant::ApplyCollisions(Map* map)
 {
-	// Check Bottom of screen for collision
-
-		// Get collision rectangle (only on collision)
-	//float playerFeet = position.y - texture.height;
-	//auto screenBottom = (screenHeight / 2 * -1);
-	//if (playerFeet <= screenBottom)
+	Vector2 mapSize = map->GetMapSize();
+	// Apply ouside map collisions
+	//if (collisionBox.y < 0)
 	//{
-	//	if (gravitationalForce > 0)
-	//		gravitationalForce = 0;
-	//	position.y = screenBottom + texture.height;
+	//	position.y = 0;
 	//}
 
+	// Apply map collisions
 	for (const auto& collision : map->GetCollisions())
 	{
 		if (CheckCollisionRecs(collisionBox, collision))
@@ -122,7 +118,7 @@ void Combatant::ApplyCollisions(Map* map)
 					collisionBox.y -= collisionOverlap.height;
 				}
 			}
-			else 
+			else
 			{
 				moveSpeed = 0;
 				if (collisionOverlap.x > collision.x)
@@ -131,7 +127,7 @@ void Combatant::ApplyCollisions(Map* map)
 					position.x -= collisionOverlap.width;
 					collisionBox.x -= collisionOverlap.width;
 				}
-				else 
+				else
 				{
 					// Left collision
 					position.x += collisionOverlap.width;
