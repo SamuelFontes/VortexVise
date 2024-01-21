@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Combatant.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="VortexVise.cpp" />
   </ItemGroup>
   <ItemGroup>

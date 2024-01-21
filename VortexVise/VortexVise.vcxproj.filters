@@ -3,8 +3,10 @@
   <ItemGroup>
     <ClCompile Include="VortexVise.cpp" />
     <ClCompile Include="Combatant.cpp" />
+    <ClCompile Include="Map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Combatant.h" />
+    <ClInclude Include="Map.h" />
   </ItemGroup>
 </Project>

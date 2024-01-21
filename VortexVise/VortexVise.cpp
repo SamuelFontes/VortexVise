@@ -4,6 +4,7 @@
 #include <iostream>
 #include "raylib.h";
 #include "Combatant.h"
+#include "Map.h"
 
 float gravity = 0.5;
 
@@ -15,8 +16,9 @@ int main()
 	ToggleFullscreen();
 
 	Combatant* player = new Combatant(true);
+	Map* map = new Map();
 
-	auto map = LoadTexture("Resources/Sprites/Maps/SkyArchipelago.png");
+	map->LoadMap("SkyArchipelago");
 	//SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
@@ -37,7 +39,7 @@ int main()
 		ClearBackground(WHITE);
 		player->ProcessCamera();
 
-		DrawTextureEx(map, Vector2{ 0, 0 }, 0, 0.27, WHITE);
+		map->Draw();
 		player->Draw(screenWidth, screenHeight);
 
 		// DEBUG
