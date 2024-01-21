@@ -18,7 +18,7 @@ int main()
 	Map* map = new Map();
 	map->LoadMap("SkyArchipelago");
 
-	Combatant* player = new Combatant(true);
+	Combatant* player = new Combatant(true, screenWidth, screenHeight);
 
 	//SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);

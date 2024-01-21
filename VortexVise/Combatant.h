@@ -4,13 +4,14 @@
 class Combatant {
 public:
 	// Constructor
-	Combatant(bool _hasCamera) {
+	Combatant(bool _hasCamera, int screenWidth, int screenHeight) {
 		texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-		position = Vector2{ 0,0 };
+		auto spawnPoint = Vector2{ screenWidth / 2.0f,screenHeight / 2.0f };
+		position = { 0,0 };
 
 		if (_hasCamera)
 		{
-			camera = Camera2D{ position,position,0,1 };
+			camera = Camera2D{ spawnPoint,{0,0} ,0,1 };
 		}
 	}
 private:

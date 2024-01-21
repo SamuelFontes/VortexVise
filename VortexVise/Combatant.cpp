@@ -145,7 +145,7 @@ void Combatant::ApplyCollisions(Map* map)
 void Combatant::ProcessCamera()
 {
 	if (hasCamera) {
-		camera.offset = position;
+		camera.target = { position.x * -1,position.y * -1 };// WHY IT IS INVERTED??????????
 		BeginMode2D(camera);
 	}
 }
@@ -154,12 +154,12 @@ void Combatant::Draw(int screenWidth, int screenHeight)
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)texture.width * direction, (float)texture.height };
 
-	Rectangle destRec = Rectangle{ screenWidth / 2.0f, screenHeight / 2.0f, (float)texture.width, (float)texture.height };
+	Rectangle destRec = Rectangle{ 0, 0, (float)texture.width, (float)texture.height };
 
 	DrawTexturePro(texture, sourceRec, destRec, position, 0, WHITE);
 
 
-	collisionBox = { position.x * -1 + destRec.x+20,position.y * -1 + destRec.y+12,25,40 }; // TODO: move this 
-	//DrawRectangleRec(collisionBox, PURPLE); // Debug
+	collisionBox = { position.x * -1 + 20,position.y * -1 + 12,25,40 }; // TODO: move this 
+	DrawRectangleRec(collisionBox, PURPLE); // Debug
 }
 
