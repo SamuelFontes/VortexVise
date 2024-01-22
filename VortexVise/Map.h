@@ -4,18 +4,12 @@
 #include <iostream>
 #include <list>
 class Map {
-public:
-	// Constructor
-	Map() {
-
-	};
-
 private:
-	std::string mapName;
-	std::string mapDescription;
-	std::string texturePath;
-	Texture2D mapTexture; // This is the whole map backed in an image
-	std::list<Rectangle> collisions;
+	std::string _mapName;
+	std::string _mapDescription;
+	std::string _texturePath;
+	Texture2D _mapTexture; // This is the whole map backed in an image
+	std::list<Rectangle> _collisions;
 
 public:
 	void LoadMap(std::string mapName);

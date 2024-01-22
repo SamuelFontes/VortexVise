@@ -15,12 +15,12 @@ int main()
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
 	ToggleFullscreen();
 
-	Map* map = new Map();
-	map->LoadMap("SkyArchipelago");
+	Map map;
+	map.LoadMap("SkyArchipelago");
 
-	Combatant* player = new Combatant(true, map);
+	Combatant player(true, map);
 
-	//SetTargetFPS(60);               
+	//SetTargetFPS(30);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
 
@@ -31,16 +31,16 @@ int main()
 
 
 
-		player->ProcessInput(deltaTime);
-		player->ApplyGravitationalForce(gravity);
-		player->ApplyCollisions(map);
+		player.ProcessInput(deltaTime);
+		player.ApplyGravitationalForce(gravity);
+		player.ApplyCollisions(map);
 
 		BeginDrawing();
 		ClearBackground(BLACK);
-		player->ProcessCamera(map);
+		player.ProcessCamera(map);
 
-		map->Draw();
-		player->Draw();
+		map.Draw();
+		player.Draw();
 
 #pragma region Debug
 		// DEBUG
@@ -48,9 +48,9 @@ int main()
 		ClearBackground(WHITE);
 		DrawFPS(128, 12);
 		DrawText(TextFormat("FPS: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
-		DrawText(TextFormat("player gravityForce: %04f", player->GetGravitationalForce()), 12, 32, 20, BLACK);
-		DrawText(TextFormat("player position: %02i %02i", (int)player->GetX(), (int)player->GetY()), 12, 64, 20, BLACK);
-		DrawText(TextFormat("collision velocity: %f", player->moveSpeed), 12, 129, 20, BLACK);
+		DrawText(TextFormat("player gravityForce: %04f", player.GetGravitationalForce()), 12, 32, 20, BLACK);
+		DrawText(TextFormat("player position: %02i %02i", (int)player.GetX(), (int)player.GetY()), 12, 64, 20, BLACK);
+		DrawText(TextFormat("collision velocity: %f", player.GetMoveSpeed()), 12, 129, 20, BLACK);
 		EndTextureMode();
 
 		auto rec = Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height };

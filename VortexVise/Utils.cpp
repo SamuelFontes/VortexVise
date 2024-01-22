@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-float Utils::roundf(float var)
+float Utils::Roundf(float var)
 {
 	// 37.66666 * 100 =3766.66
 	// 3766.66 + .5 =3767.16    for rounding off value

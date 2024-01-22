@@ -1,7 +1,9 @@
 #pragma once
 class Utils
 {
+private:
+	Utils(){}
 public:
-	static float roundf(float var);
+	static float Roundf(float var);
 };
 
