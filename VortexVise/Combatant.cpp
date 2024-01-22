@@ -29,23 +29,8 @@ void Combatant::ProcessInput(float deltaTime)
 	}
 	else
 	{
-		float desacceleration = isTouchingTheGround || gravitationalForce == 0 ? 2000 : 100;
-		if (moveSpeed > 0)
-		{
-			moveSpeed -= desacceleration * deltaTime;
-			if (moveSpeed < 0) moveSpeed = 0;
-		}
-		else if (moveSpeed < 0)
-		{
-			moveSpeed += desacceleration * deltaTime;
-			if (moveSpeed > 0) moveSpeed = 0;
-		}
-		//if (moveSpeed > -20 && moveSpeed < 20)
-		//	moveSpeed = 0;
-		//else if (moveSpeed > 0)
-		//	moveSpeed -= desacceleration;
-		//else if (moveSpeed < 0)
-		//	moveSpeed += desacceleration;
+		float desaceleration = isTouchingTheGround || gravitationalForce == 0 ? 10 : 0.5;
+		moveSpeed = Lerp(moveSpeed, 0, 1 - expf(-desaceleration * GetFrameTime()));
 	}
 
 	if (moveSpeed != 0)
