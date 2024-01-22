@@ -14,7 +14,7 @@ private:
     float _hookTimeout = 0.2f; 
     bool _pressingHookKey = false;
 
-//public: 
-//	void Simulate(Player& player, Map& map);
-//	void Draw(Player& player);
+public: 
+	void Simulate(Player& player, Map& map);
+	void Draw(Player& player);
 };

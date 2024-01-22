@@ -185,6 +185,14 @@ void Player::ProcessCamera(Map& map)
 	}
 }
 
+Vector2 Player::GetPlayerCenterPosition() const
+{
+	Vector2 position = { _position.x * -1,_position.y * -1 };
+	position.x += _texture.width / 2;
+	position.y += _texture.height / 2;
+	return position;
+}
+
 void Player::Draw()
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)_texture.width * _direction, (float)_texture.height };

@@ -5,6 +5,7 @@
 #include "raylib.h";
 #include "Player.h"
 #include "Map.h"
+#include "Hook.h"
 
 
 int main()
@@ -19,6 +20,7 @@ int main()
 	map.LoadMap("SkyArchipelago");
 
 	Player player(true, map);
+	Hook hook;
 
 	//SetTargetFPS(30);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
@@ -34,12 +36,14 @@ int main()
 		player.ProcessInput(deltaTime);
 		player.ApplyGravitationalForce(gravity);
 		player.ApplyCollisions(map);
+		hook.Simulate(player,map);
 
 		BeginDrawing();
 		ClearBackground(BLACK);
 		player.ProcessCamera(map);
 
 		map.Draw();
+		hook.Draw(player);
 		player.Draw();
 
 #pragma region Debug

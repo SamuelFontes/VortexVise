@@ -39,4 +39,5 @@ public:
 	void ApplyCollisions(Map& map);
 	void Draw();
 	void ProcessCamera(Map& map);
+	Vector2 GetPlayerCenterPosition() const;
 };
