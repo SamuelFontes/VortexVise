@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "raylib.h";
-#include "Combatant.h"
+#include "Player.h"
 #include "Map.h"
 
 
@@ -18,7 +18,7 @@ int main()
 	Map map;
 	map.LoadMap("SkyArchipelago");
 
-	Combatant player(true, map);
+	Player player(true, map);
 
 	//SetTargetFPS(30);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);

@@ -127,13 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Combatant.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Hook.cpp" />
+    <ClCompile Include="Hook.h" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VortexVise.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Combatant.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

@@ -1,10 +1,10 @@
 #pragma once
 #include <raylib.h>
 #include "Map.h"
-class Combatant {
+class Player {
 public:
 	// Constructor
-	Combatant(bool hasCamera, Map& map) {
+	Player(bool hasCamera, Map& map) {
 		_texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		auto spawnPoint = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
 		_position = { spawnPoint.x * -1, spawnPoint.y * -1 };
@@ -16,7 +16,7 @@ public:
 		}
 	}
 private:
-	Vector2 _position;
+	Vector2 _position{ 0,0 };
 	int _direction = 1;
 	Texture2D _texture;
 	float _maxMoveSpeed = 700;

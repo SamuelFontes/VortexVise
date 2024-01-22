@@ -2,12 +2,14 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="VortexVise.cpp" />
-    <ClCompile Include="Combatant.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Hook.h" />
+    <ClCompile Include="Hook.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Combatant.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

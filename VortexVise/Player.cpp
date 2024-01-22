@@ -1,7 +1,7 @@
-#include "Combatant.h"
+#include "Player.h"
 #include <raymath.h>
 
-void Combatant::ProcessInput(float deltaTime)
+void Player::ProcessInput(float deltaTime)
 {
 	if (IsKeyDown(KEY_D))
 	{
@@ -45,7 +45,7 @@ void Combatant::ProcessInput(float deltaTime)
 
 }
 
-void Combatant::ApplyGravitationalForce(float gravity)
+void Player::ApplyGravitationalForce(float gravity)
 {
 	if (!_isTouchingTheGround)
 	{
@@ -54,32 +54,32 @@ void Combatant::ApplyGravitationalForce(float gravity)
 	}
 }
 
-Vector2 Combatant::GetPosition() const
+Vector2 Player::GetPosition() const
 {
 	return _position;
 }
 
-float Combatant::GetX() const
+float Player::GetX() const
 {
 	return _position.x;
 }
 
-float Combatant::GetY() const
+float Player::GetY() const
 {
 	return _position.y;
 }
 
-float Combatant::GetGravitationalForce() const
+float Player::GetGravitationalForce() const
 {
 	return _gravitationalForce;
 }
 
-float Combatant::GetMoveSpeed() const
+float Player::GetMoveSpeed() const
 {
 	return _moveSpeed;
 }
 
-void Combatant::ApplyCollisions(Map& map)
+void Player::ApplyCollisions(Map& map)
 {
 	Vector2 collisionOffset = { 20,12 };
 	_collisionBox = { _position.x * -1 + collisionOffset.x,_position.y * -1 + collisionOffset.y,25,40 };
@@ -160,7 +160,7 @@ void Combatant::ApplyCollisions(Map& map)
 	}
 }
 
-void Combatant::ProcessCamera(Map& map)
+void Player::ProcessCamera(Map& map)
 {
 	if (_hasCamera) {
 		Vector2 target = { _position.x * -1,_position.y * -1 };// WHY IT IS INVERTED??????????
@@ -185,7 +185,7 @@ void Combatant::ProcessCamera(Map& map)
 	}
 }
 
-void Combatant::Draw()
+void Player::Draw()
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)_texture.width * _direction, (float)_texture.height };
 
