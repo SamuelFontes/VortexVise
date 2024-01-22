@@ -4,32 +4,32 @@
 class Combatant {
 public:
 	// Constructor
-	Combatant(bool _hasCamera) {
+	Combatant(bool _hasCamera, Map* map) {
 		texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		auto spawnPoint = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-		position = { 30,30 };
+		position = { spawnPoint.x * -1, spawnPoint.y * -1 };
 
 		if (_hasCamera)
 		{
-			camera = Camera2D{ spawnPoint,{0,0} ,0,1 };
+			camera = Camera2D{ spawnPoint, spawnPoint ,0,1 };
 		}
 	}
 private:
 	Vector2 position;
-	float gravitationalForce = 0;
 	int direction = 1;
 	Texture2D texture;
-	float moveSpeed = 0;
 	float maxMoveSpeed = 700;
 	float acceleration = 1500;
 	Camera2D camera;
 	bool hasCamera;
+	bool isTouchingTheGround = false;
+	Rectangle collisionBox;
 
 public:
-	Rectangle collisionBox;
+	float moveSpeed = 0;
+	float gravitationalForce = 0;
 	void ProcessInput(float deltaTime);
-	void ApplyGravitationalForce();
-	void CalculateGravitationalForce(float force, float deltaTime);
+	void ApplyGravitationalForce(float gravity);
 	Vector2 GetPosition() const;
 	float GetX() const;
 	float GetY() const;

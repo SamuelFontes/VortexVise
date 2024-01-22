@@ -33,10 +33,10 @@ void Map::LoadMap(std::string mapName)
 void Map::Draw()
 {
 	DrawTextureEx(mapTexture, Vector2{ 0, 0 }, 0, 1, WHITE);
-	for (const auto& collision : collisions)
-	{
-		DrawRectangleRec(collision,BLUE);
-	}
+	//for (const auto& collision : collisions) // DEBUG
+	//{
+	//	DrawRectangleRec(collision,BLUE);
+	//}
 }
 
 std::list<Rectangle> Map::GetCollisions()
