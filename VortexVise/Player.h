@@ -5,28 +5,28 @@ class Player {
 public:
 	// Constructor
 	Player(bool hasCamera, Map& map) {
-		_texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+		m_texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		auto spawnPoint = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-		_position = { spawnPoint.x * -1, spawnPoint.y * -1 };
+		m_position = { spawnPoint.x * -1, spawnPoint.y * -1 };
 
 		if (hasCamera)
 		{
-			_hasCamera = hasCamera;
-			_camera = Camera2D{ spawnPoint, spawnPoint ,0,1 };
+			m_hasCamera = hasCamera;
+			m_camera = Camera2D{ spawnPoint, spawnPoint ,0,1 };
 		}
 	}
 private:
-	Vector2 _position{ 0,0 };
-	int _direction = 1;
-	Texture2D _texture;
-	float _maxMoveSpeed = 700;
-	float _acceleration = 1500;
-	Camera2D _camera;
-	bool _hasCamera = false;
-	bool _isTouchingTheGround = false;
-	Rectangle _collisionBox;
-	float _moveSpeed = 0;
-	float _gravitationalForce = 0;
+	Vector2 m_position{ 0,0 };
+	int m_direction = 1;
+	Texture2D m_texture;
+	float m_maxMoveSpeed = 700;
+	float m_acceleration = 1500;
+	Camera2D m_camera;
+	bool m_hasCamera = false;
+	bool m_isTouchingTheGround = false;
+	Rectangle m_collisionBox;
+	float m_moveSpeed = 0;
+	float m_gravitationalForce = 0;
 
 public:
 	void ProcessInput(float deltaTime);
@@ -40,4 +40,5 @@ public:
 	void Draw();
 	void ProcessCamera(Map& map);
 	Vector2 GetPlayerCenterPosition() const;
+	bool IsLookingRight() const;
 };

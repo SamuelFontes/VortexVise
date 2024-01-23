@@ -26,8 +26,7 @@ int main()
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
 
-	while (!WindowShouldClose())
-	{
+	while (!WindowShouldClose()) {
 		float deltaTime = GetFrameTime();
 
 
@@ -36,7 +35,7 @@ int main()
 		player.ProcessInput(deltaTime);
 		player.ApplyGravitationalForce(gravity);
 		player.ApplyCollisions(map);
-		hook.Simulate(player,map);
+		hook.Simulate(player,map, gravity);
 
 		BeginDrawing();
 		ClearBackground(BLACK);
@@ -46,7 +45,7 @@ int main()
 		hook.Draw(player);
 		player.Draw();
 
-#pragma region Debug
+		#pragma region Debug
 		// DEBUG
 		BeginTextureMode(target);
 		ClearBackground(WHITE);
@@ -59,7 +58,7 @@ int main()
 
 		auto rec = Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height };
 		DrawTexturePro(target.texture, Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height * -1 }, rec, Vector2{ 0,0 }, 0, WHITE);
-#pragma endregion
+		#pragma endregion
 
 		EndDrawing();
 

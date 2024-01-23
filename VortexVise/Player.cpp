@@ -3,156 +3,131 @@
 
 void Player::ProcessInput(float deltaTime)
 {
-	if (IsKeyDown(KEY_D))
-	{
-		if (_direction != -1 && _isTouchingTheGround)
-		{
-			// Player changed direction
-			_moveSpeed = 0;
-		}
-		_moveSpeed += _acceleration * deltaTime;
-		if (_moveSpeed > _maxMoveSpeed)// && gravitationalForce == 0)
-			_moveSpeed = _maxMoveSpeed;
-		_direction = -1;
+	if (IsKeyDown(KEY_D)) {
+		m_moveSpeed += m_acceleration * deltaTime;
+		if (m_moveSpeed > m_maxMoveSpeed)// && gravitationalForce == 0)
+			m_moveSpeed = m_maxMoveSpeed;
+		m_direction = -1;
 	}
-	else if (IsKeyDown(KEY_A))
-	{
-		if (_direction != 1 && _isTouchingTheGround)
-		{
-			// Player changed direction
-			_moveSpeed = 0;
-		}
-		_moveSpeed -= _acceleration * deltaTime;
-		if (_moveSpeed < _maxMoveSpeed * -1)// && gravitationalForce == 0)
-			_moveSpeed = _maxMoveSpeed * -1;
-		_direction = 1;
+	else if (IsKeyDown(KEY_A)) {
+		m_moveSpeed -= m_acceleration * deltaTime;
+		if (m_moveSpeed < m_maxMoveSpeed * -1)// && gravitationalForce == 0)
+			m_moveSpeed = m_maxMoveSpeed * -1;
+		m_direction = 1;
 	}
-	else
-	{
-		float desaceleration = _isTouchingTheGround || _gravitationalForce == 0 ? 10 : 0.5;
-		_moveSpeed = Lerp(_moveSpeed, 0, 1 - expf(-desaceleration * GetFrameTime()));
+	else {
+		float desaceleration = m_isTouchingTheGround || m_gravitationalForce == 0 ? 10 : 0.5;
+		m_moveSpeed = Lerp(m_moveSpeed, 0, 1 - expf(-desaceleration * GetFrameTime()));
 	}
 
-	if (_moveSpeed != 0)
-		_position.x += _moveSpeed * deltaTime * -1;
+	if (m_moveSpeed != 0)
+		m_position.x += m_moveSpeed * deltaTime * -1;
 
 	//if (IsKeyDown(KEY_SPACE)
-	if (IsKeyDown(KEY_SPACE) && _isTouchingTheGround)
-	{
-		_isTouchingTheGround = false;
-		_gravitationalForce = -600;
+	if (IsKeyDown(KEY_SPACE) && m_isTouchingTheGround) {
+		m_isTouchingTheGround = false;
+		m_gravitationalForce = -600;
 	}
 
 }
 
 void Player::ApplyGravitationalForce(float gravity)
 {
-	if (!_isTouchingTheGround)
-	{
-		_gravitationalForce += gravity * GetFrameTime();
-		_position.y -= _gravitationalForce * GetFrameTime();
+	if (!m_isTouchingTheGround) {
+		m_gravitationalForce += gravity * GetFrameTime();
+		m_position.y -= m_gravitationalForce * GetFrameTime();
 	}
 }
 
 Vector2 Player::GetPosition() const
 {
-	return _position;
+	return m_position;
 }
 
 float Player::GetX() const
 {
-	return _position.x;
+	return m_position.x;
 }
 
 float Player::GetY() const
 {
-	return _position.y;
+	return m_position.y;
 }
 
 float Player::GetGravitationalForce() const
 {
-	return _gravitationalForce;
+	return m_gravitationalForce;
 }
 
 float Player::GetMoveSpeed() const
 {
-	return _moveSpeed;
+	return m_moveSpeed;
 }
 
 void Player::ApplyCollisions(Map& map)
 {
 	Vector2 collisionOffset = { 20,12 };
-	_collisionBox = { _position.x * -1 + collisionOffset.x,_position.y * -1 + collisionOffset.y,25,40 };
-	_isTouchingTheGround = false;
+	m_collisionBox = { m_position.x * -1 + collisionOffset.x,m_position.y * -1 + collisionOffset.y,25,40 };
+	m_isTouchingTheGround = false;
 
 	Vector2 mapSize = map.GetMapSize();
 	// Apply ouside map collisions
-	if (_collisionBox.y <= 0)
-	{
-		_position.y = 11.9;
-		_gravitationalForce = 0;
+	if (m_collisionBox.y <= 0) {
+		m_position.y = 11.9;
+		m_gravitationalForce = 0;
 	}
-	else if (_collisionBox.y > mapSize.y) {
+	else if (m_collisionBox.y > mapSize.y) {
 		// TODO: Kill the player
-		_position = { map.GetMapSize().x / 2 * -1,map.GetMapSize().y / 2 * -1 };
-		_gravitationalForce = 0;
-		_moveSpeed = 0;
+		m_position = { map.GetMapSize().x / 2 * -1,map.GetMapSize().y / 2 * -1 };
+		m_gravitationalForce = 0;
+		m_moveSpeed = 0;
 
 	}
-	if (_collisionBox.x <= 0)
-	{
-		_position.x = 0 - (_collisionBox.x * -1 - _position.x);
-		_moveSpeed = 0;
+	if (m_collisionBox.x <= 0) {
+		m_position.x = 0 - (m_collisionBox.x * -1 - m_position.x);
+		m_moveSpeed = 0;
 	}
-	else if (_collisionBox.x + _collisionBox.width >= mapSize.x)
-	{
-		_position.x = (mapSize.x - _collisionBox.width - collisionOffset.x) * -1;
-		_moveSpeed = 0;
+	else if (m_collisionBox.x + m_collisionBox.width >= mapSize.x) {
+		m_position.x = (mapSize.x - m_collisionBox.width - collisionOffset.x) * -1;
+		m_moveSpeed = 0;
 	}
 
 	// Apply map collisions
 	for (const auto& collision : map.GetCollisions())
 	{
-		if (CheckCollisionRecs(_collisionBox, collision))
-		{
+		if (CheckCollisionRecs(m_collisionBox, collision)) {
 			// OMG THIS WORKS :)
 			// This means the player is inside the thing 
-			auto collisionOverlap = GetCollisionRec(_collisionBox, collision);
+			auto collisionOverlap = GetCollisionRec(m_collisionBox, collision);
 
-			if (_position.y == (collision.y - _texture.height + collisionOffset.y) * -1)
-				_isTouchingTheGround = true;
-			if (collisionOverlap.height < collisionOverlap.width)
-			{
-				if (collisionOverlap.y < collision.y + collision.height / 2)
-				{
+			if (m_position.y == (collision.y - m_texture.height + collisionOffset.y) * -1)
+				m_isTouchingTheGround = true;
+			if (collisionOverlap.height < collisionOverlap.width) {
+				if (collisionOverlap.y < collision.y + collision.height / 2) {
 					// Feet collision
-					_position.y = (collision.y - _texture.height + collisionOffset.y) * -1;
-					_collisionBox.y = (collision.y - _collisionBox.height);
-					_gravitationalForce = 0;
-					_isTouchingTheGround = true;
+					m_position.y = (collision.y - m_texture.height + collisionOffset.y) * -1;
+					m_collisionBox.y = (collision.y - m_collisionBox.height);
+					m_gravitationalForce = 0;
+					m_isTouchingTheGround = true;
 				}
-				else
-				{
+				else {
 					// Head collision
-					_position.y -= collisionOverlap.height;
-					_collisionBox.y += collisionOverlap.height;
-					_gravitationalForce = 0.01;
+					m_position.y -= collisionOverlap.height;
+					m_collisionBox.y += collisionOverlap.height;
+					m_gravitationalForce = 0.01;
 				}
 			}
-			else
-			{
-				_moveSpeed = 0;
-				if (collisionOverlap.x > collision.x)
-				{
+			else {
+				m_moveSpeed = 0;
+				if (collisionOverlap.x > collision.x) {
 					// Right collision
-					_position.x -= collisionOverlap.width;
-					_collisionBox.x -= collisionOverlap.width;
+					m_position.x -= collisionOverlap.width;
+					m_collisionBox.x -= collisionOverlap.width;
 				}
-				else
-				{
+				else {
 					// Left collision
-					_position.x += collisionOverlap.width;
-					_collisionBox.x += collisionOverlap.width;
+					m_position.x += collisionOverlap.width;
+					m_collisionBox.x += collisionOverlap.width;
 				}
 
 			}
@@ -162,8 +137,8 @@ void Player::ApplyCollisions(Map& map)
 
 void Player::ProcessCamera(Map& map)
 {
-	if (_hasCamera) {
-		Vector2 target = { _position.x * -1,_position.y * -1 };// WHY IT IS INVERTED??????????
+	if (m_hasCamera) {
+		Vector2 target = { m_position.x * -1,m_position.y * -1 };// WHY IT IS INVERTED??????????
 
 		// Make it stay inside the map
 		if (target.x - GetScreenWidth() / 2 <= 0)
@@ -178,28 +153,33 @@ void Player::ProcessCamera(Map& map)
 
 		// Make camera smooth
 		// FIXME: fix camera jerkness when almost hitting the target
-		_camera.target.x = Lerp(_camera.target.x, target.x, 1 - expf(-3 * GetFrameTime()));
-		_camera.target.y = Lerp(_camera.target.y, target.y, 1 - expf(-3 * GetFrameTime()));
+		m_camera.target.x = Lerp(m_camera.target.x, target.x, 1 - expf(-3 * GetFrameTime()));
+		m_camera.target.y = Lerp(m_camera.target.y, target.y, 1 - expf(-3 * GetFrameTime()));
 
-		BeginMode2D(_camera);
+		BeginMode2D(m_camera);
 	}
 }
 
 Vector2 Player::GetPlayerCenterPosition() const
 {
-	Vector2 position = { _position.x * -1,_position.y * -1 };
-	position.x += _texture.width / 2;
-	position.y += _texture.height / 2;
+	Vector2 position = { m_position.x * -1,m_position.y * -1 };
+	position.x += m_texture.width / 2;
+	position.y += m_texture.height / 2;
 	return position;
+}
+
+bool Player::IsLookingRight() const
+{
+	return m_direction == -1;
 }
 
 void Player::Draw()
 {
-	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)_texture.width * _direction, (float)_texture.height };
+	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)m_texture.width * m_direction, (float)m_texture.height };
 
-	Rectangle destRec = Rectangle{ 0, 0, (float)_texture.width, (float)_texture.height };
+	Rectangle destRec = Rectangle{ 0, 0, (float)m_texture.width, (float)m_texture.height };
 
-	DrawTexturePro(_texture, sourceRec, destRec, _position, 0, WHITE);
+	DrawTexturePro(m_texture, sourceRec, destRec, m_position, 0, WHITE);
 
 
 	//DrawRectangleRec(collisionBox, GREEN); // Debug
