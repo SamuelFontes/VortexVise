@@ -83,11 +83,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 	}
 	else if (m_isHookAttached) {
 		// Should pull player here
-		Vector2 direction = { m_position.x - player.GetPosition().x, m_position.y - player.GetPosition().y };
-		direction = Vector2Normalize(direction);
-
-
-
+		Vector2 direction = Utils::GetVector2Direction(player.GetPlayerCenterPosition(),m_position);
 
 		float distance = Vector2Distance(m_position, player.GetPosition());
 

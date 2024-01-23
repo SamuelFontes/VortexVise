@@ -9,3 +9,10 @@ float Utils::Roundf(float var)
 	float value = (int)(var * 100 + .5);
 	return (float)value / 100;
 }
+
+Vector2 Utils::GetVector2Direction(Vector2 from, Vector2 to)
+{
+	Vector2 direction = { to.x - from.x, to.y - from.y };
+	direction = Vector2Normalize(direction);
+	return direction;
+}

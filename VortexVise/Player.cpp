@@ -198,7 +198,7 @@ void Player::Draw()
 	DrawTexturePro(m_texture, sourceRec, destRec, { m_position.x * -1,m_position.y * -1 }, 0, WHITE);
 
 
-	if(Utils::Debug)
+	if (Utils::Debug)
 		DrawRectangleRec(m_collisionBox, GREEN); // Debug
 }
 
