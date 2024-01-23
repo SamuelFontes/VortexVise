@@ -41,4 +41,5 @@ public:
 	void ProcessCamera(Map& map);
 	Vector2 GetPlayerCenterPosition() const;
 	bool IsLookingRight() const;
+	void ApplyVelocity(Vector2 velocity);
 };

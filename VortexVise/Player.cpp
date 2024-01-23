@@ -21,7 +21,7 @@ void Player::ProcessInput(float deltaTime)
 	}
 
 	if (m_moveSpeed != 0)
-		m_position.x += m_moveSpeed * deltaTime * -1;
+		m_position.x += m_moveSpeed * deltaTime;
 
 	//if (IsKeyDown(KEY_SPACE)
 	if (IsKeyDown(KEY_SPACE) && m_isTouchingTheGround) {
@@ -33,9 +33,12 @@ void Player::ProcessInput(float deltaTime)
 
 void Player::ApplyGravitationalForce(float gravity)
 {
+	float maxGravity = 500;
 	if (!m_isTouchingTheGround) {
 		m_gravitationalForce += gravity * GetFrameTime();
-		m_position.y -= m_gravitationalForce * GetFrameTime();
+		if (m_gravitationalForce >= maxGravity)
+			m_gravitationalForce = maxGravity;
+		m_position.y += m_gravitationalForce * GetFrameTime();
 	}
 }
 
@@ -67,7 +70,7 @@ float Player::GetMoveSpeed() const
 void Player::ApplyCollisions(Map& map)
 {
 	Vector2 collisionOffset = { 20,12 };
-	m_collisionBox = { m_position.x * -1 + collisionOffset.x,m_position.y * -1 + collisionOffset.y,25,40 };
+	m_collisionBox = { m_position.x + collisionOffset.x,m_position.y + collisionOffset.y,25,40 };
 	m_isTouchingTheGround = false;
 
 	Vector2 mapSize = map.GetMapSize();
@@ -78,17 +81,17 @@ void Player::ApplyCollisions(Map& map)
 	}
 	else if (m_collisionBox.y > mapSize.y) {
 		// TODO: Kill the player
-		m_position = { map.GetMapSize().x / 2 * -1,map.GetMapSize().y / 2 * -1 };
+		m_position = { map.GetMapSize().x / 2,map.GetMapSize().y / 2 };
 		m_gravitationalForce = 0;
 		m_moveSpeed = 0;
 
 	}
 	if (m_collisionBox.x <= 0) {
-		m_position.x = 0 - (m_collisionBox.x * -1 - m_position.x);
+		m_position.x = 0 - (m_collisionBox.x - m_position.x);
 		m_moveSpeed = 0;
 	}
 	else if (m_collisionBox.x + m_collisionBox.width >= mapSize.x) {
-		m_position.x = (mapSize.x - m_collisionBox.width - collisionOffset.x) * -1;
+		m_position.x = mapSize.x - m_collisionBox.width - collisionOffset.x;
 		m_moveSpeed = 0;
 	}
 
@@ -100,12 +103,12 @@ void Player::ApplyCollisions(Map& map)
 			// This means the player is inside the thing 
 			auto collisionOverlap = GetCollisionRec(m_collisionBox, collision);
 
-			if (m_position.y == (collision.y - m_texture.height + collisionOffset.y) * -1)
+			if (m_position.y == collision.y - m_texture.height + collisionOffset.y)
 				m_isTouchingTheGround = true;
 			if (collisionOverlap.height < collisionOverlap.width) {
 				if (collisionOverlap.y < collision.y + collision.height / 2) {
 					// Feet collision
-					m_position.y = (collision.y - m_texture.height + collisionOffset.y) * -1;
+					m_position.y = collision.y - m_texture.height + collisionOffset.y;
 					m_collisionBox.y = (collision.y - m_collisionBox.height);
 					m_gravitationalForce = 0;
 					m_isTouchingTheGround = true;
@@ -138,7 +141,7 @@ void Player::ApplyCollisions(Map& map)
 void Player::ProcessCamera(Map& map)
 {
 	if (m_hasCamera) {
-		Vector2 target = { m_position.x * -1,m_position.y * -1 };// WHY IT IS INVERTED??????????
+		Vector2 target = { m_position.x ,m_position.y };
 
 		// Make it stay inside the map
 		if (target.x - GetScreenWidth() / 2 <= 0)
@@ -162,7 +165,7 @@ void Player::ProcessCamera(Map& map)
 
 Vector2 Player::GetPlayerCenterPosition() const
 {
-	Vector2 position = { m_position.x * -1,m_position.y * -1 };
+	Vector2 position = { m_position.x, m_position.y };
 	position.x += m_texture.width / 2;
 	position.y += m_texture.height / 2;
 	return position;
@@ -173,13 +176,19 @@ bool Player::IsLookingRight() const
 	return m_direction == -1;
 }
 
+void Player::ApplyVelocity(Vector2 velocity)
+{
+	m_position.x += velocity.x;
+	m_position.y += velocity.y;
+}
+
 void Player::Draw()
 {
 	Rectangle sourceRec = Rectangle{ 0.0f, 0.0f, (float)m_texture.width * m_direction, (float)m_texture.height };
 
 	Rectangle destRec = Rectangle{ 0, 0, (float)m_texture.width, (float)m_texture.height };
 
-	DrawTexturePro(m_texture, sourceRec, destRec, m_position, 0, WHITE);
+	DrawTexturePro(m_texture, sourceRec, destRec, { m_position.x * -1,m_position.y * -1 }, 0, WHITE);
 
 
 	//DrawRectangleRec(collisionBox, GREEN); // Debug

@@ -1,4 +1,5 @@
 ﻿#include "Hook.h"
+#include <raymath.h>
 
 void Hook::Simulate(Player& player, Map& map, float gravity)
 {
@@ -28,7 +29,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 			// ↓
 			m_velocity.y += m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_W)){
+		else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_W)) {
 			// ↖
 			m_velocity.x -= m_hookShootForce * 0.6;
 			m_velocity.y -= m_hookShootForce;
@@ -65,7 +66,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 			}
 		}
 	}
-	else if (m_pressingHookKey && !IsMouseButtonDown(1)) {
+	else if ((m_pressingHookKey && !IsMouseButtonDown(1)) || IsKeyDown(KEY_SPACE)) {
 		// Hook retracted
 		m_isHookReleased = false;
 		m_isHookAttached = false;
@@ -74,19 +75,46 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 	else if (!m_isHookAttached) {
 		// Shooting the hook
 		m_position = { m_position.x + m_velocity.x * GetFrameTime(),m_position.y + m_velocity.y * GetFrameTime() };
-		m_position.y += gravity * 0.5  * GetFrameTime();
+		m_position.y += gravity * 0.5 * GetFrameTime();
 		m_collision.x = m_position.x;
 		m_collision.y = m_position.y;
 
 	}
-	else {
+	else if (m_isHookAttached) {
 		// Should pull player here
+		Vector2 direction = { m_position.x - player.GetPosition().x, m_position.y - player.GetPosition().y };
+		direction = Vector2Normalize(direction);
+
+
+
+
+		float distance = Vector2Distance(m_position, player.GetPosition());
+
+		// TODO: implement this crap here
+			//if((_hookPullOffset > _originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
+			//{
+			//    _hookPullOffset += _offsetChanger * Time.deltaTime * 10;
+
+			//    if(_soundTimer == 0)  // This is to not spam the audio 
+			//    {
+			//        GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
+			//        _soundTimer += Time.deltaTime;
+			//    }
+			//}
+
+		if (distance > m_hookPullOffset)
+		{
+			Vector2 velocity = Vector2Scale(direction, m_hookPullForce * GetFrameTime());
+			player.ApplyVelocity(velocity);
+		}
 	}
 	m_pressingHookKey = IsMouseButtonDown(1);
 
-	for (const auto& collision : map.GetCollisions()) {
-		if (CheckCollisionRecs(m_collision, collision)) {
-			m_isHookAttached = true;
+	if (m_isHookReleased) {
+		for (const auto& collision : map.GetCollisions()) {
+			if (CheckCollisionRecs(m_collision, collision)) {
+				m_isHookAttached = true;
+			}
 		}
 	}
 }

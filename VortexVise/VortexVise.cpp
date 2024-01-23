@@ -34,8 +34,8 @@ int main()
 
 		player.ProcessInput(deltaTime);
 		player.ApplyGravitationalForce(gravity);
-		player.ApplyCollisions(map);
 		hook.Simulate(player,map, gravity);
+		player.ApplyCollisions(map);
 
 		BeginDrawing();
 		ClearBackground(BLACK);
