@@ -1,32 +1,33 @@
 #include "Player.h"
 #include <raymath.h>
+#include "Utils.h"
 
 void Player::ProcessInput(float deltaTime)
 {
 	if (IsKeyDown(KEY_D)) {
-		m_moveSpeed += m_acceleration * deltaTime;
-		if (m_moveSpeed > m_maxMoveSpeed)// && gravitationalForce == 0)
-			m_moveSpeed = m_maxMoveSpeed;
+		m_velocity.x += m_acceleration * deltaTime;
+		if (m_velocity.x > m_maxMoveSpeed)// && gravitationalForce == 0)
+			m_velocity.x = m_maxMoveSpeed;
 		m_direction = -1;
 	}
 	else if (IsKeyDown(KEY_A)) {
-		m_moveSpeed -= m_acceleration * deltaTime;
-		if (m_moveSpeed < m_maxMoveSpeed * -1)// && gravitationalForce == 0)
-			m_moveSpeed = m_maxMoveSpeed * -1;
+		m_velocity.x -= m_acceleration * deltaTime;
+		if (m_velocity.x < m_maxMoveSpeed * -1)// && gravitationalForce == 0)
+			m_velocity.x = m_maxMoveSpeed * -1;
 		m_direction = 1;
 	}
 	else {
-		float desaceleration = m_isTouchingTheGround || m_gravitationalForce == 0 ? 10 : 0.5;
-		m_moveSpeed = Lerp(m_moveSpeed, 0, 1 - expf(-desaceleration * GetFrameTime()));
+		float desaceleration = m_isTouchingTheGround || m_velocity.y == 0 ? 10 : 0.5;
+		m_velocity.x = Lerp(m_velocity.x, 0, 1 - expf(-desaceleration * GetFrameTime()));
 	}
 
-	if (m_moveSpeed != 0)
-		m_position.x += m_moveSpeed * deltaTime;
+	if (m_velocity.x != 0)
+		m_position.x += m_velocity.x * deltaTime;
 
 	//if (IsKeyDown(KEY_SPACE)
 	if (IsKeyDown(KEY_SPACE) && m_isTouchingTheGround) {
 		m_isTouchingTheGround = false;
-		m_gravitationalForce = -600;
+		m_velocity.y = -400;
 	}
 
 }
@@ -35,10 +36,10 @@ void Player::ApplyGravitationalForce(float gravity)
 {
 	float maxGravity = 500;
 	if (!m_isTouchingTheGround) {
-		m_gravitationalForce += gravity * GetFrameTime();
-		if (m_gravitationalForce >= maxGravity)
-			m_gravitationalForce = maxGravity;
-		m_position.y += m_gravitationalForce * GetFrameTime();
+		m_velocity.y += gravity * GetFrameTime();
+		if (m_velocity.y >= maxGravity)
+			m_velocity.y = maxGravity;
+		m_position.y += m_velocity.y * GetFrameTime();
 	}
 }
 
@@ -59,12 +60,12 @@ float Player::GetY() const
 
 float Player::GetGravitationalForce() const
 {
-	return m_gravitationalForce;
+	return m_velocity.y;
 }
 
 float Player::GetMoveSpeed() const
 {
-	return m_moveSpeed;
+	return m_velocity.x;
 }
 
 void Player::ApplyCollisions(Map& map)
@@ -77,22 +78,22 @@ void Player::ApplyCollisions(Map& map)
 	// Apply ouside map collisions
 	if (m_collisionBox.y <= 0) {
 		m_position.y = 11.9;
-		m_gravitationalForce = 0;
+		m_velocity.y = 0;
 	}
 	else if (m_collisionBox.y > mapSize.y) {
 		// TODO: Kill the player
 		m_position = { map.GetMapSize().x / 2,map.GetMapSize().y / 2 };
-		m_gravitationalForce = 0;
-		m_moveSpeed = 0;
+		m_velocity.y = 0;
+		m_velocity.x = 0;
 
 	}
 	if (m_collisionBox.x <= 0) {
 		m_position.x = 0 - (m_collisionBox.x - m_position.x);
-		m_moveSpeed = 0;
+		m_velocity.x = 0;
 	}
 	else if (m_collisionBox.x + m_collisionBox.width >= mapSize.x) {
 		m_position.x = mapSize.x - m_collisionBox.width - collisionOffset.x;
-		m_moveSpeed = 0;
+		m_velocity.x = 0;
 	}
 
 	// Apply map collisions
@@ -110,26 +111,26 @@ void Player::ApplyCollisions(Map& map)
 					// Feet collision
 					m_position.y = collision.y - m_texture.height + collisionOffset.y;
 					m_collisionBox.y = (collision.y - m_collisionBox.height);
-					m_gravitationalForce = 0;
+					m_velocity.y = 0;
 					m_isTouchingTheGround = true;
 				}
 				else {
 					// Head collision
-					m_position.y -= collisionOverlap.height;
+					m_position.y += collisionOverlap.height;
 					m_collisionBox.y += collisionOverlap.height;
-					m_gravitationalForce = 0.01;
+					m_velocity.y = 0.01;
 				}
 			}
 			else {
-				m_moveSpeed = 0;
+				m_velocity.x = 0;
 				if (collisionOverlap.x > collision.x) {
 					// Right collision
-					m_position.x -= collisionOverlap.width;
+					m_position.x += collisionOverlap.width;
 					m_collisionBox.x -= collisionOverlap.width;
 				}
 				else {
 					// Left collision
-					m_position.x += collisionOverlap.width;
+					m_position.x -= collisionOverlap.width;
 					m_collisionBox.x += collisionOverlap.width;
 				}
 
@@ -176,10 +177,16 @@ bool Player::IsLookingRight() const
 	return m_direction == -1;
 }
 
-void Player::ApplyVelocity(Vector2 velocity)
+void Player::AddVelocity(Vector2 velocity)
 {
-	m_position.x += velocity.x;
-	m_position.y += velocity.y;
+	m_velocity.x += velocity.x * GetFrameTime();
+	m_velocity.y += velocity.y * GetFrameTime();
+}
+
+void Player::ApplyVelocity()
+{
+	m_position.x += m_velocity.x * GetFrameTime();
+	m_position.y += m_velocity.y * GetFrameTime();
 }
 
 void Player::Draw()
@@ -191,6 +198,7 @@ void Player::Draw()
 	DrawTexturePro(m_texture, sourceRec, destRec, { m_position.x * -1,m_position.y * -1 }, 0, WHITE);
 
 
-	//DrawRectangleRec(collisionBox, GREEN); // Debug
+	if(Utils::Debug)
+		DrawRectangleRec(m_collisionBox, GREEN); // Debug
 }
 

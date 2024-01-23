@@ -22,7 +22,7 @@ int main()
 	Player player(true, map);
 	Hook hook;
 
-	//SetTargetFPS(30);               
+	SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
 
@@ -35,6 +35,7 @@ int main()
 		player.ProcessInput(deltaTime);
 		player.ApplyGravitationalForce(gravity);
 		hook.Simulate(player,map, gravity);
+		player.ApplyVelocity();
 		player.ApplyCollisions(map);
 
 		BeginDrawing();

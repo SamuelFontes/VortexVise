@@ -1,5 +1,6 @@
 ﻿#include "Hook.h"
 #include <raymath.h>
+#include "Utils.h"
 
 void Hook::Simulate(Player& player, Map& map, float gravity)
 {
@@ -66,7 +67,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 			}
 		}
 	}
-	else if ((m_pressingHookKey && !IsMouseButtonDown(1)) || IsKeyDown(KEY_SPACE)) {
+	else if ((m_pressingHookKey && !IsMouseButtonDown(1))) {
 		// Hook retracted
 		m_isHookReleased = false;
 		m_isHookAttached = false;
@@ -91,21 +92,22 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 		float distance = Vector2Distance(m_position, player.GetPosition());
 
 		// TODO: implement this crap here
-			//if((_hookPullOffset > _originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
-			//{
-			//    _hookPullOffset += _offsetChanger * Time.deltaTime * 10;
+		//if((m_hookPullOffset > m_originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
+		//{
+		//_hookPullOffset += _offsetChanger * Time.deltaTime * 10;
 
-			//    if(_soundTimer == 0)  // This is to not spam the audio 
-			//    {
-			//        GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
-			//        _soundTimer += Time.deltaTime;
-			//    }
-			//}
+		//if(_soundTimer == 0)  // This is to not spam the audio 
+		//{
+		//GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
+		//_soundTimer += Time.deltaTime;
+		//}
+		
 
+		m_hookPullOffset = 50;
 		if (distance > m_hookPullOffset)
 		{
-			Vector2 velocity = Vector2Scale(direction, m_hookPullForce * GetFrameTime());
-			player.ApplyVelocity(velocity);
+			Vector2 velocity = Vector2Scale(direction, m_hookPullForce);
+			player.AddVelocity(velocity);
 		}
 	}
 	m_pressingHookKey = IsMouseButtonDown(1);
@@ -122,7 +124,8 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 void Hook::Draw(Player& const player)
 {
 	if (m_isHookReleased) {
-		DrawRectangleRec(m_collision, GREEN); // Debug
+		if(Utils::Debug)
+			DrawRectangleRec(m_collision, GREEN); // Debug
 	}
 
 }
