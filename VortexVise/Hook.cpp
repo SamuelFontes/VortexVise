@@ -2,7 +2,7 @@
 #include <raymath.h>
 #include "Utils.h"
 
-void Hook::Simulate(Player& player, Map& map, float gravity)
+void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 {
 	if (!m_pressingHookKey && IsMouseButtonDown(1)) {
 		// start Hook shoot
@@ -75,8 +75,8 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 	}
 	else if (!m_isHookAttached) {
 		// Shooting the hook
-		m_position = { m_position.x + m_velocity.x * GetFrameTime(),m_position.y + m_velocity.y * GetFrameTime() };
-		m_position.y += gravity * 0.5 * GetFrameTime();
+		m_position = { m_position.x + m_velocity.x * deltaTime,m_position.y + m_velocity.y * deltaTime };
+		m_position.y += gravity * 0.5 * deltaTime;
 		m_collision.x = m_position.x;
 		m_collision.y = m_position.y;
 
@@ -99,11 +99,10 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 		//}
 		
 
-		m_hookPullOffset = 50;
 		if (distance > m_hookPullOffset)
 		{
 			Vector2 velocity = Vector2Scale(direction, m_hookPullForce);
-			player.AddVelocity(velocity);
+			player.AddVelocity(velocity,deltaTime);
 		}
 	}
 	m_pressingHookKey = IsMouseButtonDown(1);
@@ -120,6 +119,8 @@ void Hook::Simulate(Player& player, Map& map, float gravity)
 void Hook::Draw(Player& const player)
 {
 	if (m_isHookReleased) {
+		DrawTexture(m_texture, m_position.x, m_position.y, WHITE);
+
 		if(Utils::Debug)
 			DrawRectangleRec(m_collision, GREEN); // Debug
 	}

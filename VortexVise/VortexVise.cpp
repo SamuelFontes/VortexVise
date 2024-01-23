@@ -11,6 +11,8 @@
 int main()
 {
 	float gravity = 900;
+	int tickrate = 128; // Even my game is 128 tick, suck it CSGO
+	int targetFPS = 0;
 	int screenWidth = 1920;
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
@@ -22,21 +24,38 @@ int main()
 	Player player(true, map);
 	Hook hook;
 
-	SetTargetFPS(60);               
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
 
+	auto currentTime = GetTime();
+	auto lastTime = currentTime;
+	double const deltaTime = static_cast<double>(1) / tickrate;
+
 	while (!WindowShouldClose()) {
-		float deltaTime = GetFrameTime();
+		if (targetFPS != 0) {
+			double time = static_cast<double>(1) / targetFPS;
+			WaitTime(time);
+		}
+
+		currentTime = GetTime();
+		auto simulationTime = currentTime - lastTime;
 
 
 
 
-		player.ProcessInput(deltaTime);
-		player.ApplyGravitationalForce(gravity);
-		hook.Simulate(player,map, gravity);
-		player.ApplyVelocity();
-		player.ApplyCollisions(map);
+
+
+		while (simulationTime >= deltaTime) // perform one update for every interval passed
+		{
+			player.ProcessInput(deltaTime);
+			player.ApplyGravitationalForce(gravity, deltaTime);
+			hook.Simulate(player, map, gravity, deltaTime);
+			player.ApplyVelocity(deltaTime);
+			player.ApplyCollisions(map);
+			simulationTime -= deltaTime;
+			lastTime += deltaTime;
+		}
+
 
 		BeginDrawing();
 		ClearBackground(BLACK);
@@ -46,12 +65,12 @@ int main()
 		hook.Draw(player);
 		player.Draw();
 
-		#pragma region Debug
+#pragma region Debug
 		// DEBUG
 		BeginTextureMode(target);
 		ClearBackground(WHITE);
 		DrawFPS(128, 12);
-		DrawText(TextFormat("FPS: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
+		DrawText(TextFormat("dt: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
 		DrawText(TextFormat("player gravityForce: %04f", player.GetGravitationalForce()), 12, 32, 20, BLACK);
 		DrawText(TextFormat("player position: %02i %02i", (int)player.GetX(), (int)player.GetY()), 12, 64, 20, BLACK);
 		DrawText(TextFormat("collision velocity: %f", player.GetMoveSpeed()), 12, 129, 20, BLACK);
@@ -59,7 +78,7 @@ int main()
 
 		auto rec = Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height };
 		DrawTexturePro(target.texture, Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height * -1 }, rec, Vector2{ 0,0 }, 0, WHITE);
-		#pragma endregion
+#pragma endregion
 
 		EndDrawing();
 

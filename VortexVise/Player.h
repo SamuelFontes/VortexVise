@@ -29,7 +29,7 @@ private:
 
 public:
 	void ProcessInput(float deltaTime);
-	void ApplyGravitationalForce(float gravity);
+	void ApplyGravitationalForce(float gravity, float deltaTime);
 	Vector2 GetPosition() const;
 	float GetX() const;
 	float GetY() const;
@@ -40,6 +40,6 @@ public:
 	void ProcessCamera(Map& map);
 	Vector2 GetPlayerCenterPosition() const;
 	bool IsLookingRight() const;
-	void AddVelocity(Vector2 velocity);
-	void ApplyVelocity();
+	void AddVelocity(Vector2 velocity, float deltaTime);
+	void ApplyVelocity(float deltaTime);
 };

@@ -18,7 +18,7 @@ void Player::ProcessInput(float deltaTime)
 	}
 	else {
 		float desaceleration = m_isTouchingTheGround || m_velocity.y == 0 ? 10 : 0.5;
-		m_velocity.x = Lerp(m_velocity.x, 0, 1 - expf(-desaceleration * GetFrameTime()));
+		m_velocity.x = Lerp(m_velocity.x, 0, 1 - expf(-desaceleration * deltaTime));
 	}
 
 	if (m_velocity.x != 0)
@@ -32,14 +32,14 @@ void Player::ProcessInput(float deltaTime)
 
 }
 
-void Player::ApplyGravitationalForce(float gravity)
+void Player::ApplyGravitationalForce(float gravity, float deltaTime)
 {
 	float maxGravity = 500;
 	if (!m_isTouchingTheGround) {
-		m_velocity.y += gravity * GetFrameTime();
+		m_velocity.y += gravity * deltaTime;
 		if (m_velocity.y >= maxGravity)
 			m_velocity.y = maxGravity;
-		m_position.y += m_velocity.y * GetFrameTime();
+		m_position.y += m_velocity.y * deltaTime;
 	}
 }
 
@@ -177,16 +177,16 @@ bool Player::IsLookingRight() const
 	return m_direction == -1;
 }
 
-void Player::AddVelocity(Vector2 velocity)
+void Player::AddVelocity(Vector2 velocity, float deltaTime)
 {
-	m_velocity.x += velocity.x * GetFrameTime();
-	m_velocity.y += velocity.y * GetFrameTime();
+	m_velocity.x += velocity.x * deltaTime;
+	m_velocity.y += velocity.y * deltaTime;
 }
 
-void Player::ApplyVelocity()
+void Player::ApplyVelocity(float deltaTime)
 {
-	m_position.x += m_velocity.x * GetFrameTime();
-	m_position.y += m_velocity.y * GetFrameTime();
+	m_position.x += m_velocity.x * deltaTime;
+	m_position.y += m_velocity.y * deltaTime;
 }
 
 void Player::Draw()
