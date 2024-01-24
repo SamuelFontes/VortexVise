@@ -29,6 +29,7 @@ private:
 	bool m_hasCamera = false;
 	bool m_isTouchingTheGround = false;
 	Rectangle m_collisionBox;
+	std::list<Rectangle> m_playerCollisions;
 
 public:
 	void ProcessInput(float deltaTime);

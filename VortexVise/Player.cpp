@@ -96,9 +96,9 @@ void Player::ApplyCollisions(Map& map)
 
 	// This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
 	// WARNING: This solution only works if the player never goes in the minus coordinates, why? because at least for now he can't, if this changes please redo this collision interpolation crap
-	std::list<Rectangle> playerCollisions;
-	float interpolationAmount = 3;
-	for (float i = 3; i > 0; i -= 0.1) {
+	m_playerCollisions.clear();
+	float interpolationAmount = 1;
+	for (float i = interpolationAmount; i > 0; i -= 0.1) {
 		Rectangle interpolatedCollision = endingCollision;
 		if (m_collisionBox.x < endingCollision.x && endingCollision.x - m_collisionBox.x >= m_collisionBox.width * i) {
 			interpolatedCollision.x += m_collisionBox.width * i;
@@ -113,18 +113,20 @@ void Player::ApplyCollisions(Map& map)
 		else if (m_collisionBox.y > endingCollision.y && m_collisionBox.y - endingCollision.y >= m_collisionBox.height * i) {
 			interpolatedCollision.y -= m_collisionBox.height * i;
 		}
-		playerCollisions.push_front(interpolatedCollision);
+		if(interpolatedCollision.x != endingCollision.x || interpolatedCollision.y != endingCollision .y)
+			m_playerCollisions.push_front(interpolatedCollision);
 	}
 
 
-	playerCollisions.push_front(endingCollision);
+	m_playerCollisions.push_back(endingCollision);
 
 	// Apply map collisions
-	for (auto& playerCollision : playerCollisions) {
+	for (auto& playerCollision : m_playerCollisions) {
 		for (const auto& collision : map.GetCollisions())
 		{
 			if (CheckCollisionRecs(playerCollision, collision)) {
 				// OMG THIS WORKS :)
+				// TODO: Maybe redo this part this is not working
 				// This means the player is inside the thing 
 				auto collisionOverlap = GetCollisionRec(playerCollision, collision);
 
@@ -162,8 +164,8 @@ void Player::ApplyCollisions(Map& map)
 					}
 					else {
 						// Left collision
-						m_position.x += collisionOverlap.width;
-						playerCollision.x += collisionOverlap.width;
+						m_position.x -= collisionOverlap.width;
+						playerCollision.x -= collisionOverlap.width;
 						m_collisionBox = playerCollision;
 						return;
 					}
@@ -235,7 +237,14 @@ void Player::Draw()
 	DrawTexturePro(m_texture, sourceRec, destRec, { m_position.x * -1,m_position.y * -1 }, 0, WHITE);
 
 
-	if (Utils::Debug())
+	if (Utils::Debug()) {
 		DrawRectangleRec(m_collisionBox, GREEN); // Debug
+		unsigned char color = 0;
+		for (auto& playerCollision : m_playerCollisions) {
+			DrawRectangleRec(playerCollision, {color,100,100,255}); // Collision Interpolation
+			color += 40;
+
+		}
+	}
 }
 
