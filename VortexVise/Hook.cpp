@@ -1,6 +1,4 @@
 ﻿#include "Hook.h"
-#include <raymath.h>
-#include "Utils.h"
 
 void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 {
@@ -121,7 +119,7 @@ void Hook::Draw(Player& const player)
 	if (m_isHookReleased) {
 		DrawTexture(m_texture, m_position.x, m_position.y, WHITE);
 
-		if(Utils::Debug)
+		if(Utils::Debug())
 			DrawRectangleRec(m_collision, GREEN); // Debug
 	}
 

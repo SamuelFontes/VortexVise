@@ -8,6 +8,7 @@ private:
 public:
 	static float Roundf(float var);
 	static Vector2 GetVector2Direction(Vector2 from, Vector2 to);
-	static const bool Debug = false;
+	static bool Debug();
+	static void SwitchDebug();
 };
 

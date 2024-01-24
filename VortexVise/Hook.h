@@ -1,6 +1,8 @@
 #pragma once
 #include "Player.h"
 #include <raylib.h>
+#include <raymath.h>
+#include "Utils.h"
 class Hook {
 private:
 	Vector2 m_position{ 0,0 };

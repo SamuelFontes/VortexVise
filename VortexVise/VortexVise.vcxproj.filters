@@ -12,5 +12,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Debug.h" />
   </ItemGroup>
 </Project>

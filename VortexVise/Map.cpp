@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "Utils.h"
 
 void Map::LoadMap(std::string mapName)
 {
@@ -34,7 +33,7 @@ void Map::LoadMap(std::string mapName)
 void Map::Draw()
 {
 	DrawTextureEx(m_mapTexture, Vector2{ 0, 0 }, 0, 1, WHITE);
-	if (Utils::Debug){
+	if (Utils::Debug()){
 		for (const auto& collision : m_collisions) // DEBUG
 		{
 			DrawRectangleRec(collision,BLUE);

@@ -1,5 +1,7 @@
 #include "Utils.h"
 
+bool debug = false;
+
 float Utils::Roundf(float var)
 {
 	// 37.66666 * 100 =3766.66
@@ -16,3 +18,12 @@ Vector2 Utils::GetVector2Direction(Vector2 from, Vector2 to)
 	direction = Vector2Normalize(direction);
 	return direction;
 }
+
+bool Utils::Debug() {
+	return debug;
+}
+
+void Utils::SwitchDebug() {
+	debug = !debug;
+}
+

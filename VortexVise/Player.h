@@ -1,6 +1,9 @@
 #pragma once
 #include <raylib.h>
 #include "Map.h"
+#include <raymath.h>
+#include "Utils.h"
+#include <vector>
 class Player {
 public:
 	// Constructor

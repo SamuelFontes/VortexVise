@@ -13,10 +13,10 @@ int main()
 	float gravity = 900;
 	int tickrate = 128; // Even my game has more than 64 tick, suck it CSGO
 	int targetFPS = 0;
-	int screenWidth = 1920;
-	int screenHeight = 1080;
+	int screenWidth = 1280;
+	int screenHeight = 720;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
-	ToggleFullscreen();
+	//ToggleFullscreen();
 
 	Map map;
 	map.LoadMap("SkyArchipelago");
@@ -45,6 +45,10 @@ int main()
 		int tickCounter = 0;
 
 
+		if (IsKeyPressed(KEY_F7)) {
+
+			Utils::SwitchDebug();
+		}
 
 		while (simulationTime >= deltaTime) // perform one update for every interval passed
 		{
