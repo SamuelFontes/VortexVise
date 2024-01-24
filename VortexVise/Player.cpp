@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <raymath.h>
 #include "Utils.h"
+#include <vector>
 
 void Player::ProcessInput(float deltaTime)
 {
@@ -71,72 +72,104 @@ float Player::GetMoveSpeed() const
 void Player::ApplyCollisions(Map& map)
 {
 	Vector2 collisionOffset = { 20,12 };
-	m_collisionBox = { m_position.x + collisionOffset.x,m_position.y + collisionOffset.y,25,40 };
+	Rectangle endingCollision = { m_position.x + collisionOffset.x,m_position.y + collisionOffset.y,25,40 };
 	m_isTouchingTheGround = false;
 
 	Vector2 mapSize = map.GetMapSize();
 	// Apply ouside map collisions
-	if (m_collisionBox.y <= 0) {
+	if (endingCollision.y <= 0) {
 		m_position.y = 11.9;
 		m_velocity.y = 0;
 	}
-	else if (m_collisionBox.y > mapSize.y) {
+	else if (endingCollision.y > mapSize.y) {
 		// TODO: Kill the player
 		m_position = { map.GetMapSize().x / 2,map.GetMapSize().y / 2 };
 		m_velocity.y = 0;
 		m_velocity.x = 0;
 
 	}
-	if (m_collisionBox.x <= 0) {
-		m_position.x = 0 - (m_collisionBox.x - m_position.x);
+	if (endingCollision.x <= 0) {
+		m_position.x = 0 - (endingCollision.x - m_position.x);
 		m_velocity.x = 0;
 	}
-	else if (m_collisionBox.x + m_collisionBox.width >= mapSize.x) {
-		m_position.x = mapSize.x - m_collisionBox.width - collisionOffset.x;
+	else if (endingCollision.x + endingCollision.width >= mapSize.x) {
+		m_position.x = mapSize.x - endingCollision.width - collisionOffset.x;
 		m_velocity.x = 0;
 	}
+
+	// This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
+	// WARNING: This solution only works if the player never goes in the minus coordinates, why? because at least for now he can't, if this changes please redo this collision interpolation crap
+	std::list<Rectangle> playerCollisions;
+	Rectangle interpolatedCollision = endingCollision;
+	if (m_collisionBox.x < endingCollision.x && endingCollision.x - m_collisionBox.x >= m_collisionBox.width * 0.5) {
+		interpolatedCollision.x += m_collisionBox.width * 0.5;
+	}
+	else if (m_collisionBox.x > endingCollision.x && m_collisionBox.x - endingCollision.x >= m_collisionBox.width * 0.5) {
+		interpolatedCollision.x -= m_collisionBox.width * 0.5;
+	}
+	if (m_collisionBox.y < endingCollision.y && endingCollision.y - m_collisionBox.y >= m_collisionBox.height * 0.5) {
+		interpolatedCollision.y += m_collisionBox.height * 0.5;
+	}
+	else if (m_collisionBox.y > endingCollision.y && m_collisionBox.y - endingCollision.y >= m_collisionBox.height * 0.5) {
+		interpolatedCollision.y -= m_collisionBox.height * 0.5;
+	}
+
+	playerCollisions.push_front(interpolatedCollision);
+	playerCollisions.push_front(endingCollision);
 
 	// Apply map collisions
-	for (const auto& collision : map.GetCollisions())
-	{
-		if (CheckCollisionRecs(m_collisionBox, collision)) {
-			// OMG THIS WORKS :)
-			// This means the player is inside the thing 
-			auto collisionOverlap = GetCollisionRec(m_collisionBox, collision);
+	for (auto& playerCollision : playerCollisions) {
+		for (const auto& collision : map.GetCollisions())
+		{
+			if (CheckCollisionRecs(playerCollision, collision)) {
+				// OMG THIS WORKS :)
+				// This means the player is inside the thing 
+				auto collisionOverlap = GetCollisionRec(playerCollision, collision);
 
-			if (m_position.y == collision.y - m_texture.height + collisionOffset.y)
-				m_isTouchingTheGround = true;
-			if (collisionOverlap.height < collisionOverlap.width) {
-				if (collisionOverlap.y < collision.y + collision.height / 2) {
-					// Feet collision
-					m_position.y = collision.y - m_texture.height + collisionOffset.y;
-					m_collisionBox.y = (collision.y - m_collisionBox.height);
-					m_velocity.y = 0;
+				if (m_position.y == collision.y - m_texture.height + collisionOffset.y)
 					m_isTouchingTheGround = true;
+				if (collisionOverlap.height < collisionOverlap.width) {
+					if (collisionOverlap.y < collision.y + collision.height / 2) {
+						// Feet collision
+						m_position.y = collision.y - m_texture.height + collisionOffset.y;
+						playerCollision.y = (collision.y - playerCollision.height);
+						m_velocity.y = 0;
+						m_isTouchingTheGround = true;
+						m_collisionBox = playerCollision;
+						return;
+					}
+					else {
+						// Head collision
+						m_position.y += collisionOverlap.height;
+						playerCollision.y += collisionOverlap.height;
+						m_velocity.y = 0.01;
+						m_collisionBox = playerCollision;
+						return;
+					}
 				}
 				else {
-					// Head collision
-					m_position.y += collisionOverlap.height;
-					m_collisionBox.y += collisionOverlap.height;
-					m_velocity.y = 0.01;
-				}
-			}
-			else {
-				m_velocity.x = 0;
-				if (collisionOverlap.x > collision.x) {
-					// Right collision
-					m_position.x += collisionOverlap.width;
-					m_collisionBox.x -= collisionOverlap.width;
-				}
-				else {
-					// Left collision
-					m_position.x -= collisionOverlap.width;
-					m_collisionBox.x += collisionOverlap.width;
-				}
+					m_velocity.x = 0;
+					if (collisionOverlap.x > collision.x) {
+						// Right collision
+						m_position.x += collisionOverlap.width;
+						playerCollision.x -= collisionOverlap.width;
+						m_collisionBox = playerCollision;
+						return;
+					}
+					else {
+						// Left collision
+						m_position.x -= collisionOverlap.width;
+						playerCollision.x += collisionOverlap.width;
+						m_collisionBox = playerCollision;
+						return;
+					}
 
+				}
 			}
 		}
+
 	}
+	m_collisionBox = endingCollision;
 }
 
 void Player::ProcessCamera(Map& map)
