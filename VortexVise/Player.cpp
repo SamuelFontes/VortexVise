@@ -97,8 +97,8 @@ void Player::ApplyCollisions(Map& map)
 	// This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
 	// WARNING: This solution only works if the player never goes in the minus coordinates, why? because at least for now he can't, if this changes please redo this collision interpolation crap
 	m_playerCollisions.clear();
-	float interpolationAmount = 1;
-	for (float i = interpolationAmount; i > 0; i -= 0.1) {
+	float interpolationAmount = 2;
+	for (float i = interpolationAmount; i > 0; i -= 0.2) {
 		Rectangle interpolatedCollision = endingCollision;
 		if (m_collisionBox.x < endingCollision.x && endingCollision.x - m_collisionBox.x >= m_collisionBox.width * i) {
 			interpolatedCollision.x += m_collisionBox.width * i;

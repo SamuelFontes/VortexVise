@@ -12,11 +12,11 @@ int main()
 {
 	float gravity = 900;
 	int tickrate = 128; // Even my game has more than 64 tick, suck it CSGO
-	int targetFPS = 0;
-	int screenWidth = 1280;
-	int screenHeight = 720;
+	int targetFPS = 60;
+	int screenWidth = 1920;
+	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
-	//ToggleFullscreen();
+	ToggleFullscreen();
 
 	Map map;
 	map.LoadMap("SkyArchipelago");
@@ -31,6 +31,8 @@ int main()
 	auto lastTime = currentTime;
 	double const deltaTime = static_cast<double>(1) / tickrate;
 
+	int tickCounter = 0;
+	int renderCounter = 0;
 	while (!WindowShouldClose()) {
 		if (targetFPS != 0) {
 			double time = static_cast<double>(1) / targetFPS;
@@ -42,13 +44,8 @@ int main()
 
 
 
-		int tickCounter = 0;
 
 
-		if (IsKeyPressed(KEY_F7)) {
-
-			Utils::SwitchDebug();
-		}
 
 		while (simulationTime >= deltaTime) // perform one update for every interval passed
 		{
@@ -62,11 +59,11 @@ int main()
 			tickCounter++;
 		}
 
-
 		BeginDrawing();
 		ClearBackground(BLACK);
 		player.ProcessCamera(map);
 
+		renderCounter++;
 		map.Draw();
 		hook.Draw(player);
 		player.Draw();
@@ -78,7 +75,7 @@ int main()
 		DrawFPS(128, 12);
 		DrawText(TextFormat("dt: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
 		DrawText(TextFormat("player gravityForce: %04f", player.GetGravitationalForce()), 12, 32, 20, BLACK);
-		DrawText(TextFormat("tc: %02i", tickCounter), 12, 90, 20, BLACK);
+		DrawText(TextFormat("tc: %02i %02i", tickCounter, renderCounter), 12, 90, 20, BLACK);
 		DrawText(TextFormat("player position: %02i %02i", (int)player.GetX(), (int)player.GetY()), 12, 64, 20, BLACK);
 		DrawText(TextFormat("collision velocity: %f", player.GetMoveSpeed()), 12, 129, 20, BLACK);
 		EndTextureMode();
@@ -88,6 +85,11 @@ int main()
 #pragma endregion
 
 		EndDrawing();
+		if (IsKeyPressed(KEY_F7)) {
+
+			Utils::SwitchDebug();
+		}
+
 
 	}
 
