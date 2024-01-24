@@ -11,7 +11,7 @@
 int main()
 {
 	float gravity = 900;
-	int tickrate = 128; // Even my game is 128 tick, suck it CSGO
+	int tickrate = 512; // Even my game has more than 64 tick, suck it CSGO
 	int targetFPS = 0;
 	int screenWidth = 1920;
 	int screenHeight = 1080;
@@ -42,6 +42,7 @@ int main()
 
 
 
+		int tickCounter = 0;
 
 
 
@@ -54,6 +55,7 @@ int main()
 			player.ApplyCollisions(map);
 			simulationTime -= deltaTime;
 			lastTime += deltaTime;
+			tickCounter++;
 		}
 
 
@@ -72,6 +74,7 @@ int main()
 		DrawFPS(128, 12);
 		DrawText(TextFormat("dt: %02i", (int)(1 / deltaTime)), 12, 12, 20, BLACK);
 		DrawText(TextFormat("player gravityForce: %04f", player.GetGravitationalForce()), 12, 32, 20, BLACK);
+		DrawText(TextFormat("tc: %02i", tickCounter), 12, 90, 20, BLACK);
 		DrawText(TextFormat("player position: %02i %02i", (int)player.GetX(), (int)player.GetY()), 12, 64, 20, BLACK);
 		DrawText(TextFormat("collision velocity: %f", player.GetMoveSpeed()), 12, 129, 20, BLACK);
 		EndTextureMode();
