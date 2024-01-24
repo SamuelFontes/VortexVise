@@ -81,7 +81,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 	}
 	else if (m_isHookAttached) {
 		// Should pull player here
-		Vector2 direction = Utils::GetVector2Direction(player.GetPlayerCenterPosition(),m_position);
+		Vector2 direction = Utils::GetVector2Direction(player.GetPlayerCenterPosition(), m_position);
 
 		float distance = Vector2Distance(m_position, player.GetPosition());
 
@@ -95,12 +95,12 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 		//GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
 		//_soundTimer += Time.deltaTime;
 		//}
-		
+
 
 		if (distance > m_hookPullOffset)
 		{
 			Vector2 velocity = Vector2Scale(direction, m_hookPullForce);
-			player.AddVelocity(velocity,deltaTime);
+			player.AddVelocity(velocity, deltaTime);
 		}
 	}
 	m_pressingHookKey = IsMouseButtonDown(1);
@@ -117,9 +117,10 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 void Hook::Draw(Player& const player)
 {
 	if (m_isHookReleased) {
-		DrawTexture(m_texture, m_position.x, m_position.y, WHITE);
+		DrawLineEx(player.GetPlayerCenterPosition(), { m_position.x + 8, m_position.y + 8 }, 2, {159,79,0,255});
+		DrawTexture(m_texture, m_position.x - 8, m_position.y - 10, WHITE);
 
-		if(Utils::Debug())
+		if (Utils::Debug())
 			DrawRectangleRec(m_collision, GREEN); // Debug
 	}
 
