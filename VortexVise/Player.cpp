@@ -113,7 +113,7 @@ void Player::ApplyCollisions(Map& map)
 		else if (m_collisionBox.y > endingCollision.y && m_collisionBox.y - endingCollision.y >= m_collisionBox.height * i) {
 			interpolatedCollision.y -= m_collisionBox.height * i;
 		}
-		if(interpolatedCollision.x != endingCollision.x || interpolatedCollision.y != endingCollision .y)
+		if (interpolatedCollision.x != endingCollision.x || interpolatedCollision.y != endingCollision.y)
 			m_playerCollisions.push_front(interpolatedCollision);
 	}
 
@@ -122,6 +122,7 @@ void Player::ApplyCollisions(Map& map)
 
 	// Apply map collisions
 	for (auto& playerCollision : m_playerCollisions) {
+		bool colided = false;
 		for (const auto& collision : map.GetCollisions())
 		{
 			if (CheckCollisionRecs(playerCollision, collision)) {
@@ -131,15 +132,19 @@ void Player::ApplyCollisions(Map& map)
 
 				if (m_position.y == collision.y - m_texture.height + collisionOffset.y)
 					m_isTouchingTheGround = true;
+
+				Vector2 colliderCenter = { collision.x + collision.width * 0.5, collision.y + collision.height * 0.5 };
+
 				if (collisionOverlap.height < collisionOverlap.width) {
-					if (collisionOverlap.y < collision.y + collision.height / 2) {
+					if (collisionOverlap.y < colliderCenter.y) {
 						// Feet collision
 						m_position.y = collision.y - m_texture.height + collisionOffset.y;
 						playerCollision.y = (collision.y - playerCollision.height);
 						m_velocity.y = 0;
 						m_isTouchingTheGround = true;
 						m_collisionBox = playerCollision;
-						return;
+						colided = true;
+						continue;
 					}
 					else {
 						// Head collision
@@ -149,30 +154,39 @@ void Player::ApplyCollisions(Map& map)
 						playerCollision.y += collisionOverlap.height;
 						m_velocity.y = 0.01;
 						m_collisionBox = playerCollision;
-						return;
+						colided = true;
+						continue;
 					}
 				}
 				else {
-					m_velocity.x = 0;
-					if (collisionOverlap.x > collision.x) {
+
+					if (collisionOverlap.x > colliderCenter.x) {
+						m_velocity.x = 0;
 						// Right side of collision block on map
 						m_position.x += collisionOverlap.width;
 						playerCollision.x += collisionOverlap.width;
 						m_collisionBox = playerCollision;
-						return;
+						colided = true;
+						continue;
 					}
-					else {
+					else
+					{
+						m_velocity.x = 0;
 						// Left collision
 						m_position.x -= collisionOverlap.width;
 						playerCollision.x -= collisionOverlap.width;
 						m_collisionBox = playerCollision;
-						return;
+						colided = true;
+						continue;
 					}
-
 				}
+
+
 			}
 		}
 
+		if (colided)
+			return;
 	}
 	m_collisionBox = endingCollision;
 }
@@ -240,7 +254,7 @@ void Player::Draw()
 		DrawRectangleRec(m_collisionBox, GREEN); // Debug
 		unsigned char color = 0;
 		for (auto& playerCollision : m_playerCollisions) {
-			DrawRectangleRec(playerCollision, {color,100,100,255}); // Collision Interpolation
+			DrawRectangleRec(playerCollision, { color,100,100,255 }); // Collision Interpolation
 			color += 40;
 
 		}

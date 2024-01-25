@@ -16,6 +16,7 @@ int main()
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
 	ToggleFullscreen();
+	DisableCursor();
 
 	Map map;
 	map.LoadMap("SkyArchipelago");
