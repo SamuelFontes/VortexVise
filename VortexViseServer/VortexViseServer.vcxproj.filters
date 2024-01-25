@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="VortexViseServer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nbnet.h" />
+  </ItemGroup>
 </Project>

@@ -2,6 +2,9 @@
 //
 
 #include <iostream>
+#define NBNET_IMPL
+
+#include "nbnet.h"
 
 int main()
 {
