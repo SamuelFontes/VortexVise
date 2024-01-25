@@ -2,32 +2,6 @@
 
 void Player::ProcessInput(float deltaTime, Input input)
 {
-	// TODO: NETWORKING
-	// Physics Runs On The Server
-	/*
-	struct Input
-    {
-         bool left;
-         bool right;
-         bool forward;
-         bool back;
-         bool jump;
-    };
-
-    struct State
-    {
-         Vector position;
-         Vector velocity;
-    };
-	 struct Move
-    {
-        double time;
-        Input input;
-        State state;
-    };
-	*/
-
-	// I should receive the input here, this should happen on the server and the client should have predictions, the later the server responds
 	if (input.Right) {
 		m_velocity.x += m_acceleration * deltaTime;
 		if (m_velocity.x > m_maxMoveSpeed)// && gravitationalForce == 0)
