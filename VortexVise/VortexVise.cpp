@@ -28,11 +28,14 @@ int main()
 
 	auto currentTime = GetTime();
 	auto lastTime = currentTime;
+	auto lastTimeAccumulator = currentTime;
 	double const deltaTime = static_cast<double>(1) / tickrate;
 
 	int tickCounter = 0;
 	int renderCounter = 0;
+	double accumulator = 0;
 	while (!WindowShouldClose()) {
+		bool isSlowerThanTickRate = false;
 		int targetFPS = Utils::GetFPS();
 		if (targetFPS != 0) {
 			double time = static_cast<double>(1) / targetFPS;
@@ -40,23 +43,34 @@ int main()
 		}
 
 		currentTime = GetTime();
-		auto simulationTime = currentTime - lastTime;
-
-
-
-
+		double simulationTime = currentTime - lastTime;
 
 
 		while (simulationTime >= deltaTime) // perform one update for every interval passed
 		{
-			player.ProcessInput(deltaTime);
-			player.ApplyGravitationalForce(gravity, deltaTime);
-			hook.Simulate(player, map, gravity, deltaTime);
-			player.ApplyVelocity(deltaTime);
+			isSlowerThanTickRate = true;
+			player.ProcessInput(deltaTime-accumulator);
+			player.ApplyGravitationalForce(gravity, deltaTime-accumulator);
+			hook.Simulate(player, map, gravity, deltaTime-accumulator);
+			player.ApplyVelocity(deltaTime-accumulator);
 			player.ApplyCollisions(map);
 			simulationTime -= deltaTime;
 			lastTime += deltaTime;
 			tickCounter++;
+			accumulator = 0;
+			lastTimeAccumulator = currentTime;
+			// TODO: Here we should send the state to the server
+		}
+		if (!isSlowerThanTickRate) {
+			double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
+			accumulator += accumulatorSimulationTime;
+			player.ProcessInput(accumulatorSimulationTime);
+			player.ApplyGravitationalForce(gravity, accumulatorSimulationTime);
+			hook.Simulate(player, map, gravity, accumulatorSimulationTime);
+			player.ApplyVelocity(accumulatorSimulationTime);
+			player.ApplyCollisions(map);
+			lastTimeAccumulator = currentTime;
+
 		}
 
 		BeginDrawing();
