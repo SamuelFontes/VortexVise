@@ -19,6 +19,6 @@ private:
 	bool m_pressingHookKey = false;
 
 public:
-	void Simulate(Player& player, Map& map, float gravity, float deltaTime);
+	void Simulate(Player& player, Map& map, const float& gravity, const float& deltaTime, Input& input);
 	void Draw(Player& player);
 };

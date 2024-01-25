@@ -47,27 +47,62 @@ int main()
 		double simulationTime = currentTime - lastTime;
 
 
+		Input input = player.GetInput(); // Only thing we send to the server here
 		while (simulationTime >= deltaTime) // perform one update for every interval passed
 		{
 			isSlowerThanTickRate = true;
-			player.ProcessInput(deltaTime-accumulator);
-			player.ApplyGravitationalForce(gravity, deltaTime-accumulator);
-			hook.Simulate(player, map, gravity, deltaTime-accumulator);
-			player.ApplyVelocity(deltaTime-accumulator);
+			// TODO: Here we should send the state to the server
+			// ON THE SERVER
+			/*
+			void processInput( double time, Input input )
+			{
+				if ( time < currentTime )// this is important
+					return;
+
+				float deltaTime = currentTime - time; 
+
+				updatePhysics( currentTime, deltaTime, input );
+			}
+			*/
+			// THIS SHOULD HAPPEN ON THE SERVER 
+			player.ProcessInput(deltaTime - accumulator, input);
+			player.ApplyGravitationalForce(gravity, deltaTime - accumulator);
+			hook.Simulate(player, map, gravity, deltaTime - accumulator, input);
+			player.ApplyVelocity(deltaTime - accumulator);
 			player.ApplyCollisions(map);
 			simulationTime -= deltaTime;
 			lastTime += deltaTime;
 			tickCounter++;
 			accumulator = 0;
 			lastTimeAccumulator = currentTime;
-			// TODO: Here we should send the state to the server
+			// TODO: when receive the packet do Clients Approximate Physics Locally
+			/*
+			void clientUpdate( float time, Input input, State state )
+			{
+				Vector difference = state.position -
+									current.position;
+
+				float distance = difference.length();
+
+				if ( distance > 2.0f )
+					current.position = state.position;
+				else if ( distance > 0.1 )
+					current.position += difference * 0.1f;
+
+				current.velocity = velocity;
+
+				current.input = input;
+			}*/
+
+			// TODO: Create the Client-Side Prediction
 		}
 		if (!isSlowerThanTickRate) {
+			// This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
 			double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
 			accumulator += accumulatorSimulationTime;
-			player.ProcessInput(accumulatorSimulationTime);
+			player.ProcessInput(accumulatorSimulationTime, input);
 			player.ApplyGravitationalForce(gravity, accumulatorSimulationTime);
-			hook.Simulate(player, map, gravity, accumulatorSimulationTime);
+			hook.Simulate(player, map, gravity, accumulatorSimulationTime, input);
 			player.ApplyVelocity(accumulatorSimulationTime);
 			player.ApplyCollisions(map);
 			lastTimeAccumulator = currentTime;

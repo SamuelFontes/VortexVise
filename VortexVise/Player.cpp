@@ -1,14 +1,40 @@
 #include "Player.h"
 
-void Player::ProcessInput(float deltaTime)
+void Player::ProcessInput(float deltaTime, Input input)
 {
-	if (IsKeyDown(KEY_D)) {
+	// TODO: NETWORKING
+	// Physics Runs On The Server
+	/*
+	struct Input
+    {
+         bool left;
+         bool right;
+         bool forward;
+         bool back;
+         bool jump;
+    };
+
+    struct State
+    {
+         Vector position;
+         Vector velocity;
+    };
+	 struct Move
+    {
+        double time;
+        Input input;
+        State state;
+    };
+	*/
+
+	// I should receive the input here, this should happen on the server and the client should have predictions, the later the server responds
+	if (input.Right) {
 		m_velocity.x += m_acceleration * deltaTime;
 		if (m_velocity.x > m_maxMoveSpeed)// && gravitationalForce == 0)
 			m_velocity.x = m_maxMoveSpeed;
 		m_direction = -1;
 	}
-	else if (IsKeyDown(KEY_A)) {
+	else if (input.Left) {
 		m_velocity.x -= m_acceleration * deltaTime;
 		if (m_velocity.x < m_maxMoveSpeed * -1)// && gravitationalForce == 0)
 			m_velocity.x = m_maxMoveSpeed * -1;
@@ -23,11 +49,32 @@ void Player::ProcessInput(float deltaTime)
 		m_position.x += m_velocity.x * deltaTime;
 
 	//if (IsKeyDown(KEY_SPACE)
-	if (IsKeyDown(KEY_SPACE) && m_isTouchingTheGround) {
+	if (input.Jump && m_isTouchingTheGround) {
 		m_isTouchingTheGround = false;
 		m_velocity.y = -400;
 	}
 
+}
+
+Input Player::GetInput()
+{
+	// TODO: Implement gamepad and stuff
+	Input input{};
+	if (IsKeyDown(KEY_A))
+		input.Left = true;
+	if (IsKeyDown(KEY_D))
+		input.Right = true;
+	if (IsKeyDown(KEY_SPACE))
+		input.Jump = true;
+	if (IsKeyPressed(KEY_SPACE))
+		input.CancelHook = true;
+	if (IsMouseButtonDown(1))
+		input.Hook = true;
+	if (IsKeyDown(KEY_W))
+		input.Up = true;
+	if (IsKeyDown(KEY_S))
+		input.Down = true;
+	return input;
 }
 
 void Player::ApplyGravitationalForce(float gravity, float deltaTime)

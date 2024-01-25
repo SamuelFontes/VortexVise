@@ -7,11 +7,17 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Hook.h" />
     <ClCompile Include="Hook.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="ClientAction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="ClientAction.h" />
   </ItemGroup>
 </Project>

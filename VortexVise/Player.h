@@ -4,6 +4,7 @@
 #include <raymath.h>
 #include "Utils.h"
 #include <vector>
+#include "Input.h"
 class Player {
 public:
 	// Constructor
@@ -32,7 +33,8 @@ private:
 	std::list<Rectangle> m_playerCollisions;
 
 public:
-	void ProcessInput(float deltaTime);
+	void ProcessInput(float deltaTime, Input input);
+	Input GetInput();
 	void ApplyGravitationalForce(float gravity, float deltaTime);
 	Vector2 GetPosition() const;
 	float GetX() const;

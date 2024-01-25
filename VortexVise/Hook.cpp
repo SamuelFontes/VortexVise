@@ -1,14 +1,14 @@
 ﻿#include "Hook.h"
 
-void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
+void Hook::Simulate(Player& player, Map& map, const float& gravity, const float& deltaTime, Input& input)
 {
-	if (IsKeyPressed(KEY_SPACE) && m_isHookAttached) {
+	if (input.CancelHook && m_isHookAttached) {
 		m_isHookReleased = false;
 		m_isHookAttached = false;
 		m_velocity = { 0,0 };
 
 	}
-	if (!m_pressingHookKey && IsMouseButtonDown(1)) {
+	if (!m_pressingHookKey && input.Hook) {
 		// start Hook shoot
 		m_isHookReleased = true;
 		m_isHookAttached = false;
@@ -20,41 +20,41 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 		m_velocity = { 0,0 };
 
 		// Get hook direction
-		if (IsKeyDown(KEY_A) && IsKeyDown(KEY_S)) {
+		if (input.Left && input.Down){
 			// ↙ 
 			m_velocity.x -= m_hookShootForce;
 			m_velocity.y += m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_D) && IsKeyDown(KEY_S)) {
+		else if (input.Right && input.Down){
 			// ↘
 			m_velocity.x += m_hookShootForce;
 			m_velocity.y += m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_S)) {
+		else if (input.Down){
 			// ↓
 			m_velocity.y += m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_A) && IsKeyDown(KEY_W)) {
+		else if (input.Left && input.Up) {
 			// ↖
 			m_velocity.x -= m_hookShootForce * 0.6;
 			m_velocity.y -= m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_D) && IsKeyDown(KEY_W)) {
+		else if (input.Right && input.Up) {
 			// ↗
 			m_velocity.x += m_hookShootForce * 0.6;
 			m_velocity.y -= m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_A)) {
+		else if (input.Left) {
 			// ↖
 			m_velocity.x -= m_hookShootForce;
 			m_velocity.y -= m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_D)) {
+		else if (input.Right) {
 			// ↗
 			m_velocity.x += m_hookShootForce;
 			m_velocity.y -= m_hookShootForce;
 		}
-		else if (IsKeyDown(KEY_W)) {
+		else if (input.Up) {
 			// ↑
 			m_velocity.y -= m_hookShootForce;
 		}
@@ -71,7 +71,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 			}
 		}
 	}
-	else if ((m_pressingHookKey && !IsMouseButtonDown(1))) {
+	else if ((m_pressingHookKey && !input.Hook)) {
 		// Hook retracted
 		m_isHookReleased = false;
 		m_isHookAttached = false;
@@ -109,7 +109,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 			player.AddVelocity(velocity, deltaTime);
 		}
 	}
-	m_pressingHookKey = IsMouseButtonDown(1);
+	m_pressingHookKey = input.Hook;
 
 	if (m_isHookReleased) {
 		for (const auto& collision : map.GetCollisions()) {
