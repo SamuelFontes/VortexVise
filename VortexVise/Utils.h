@@ -10,5 +10,7 @@ public:
 	static Vector2 GetVector2Direction(Vector2 from, Vector2 to);
 	static bool Debug();
 	static void SwitchDebug();
+	static void UnlockFPS();
+	static int GetFPS();
 };
 

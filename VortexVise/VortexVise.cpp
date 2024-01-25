@@ -11,8 +11,7 @@
 int main()
 {
 	float gravity = 900;
-	int tickrate = 128; // Even my game has more than 64 tick, suck it CSGO
-	int targetFPS = 60;
+	int tickrate = 64; // Even my game has more than 64 tick, suck it CSGO
 	int screenWidth = 1920;
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
@@ -34,6 +33,7 @@ int main()
 	int tickCounter = 0;
 	int renderCounter = 0;
 	while (!WindowShouldClose()) {
+		int targetFPS = Utils::GetFPS();
 		if (targetFPS != 0) {
 			double time = static_cast<double>(1) / targetFPS;
 			WaitTime(time);
@@ -88,6 +88,11 @@ int main()
 		if (IsKeyPressed(KEY_F7)) {
 
 			Utils::SwitchDebug();
+		}
+
+		if (IsKeyPressed(KEY_F8)) {
+
+			Utils::UnlockFPS();
 		}
 
 

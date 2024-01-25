@@ -1,6 +1,7 @@
 #include "Utils.h"
 
 bool debug = false;
+int fps = 0;
 
 float Utils::Roundf(float var)
 {
@@ -25,5 +26,17 @@ bool Utils::Debug() {
 
 void Utils::SwitchDebug() {
 	debug = !debug;
+}
+
+void Utils::UnlockFPS() {
+	if (fps == 0)
+		fps = 60;
+	else
+		fps = 0;
+}
+
+int Utils::GetFPS()
+{
+	return fps;
 }
 
