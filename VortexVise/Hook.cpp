@@ -120,7 +120,7 @@ void Hook::Simulate(Player& player, Map& map, const float& gravity, const float&
 	}
 }
 
-void Hook::Draw(Player& const player)
+void Hook::Draw(Player& player)
 {
 	if (m_isHookReleased) {
 		DrawLineEx(player.GetPlayerCenterPosition(), { m_position.x + 8, m_position.y + 8 }, 2, { 159,79,0,255 });
