@@ -2,6 +2,12 @@
 
 void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 {
+	if (IsKeyPressed(KEY_SPACE) && m_isHookAttached) {
+		m_isHookReleased = false;
+		m_isHookAttached = false;
+		m_velocity = { 0,0 };
+
+	}
 	if (!m_pressingHookKey && IsMouseButtonDown(1)) {
 		// start Hook shoot
 		m_isHookReleased = true;
@@ -117,7 +123,7 @@ void Hook::Simulate(Player& player, Map& map, float gravity, float deltaTime)
 void Hook::Draw(Player& const player)
 {
 	if (m_isHookReleased) {
-		DrawLineEx(player.GetPlayerCenterPosition(), { m_position.x + 8, m_position.y + 8 }, 2, {159,79,0,255});
+		DrawLineEx(player.GetPlayerCenterPosition(), { m_position.x + 8, m_position.y + 8 }, 2, { 159,79,0,255 });
 		DrawTexture(m_texture, m_position.x - 8, m_position.y - 10, WHITE);
 
 		if (Utils::Debug())
