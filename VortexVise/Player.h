@@ -10,7 +10,7 @@ public:
 	Player(bool hasCamera, Map& map) {
 		m_texture = LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 		auto spawnPoint = Vector2{ GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-		m_position = { spawnPoint.x * -1, spawnPoint.y * -1 };
+		m_position = spawnPoint;
 
 		if (hasCamera)
 		{

@@ -125,8 +125,7 @@ void Player::ApplyCollisions(Map& map)
 		for (const auto& collision : map.GetCollisions())
 		{
 			if (CheckCollisionRecs(playerCollision, collision)) {
-				// OMG THIS WORKS :)
-				// TODO: Maybe redo this part this is not working
+
 				// This means the player is inside the thing 
 				auto collisionOverlap = GetCollisionRec(playerCollision, collision);
 
