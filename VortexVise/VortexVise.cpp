@@ -2,16 +2,27 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include "raylib.h"
 #include "Player.h"
 #include "Map.h"
 #include "Hook.h"
 
-
-int main()
+int main(int argc, char *argv[])
 {
+	if (argc > 1)
+	{
+		auto argument = argv[1];
+		if (std::strcmp(argument, "server") == 0)
+		{
+			std::cout << "VortexVise Server Started!" << std::endl;
+			// TODO: Run server
+			return 0;
+		}
+	}
+
 	float gravity = 900;
-	int tickrate = 64; 
+	int tickrate = 64;
 	int screenWidth = 1920;
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
@@ -26,7 +37,6 @@ int main()
 
 	RenderTexture2D target = LoadRenderTexture(300, 300);
 
-
 	auto currentTime = GetTime();
 	auto lastTime = currentTime;
 	auto lastTimeAccumulator = currentTime;
@@ -35,10 +45,12 @@ int main()
 	int tickCounter = 0;
 	int renderCounter = 0;
 	double accumulator = 0;
-	while (!WindowShouldClose()) {
+	while (!WindowShouldClose())
+	{
 		bool isSlowerThanTickRate = false;
 		int targetFPS = Utils::GetFPS();
-		if (targetFPS != 0) {
+		if (targetFPS != 0)
+		{
 			double time = static_cast<double>(1) / targetFPS;
 			WaitTime(time);
 		}
@@ -46,8 +58,7 @@ int main()
 		currentTime = GetTime();
 		double simulationTime = currentTime - lastTime;
 
-
-		Input input = player.GetInput(); // Only thing we send to the server here
+		Input input = player.GetInput();	// Only thing we send to the server here
 		while (simulationTime >= deltaTime) // perform one update for every interval passed
 		{
 			isSlowerThanTickRate = true;
@@ -59,12 +70,12 @@ int main()
 				if ( time < currentTime )// this is important
 					return;
 
-				float deltaTime = currentTime - time; 
+				float deltaTime = currentTime - time;
 
 				updatePhysics( currentTime, deltaTime, input );
 			}
 			*/
-			// THIS SHOULD HAPPEN ON THE SERVER 
+			// THIS SHOULD HAPPEN ON THE SERVER
 			player.ProcessInput(deltaTime - accumulator, input);
 			player.ApplyGravitationalForce(gravity, deltaTime - accumulator);
 			hook.Simulate(player, map, gravity, deltaTime - accumulator, input);
@@ -96,7 +107,8 @@ int main()
 
 			// TODO: Create the Client-Side Prediction
 		}
-		if (!isSlowerThanTickRate) {
+		if (!isSlowerThanTickRate)
+		{
 			// This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
 			double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
 			accumulator += accumulatorSimulationTime;
@@ -106,7 +118,6 @@ int main()
 			player.ApplyVelocity(accumulatorSimulationTime);
 			player.ApplyCollisions(map);
 			lastTimeAccumulator = currentTime;
-
 		}
 
 		BeginDrawing();
@@ -130,24 +141,23 @@ int main()
 		DrawText(TextFormat("collision velocity: %f", player.GetMoveSpeed()), 12, 129, 20, BLACK);
 		EndTextureMode();
 
-		auto rec = Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height };
-		DrawTexturePro(target.texture, Rectangle{ 0,0, (float)target.texture.width,(float)target.texture.height * -1 }, rec, Vector2{ 0,0 }, 0, WHITE);
+		auto rec = Rectangle{0, 0, (float)target.texture.width, (float)target.texture.height};
+		DrawTexturePro(target.texture, Rectangle{0, 0, (float)target.texture.width, (float)target.texture.height * -1}, rec, Vector2{0, 0}, 0, WHITE);
 #pragma endregion
 
 		EndDrawing();
-		if (IsKeyPressed(KEY_F7)) {
+		if (IsKeyPressed(KEY_F7))
+		{
 
 			Utils::SwitchDebug();
 		}
 
-		if (IsKeyPressed(KEY_F8)) {
+		if (IsKeyPressed(KEY_F8))
+		{
 
 			Utils::UnlockFPS();
 		}
-
-
 	}
 
 	CloseWindow();
 }
-
