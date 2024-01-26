@@ -38,11 +38,11 @@ Input Player::GetInput()
 		input.Left = true;
 	if (IsKeyDown(KEY_D))
 		input.Right = true;
-	if (IsKeyDown(KEY_SPACE))
+	if (IsKeyDown(KEY_SPACE) || IsKeyDown(KEY_K))
 		input.Jump = true;
 	if (IsKeyPressed(KEY_SPACE))
 		input.CancelHook = true;
-	if (IsMouseButtonDown(1))
+	if (IsMouseButtonDown(1) || IsKeyDown(KEY_J))
 		input.Hook = true;
 	if (IsKeyDown(KEY_W))
 		input.Up = true;

@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include "raylib.h";
+#include "raylib.h"
 #include "Player.h"
 #include "Map.h"
 #include "Hook.h"
@@ -11,7 +11,7 @@
 int main()
 {
 	float gravity = 900;
-	int tickrate = 64; // Even my game has more than 64 tick, suck it CSGO
+	int tickrate = 64; 
 	int screenWidth = 1920;
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");
