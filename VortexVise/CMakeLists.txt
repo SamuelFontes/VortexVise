@@ -33,7 +33,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 endif()
 
 # Add source to this project's executable.
-add_executable (VortexVise "VortexVise.cpp" "ClientAction.cpp" "ClientAction.h" "Hook.cpp" "Hook.h" "Input.cpp" "Input.h" "Map.cpp" "Map.h" "Player.cpp" "Player.h" "State.cpp" "State.h" "Utils.cpp" "Utils.h")
+add_executable (VortexVise "VortexVise.cpp" "ClientAction.cpp" "ClientAction.h" "Hook.cpp" "Hook.h" "Input.cpp" "Input.h" "Map.cpp" "Map.h" "Player.cpp" "Player.h" "State.cpp" "State.h" "Utils.cpp" "Utils.h" "GameServer.h" "GameServer.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET VortexVise PROPERTY CXX_STANDARD 20)
