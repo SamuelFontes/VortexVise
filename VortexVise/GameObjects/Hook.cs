@@ -1,11 +1,12 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 using VortexVise.Models;
+using VortexVise.Networking;
 using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-internal class Hook
+public class Hook
 {
     Vector2 _position = new(0, 0);
     Vector2 _velocity = new(0, 0);
@@ -19,113 +20,125 @@ internal class Hook
     bool _isHookReleased = false;
     float _hookTimeout = 0.2f;
     bool _pressingHookKey = false;
-    public void Simulate(Player player, Map map, float gravity, float deltaTime, Input input)
+    private HookState GetState()
     {
-        if (input.CancelHook && _isHookAttached)
+        var state = new HookState();
+        state.Position = _position;
+        state.Velocity = _velocity;
+        state.Collision = _collision;
+        state.IsHookAttached = _isHookAttached;
+        state.IsHookReleased = _isHookReleased;
+        state.IsPressingHookKey = _pressingHookKey;
+        return state;
+    }
+    public HookState Simulate(Player player, Map map, float gravity, float deltaTime, Input input)
+    {
+        var state = GetState();
+        if (input.CancelHook && state.IsHookAttached)
         {
-            _isHookReleased = false;
-            _isHookAttached = false;
-            _velocity = new(0, 0);
+            state.IsHookReleased = false;
+            state.IsHookAttached = false;
+            state.Velocity = new(0, 0);
 
         }
-        if (!_pressingHookKey && input.Hook)
+        if (!state.IsPressingHookKey && input.Hook)
         {
             // start Hook shoot
-            _isHookReleased = true;
-            _isHookAttached = false;
-            _position = player.GetPlayerCenterPosition();
-            _collision.X = _position.X;
-            _collision.Y = _position.Y;
+            state.IsHookReleased = true;
+            state.IsHookAttached = false;
+            state.Position = player.GetPlayerCenterPosition();
+            state.Collision.X = state.Position.X;
+            state.Collision.Y = state.Position.Y;
 
             // Reset velocity
-            _velocity = new(0, 0);
+            state.Velocity = new(0, 0);
 
             // Get hook direction
             if (input.Left && input.Down)
             {
                 // ↙ 
-                _velocity.X -= _hookShootForce;
-                _velocity.Y += _hookShootForce;
+                state.Velocity.X -= _hookShootForce;
+                state.Velocity.Y += _hookShootForce;
             }
             else if (input.Right && input.Down)
             {
                 // ↘
-                _velocity.X += _hookShootForce;
-                _velocity.Y += _hookShootForce;
+                state.Velocity.X += _hookShootForce;
+                state.Velocity.Y += _hookShootForce;
             }
             else if (input.Down)
             {
                 // ↓
-                _velocity.Y += _hookShootForce;
+                state.Velocity.Y += _hookShootForce;
             }
             else if (input.Left && input.Up)
             {
                 // ↖
-                _velocity.X -= _hookShootForce * 0.6f;
-                _velocity.Y -= _hookShootForce;
+                state.Velocity.X -= _hookShootForce * 0.6f;
+                state.Velocity.Y -= _hookShootForce;
             }
             else if (input.Right && input.Up)
             {
                 // ↗
-                _velocity.X += _hookShootForce * 0.6f;
-                _velocity.Y -= _hookShootForce;
+                state.Velocity.X += _hookShootForce * 0.6f;
+                state.Velocity.Y -= _hookShootForce;
             }
             else if (input.Left)
             {
                 // ↖
-                _velocity.X -= _hookShootForce;
-                _velocity.Y -= _hookShootForce;
+                state.Velocity.X -= _hookShootForce;
+                state.Velocity.Y -= _hookShootForce;
             }
             else if (input.Right)
             {
                 // ↗
-                _velocity.X += _hookShootForce;
-                _velocity.Y -= _hookShootForce;
+                state.Velocity.X += _hookShootForce;
+                state.Velocity.Y -= _hookShootForce;
             }
             else if (input.Up)
             {
                 // ↑
-                _velocity.Y -= _hookShootForce;
+                state.Velocity.Y -= _hookShootForce;
             }
             else
             {
                 // This will use the player direction
                 if (player.IsLookingRight())
                 {
-                    _velocity.X += _hookShootForce;
-                    _velocity.Y -= _hookShootForce;
+                    state.Velocity.X += _hookShootForce;
+                    state.Velocity.Y -= _hookShootForce;
                 }
                 else
                 {
-                    _velocity.X -= _hookShootForce;
-                    _velocity.Y -= _hookShootForce;
+                    state.Velocity.X -= _hookShootForce;
+                    state.Velocity.Y -= _hookShootForce;
 
                 }
             }
         }
 
-        else if ((_pressingHookKey && !input.Hook))
+        else if ((state.IsPressingHookKey && !input.Hook))
         {
             // Hook retracted
-            _isHookReleased = false;
-            _isHookAttached = false;
-            _velocity = new(0, 0);
+            state.IsHookReleased = false;
+            state.IsHookAttached = false;
+            state.Velocity = new(0, 0);
         }
-        else if (!_isHookAttached)
+        else if (!state.IsHookAttached)
         {
             // Shooting the hook
-            _position = new(_position.X + _velocity.X * deltaTime, _position.Y + _velocity.Y * deltaTime);
-            _position.Y += gravity * 0.5f * deltaTime;
-            _collision.X = _position.X;
-            _collision.Y = _position.Y;
+            state.Position = new(state.Position.X + state.Velocity.X * deltaTime, state.Position.Y + state.Velocity.Y * deltaTime);
+            state.Position.Y += gravity * 0.5f * deltaTime;
+            state.Collision.X = state.Position.X;
+            state.Collision.Y = state.Position.Y;
 
         }
-        else if (_isHookAttached)
+        else if (state.IsHookAttached)
         {
             // Should pull player here
-            Vector2 direction = Utils.GetVector2Direction(player.GetPlayerCenterPosition(), _position);
+            Vector2 direction = Utils.GetVector2Direction(player.GetPlayerCenterPosition(), state.Position);
 
-            float distance = Raymath.Vector2Distance(_position, player.GetPosition());
+            float distance = Raymath.Vector2Distance(state.Position, player.GetPosition());
 
             // TODO: implement this crap here
             //if((_hookPullOffset > _originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
@@ -145,18 +158,19 @@ internal class Hook
                 player.AddVelocity(velocity, deltaTime);
             }
         }
-        _pressingHookKey = input.Hook;
+        state.IsPressingHookKey = input.Hook;
 
-        if (_isHookReleased)
+        if (state.IsHookReleased)
         {
             foreach (var collision in map.GetCollisions())
             {
-                if (Raylib.CheckCollisionRecs(_collision, collision))
+                if (Raylib.CheckCollisionRecs(state.Collision, collision))
                 {
-                    _isHookAttached = true;
+                    state.IsHookAttached = true;
                 }
             }
         }
+        return state;
     }
 
     public void Draw(Player player)
@@ -172,5 +186,14 @@ internal class Hook
 
 
 
+    }
+    public void ApplyState(HookState state)
+    {
+        _position = state.Position;
+        _velocity = state.Velocity;
+        _collision = state.Collision;
+        _isHookAttached = state.IsHookAttached;
+        _isHookReleased = state.IsHookReleased;
+        _pressingHookKey = state.IsPressingHookKey;
     }
 }

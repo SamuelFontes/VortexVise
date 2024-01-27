@@ -7,23 +7,27 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using VortexVise.Models;
+using VortexVise.Networking;
 using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-internal class Player
+public class Player
 {
-    Vector2 _position = new Vector2() { X = 0, Y = 0 };
-    Vector2 _velocity = new Vector2() { X = 0, Y = 0 };
-    int _direction = 1;
-    Texture2D _texture;
-    float _maxMoveSpeed = 350;
-    float _acceleration = 750;
-    Camera2D _camera;
-    bool _hasCamera = false;
-    bool _isTouchingTheGround = false;
-    Rectangle _collisionBox;
-    List<Rectangle> _playerCollisions = new List<Rectangle>();
+    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Hook Hook { get; private set; } = new Hook();
+
+    private Vector2 _position = new Vector2() { X = 0, Y = 0 };
+    private Vector2 _velocity = new Vector2() { X = 0, Y = 0 };
+    private int _direction = 1;
+    private Texture2D _texture;
+    private float _maxMoveSpeed = 350;
+    private float _acceleration = 750;
+    private Camera2D _camera;
+    private bool _hasCamera = false;
+    private bool _isTouchingTheGround = false;
+    private Rectangle _collisionBox;
+    private List<Rectangle> _playerCollisions = new List<Rectangle>();
 
     public Player(bool hasCamera, Map map)
     {
@@ -38,38 +42,37 @@ internal class Player
         }
     }
 
-    public void ProcessInput(float deltaTime, Input input)
+    public Vector2 ProcessVelocity(float deltaTime, Input input)
     {
+        var velocity = _velocity;
         if (input.Right)
         {
-            _velocity.X += _acceleration * deltaTime;
-            if (_velocity.X > _maxMoveSpeed)// && gravitationalForce == 0)
-                _velocity.X = _maxMoveSpeed;
+            velocity.X += _acceleration * deltaTime;
+            if (velocity.X > _maxMoveSpeed)// && gravitationalForce == 0)
+                velocity.X = _maxMoveSpeed;
             _direction = -1;
         }
         else if (input.Left)
         {
-            _velocity.X -= _acceleration * deltaTime;
-            if (_velocity.X < _maxMoveSpeed * -1)// && gravitationalForce == 0)
-                _velocity.X = _maxMoveSpeed * -1;
+            velocity.X -= _acceleration * deltaTime;
+            if (velocity.X < _maxMoveSpeed * -1)// && gravitationalForce == 0)
+                velocity.X = _maxMoveSpeed * -1;
             _direction = 1;
         }
         else
         {
-            float desaceleration = _isTouchingTheGround || _velocity.Y == 0f ? 10f : 0.5f;
-            _velocity.X = Raymath.Lerp(_velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime));
+            float desaceleration = _isTouchingTheGround || velocity.Y == 0f ? 10f : 0.5f;
+            velocity.X = Raymath.Lerp(velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime));
         }
 
-        if (_velocity.X != 0)
-            _position.X += _velocity.X * deltaTime;
 
-        //if (IsKeyDown(KEY_SPACE)
         if (input.Jump && _isTouchingTheGround)
         {
             _isTouchingTheGround = false;
-            _velocity.Y = -400;
+            velocity.Y = -400;
         }
 
+        return velocity;
     }
 
     public Input GetInput()
@@ -93,21 +96,31 @@ internal class Player
         return input;
     }
 
-    public void ApplyGravitationalForce(float gravity, float deltaTime)
+    public Vector2 ProcessPosition(float gravity, float deltaTime, Vector2 velocity)
     {
+        var position = _position;
+        if (velocity.X != 0)
+            position.X += velocity.X * deltaTime;
+
         float maxGravity = 500;
         if (!_isTouchingTheGround)
         {
-            _velocity.Y += gravity * deltaTime;
-            if (_velocity.Y >= maxGravity)
-                _velocity.Y = maxGravity;
-            _position.Y += _velocity.Y * deltaTime;
+            velocity.Y += gravity * deltaTime;
+            if (velocity.Y >= maxGravity)
+                velocity.Y = maxGravity;
         }
+        position.Y += velocity.Y * deltaTime;
+        return position;
     }
 
     public Vector2 GetPosition()
     {
         return _position;
+    }
+
+    public Vector2 GetVelocity()
+    {
+        return _velocity;
     }
 
     public float GetX()
@@ -317,12 +330,6 @@ internal class Player
         _velocity.Y += velocity.Y * deltaTime;
     }
 
-    public void ApplyVelocity(float deltaTime)
-    {
-        _position.X += _velocity.X * deltaTime;
-        _position.Y += _velocity.Y * deltaTime;
-    }
-
     public void Draw()
     {
         Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.Width * _direction, (float)_texture.Height);
@@ -343,6 +350,12 @@ internal class Player
 
             }
         }
+    }
+    public void ApplyState(PlayerState state)
+    {
+        _position = state.Position;
+        _velocity = state.Velocity;
+        Hook.ApplyState(state.HookState);
     }
 
 

@@ -6,6 +6,8 @@ using System.Text;
 using VortexVise.GameObjects;
 using VortexVise.Models;
 using VortexVise.Utilities;
+using VortexVise.Networking;
+using System.Text.Json;
 
 float gravity = 900;
 int tickrate = 64;
@@ -44,7 +46,7 @@ while (!Raylib.WindowShouldClose())
     currentTime = Raylib.GetTime();
     double simulationTime = currentTime - lastTime;
 
-    Input input = player.GetInput();    // Only thing we send to the server here
+    GameState state = new(player,gravity);
     while (simulationTime >= deltaTime) // perform one update for every interval passed
     {
         isSlowerThanTickRate = true;
@@ -62,10 +64,8 @@ while (!Raylib.WindowShouldClose())
         }
         */
         // THIS SHOULD HAPPEN ON THE SERVER
-        player.ProcessInput((float)(deltaTime - accumulator), input);
-        player.ApplyGravitationalForce(gravity, (float)(deltaTime - accumulator));
-        hook.Simulate(player, map, gravity, (float)(deltaTime - accumulator), input);
-        player.ApplyVelocity((float)(deltaTime - accumulator));
+
+        state.SimulatePlayerState(player, (float)(deltaTime - accumulator),map);
         player.ApplyCollisions(map);
         simulationTime -= deltaTime;
         lastTime += deltaTime;
@@ -98,10 +98,7 @@ while (!Raylib.WindowShouldClose())
         // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
         double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
         accumulator += accumulatorSimulationTime;
-        player.ProcessInput((float)accumulatorSimulationTime, input);
-        player.ApplyGravitationalForce(gravity, (float)accumulatorSimulationTime);
-        hook.Simulate(player, map, gravity, (float)accumulatorSimulationTime, input);
-        player.ApplyVelocity((float)accumulatorSimulationTime);
+        state.SimulatePlayerState(player, (float)accumulatorSimulationTime,map);
         player.ApplyCollisions(map);
         lastTimeAccumulator = currentTime;
     }
@@ -152,7 +149,8 @@ while (!Raylib.WindowShouldClose())
             udpClient.Connect("localhost", 9050);
 
             // Sends a message to the host to which you have connected.
-            Byte[] sendBytes = Encoding.ASCII.GetBytes(@"test ");
+            string json = JsonSerializer.Serialize(state);
+            Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
             udpClient.Send(sendBytes, sendBytes.Length);
 
