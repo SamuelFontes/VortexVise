@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	}
 
 	float gravity = 900;
-	int tickrate = 64;
+	int tickrate = 60;
 	int screenWidth = 1920;
 	int screenHeight = 1080;
 	InitWindow(screenWidth, screenHeight, "Vortex Vise");

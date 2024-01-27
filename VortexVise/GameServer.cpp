@@ -1,4 +1,8 @@
 #include "GameServer.h"
+void interrupt_handler( int /*dummy*/ )
+{
+    //quit = 1;
+}
 
 void GameServer::RunServer(float deltaTime)
 {
@@ -10,7 +14,7 @@ void GameServer::RunServer(float deltaTime)
 	yojimbo_log_level( YOJIMBO_LOG_LEVEL_INFO );
 	srand( (unsigned int) time( NULL ) ); // wut
 
-    std::cout << "Started server on port " << m_port << std::endl;
+    std::cout << "Started server on port " << ServerPort << std::endl;
 
     double time = 100.0;
 
@@ -19,7 +23,7 @@ void GameServer::RunServer(float deltaTime)
     uint8_t privateKey[KeyBytes];
     memset(privateKey, 0, KeyBytes);
 
-    Server server(GetDefaultAllocator(), privateKey, Address("127.0.0.1", m_port), config, adapter, time);
+    Server server(GetDefaultAllocator(), privateKey, Address("127.0.0.1", ServerPort), config, adapter, time);
 
     server.Start(MaxClients);
 
@@ -31,7 +35,7 @@ void GameServer::RunServer(float deltaTime)
 
     signal(SIGINT, interrupt_handler);
 
-    while (!quit)
+    while (1) // TODO: make this have a way of quitting
     {
         server.SendPackets();
 
