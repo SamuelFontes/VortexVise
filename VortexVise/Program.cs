@@ -9,7 +9,7 @@ using System.Text.Json;
 using VortexVise.States;
 using VortexVise.Logic;
 
-float gravity = 900;
+float gravity = 1800;
 int tickrate = 64;
 int screenWidth = 1920;
 int screenHeight = 1080;
@@ -27,7 +27,6 @@ var lastTimeAccumulator = currentTime;
 double deltaTime = 1d / tickrate;
 
 int tickCounter = 0;
-int renderCounter = 0;
 double accumulator = 0;
 
 GameState lastState = new();
@@ -109,8 +108,8 @@ while (!Raylib.WindowShouldClose())
 
     Raylib.BeginDrawing();
     Raylib.ClearBackground(Color.Black);
-    GameLogic.DrawState(state);
     PlayerLogic.ProcessCamera(state.PlayerStates.FirstOrDefault(p => p.Id == playerId).Position);
+    GameLogic.DrawState(state);
 /*
     #region Debug
     // DEBUG

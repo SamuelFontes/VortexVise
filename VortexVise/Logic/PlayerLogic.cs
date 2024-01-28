@@ -15,8 +15,10 @@ namespace VortexVise.GameObjects;
 public static class PlayerLogic
 {
     static private Texture2D _texture;
-    static private readonly float _maxMoveSpeed = 350;
-    static private readonly float _acceleration = 750;
+    static private readonly float _maxMoveSpeed = 700;
+    static private readonly float _jumpForce = 800;
+    static private readonly float _maxGravity = 1000;
+    static private readonly float _acceleration = 1500;
     static private Camera2D _camera;
     static private Vector2 _spawnPoint;
 
@@ -25,7 +27,7 @@ public static class PlayerLogic
         _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         _spawnPoint = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f); // TODO: Get from map
 
-        _camera = new Camera2D(_spawnPoint, new(0,0), 0, 1);
+        _camera = new Camera2D(_spawnPoint, _spawnPoint, 0, 1);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {
@@ -67,10 +69,10 @@ public static class PlayerLogic
         if (input.Jump && isTouchingTheGround)
         {
             isTouchingTheGround = false;
-            velocity.Y = -400;
+            velocity.Y = -_jumpForce;
         }
 
-        float maxGravity = 500;
+        float maxGravity = _maxGravity;
         if (!isTouchingTheGround)
         {
             velocity.Y += gravity * deltaTime;
