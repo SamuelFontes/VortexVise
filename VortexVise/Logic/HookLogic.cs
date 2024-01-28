@@ -5,7 +5,7 @@ using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-public class HookLogic
+/*public class HookLogic
 {
     Texture2D _texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
     float _hookPullForce = 2500;
@@ -13,9 +13,10 @@ public class HookLogic
     float _hookShootForce = 2000;
     float _hookSizeLimit = 200;
     float _hookTimeout = 0.2f;
-    public HookState SimulateState(PlayerLogic player, MapLogic map, float gravity, float deltaTime, InputState input)
+
+    public HookState SimulateState(float gravity, float deltaTime, PlayerState playerState)
     {
-        var state = GetState();
+        var state = new HookState();   
         if (input.CancelHook && state.IsHookAttached)
         {
             state.IsHookReleased = false;
@@ -170,3 +171,4 @@ public class HookLogic
 
     }
 }
+*/

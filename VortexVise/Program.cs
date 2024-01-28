@@ -7,6 +7,7 @@ using VortexVise.GameObjects;
 using VortexVise.Utilities;
 using System.Text.Json;
 using VortexVise.States;
+using VortexVise.Logic;
 
 float gravity = 900;
 int tickrate = 64;
@@ -18,9 +19,6 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 
 MapLogic.LoadMap("SkyArchipelago");
 
-PlayerLogic player = new(true, map);
-HookLogic hook = new();
-
 RenderTexture2D target = Raylib.LoadRenderTexture(300, 300);
 
 double currentTime = Raylib.GetTime();
@@ -31,6 +29,16 @@ double deltaTime = 1d / tickrate;
 int tickCounter = 0;
 int renderCounter = 0;
 double accumulator = 0;
+
+GameState lastState = new();
+lastState.CurrentTime = currentTime;
+lastState.Gravity = gravity;
+lastState.PlayerStates.Add(new());
+Guid playerId = lastState.PlayerStates[0].Id;
+
+List<GameState> gameStates = new List<GameState>();
+gameStates.Add(lastState);
+PlayerLogic.Init();
 while (!Raylib.WindowShouldClose())
 {
     bool isSlowerThanTickRate = false;
@@ -44,7 +52,7 @@ while (!Raylib.WindowShouldClose())
     currentTime = Raylib.GetTime();
     double simulationTime = currentTime - lastTime;
 
-    GameState state = new(player,gravity);
+    GameState state = new GameState();
     while (simulationTime >= deltaTime) // perform one update for every interval passed
     {
         isSlowerThanTickRate = true;
@@ -63,8 +71,7 @@ while (!Raylib.WindowShouldClose())
         */
         // THIS SHOULD HAPPEN ON THE SERVER
 
-        state.SimulatePlayerState(player, (float)(deltaTime - accumulator),map);
-        player.ApplyCollisions(map);
+        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator));
         simulationTime -= deltaTime;
         lastTime += deltaTime;
         tickCounter++;
@@ -96,36 +103,31 @@ while (!Raylib.WindowShouldClose())
         // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
         double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
         accumulator += accumulatorSimulationTime;
-        state.SimulatePlayerState(player, (float)accumulatorSimulationTime,map);
-        player.ApplyCollisions(map);
+        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(accumulatorSimulationTime));
         lastTimeAccumulator = currentTime;
     }
 
     Raylib.BeginDrawing();
     Raylib.ClearBackground(Color.Black);
-    player.ProcessCamera(map);
-
-    renderCounter++;
-    map.Draw();
-    hook.Draw(player);
-    player.Draw();
-
+    GameLogic.DrawState(state);
+    PlayerLogic.ProcessCamera(state.PlayerStates.FirstOrDefault(p => p.Id == playerId).Position);
+/*
     #region Debug
     // DEBUG
     Raylib.BeginTextureMode(target);
     Raylib.ClearBackground(Color.White);
     Raylib.DrawFPS(128, 12);
     Raylib.DrawText("dt: " + (int)(1 / deltaTime), 12, 12, 20, Color.Black);
-    Raylib.DrawText("player gravityForce: " + player.GetGravitationalForce(), 12, 32, 20, Color.Black);
+    //Raylib.DrawText("player gravityForce: " + player.GetGravitationalForce(), 12, 32, 20, Color.Black);
     Raylib.DrawText($"tc: {tickCounter} {renderCounter}", 12, 90, 20, Color.Black);
-    Raylib.DrawText($"player position: {(int)player.GetX()} {(int)player.GetY()}", 12, 64, 20, Color.Black);
-    Raylib.DrawText($"collision velocity:{player.GetMoveSpeed()}", 12, 129, 20, Color.Black);
+    //Raylib.DrawText($"player position: {(int)player.GetX()} {(int)player.GetY()}", 12, 64, 20, Color.Black);
+    //Raylib.DrawText($"collision velocity:{player.GetMoveSpeed()}", 12, 129, 20, Color.Black);
     Raylib.EndTextureMode();
 
     var rec = new Rectangle() { X = 0, Y = 0, Width = (float)target.Texture.Width, Height = (float)target.Texture.Height };
     Raylib.DrawTexturePro(target.Texture, new Rectangle(0, 0, (float)target.Texture.Width, (float)target.Texture.Height * -1), rec, new Vector2(0, 0), 0, Color.White);
     #endregion
-
+*/
     Raylib.EndDrawing();
     if (Raylib.IsKeyPressed(KeyboardKey.F7))
     {
@@ -175,6 +177,9 @@ while (!Raylib.WindowShouldClose())
             Console.WriteLine(e.ToString());
         }
     }
+
+    gameStates.Add(state);
+    lastState = state;
 }
 
 Raylib.CloseWindow();

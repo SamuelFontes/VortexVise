@@ -25,7 +25,7 @@ public static class PlayerLogic
         _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         _spawnPoint = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f); // TODO: Get from map
 
-        _camera = new Camera2D(_spawnPoint, _spawnPoint, 0, 1);
+        _camera = new Camera2D(_spawnPoint, new(0,0), 0, 1);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {

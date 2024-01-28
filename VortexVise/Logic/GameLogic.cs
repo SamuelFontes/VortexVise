@@ -8,9 +8,9 @@ using VortexVise.States;
 
 namespace VortexVise.Logic
 {
-    public class GameLogic
+    public static class GameLogic
     {
-        public GameState SimulateState(GameState lastState, double currentTime, Guid playerId, float deltaTime)
+        public static GameState SimulateState(GameState lastState, double currentTime, Guid playerId, float deltaTime)
         {
             GameState state = new()
             {
@@ -33,13 +33,20 @@ namespace VortexVise.Logic
 
                 (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
 
-
+                state.PlayerStates.Add(currentPlayerState);
             }
 
+            return state;
         }
-        public void DrawState(GameState state)
+        public static void DrawState(GameState state)
         {
             // All rendering logic should go here
+            MapLogic.Draw();
+            foreach(var playerState in state.PlayerStates)
+            {
+                PlayerLogic.DrawState(playerState);
+            }
+
 
         }
     }
