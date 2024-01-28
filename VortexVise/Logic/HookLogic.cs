@@ -7,30 +7,13 @@ namespace VortexVise.GameObjects;
 
 public class HookLogic
 {
-    Vector2 _position = new(0, 0);
-    Vector2 _velocity = new(0, 0);
-    Rectangle _collision = new(0, 0, 16, 16);
     Texture2D _texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
     float _hookPullForce = 2500;
     float _hookPullOffset = 50;
     float _hookShootForce = 2000;
     float _hookSizeLimit = 200;
-    bool _isHookAttached = false;
-    bool _isHookReleased = false;
     float _hookTimeout = 0.2f;
-    bool _pressingHookKey = false;
-    private HookState GetState()
-    {
-        var state = new HookState();
-        state.Position = _position;
-        state.Velocity = _velocity;
-        state.Collision = _collision;
-        state.IsHookAttached = _isHookAttached;
-        state.IsHookReleased = _isHookReleased;
-        state.IsPressingHookKey = _pressingHookKey;
-        return state;
-    }
-    public HookState Simulate(PlayerLogic player, MapLogic map, float gravity, float deltaTime, InputState input)
+    public HookState SimulateState(PlayerLogic player, MapLogic map, float gravity, float deltaTime, InputState input)
     {
         var state = GetState();
         if (input.CancelHook && state.IsHookAttached)
@@ -172,7 +155,7 @@ public class HookLogic
         return state;
     }
 
-    public void Draw(PlayerLogic player)
+    public void DrawState(PlayerLogic player)
     {
         if (_isHookReleased)
         {
@@ -185,14 +168,5 @@ public class HookLogic
 
 
 
-    }
-    public void ApplyState(HookState state)
-    {
-        _position = state.Position;
-        _velocity = state.Velocity;
-        _collision = state.Collision;
-        _isHookAttached = state.IsHookAttached;
-        _isHookReleased = state.IsHookReleased;
-        _pressingHookKey = state.IsPressingHookKey;
     }
 }

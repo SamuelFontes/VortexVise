@@ -16,8 +16,7 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
 //Raylib.DisableCursor();
 
-MapLogic map = new();
-map.LoadMap("SkyArchipelago");
+MapLogic.LoadMap("SkyArchipelago");
 
 PlayerLogic player = new(true, map);
 HookLogic hook = new();

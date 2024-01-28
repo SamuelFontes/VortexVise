@@ -10,11 +10,12 @@ namespace VortexVise.States
 {
     public class HookState
     {
-        public Vector2 Position;
-        public Vector2 Velocity;
-        public Rectangle Collision;
-        public bool IsHookAttached;
-        public bool IsHookReleased;
-        public bool IsPressingHookKey;
+        public Guid OwnerId { get; set; }
+        public Vector2 Position { get; set; } = new Vector2(0, 0);
+        public Vector2 Velocity { get; set; } = new Vector2(0, 0);
+        public Rectangle Collision { get; set; } = new Rectangle(0, 0, 0, 0);
+        public bool IsHookAttached { get; set; } = false;
+        public bool IsHookReleased { get; set; } = false;
+        public bool IsPressingHookKey { get; set; } = false;
     }
 }

@@ -10,16 +10,16 @@ using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-public class MapLogic
+public static class MapLogic
 {
-    string _mapName;
-    string _mapDescription;
-    string _texturePath;
-    Texture2D _mapTexture; // This is the whole map baked into an image
-    List<Rectangle> _collisions = new List<Rectangle>();
+    static string _mapName;
+    static string _mapDescription;
+    static string _texturePath;
+    static Texture2D _mapTexture; // This is the whole map baked into an image
+    static List<Rectangle> _collisions = new List<Rectangle>();
 
 
-    public void LoadMap(string mapName)
+    public static void LoadMap(string mapName)
     {
         // TODO: Load collisions and image from a file
         string mapFolder = "Resources/Sprites/Maps/";
@@ -49,7 +49,7 @@ public class MapLogic
         _collisions.Add(new Rectangle(1219, 1708, 267, 34));
     }
 
-    public void Draw()
+    public static void Draw()
     {
         Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, Color.White);
         if (Utils.Debug())
@@ -62,12 +62,12 @@ public class MapLogic
 
     }
 
-    public List<Rectangle> GetCollisions()
+    public static List<Rectangle> GetCollisions()
     {
         return _collisions;
     }
 
-    public Vector2 GetMapSize()
+    public static Vector2 GetMapSize()
     {
         return new Vector2((float)_mapTexture.Width, (float)_mapTexture.Height);
     }
