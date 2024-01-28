@@ -17,6 +17,11 @@ namespace VortexVise.Logic
                 Gravity = lastState.Gravity,
                 CurrentTime = currentTime
             };
+            if(lastState.PlayerStates.Count < 1)
+            {
+                var a = 1;
+
+            }
 
             // Simulate Player State
             foreach (var lastPlayerState in lastState.PlayerStates)
