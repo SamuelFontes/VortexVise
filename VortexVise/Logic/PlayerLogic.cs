@@ -6,16 +6,15 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using VortexVise.Models;
-using VortexVise.Networking;
+using VortexVise.States;
 using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-public class Player
+public class PlayerLogic
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
-    public Hook Hook { get; private set; } = new Hook();
+    public HookLogic Hook { get; private set; } = new HookLogic();
 
     private Vector2 _position = new Vector2() { X = 0, Y = 0 };
     private Vector2 _velocity = new Vector2() { X = 0, Y = 0 };
@@ -29,7 +28,7 @@ public class Player
     private Rectangle _collisionBox;
     private List<Rectangle> _playerCollisions = new List<Rectangle>();
 
-    public Player(bool hasCamera, Map map)
+    public PlayerLogic(bool hasCamera, MapLogic map)
     {
         _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         var spawnPoint = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f);
@@ -42,7 +41,7 @@ public class Player
         }
     }
 
-    public Vector2 ProcessVelocity(float deltaTime, Input input)
+    public Vector2 ProcessVelocity(float deltaTime, InputState input)
     {
         var velocity = _velocity;
         if (input.Right)
@@ -75,10 +74,10 @@ public class Player
         return velocity;
     }
 
-    public Input GetInput()
+    public InputState GetInput()
     {
         // TODO: Implement gamepad and stuff
-        Input input = new();
+        InputState input = new();
         if (Raylib.IsKeyDown(KeyboardKey.A))
             input.Left = true;
         if (Raylib.IsKeyDown(KeyboardKey.D))
@@ -143,7 +142,7 @@ public class Player
         return _velocity.X;
     }
 
-    public void ApplyCollisions(Map map)
+    public void ApplyCollisions(MapLogic map)
     {
         Vector2 collisionOffset = new(20, 12);
         Rectangle endingCollision = new(_position.X + collisionOffset.X, _position.Y + collisionOffset.Y, 25, 40);
@@ -284,7 +283,7 @@ public class Player
         _collisionBox = endingCollision;
     }
 
-    public void ProcessCamera(Map map)
+    public void ProcessCamera(MapLogic map)
     {
         if (_hasCamera)
         {

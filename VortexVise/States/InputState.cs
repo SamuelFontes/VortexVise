@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VortexVise.GameObjects;
 
-namespace VortexVise.Models;
+namespace VortexVise.States;
 
-public class Input
+public class InputState
 {
     public bool Left { get; set; }
     public bool Right { get; set; }

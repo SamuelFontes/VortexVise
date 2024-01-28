@@ -4,10 +4,9 @@ using System.Net;
 using System.Numerics;
 using System.Text;
 using VortexVise.GameObjects;
-using VortexVise.Models;
 using VortexVise.Utilities;
-using VortexVise.Networking;
 using System.Text.Json;
+using VortexVise.States;
 
 float gravity = 900;
 int tickrate = 64;
@@ -17,11 +16,11 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
 //Raylib.DisableCursor();
 
-Map map = new();
+MapLogic map = new();
 map.LoadMap("SkyArchipelago");
 
-Player player = new(true, map);
-Hook hook = new();
+PlayerLogic player = new(true, map);
+HookLogic hook = new();
 
 RenderTexture2D target = Raylib.LoadRenderTexture(300, 300);
 

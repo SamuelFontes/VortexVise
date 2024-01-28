@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VortexVise.Networking
+namespace VortexVise.States
 {
     public class HookState
     {

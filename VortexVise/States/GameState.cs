@@ -4,24 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VortexVise.GameObjects;
-using VortexVise.Models;
 
-namespace VortexVise.Networking;
+namespace VortexVise.States;
 
 public class GameState
 {
     public double Time { get; set; }
-    public Input Input { get; set; }
+    public InputState Input { get; set; }
     public float Gravity { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = [];
 
-    public GameState(Player player, float gravity)
+    public GameState(PlayerLogic player, float gravity)
     {
         Input = player.GetInput();
         PlayerStates.Add(new PlayerState(player));
         Gravity = gravity;
     }
-    public void SimulatePlayerState(Player player, float deltaTime, Map map)
+    public void SimulatePlayerState(PlayerLogic player, float deltaTime, MapLogic map)
     {
         var state = PlayerStates.Where(p => p.Id == player.Id).FirstOrDefault();
         if (state == null) throw new Exception("Can't find player");

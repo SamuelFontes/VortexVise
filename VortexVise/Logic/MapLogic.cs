@@ -10,7 +10,7 @@ using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-public class Map
+public class MapLogic
 {
     string _mapName;
     string _mapDescription;

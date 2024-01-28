@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VortexVise.GameObjects;
 
-namespace VortexVise.Networking;
+namespace VortexVise.States;
 
 public class PlayerState
 {
@@ -14,7 +14,7 @@ public class PlayerState
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
     public HookState HookState { get; set; }
-    public PlayerState(Player player)
+    public PlayerState(PlayerLogic player)
     {
         Id = player.Id;
         Position = player.GetPosition();

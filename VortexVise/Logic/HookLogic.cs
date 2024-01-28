@@ -1,12 +1,11 @@
 ﻿using Raylib_cs;
 using System.Numerics;
-using VortexVise.Models;
-using VortexVise.Networking;
+using VortexVise.States;
 using VortexVise.Utilities;
 
 namespace VortexVise.GameObjects;
 
-public class Hook
+public class HookLogic
 {
     Vector2 _position = new(0, 0);
     Vector2 _velocity = new(0, 0);
@@ -31,7 +30,7 @@ public class Hook
         state.IsPressingHookKey = _pressingHookKey;
         return state;
     }
-    public HookState Simulate(Player player, Map map, float gravity, float deltaTime, Input input)
+    public HookState Simulate(PlayerLogic player, MapLogic map, float gravity, float deltaTime, InputState input)
     {
         var state = GetState();
         if (input.CancelHook && state.IsHookAttached)
@@ -173,7 +172,7 @@ public class Hook
         return state;
     }
 
-    public void Draw(Player player)
+    public void Draw(PlayerLogic player)
     {
         if (_isHookReleased)
         {
