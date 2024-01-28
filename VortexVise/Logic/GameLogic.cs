@@ -19,8 +19,7 @@ namespace VortexVise.Logic
             };
             if(lastState.PlayerStates.Count < 1)
             {
-                var a = 1;
-
+                throw new Exception("There are no players, this shouldn't happen on the client");
             }
 
             // Simulate Player State
@@ -33,8 +32,9 @@ namespace VortexVise.Logic
                 }
                 currentPlayerState.Direction = PlayerLogic.ProcessDirection(deltaTime, currentPlayerState.Input, lastPlayerState);
                 (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);
-                // TODO: ProcessHook
+                currentPlayerState.HookState = lastPlayerState.HookState;
                 currentPlayerState.Position = PlayerLogic.ProcessPosition(deltaTime, currentPlayerState, lastPlayerState.Position);
+                currentPlayerState.HookState = HookLogic.SimulateState(state.Gravity,deltaTime, currentPlayerState);
 
                 (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
 
@@ -49,6 +49,7 @@ namespace VortexVise.Logic
             MapLogic.Draw();
             foreach(var playerState in state.PlayerStates)
             {
+                HookLogic.DrawState(playerState);
                 PlayerLogic.DrawState(playerState);
             }
 

@@ -40,4 +40,9 @@ public class PlayerState
         Velocity = SerializableVelocity.ToVector2();
         Collision = SerializableCollision.ToRectangle();
     }
+    public void AddVelocity(Vector2 velocity, float deltaTime)
+    {
+        Velocity += new Vector2(velocity.X * deltaTime, velocity.Y * deltaTime);
+    }
+
 }

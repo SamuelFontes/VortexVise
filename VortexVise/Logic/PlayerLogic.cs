@@ -295,13 +295,6 @@ public static class PlayerLogic
     }
 
 
-    public static Vector2 AddVelocity(Vector2 velocity, float deltaTime)
-    {
-        var newVelocity = velocity;
-        newVelocity.X += velocity.X * deltaTime;
-        newVelocity.Y += velocity.Y * deltaTime;
-        return newVelocity;
-    }
 
     public static void DrawState(PlayerState playerState)
     {
