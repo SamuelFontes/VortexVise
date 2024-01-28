@@ -33,8 +33,8 @@ double accumulator = 0;
 GameState lastState = new();
 lastState.CurrentTime = currentTime;
 lastState.Gravity = gravity;
-lastState.PlayerStates.Add(new());
-Guid playerId = lastState.PlayerStates[0].Id;
+Guid playerId = Guid.NewGuid();
+lastState.PlayerStates.Add(new(playerId));
 
 List<GameState> gameStates = new List<GameState>();
 gameStates.Add(lastState);
@@ -149,6 +149,7 @@ while (!Raylib.WindowShouldClose())
             udpClient.Connect("localhost", 9050);
 
             // Sends a message to the host to which you have connected.
+            state.PrepareSerialization();
             string json = JsonSerializer.Serialize(state);
             Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 

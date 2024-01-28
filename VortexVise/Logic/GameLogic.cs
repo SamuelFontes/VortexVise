@@ -21,7 +21,7 @@ namespace VortexVise.Logic
             // Simulate Player State
             foreach (var lastPlayerState in lastState.PlayerStates)
             {
-                PlayerState currentPlayerState = new PlayerState();
+                PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
                 if (lastPlayerState.Id == playerId)
                 {
                     currentPlayerState.Input = PlayerLogic.GetInput();
