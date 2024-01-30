@@ -153,7 +153,7 @@ public static class PlayerLogic
         // This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
         // WARNING: This solution only works if the player never goes in the minus coordinates, why? because at least for now he can't, if this changes please redo this collision interpolation crap
         var playerCollisions = new List<Rectangle>();
-        float interpolationAmount = 2;
+        float interpolationAmount = 2f;
         for (float i = interpolationAmount; i > 0; i -= 0.2f)
         {
             Rectangle interpolatedCollision = endingCollision;
@@ -200,7 +200,7 @@ public static class PlayerLogic
 
                     if (collisionOverlap.Height < collisionOverlap.Width)
                     {
-                        if (collisionOverlap.Y < colliderCenter.Y)
+                        if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
                             newPosition.Y = collision.Y - _texture.Height + collisionOffset.Y;
