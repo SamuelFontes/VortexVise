@@ -27,12 +27,12 @@ double accumulator = 0;
 GameState lastState = new();
 lastState.CurrentTime = currentTime;
 lastState.Gravity = gravity;
+PlayerLogic.Init();
 Guid playerId = Guid.NewGuid();
 lastState.PlayerStates.Add(new(playerId));
 
 List<GameState> gameStates = new List<GameState>();
 gameStates.Add(lastState);
-PlayerLogic.Init();
 GameState state = new GameState();
 var client = new GameClient();
 while (!Raylib.WindowShouldClose())

@@ -44,7 +44,6 @@ namespace VortexVise.Logic
             try
             {
                 // Sends a message to the host to which you have connected.
-                state.PrepareSerialization();
                 string json = JsonSerializer.Serialize(state);
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 

@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.GameObjects;
 using VortexVise.Utilities;
 
 namespace VortexVise.States;
@@ -14,25 +15,14 @@ public class PlayerState
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
     public InputState Input { get; set; } = new InputState();
     public HookState HookState { get; set; } = new HookState();
-    public SerializableVector2 SerializablePosition { get; set; } = new SerializableVector2(new(0, 0));
-    public SerializableVector2 SerializableVelocity { get; set; } = new SerializableVector2(new(0, 0));
-    public SerializableRectangle SerializableCollision { get; set; } = new SerializableRectangle(new(0, 0, 0, 0));
-    public PlayerState(Guid id) {  Id = id; }
+    public PlayerState(Guid id)
+    {
+        Id = id;
+        Position = PlayerLogic.SpawnPoint;
+    }
     public bool IsLookingRight()
     {
         return Direction == -1;
-    }
-    public void PrepareSerialization()
-    {
-        SerializablePosition = new SerializableVector2(Position);
-        SerializableVelocity = new SerializableVector2(Velocity);
-        SerializableCollision = new SerializableRectangle(Collision);
-    }
-    public void PostSerialization()
-    {
-        Position = SerializablePosition.ToVector2();
-        Velocity = SerializableVelocity.ToVector2();
-        Collision = SerializableCollision.ToRectangle();
     }
     public void AddVelocity(Vector2 velocity, float deltaTime)
     {
