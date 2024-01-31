@@ -26,11 +26,13 @@ namespace VortexViseServer
 
                 Console.WriteLine("Message received from {0}:", sender.ToString());
                 string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
+                Console.WriteLine(receivedData);
 
-                var state = JsonSerializer.Deserialize<GameState>(receivedData);
+                var state = GameState.Deserialize(receivedData);
                 state.Gravity = 69;
 
-                var response= JsonSerializer.Serialize(state);
+                var response = state.Serialize();
+                Console.WriteLine(response);
 
                 byte[] responseData = Encoding.ASCII.GetBytes(response);
                 newsock.Send(responseData, responseData.Length, sender);

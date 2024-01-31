@@ -44,7 +44,7 @@ namespace VortexVise.Logic
             try
             {
                 // Sends a message to the host to which you have connected.
-                string json = JsonSerializer.Serialize(state);
+                string json = state.Serialize();
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
                 _udpClient.Send(sendBytes, sendBytes.Length);
@@ -79,7 +79,7 @@ namespace VortexVise.Logic
                                             " on their port number " +
                                             RemoteIpEndPoint.Port.ToString());
 
-                state = JsonSerializer.Deserialize<GameState>(returnData);
+                state = GameState.Deserialize(returnData);
             }
             catch(Exception e)
             {

@@ -143,12 +143,10 @@ while (!Raylib.WindowShouldClose())
     }
     if (Raylib.IsKeyPressed(KeyboardKey.F10))
     {
-        Console.WriteLine(state.Serialize());
-
-/*        client.SendState(state);
+        client.SendState(state);
         var receivedState = client.GetState();
-        Console.WriteLine(receivedState);
-*/    }
+        Console.WriteLine(receivedState.Serialize());
+    }
 
 }
 

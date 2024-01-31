@@ -102,9 +102,9 @@ public static class HookLogic
         else if (!state.IsHookAttached && state.IsHookReleased)
         {
             // Shooting the hook
-            state.Velocity += new Vector2(0,gravity * 0.5f * deltaTime);
+            state.Velocity += new Vector2(0, gravity * 0.5f * deltaTime);
             state.Position = new(state.Position.X + state.Velocity.X * deltaTime * 0.5f, state.Position.Y + state.Velocity.Y * deltaTime * 0.5f);
-            state.Collision = new Rectangle(state.Position,state.Collision.Width,state.Collision.Height);
+            state.Collision = new Rectangle(state.Position, state.Collision.Width, state.Collision.Height);
 
         }
         else if (state.IsHookAttached)
@@ -160,5 +160,9 @@ public static class HookLogic
 
 
 
+    }
+    public static Rectangle GetHookCollision(Vector2 position)
+    {
+        return new(position.X, position.Y, HookSize, HookSize);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Numerics;
+using VortexVise.GameObjects;
 
 namespace VortexVise.States;
 
@@ -47,7 +48,8 @@ public class GameState
                 var player = new PlayerState(playerId);
                 player.Position = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|PX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|PY))[\s\S]*?(?=\|)").Value));
                 player.Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|VX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|VY))[\s\S]*?(?=\|)").Value));
-                player.Direction = Convert.ToInt32(Regex.Match(match.Value, @"(?<=(\|D))[\s\S]*?(?=\|)"));
+                player.Collision = PlayerLogic.GetPlayerCollision(player.Position);
+                player.Direction = Convert.ToInt32(Regex.Match(match.Value, @"(?<=(\|D))[\s\S]*?(?=\|)").Value);
                 player.IsTouchingTheGround = Regex.Match(match.Value,@"(?<=(\|TG))[\s\S]*?(?=\|)").Value == "1";
                 player.Input = new InputState()
                 {
@@ -61,8 +63,15 @@ public class GameState
                 };
                 player.HookState = new HookState()
                 {
+                    Position = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|HPX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|HPY))[\s\S]*?(?=\|)").Value)),
+                    Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|HVX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|HVY))[\s\S]*?(?=\|)").Value)),
+                    IsHookAttached = Regex.Match(match.Value, @"(?<=(\|HA))[\s\S]*?(?=\|)").Value == "1",
+                    IsHookReleased = Regex.Match(match.Value, @"(?<=(\|HR))[\s\S]*?(?=\|)").Value == "1",
+                    IsPressingHookKey = Regex.Match(match.Value, @"(?<=(\|HPR))[\s\S]*?(?=\|)").Value == "1",
 
                 };
+                player.HookState.Collision = HookLogic.GetHookCollision(player.HookState.Position);
+                state.PlayerStates.Add(player);
             }
 
         }
