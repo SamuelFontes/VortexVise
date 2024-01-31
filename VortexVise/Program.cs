@@ -1,13 +1,9 @@
 ﻿using Raylib_cs;
-using System.Net.Sockets;
-using System.Net;
 using System.Numerics;
-using System.Text;
 using VortexVise.GameObjects;
-using VortexVise.Utilities;
-using System.Text.Json;
-using VortexVise.States;
 using VortexVise.Logic;
+using VortexVise.States;
+using VortexVise.Utilities;
 
 float gravity = 1800;
 int tickrate = 64;

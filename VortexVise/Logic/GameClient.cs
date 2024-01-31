@@ -3,9 +3,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using VortexVise.States;
-using Raylib_cs;// NEEDS TO BE HERE
-using System.Numerics;// NEEDS TO BE HERE
-using VortexVise.Utilities;// NEEDS TO BE HERE
 
 namespace VortexVise.Logic
 {
