@@ -7,8 +7,8 @@ using VortexVise.Utilities;
 
 float gravity = 1800;
 int tickrate = 64;
-int screenWidth = 1920;
-int screenHeight = 1080;
+int screenWidth = 1280;
+int screenHeight = 720;
 Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
 //Raylib.DisableCursor();
@@ -143,10 +143,12 @@ while (!Raylib.WindowShouldClose())
     }
     if (Raylib.IsKeyPressed(KeyboardKey.F10))
     {
-        client.SendState(state);
+        Console.WriteLine(state.Serialize());
+
+/*        client.SendState(state);
         var receivedState = client.GetState();
         Console.WriteLine(receivedState);
-    }
+*/    }
 
 }
 
