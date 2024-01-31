@@ -4,7 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using VortexVise.States;
 
 namespace VortexViseServer
 {
@@ -27,9 +29,13 @@ namespace VortexViseServer
                 byte[] data = newsock.Receive(ref sender);
 
                 Console.WriteLine("Message received from {0}:", sender.ToString());
-                Console.WriteLine(Encoding.ASCII.GetString(data, 0, data.Length));
+                string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
 
-                string response = "Welcome to my test server";
+                var state = JsonSerializer.Deserialize<GameState>(receivedData);
+                state.Gravity = 69;
+
+                var response= JsonSerializer.Serialize(state);
+
                 byte[] responseData = Encoding.ASCII.GetBytes(response);
                 newsock.Send(responseData, responseData.Length, sender);
             }
