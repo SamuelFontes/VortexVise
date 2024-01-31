@@ -7,6 +7,7 @@ namespace VortexVise.GameObjects;
 
 public static class HookLogic
 {
+    public static int HookSize = 16;
     static Texture2D _texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
     static float _hookPullForce = 5000;
     static float _hookPullOffset = 50;
@@ -30,7 +31,7 @@ public static class HookLogic
             state.IsHookReleased = true;
             state.IsHookAttached = false;
             state.Position = PlayerLogic.GetPlayerCenterPosition(playerState.Position);
-            state.Collision = new Rectangle(state.Position, new(16, 16));
+            state.Collision = new Rectangle(state.Position, new(HookSize, HookSize));
 
             // Reset velocity
             state.Velocity = new(0, 0);

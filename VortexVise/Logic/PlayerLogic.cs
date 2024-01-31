@@ -14,6 +14,7 @@ public static class PlayerLogic
     static private readonly float _maxGravity = 1000;
     static private readonly float _acceleration = 1500;
     static private Camera2D _camera;
+    static private  Vector2 _collisionOffset = new(20, 12);
 
     static public void Init()
     {
@@ -107,15 +108,19 @@ public static class PlayerLogic
         return position;
     }
 
+    public static Rectangle GetPlayerCollision(Vector2 position)
+    {
+        return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 25, 40);
+    }
+
     public static (Vector2,Vector2,Rectangle,bool) ApplyCollisions(Vector2 currentPlayerPosition, Vector2 currentPlayerVelocity, Rectangle lastPlayerCollision)
     {
         // TODO: Refactor this please this makes my brain melt
-        Vector2 collisionOffset = new(20, 12);
         Vector2 newPosition = currentPlayerPosition;
         Vector2 newVelocity = currentPlayerVelocity;
         Rectangle newCollision = lastPlayerCollision;
         var isTouchingTheGround = false;
-        Rectangle endingCollision = new(currentPlayerPosition.X + collisionOffset.X, currentPlayerPosition.Y + collisionOffset.Y, 25, 40);
+        Rectangle endingCollision = GetPlayerCollision(currentPlayerPosition);
 
         Vector2 mapSize = MapLogic.GetMapSize();
         // Apply ouside map collisions
@@ -139,7 +144,7 @@ public static class PlayerLogic
         }
         else if (endingCollision.X + endingCollision.Width >= mapSize.X)
         {
-            newPosition.X = mapSize.X - endingCollision.Width - collisionOffset.X;
+            newPosition.X = mapSize.X - endingCollision.Width - _collisionOffset.X;
             newVelocity.X = 0;
         }
 
@@ -186,7 +191,7 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (newPosition.Y == collision.Y - _texture.Height + collisionOffset.Y)
+                    if (newPosition.Y == collision.Y - _texture.Height + _collisionOffset.Y)
                         isTouchingTheGround = true;
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
@@ -196,7 +201,7 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            newPosition.Y = collision.Y - _texture.Height + collisionOffset.Y;
+                            newPosition.Y = collision.Y - _texture.Height + _collisionOffset.Y;
                             newCollision = playerCollision;
                             newCollision.Y = (collision.Y - playerCollision.Height);
                             newVelocity.Y = 0;
