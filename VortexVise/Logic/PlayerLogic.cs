@@ -16,9 +16,12 @@ public static class PlayerLogic
     static private Camera2D _camera;
     static private  Vector2 _collisionOffset = new(20, 12);
 
-    static public void Init()
+    static public void Init(bool isServer)
     {
-        _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+        if (!isServer)
+            _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+        else 
+            _texture = new Texture2D() { Width = 64, Height = 64 }; // Player will always be this size
         SpawnPoint = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f); // TODO: Get from map
 
         _camera = new Camera2D(SpawnPoint, SpawnPoint, 0, 1);

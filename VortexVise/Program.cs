@@ -13,7 +13,7 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
 //Raylib.DisableCursor();
 
-MapLogic.LoadMap("SkyArchipelago");
+MapLogic.LoadMap("SkyArchipelago", false);
 
 RenderTexture2D target = Raylib.LoadRenderTexture(300, 300);
 
@@ -27,7 +27,7 @@ double accumulator = 0;
 GameState lastState = new();
 lastState.CurrentTime = currentTime;
 lastState.Gravity = gravity;
-PlayerLogic.Init();
+PlayerLogic.Init(false);
 Guid playerId = Guid.NewGuid();
 lastState.PlayerStates.Add(new(playerId));
 
@@ -69,10 +69,10 @@ while (!Raylib.WindowShouldClose())
         if (client.IsConnected)
         {
             // Do all the network magic
-            client.SendInput(PlayerLogic.GetInput(),playerId,currentTime);
+            client.SendInput(PlayerLogic.GetInput(), playerId, currentTime);
             // This should not stop the game
             var receivedState = client.GetState();
-            if(receivedState != null) 
+            if (receivedState != null)
                 state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
         }
         else
@@ -116,14 +116,15 @@ while (!Raylib.WindowShouldClose())
     gameStates.Add(state);
     lastState = state;
 
+    var player = state.PlayerStates.FirstOrDefault(p => p.Id == playerId);
+    if (player == null) continue;
     Raylib.BeginDrawing();
     Raylib.ClearBackground(Color.Black);
-    PlayerLogic.ProcessCamera(state.PlayerStates.FirstOrDefault(p => p.Id == playerId).Position);
+    PlayerLogic.ProcessCamera(player.Position);
     GameLogic.DrawState(state);
 
     #region Debug
     // DEBUG
-    var player = state.PlayerStates.FirstOrDefault(p => p.Id == playerId);
     Raylib.BeginTextureMode(target);
     Raylib.ClearBackground(Color.White);
     Raylib.DrawFPS(128, 12);
@@ -152,6 +153,8 @@ while (!Raylib.WindowShouldClose())
     if (Raylib.IsKeyPressed(KeyboardKey.F9))
     {
         client.Connect();
+        //if(client.IsConnected) 
+        //gameStates.Clear();
     }
 
 }

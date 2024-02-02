@@ -13,11 +13,14 @@ public static class MapLogic
     static List<Rectangle> _collisions = new List<Rectangle>();
 
 
-    public static void LoadMap(string mapName)
+    public static void LoadMap(string mapName, bool isServer)
     {
         // TODO: Load collisions and image from a file
         string mapFolder = "Resources/Sprites/Maps/";
-        _mapTexture = Raylib.LoadTexture(mapFolder + mapName + ".png");
+        if (!isServer)
+            _mapTexture = Raylib.LoadTexture(mapFolder + mapName + ".png");
+        else
+            _mapTexture = new Texture2D() { Height = 2048, Width = 2048 } ; // TODO: Get the map size from some place
 
 
         // TODO: Load from a json or some shit like that

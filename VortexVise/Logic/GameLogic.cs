@@ -12,10 +12,6 @@ namespace VortexVise.Logic
                 Gravity = lastState.Gravity,
                 CurrentTime = currentTime
             };
-            if(lastState.PlayerStates.Count < 1)
-            {
-                throw new Exception("There are no players, this shouldn't happen on the client");
-            }
 
             // Simulate Player State
             foreach (var lastPlayerState in lastState.PlayerStates)
