@@ -23,7 +23,7 @@ namespace VortexVise.Logic
                         currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
                     else 
                         currentPlayerState.Input = lastPlayerState.Input;
-                }else if(Guid.Empty == playerId)
+                }else
                 {
                     currentPlayerState.Input = lastPlayerState.Input;
                 }
