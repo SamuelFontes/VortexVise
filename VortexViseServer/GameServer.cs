@@ -28,10 +28,10 @@ namespace VortexViseServer
                 string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
                 Console.WriteLine(receivedData);
 
-                var state = GameState.Deserialize(receivedData);
+                var state = GameState.DeserializeState(receivedData);
                 state.Gravity = 69;
 
-                var response = state.Serialize();
+                var response = state.SerializeState();
                 Console.WriteLine(response);
 
                 byte[] responseData = Encoding.ASCII.GetBytes(response);

@@ -10,12 +10,12 @@ public class GameState
     public float Gravity { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = [];
 
-    public string Serialize()
+    public string SerializeState()
     {
         // This will serialize the state to send over udp every frame
         // Why not JSON serialization? AOT
 
-        string serializedState = "";
+        string serializedState = "[S]";
 
         // this will not be a json serialization, it will be a crappy specific bullshit accumulator that I will parse with regex, deal with it
         serializedState += "|CT" + CurrentTime.ToString();
@@ -31,7 +31,7 @@ public class GameState
 
         return serializedState;
     }
-    public static GameState Deserialize(string serializedState)
+    public static GameState DeserializeState(string serializedState)
     {
         // Do you even regex bro?
         var state = new GameState();
@@ -82,6 +82,51 @@ public class GameState
         }
 
         return state;
+    }
+    public static string SerializeInput(InputState input, Guid playerId, double time)
+    {
+        // This will serialize the input to send over udp every frame
+        // Why not JSON serialization? AOT
+
+        string serializedInput = "[I]";
+        serializedInput += "|CT" + time;
+
+
+        Func<bool, int> bn = b => b ? 1 : 0; // converts bool to 1 or 0
+
+        serializedInput += $"|ID{playerId}|IL{bn(input.Left)}|IR{bn(input.Right)}|IU{bn(input.Up)}|IPD{bn(input.Down)}|IH{bn(input.Hook)}|IC{bn(input.CancelHook)}|IJ{bn(input.Jump)}";
+
+        return serializedInput;
+    }
+    public static (Guid,InputState,double) DeserializeInput(string serializedInput)
+    {
+        Guid playerId = Guid.Empty;
+        var input = new InputState();
+        double time = 0;
+
+        try
+        {
+            time = Convert.ToDouble(Regex.Match(serializedInput, @"(?<=(\|CT))[\s\S]*?(?=\|)").Value);
+            playerId = Guid.Parse(Regex.Match(serializedInput, @"(?<=(\|ID))[\s\S]*?(?=\|)").Value);
+            input = new InputState()
+            {
+                Left = Regex.Match(serializedInput,@"(?<=(\|IL))[\s\S]*?(?=\|)").Value == "1",
+                Right = Regex.Match(serializedInput,@"(?<=(\|IR))[\s\S]*?(?=\|)").Value == "1",
+                Up = Regex.Match(serializedInput,@"(?<=(\|IU))[\s\S]*?(?=\|)").Value == "1",
+                Down = Regex.Match(serializedInput,@"(?<=(\|IPD))[\s\S]*?(?=\|)").Value == "1",
+                Jump = Regex.Match(serializedInput,@"(?<=(\|IJ))[\s\S]*?(?=\|)").Value == "1",
+                Hook = Regex.Match(serializedInput,@"(?<=(\|IH))[\s\S]*?(?=\|)").Value == "1",
+                CancelHook = Regex.Match(serializedInput,@"(?<=(\|IC))[\s\S]*?(?=\|)").Value == "1",
+            };
+
+        }
+        catch (Exception e)
+        {
+            // Better be safe, otherwise someone sending crappy data will crash the server
+            Console.WriteLine(e.Message);
+        }
+
+        return (playerId,input,time);
     }
 
 }

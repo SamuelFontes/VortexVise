@@ -66,7 +66,18 @@ while (!Raylib.WindowShouldClose())
         */
         // THIS SHOULD HAPPEN ON THE SERVER
 
-        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+        if (client.IsConnected)
+        {
+            // Do all the network magic
+            client.SendInput(PlayerLogic.GetInput(),playerId,currentTime);
+            var receivedState = client.GetState();
+            if(receivedState != null) 
+                state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+        }
+        else
+        {
+            state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+        }
         simulationTime -= deltaTime;
         lastTime += deltaTime;
         accumulator = 0;
@@ -140,11 +151,6 @@ while (!Raylib.WindowShouldClose())
     if (Raylib.IsKeyPressed(KeyboardKey.F9))
     {
         client.Connect();
-    }
-    if (Raylib.IsKeyPressed(KeyboardKey.F10))
-    {
-        client.SendState(state);
-        var receivedState = client.GetState();
     }
 
 }
