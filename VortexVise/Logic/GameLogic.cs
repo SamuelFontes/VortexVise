@@ -5,7 +5,7 @@ namespace VortexVise.Logic
 {
     public static class GameLogic
     {
-        public static GameState SimulateState(GameState lastState, double currentTime, Guid playerId, float deltaTime)
+        public static GameState SimulateState(GameState lastState, double currentTime, Guid playerId, float deltaTime, bool isNetworkFrame)
         {
             GameState state = new()
             {
@@ -23,7 +23,10 @@ namespace VortexVise.Logic
                 PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
                 if (lastPlayerState.Id == playerId)
                 {
-                    currentPlayerState.Input = PlayerLogic.GetInput();
+                    if(isNetworkFrame)
+                        currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
+                    else 
+                        currentPlayerState.Input = lastPlayerState.Input;
                 }
                 currentPlayerState.Direction = PlayerLogic.ProcessDirection(deltaTime, currentPlayerState.Input, lastPlayerState);
                 (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);

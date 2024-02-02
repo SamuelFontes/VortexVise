@@ -8,6 +8,7 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
+        public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public void Connect()
         {
@@ -16,12 +17,14 @@ namespace VortexVise.Logic
             try
             {
                 _udpClient.Connect("localhost", 9050);
+                IsConnected = true;
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 _udpClient.Close();
+                IsConnected = false;
             }
         }
 
@@ -30,10 +33,12 @@ namespace VortexVise.Logic
             try
             {
                 _udpClient.Close();
+                IsConnected = false;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                IsConnected = false;
             }
 
         }

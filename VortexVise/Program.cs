@@ -66,7 +66,7 @@ while (!Raylib.WindowShouldClose())
         */
         // THIS SHOULD HAPPEN ON THE SERVER
 
-        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator));
+        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
         simulationTime -= deltaTime;
         lastTime += deltaTime;
         accumulator = 0;
@@ -97,7 +97,7 @@ while (!Raylib.WindowShouldClose())
         // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
         double accumulatorSimulationTime = currentTime - lastTimeAccumulator;
         accumulator += accumulatorSimulationTime;
-        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(accumulatorSimulationTime));
+        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(accumulatorSimulationTime), false);
         lastTimeAccumulator = currentTime;
         // TODO: If inputs happen here, they should be sent to the server. Otherwise no because this can happen 3000 times per second
     }
@@ -145,7 +145,6 @@ while (!Raylib.WindowShouldClose())
     {
         client.SendState(state);
         var receivedState = client.GetState();
-        Console.WriteLine(receivedState.Serialize());
     }
 
 }
