@@ -30,6 +30,7 @@ gameStates.Add(lastState);
 var watch = System.Diagnostics.Stopwatch.StartNew();
 
 GameState state = new GameState();
+state = lastState;
 MapLogic.LoadMap("SkyArchipelago", true);
 PlayerLogic.Init(true);
 while (true)
@@ -80,6 +81,7 @@ while (true)
         }
         state = GameLogic.SimulateState(lastState, currentTime, Guid.Empty, (float)deltaTime, true);
         lastTime = currentTime;
+        lastState = state;
     }
 
     // Send simulation to everyone

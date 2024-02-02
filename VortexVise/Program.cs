@@ -125,7 +125,7 @@ while (!Raylib.WindowShouldClose())
 
     #region Debug
     // DEBUG
-    Raylib.BeginTextureMode(target);
+/*    Raylib.BeginTextureMode(target);
     Raylib.ClearBackground(Color.White);
     Raylib.DrawFPS(128, 12);
     Raylib.DrawText("dt: " + (int)(1 / deltaTime), 12, 12, 20, Color.Black);
@@ -136,6 +136,7 @@ while (!Raylib.WindowShouldClose())
 
     var rec = new Rectangle() { X = 0, Y = 0, Width = (float)target.Texture.Width, Height = (float)target.Texture.Height };
     Raylib.DrawTexturePro(target.Texture, new Rectangle(0, 0, (float)target.Texture.Width, (float)target.Texture.Height * -1), rec, new Vector2(0, 0), 0, Color.White);
+*/   
     #endregion
 
     Raylib.EndDrawing();

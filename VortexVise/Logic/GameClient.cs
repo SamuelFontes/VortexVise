@@ -101,11 +101,11 @@ namespace VortexVise.Logic
                 // Uses the IPEndPoint object to determine which of these two hosts responded.
                 Console.WriteLine("This is the message you received " +
                                              returnData.ToString());
-                Console.WriteLine("This message was sent from " +
+/*                Console.WriteLine("This message was sent from " +
                                             RemoteIpEndPoint.Address.ToString() +
                                             " on their port number " +
                                             RemoteIpEndPoint.Port.ToString());
-
+*/
                 state = GameState.DeserializeState(returnData);
             }
             catch(Exception e)
