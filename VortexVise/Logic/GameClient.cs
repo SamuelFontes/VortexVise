@@ -8,6 +8,7 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
+        string ip = "192.168.1.166";
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public void Connect()
@@ -16,7 +17,7 @@ namespace VortexVise.Logic
             // This constructor arbitrarily assigns the local port number.
             try
             {
-                _udpClient.Connect("localhost", 9050);
+                _udpClient.Connect(ip, 9050);
                 IsConnected = true;
 
             }
