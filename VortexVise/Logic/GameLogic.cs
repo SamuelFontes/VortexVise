@@ -23,6 +23,9 @@ namespace VortexVise.Logic
                         currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
                     else 
                         currentPlayerState.Input = lastPlayerState.Input;
+                }else if(Guid.Empty == playerId)
+                {
+                    currentPlayerState.Input = lastPlayerState.Input;
                 }
                 currentPlayerState.Direction = PlayerLogic.ProcessDirection(deltaTime, currentPlayerState.Input, lastPlayerState);
                 (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);

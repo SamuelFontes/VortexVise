@@ -71,6 +71,7 @@ namespace VortexVise.Logic
             {
                 // Sends a message to the host to which you have connected.
                 string json = GameState.SerializeInput(input, playerId, time);  
+                Console.WriteLine(json);
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
                 _udpClient.Send(sendBytes, sendBytes.Length);

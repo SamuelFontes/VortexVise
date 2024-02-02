@@ -67,12 +67,18 @@ while (true)
 
 
 
-    currentTime = watch.Elapsed.TotalNanoseconds;
+    currentTime = watch.Elapsed.TotalSeconds;
     var time = currentTime - lastTime;
     if (time > deltaTime)
     {
-        // TODO: Simulate new gamestate
-        state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)deltaTime, true);
+        // Simulate new gamestate
+        foreach(var lastPlayerState in  lastState.PlayerStates)
+        {
+            var player = players.FirstOrDefault(_ => _.Id == lastPlayerState.Id);
+            if (player == null) continue;
+            lastPlayerState.Input = player.Input;
+        }
+        state = GameLogic.SimulateState(lastState, currentTime, Guid.Empty, (float)deltaTime, true);
         lastTime = currentTime;
     }
 
