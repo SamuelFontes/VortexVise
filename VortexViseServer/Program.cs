@@ -30,6 +30,11 @@ while (true)
     Console.WriteLine("Message received from {0}:", sender.ToString());
     string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
     Console.WriteLine(receivedData);
+    // Should read the input, simulate the state, return the simulated state
+    // later I should read input from everyone, and when we need to simulate the state get everyone last input and simulate
+    // Send simulation to everyone
+    // Clear input list after simluation
+    // The response always should be the last simulated state every, so if a new state wasn't simulated it will send the last one
 
     if(time > deltaTime)
     {

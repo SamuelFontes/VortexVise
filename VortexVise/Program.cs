@@ -70,6 +70,7 @@ while (!Raylib.WindowShouldClose())
         {
             // Do all the network magic
             client.SendInput(PlayerLogic.GetInput(),playerId,currentTime);
+            // This should not stop the game
             var receivedState = client.GetState();
             if(receivedState != null) 
                 state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
