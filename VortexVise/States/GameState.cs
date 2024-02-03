@@ -10,6 +10,7 @@ public class GameState
     public float Gravity { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = [];
 
+    // TODO: Add compression
     public string SerializeState()
     {
         // This will serialize the state to send over udp every frame
@@ -95,7 +96,7 @@ public class GameState
         Func<bool, int> bn = b => b ? 1 : 0; // converts bool to 1 or 0
 
         serializedInput += $"|ID{playerId}|IL{bn(input.Left)}|IR{bn(input.Right)}|IU{bn(input.Up)}|IPD{bn(input.Down)}|IH{bn(input.Hook)}|IC{bn(input.CancelHook)}|IJ{bn(input.Jump)}";
-        serializedInput += "|";
+        serializedInput += "|"; // This is needed to deserialize
 
         return serializedInput;
     }

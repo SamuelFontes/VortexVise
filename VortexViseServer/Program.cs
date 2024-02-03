@@ -57,13 +57,22 @@ while (true)
 
         // Send simulation to everyone
         // The response always should be the last simulated state every, so if a new state wasn't simulated it will send the last one
-        var response = state.SerializeState();
-
-        byte[] responseData = Encoding.ASCII.GetBytes(response);
-        foreach (var player in players)
+        Thread sendThread = new Thread(new ThreadStart(() =>
         {
-            newsock.Send(responseData, responseData.Length, player.Sender);
-        }
+            SendState(state);
+        }));
+        sendThread.Start();
+    }
+
+}
+void SendState(GameState state)
+{
+    var response = state.SerializeState();
+
+    byte[] responseData = Encoding.ASCII.GetBytes(response);
+    foreach (var player in players)
+    {
+        newsock.Send(responseData, responseData.Length, player.Sender);
     }
 
 }
