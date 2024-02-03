@@ -96,7 +96,7 @@ namespace VortexVise.Logic
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
                 // Blocks until a message returns on this socket from a remote host.
-                Byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
+                Byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint); 
                 string returnData = Encoding.ASCII.GetString(receiveBytes);
 
                 // Uses the IPEndPoint object to determine which of these two hosts responded.

@@ -9,7 +9,7 @@ public static class MapLogic
     static string _mapName;
     static string _mapDescription;
     static string _texturePath;
-    static Texture2D _mapTexture; // This is the whole map baked into an image
+    public static Texture2D _mapTexture; // This is the whole map baked into an image
     static List<Rectangle> _collisions = new List<Rectangle>();
 
 

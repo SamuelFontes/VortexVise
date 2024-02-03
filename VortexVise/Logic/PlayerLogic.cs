@@ -22,9 +22,10 @@ public static class PlayerLogic
             _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         else 
             _texture = new Texture2D() { Width = 64, Height = 64 }; // Player will always be this size
-        SpawnPoint = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f); // TODO: Get from map
+        SpawnPoint = new Vector2(MapLogic._mapTexture.Width / 2.0f, MapLogic._mapTexture.Height / 2.0f);
+        var cameraView = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f);
 
-        _camera = new Camera2D(SpawnPoint, SpawnPoint, 0, 1);
+        _camera = new Camera2D(cameraView, cameraView, 0, 1);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {

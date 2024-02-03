@@ -51,26 +51,13 @@ while (!Raylib.WindowShouldClose())
     while (simulationTime >= deltaTime) // perform one update for every interval passed
     {
         isSlowerThanTickRate = true;
-        // TODO: Here we should send the state to the server
-        // ON THE SERVER
-        /*
-        void processInput( double time, Input input )
-        {
-            if ( time < currentTime )// this is important
-                return;
-
-            float deltaTime = currentTime - time;
-
-            updatePhysics( currentTime, deltaTime, input );
-        }
-        */
-        // THIS SHOULD HAPPEN ON THE SERVER
 
         if (client.IsConnected)
         {
             // Do all the network magic
             client.SendInput(PlayerLogic.GetInput(), playerId, currentTime);
-            // This should not stop the game
+
+            // TODO: This should not stop the game, so make it run in another task
             var receivedState = client.GetState();
             if (receivedState != null)
                 state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
