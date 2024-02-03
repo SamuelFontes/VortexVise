@@ -8,7 +8,7 @@ namespace VortexVise.GameObjects;
 public static class HookLogic
 {
     public static int HookSize = 16;
-    static Texture2D _texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
+    public static Texture2D _texture;
     static float _hookPullForce = 5000;
     static float _hookPullOffset = 50;
     static float _hookShootForce = 2000;

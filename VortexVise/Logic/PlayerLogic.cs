@@ -19,9 +19,16 @@ public static class PlayerLogic
     static public void Init(bool isServer)
     {
         if (!isServer)
+        {
             _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-        else 
+            HookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
+        }
+        else
+        {
             _texture = new Texture2D() { Width = 64, Height = 64 }; // Player will always be this size
+            HookLogic._texture = new Texture2D() { Width = 32, Height = 32 }; // if there are diffent kinds of hook change it here
+
+        }
         SpawnPoint = new Vector2(MapLogic._mapTexture.Width / 2.0f, MapLogic._mapTexture.Height / 2.0f);
         var cameraView = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f);
 
