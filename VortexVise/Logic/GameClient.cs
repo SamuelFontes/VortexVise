@@ -11,6 +11,7 @@ namespace VortexVise.Logic
         string ip = "192.168.1.166";
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
+        public GameState LastServerState = new GameState();
         public void Connect()
         {
 
@@ -71,7 +72,7 @@ namespace VortexVise.Logic
             try
             {
                 // Sends a message to the host to which you have connected.
-                string json = GameState.SerializeInput(input, playerId, time);  
+                string json = GameState.SerializeInput(input, playerId, time);
                 Console.WriteLine(json);
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
@@ -87,33 +88,28 @@ namespace VortexVise.Logic
 
             return wasSent;
         }
-        public GameState? GetState()
+        public void GetState()
         {
-            GameState? state = null;
-            try
+            while (true)
             {
-                //IPEndPoint object will allow us to read datagrams sent from any source.
-                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                try
+                {
+                    //IPEndPoint object will allow us to read datagrams sent from any source.
+                    IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
-                // Blocks until a message returns on this socket from a remote host.
-                Byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint); 
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
+                    // Blocks until a message returns on this socket from a remote host.
+                    Byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
+                    string returnData = Encoding.ASCII.GetString(receiveBytes);
 
-                // Uses the IPEndPoint object to determine which of these two hosts responded.
-                Console.WriteLine("This is the message you received " +
-                                             returnData.ToString());
-/*                Console.WriteLine("This message was sent from " +
-                                            RemoteIpEndPoint.Address.ToString() +
-                                            " on their port number " +
-                                            RemoteIpEndPoint.Port.ToString());
-*/
-                state = GameState.DeserializeState(returnData);
+                    // Uses the IPEndPoint object to determine which of these two hosts responded.
+                    LastServerState = GameState.DeserializeState(returnData);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+
             }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            return state;
         }
     }
 }

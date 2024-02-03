@@ -72,33 +72,41 @@ void ReceivePlayerPackets()
 {
     while (true)
     {
-        // receive everyones input
-        byte[] data = newsock.Receive(ref sender);
-
-        string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
-
-        // Should read the input, simulate the state, return the simulated state
-        (Guid playerId, InputState input, double receivedTime) = GameState.DeserializeInput(receivedData);
-
-        var p = players.FirstOrDefault(_ => _.Id == playerId);
-        if (p == null)
+        try
         {
-            p = new Player()
+            // receive players input
+            byte[] data = newsock.Receive(ref sender);
+
+            string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
+
+            // Should read the input, simulate the state, return the simulated state
+            (Guid playerId, InputState input, double receivedTime) = GameState.DeserializeInput(receivedData);
+
+            var p = players.FirstOrDefault(_ => _.Id == playerId);
+            if (p == null)
             {
-                Id = playerId,
-                Input = input,
-                Time = receivedTime,
-                Sender = sender,
-            };
-            players.Add(p);
-            // TODO: New player joined, do the thing
-            lastState.PlayerStates.Add(new(playerId));
-            // TODO: make it handle player disconnect on timeout
+                p = new Player()
+                {
+                    Id = playerId,
+                    Input = input,
+                    Time = receivedTime,
+                    Sender = sender,
+                };
+                players.Add(p);
+                // TODO: New player joined, do the thing
+                lastState.PlayerStates.Add(new(playerId));
+                // TODO: make it handle player disconnect on timeout
+            }
+            if (p.Time < receivedTime)
+            {
+                p.Input = input;
+                p.Time = receivedTime;
+            }
+
         }
-        if (p.Time < receivedTime)
+        catch
         {
-            p.Input = input;
-            p.Time = receivedTime;
+
         }
 
     }

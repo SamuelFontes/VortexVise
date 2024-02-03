@@ -58,9 +58,8 @@ while (!Raylib.WindowShouldClose())
             client.SendInput(PlayerLogic.GetInput(), playerId, currentTime);
 
             // TODO: This should not stop the game, so make it run in another task
-            var receivedState = client.GetState();
-            if (receivedState != null)
-                state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+            GameState receivedState = client.LastServerState;
+            state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
         }
         else
         {
@@ -141,8 +140,9 @@ while (!Raylib.WindowShouldClose())
     if (Raylib.IsKeyPressed(KeyboardKey.F9))
     {
         client.Connect();
-        //if(client.IsConnected) 
-        //gameStates.Clear();
+        
+        Thread myThread = new Thread(new ThreadStart(client.GetState));
+        myThread.Start();
     }
 
 }
