@@ -131,4 +131,27 @@ public class GameState
         return (playerId,input,time);
     }
 
+    public void ApproximateState(GameState receivedState, Guid playerId)
+    {
+        // When receive the packet do Clients Approximate Physics Locally
+        var playerState = PlayerStates.FirstOrDefault(p => p.Id == playerId);
+        if (playerState == null) return; // This should not happen 
+
+        var receivedPlayerState = receivedState.PlayerStates.FirstOrDefault(p => p.Id == playerId);
+        if (receivedPlayerState == null) return; // This should not happen 
+
+        Vector2 difference = receivedPlayerState.Position - playerState.Position;
+        float distance = difference.Length();
+
+        if ( distance > 2.0f )
+            playerState.Position = receivedPlayerState.Position;
+        else if ( distance > 0.1 )
+            playerState.Position += difference * 0.1f;
+
+        playerState.Velocity = receivedPlayerState.Velocity;
+        playerState.HookState = receivedPlayerState.HookState;
+
+        playerState.Input = receivedPlayerState.Input;
+    }
+
 }

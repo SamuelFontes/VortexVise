@@ -59,7 +59,8 @@ while (!Raylib.WindowShouldClose())
 
             // TODO: This should not stop the game, so make it run in another task
             GameState receivedState = client.LastServerState;
-            state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+            lastState.ApproximateState(receivedState, playerId);
+            state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
         }
         else
         {
@@ -69,24 +70,6 @@ while (!Raylib.WindowShouldClose())
         lastTime += deltaTime;
         accumulator = 0;
         lastTimeAccumulator = currentTime;
-        // TODO: when receive the packet do Clients Approximate Physics Locally
-        /*
-        void clientUpdate( float time, Input input, State state )
-        {
-            Vector difference = state.position -
-                                current.position;
-
-            float distance = difference.length();
-
-            if ( distance > 2.0f )
-                current.position = state.position;
-            else if ( distance > 0.1 )
-                current.position += difference * 0.1f;
-
-            current.velocity = velocity;
-
-            current.input = input;
-        }*/
 
         // TODO: Create the Client-Side Prediction
     }
