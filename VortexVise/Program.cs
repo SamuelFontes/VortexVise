@@ -57,7 +57,7 @@ while (!Raylib.WindowShouldClose())
             // Do all the network magic
             client.SendInput(PlayerLogic.GetInput(), playerId, currentTime);
 
-            // TODO: This should not stop the game, so make it run in another task
+            // This should not stop the game, so make it run in another task
             GameState receivedState = client.LastServerState;
             lastState.ApproximateState(receivedState, playerId);
             state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
@@ -72,6 +72,12 @@ while (!Raylib.WindowShouldClose())
         lastTimeAccumulator = currentTime;
 
         // TODO: Create the Client-Side Prediction
+        /*
+        Client side prediction works by predicting physics ahead locally using the player’s input, simulating ahead without waiting for the server round trip.
+        The server periodically sends corrections to the client which are required to ensure that the client stays in sync with the server physics. 
+        At all times the server is authoritative over the physics of the character so even if the client attempts to cheat all they are doing is fooling themselves locally while the server physics remains unaffected. 
+        Seeing as all game logic runs on the server according to server physics state, client side movement cheating is basically eliminated.
+        */
     }
     if (!isSlowerThanTickRate)
     {
@@ -80,7 +86,6 @@ while (!Raylib.WindowShouldClose())
         accumulator += accumulatorSimulationTime;
         state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(accumulatorSimulationTime), false);
         lastTimeAccumulator = currentTime;
-        // TODO: If inputs happen here, they should be sent to the server. Otherwise no because this can happen 3000 times per second
     }
     gameStates.Add(state);
     lastState = state;
