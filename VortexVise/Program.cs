@@ -31,8 +31,8 @@ PlayerLogic.Init(false);
 Guid playerId = Guid.NewGuid();
 lastState.PlayerStates.Add(new(playerId));
 
-List<GameState> gameStates = new List<GameState>();
-gameStates.Add(lastState);
+//List<GameState> gameStates = new List<GameState>();
+//gameStates.Add(lastState);
 GameState state = new GameState();
 var client = new GameClient();
 while (!Raylib.WindowShouldClose())
@@ -59,8 +59,17 @@ while (!Raylib.WindowShouldClose())
 
             // This should not stop the game, so make it run in another task
             GameState receivedState = client.LastServerState;
-            receivedState.ApproximateState(lastState, playerId);
-            state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+            if(receivedState.CurrentTime != client.LastSimulatedTime)
+            {
+                receivedState.ApproximateState(lastState, playerId);
+                state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+                client.LastSimulatedTime = receivedState.CurrentTime;
+            }
+            else
+            {
+                // Client-Side Prediction
+                state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+            }
         }
         else
         {
@@ -71,13 +80,6 @@ while (!Raylib.WindowShouldClose())
         accumulator = 0;
         lastTimeAccumulator = currentTime;
 
-        // TODO: Create the Client-Side Prediction
-        /*
-        Client side prediction works by predicting physics ahead locally using the player’s input, simulating ahead without waiting for the server round trip.
-        The server periodically sends corrections to the client which are required to ensure that the client stays in sync with the server physics. 
-        At all times the server is authoritative over the physics of the character so even if the client attempts to cheat all they are doing is fooling themselves locally while the server physics remains unaffected. 
-        Seeing as all game logic runs on the server according to server physics state, client side movement cheating is basically eliminated.
-        */
     }
     if (!isSlowerThanTickRate)
     {
@@ -87,7 +89,7 @@ while (!Raylib.WindowShouldClose())
         state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(accumulatorSimulationTime), false);
         lastTimeAccumulator = currentTime;
     }
-    gameStates.Add(state);
+    //gameStates.Add(state);
     lastState = state;
 
     var player = state.PlayerStates.FirstOrDefault(p => p.Id == playerId);

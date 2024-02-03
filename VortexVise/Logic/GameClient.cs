@@ -12,6 +12,7 @@ namespace VortexVise.Logic
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public GameState LastServerState = new GameState();
+        public double LastSimulatedTime = 0;
         public void Connect()
         {
 

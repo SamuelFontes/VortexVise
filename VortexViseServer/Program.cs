@@ -22,11 +22,11 @@ var lastTime = currentTime;
 
 
 List<Player> players = new List<Player>();
-List<GameState> gameStates = new List<GameState>();
+//List<GameState> gameStates = new List<GameState>();
 GameState lastState = new();
 lastState.CurrentTime = currentTime;
 lastState.Gravity = 1800;
-gameStates.Add(lastState);
+//gameStates.Add(lastState);
 var watch = System.Diagnostics.Stopwatch.StartNew();
 
 GameState state = new GameState();
