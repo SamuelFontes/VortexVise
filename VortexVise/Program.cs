@@ -59,8 +59,8 @@ while (!Raylib.WindowShouldClose())
 
             // This should not stop the game, so make it run in another task
             GameState receivedState = client.LastServerState;
-            lastState.ApproximateState(receivedState, playerId);
-            state = GameLogic.SimulateState(lastState, currentTime, playerId, (float)(deltaTime - accumulator), true);
+            receivedState.ApproximateState(lastState, playerId);
+            state = GameLogic.SimulateState(receivedState, currentTime, playerId, (float)(deltaTime - accumulator), true);
         }
         else
         {
