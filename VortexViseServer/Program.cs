@@ -44,10 +44,10 @@ while (true)
     var time = currentTime - lastTime;
     if (time > deltaTime)
     {
-        // Simulate new gamestate
+        // Simulate new game state
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
-            var player = players.FirstOrDefault(_ => _.Id == lastPlayerState.Id);
+            var player = players.FirstOrDefault(_ => _.Id == lastPlayerState.Id); // TODO: optimize this
             if (player == null) continue;
             lastPlayerState.Input = player.Input;
         }

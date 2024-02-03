@@ -94,7 +94,7 @@ public class GameState
 
         Func<bool, int> bn = b => b ? 1 : 0; // converts bool to 1 or 0
 
-        serializedInput += $"|ID{playerId}|IL{bn(input.Left)}|IR{bn(input.Right)}|IU{bn(input.Up)}|IPD{bn(input.Down)}|IH{bn(input.Hook)}|IC{bn(input.CancelHook)}|IJ{bn(input.Jump)}";
+        serializedInput += $"|ID{playerId}|IL{bn(input.Left)}|IR{bn(input.Right)}|IU{bn(input.Up)}|IPD{bn(input.Down)}|IH{bn(input.Hook)}|IC{bn(input.CancelHook)}|IJ{bn(input.Jump)}|";
 
         return serializedInput;
     }
