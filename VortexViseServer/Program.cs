@@ -70,10 +70,16 @@ void SendState(GameState state)
     var response = state.SerializeState();
 
     byte[] responseData = Encoding.ASCII.GetBytes(response);
+    List<Task> tasks = new List<Task>();
     foreach (var player in players)
     {
-        newsock.Send(responseData, responseData.Length, player.Sender);
+        tasks.Add(
+            ((Func<Task>)(async () =>
+            {
+                newsock.Send(responseData, responseData.Length, player.Sender);
+            }))());
     }
+    Task.WaitAll(tasks.ToArray());
 
 }
 
