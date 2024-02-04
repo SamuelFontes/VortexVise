@@ -34,6 +34,7 @@ public class GameState
     }
     public static GameState DeserializeState(string serializedState)
     {
+        serializedState = serializedState.Replace(",", ".");
         // Do you even regex bro?
         var state = new GameState();
 

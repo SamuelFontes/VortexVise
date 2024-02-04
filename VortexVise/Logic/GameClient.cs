@@ -9,7 +9,9 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
-        string ip = "192.168.1.166";
+        string ip = "26.121.116.251";
+/*        string ip = "localhost";
+*/        int port = 9050;
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public GameState LastServerState = new GameState();
@@ -20,7 +22,7 @@ namespace VortexVise.Logic
             // This constructor arbitrarily assigns the local port number.
             try
             {
-                _udpClient.Connect(ip, 9050);
+                _udpClient.Connect(ip, port);
                 IsConnected = true;
 
             }
@@ -101,6 +103,7 @@ namespace VortexVise.Logic
                     // Blocks until a message returns on this socket from a remote host.
                     Byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
                     string returnData = Encoding.ASCII.GetString(receiveBytes);
+                    Console.WriteLine(returnData);
 
                     // Uses the IPEndPoint object to determine which of these two hosts responded.
                     var state = GameState.DeserializeState(returnData);

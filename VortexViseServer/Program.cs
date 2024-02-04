@@ -8,8 +8,10 @@ using VortexVise.States;
 
 
 Console.WriteLine("VortexVise Server Started!");
-IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
+int port  = 9050;
+IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
 UdpClient newsock = new UdpClient(ipep);
+Console.WriteLine("Server running on port "+port);
 
 Console.WriteLine("Waiting for a client...");
 
@@ -93,6 +95,7 @@ void ReceivePlayerPackets()
             byte[] data = newsock.Receive(ref sender);
 
             string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
+            //Console.WriteLine(receivedData);
 
             // Should read the input, simulate the state, return the simulated state
             (Guid playerId, InputState input, double receivedTime) = GameState.DeserializeInput(receivedData);
@@ -109,6 +112,7 @@ void ReceivePlayerPackets()
                 };
                 players.Add(p);
                 // TODO: New player joined, do the thing
+                Console.WriteLine("Player Connected");
                 lastState.PlayerStates.Add(new(playerId));
                 // TODO: make it handle player disconnect on timeout
             }
