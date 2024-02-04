@@ -9,7 +9,7 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
-        string ip = "26.121.116.251";
+        string ip = "26.54.110.241";
 /*        string ip = "localhost";
 */        int port = 9050;
         public bool IsConnected = false;
