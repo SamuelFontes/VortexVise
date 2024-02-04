@@ -36,7 +36,8 @@ public class GameState
     {
         double a;
         if (double.TryParse("3.3", out a)) 
-            serializedState = serializedState.Replace(",", ".");
+            if(a == 3.3d)
+                serializedState = serializedState.Replace(",", ".");
         // Do you even regex bro?
         var state = new GameState();
 
