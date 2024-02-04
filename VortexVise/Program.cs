@@ -112,7 +112,7 @@ Raylib.BeginTextureMode(target);
     if(!client.IsConnected)
         Raylib.DrawText("PRESS F9 TO CONNECT", 12, 12, 32, Color.White);
     else
-        Raylib.DrawText($"CONNECTED - {client.GetPing()}ms", 12, 12, 32, Color.White);
+        Raylib.DrawText($"CONNECTED - {client.Ping}ms", 12, 12, 32, Color.White);
     Raylib.EndTextureMode();
     var rec = new Rectangle() { X = 0, Y = 0, Width = (float)target.Texture.Width, Height = (float)target.Texture.Height };
     Raylib.DrawTexturePro(target.Texture, new Rectangle(0, 0, (float)target.Texture.Width, (float)target.Texture.Height * -1), rec, new Vector2(0, 0), 0, Color.White);

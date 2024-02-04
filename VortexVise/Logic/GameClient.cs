@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -9,13 +10,14 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
-        string ip = "26.121.116.251";
-/*        string ip = "localhost";
-*/        int port = 9050;
+        string ip = "samuguel-46439.portmap.io";
+        //string ip = "localhost";
+        int port = 46439;
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public GameState LastServerState = new GameState();
         public double LastSimulatedTime = 0;
+        public long Ping = 0;
         public void Connect()
         {
 
@@ -24,6 +26,9 @@ namespace VortexVise.Logic
             {
                 _udpClient.Connect(ip, port);
                 IsConnected = true;
+                UpdatePing();
+                Thread getPingThread = new Thread(new ThreadStart(GetServerLatency));
+                getPingThread.Start();
 
             }
             catch (Exception e)
@@ -117,9 +122,21 @@ namespace VortexVise.Logic
 
             }
         }
-        public int GetPing()
+        public async void GetServerLatency()
         {
-            return (int)((Raylib.GetTime() - LastSimulatedTime) * 10);
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+
+            while (await timer.WaitForNextTickAsync())
+            {
+                //Business logic
+                UpdatePing();
+            }
+        }
+        void UpdatePing()
+        {
+            Ping ping = new Ping();
+            PingReply reply = ping.Send(ip, 1000);
+            Ping = reply.RoundtripTime;
         }
     }
 }
