@@ -103,7 +103,9 @@ namespace VortexVise.Logic
                     string returnData = Encoding.ASCII.GetString(receiveBytes);
 
                     // Uses the IPEndPoint object to determine which of these two hosts responded.
-                    LastServerState = GameState.DeserializeState(returnData);
+                    var state = GameState.DeserializeState(returnData);
+                    if (state.CurrentTime > LastSimulatedTime)
+                        LastServerState = state;
                 }
                 catch (Exception e)
                 {
