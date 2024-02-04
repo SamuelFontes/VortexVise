@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Raylib_cs;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -74,7 +75,6 @@ namespace VortexVise.Logic
             {
                 // Sends a message to the host to which you have connected.
                 string json = GameState.SerializeInput(input, playerId, time);
-                Console.WriteLine(json);
                 Byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
                 _udpClient.Send(sendBytes, sendBytes.Length);
@@ -113,6 +113,10 @@ namespace VortexVise.Logic
                 }
 
             }
+        }
+        public int GetPing()
+        {
+            return (int)((Raylib.GetTime() - LastSimulatedTime) * 10);
         }
     }
 }

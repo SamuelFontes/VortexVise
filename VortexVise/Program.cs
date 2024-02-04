@@ -15,7 +15,7 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 
 MapLogic.LoadMap("SkyArchipelago", false);
 
-RenderTexture2D target = Raylib.LoadRenderTexture(300, 300);
+RenderTexture2D target = Raylib.LoadRenderTexture(512, 128);
 
 double currentTime = Raylib.GetTime();
 var lastTimeAccumulator = currentTime;
@@ -99,20 +99,25 @@ while (!Raylib.WindowShouldClose())
     PlayerLogic.ProcessCamera(player.Position);
     GameLogic.DrawState(state);
 
+Raylib.BeginTextureMode(target);
     #region Debug
     // DEBUG
-/*    Raylib.BeginTextureMode(target);
-    Raylib.ClearBackground(Color.White);
-    Raylib.DrawFPS(128, 12);
-    Raylib.DrawText("dt: " + (int)(1 / deltaTime), 12, 12, 20, Color.Black);
-    Raylib.DrawText("player gravityForce: " + player.Velocity.Y, 12, 32, 20, Color.Black);
-    Raylib.DrawText($"player position: {(int)player.Position.X} {(int)player.Velocity.Y}", 12, 64, 20, Color.Black);
-    Raylib.DrawText($"collision velocity:{player.Velocity.X}", 12, 129, 20, Color.Black);
+    Raylib.ClearBackground(new(0,0,0,100));
+    /*    Raylib.DrawFPS(128, 12);
+        Raylib.DrawText("dt: " + (int)(1 / deltaTime), 12, 12, 20, Color.Black);
+        Raylib.DrawText("player gravityForce: " + player.Velocity.Y, 12, 32, 20, Color.Black);
+        Raylib.DrawText($"player position: {(int)player.Position.X} {(int)player.Velocity.Y}", 12, 64, 20, Color.Black);
+        Raylib.DrawText($"collision velocity:{player.Velocity.X}", 12, 129, 20, Color.Black);
+    */
+    if(!client.IsConnected)
+        Raylib.DrawText("PRESS F9 TO CONNECT", 12, 12, 32, Color.White);
+    else
+        Raylib.DrawText($"CONNECTED - {client.GetPing()}ms", 12, 12, 32, Color.White);
     Raylib.EndTextureMode();
-
     var rec = new Rectangle() { X = 0, Y = 0, Width = (float)target.Texture.Width, Height = (float)target.Texture.Height };
     Raylib.DrawTexturePro(target.Texture, new Rectangle(0, 0, (float)target.Texture.Width, (float)target.Texture.Height * -1), rec, new Vector2(0, 0), 0, Color.White);
-*/   
+    
+
     #endregion
 
     Raylib.EndDrawing();
