@@ -103,6 +103,10 @@ void ReceivePlayerPackets()
             var p = players.FirstOrDefault(_ => _.Id == playerId);
             if (p == null)
             {
+                var existingPlayer = players.Where(x => x.Sender.Address.ToString() == sender.Address.ToString()).FirstOrDefault();
+                if(existingPlayer != null)
+                    players.Remove(existingPlayer);
+
                 p = new Player()
                 {
                     Id = playerId,

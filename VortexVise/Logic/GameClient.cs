@@ -9,9 +9,8 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
-        string ip = "26.54.110.241";
-/*        string ip = "localhost";
-*/        int port = 9050;
+        string ip = "localhost";
+        int port = 9050;
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
         public GameState LastServerState = new GameState();
