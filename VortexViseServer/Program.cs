@@ -103,6 +103,19 @@ void ReceivePlayerPackets()
             var p = players.FirstOrDefault(_ => _.Id == playerId);
             if (p == null)
             {
+                var existingPlayer = players
+                    .FirstOrDefault(x => x.Sender.Address.ToString() == sender.Address.ToString());
+
+                if(existingPlayer != null)
+                {
+                    players.Remove(existingPlayer);
+                    // I suppose this is never going to be null, since the player actually entered the server that might be already a state
+                    // so let's just remove it.
+                    var playerLastState = lastState.PlayerStates
+                        .FirstOrDefault(x => x.Id == existingPlayer.Id);
+                    lastState.PlayerStates.Remove(playerLastState);
+                }
+
                 p = new Player()
                 {
                     Id = playerId,
