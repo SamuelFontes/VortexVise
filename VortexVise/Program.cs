@@ -9,6 +9,7 @@ float gravity = 1800;
 int tickrate = 64;
 int screenWidth = 1280;
 int screenHeight = 720;
+// Raylib.SetConfigFlags(ConfigFlags.VSyncHint); Vsync, feels like shit
 Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
 //Raylib.DisableCursor();

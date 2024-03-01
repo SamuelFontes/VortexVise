@@ -310,9 +310,9 @@ public static class PlayerLogic
     {
         Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.Width * playerState.Direction, (float)_texture.Height);
 
-        Rectangle destRec = new(0, 0, (float)_texture.Width, (float)_texture.Height);
+        Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, (float)_texture.Width, (float)_texture.Height);
 
-        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(playerState.Position.X * -1, playerState.Position.Y * -1), 0, Color.White); // This is inverted for some reason
+        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f), 0, Color.White); // Draw Player 
 
 
         if (Utils.Debug())
