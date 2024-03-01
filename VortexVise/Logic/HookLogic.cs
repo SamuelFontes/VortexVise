@@ -12,7 +12,7 @@ public static class HookLogic
     static float _hookPullForce = 5000;
     static float _hookPullOffset = 50;
     static float _hookShootForce = 2000;
-    static float _hookSizeLimit = 200;
+    static float _hookSizeLimit = 2000;
     static float _hookTimeout = 0.2f;
 
     public static HookState SimulateState(float gravity, float deltaTime, PlayerState playerState)
@@ -103,6 +103,15 @@ public static class HookLogic
         {
             // Shooting the hook
             state.Velocity += new Vector2(0, gravity * 0.5f * deltaTime);
+
+            Vector2 direction = Utils.GetVector2Direction(PlayerLogic.GetPlayerCenterPosition(playerState.Position), state.Position);
+            float distance = Raymath.Vector2Distance(state.Position, playerState.Position);
+
+            if (distance > _hookSizeLimit && (state.Velocity.X != 0 || state.Velocity.Y < 0))
+            {
+                state.Velocity = new(0, 0);  // Stop hook in all directions
+            }
+
             state.Position = new(state.Position.X + state.Velocity.X * deltaTime * 0.5f, state.Position.Y + state.Velocity.Y * deltaTime * 0.5f);
             state.Collision = new Rectangle(state.Position, state.Collision.Width, state.Collision.Height);
 
