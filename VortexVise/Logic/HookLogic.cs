@@ -55,38 +55,38 @@ public static class HookLogic
             else if (playerState.Input.Left && playerState.Input.Up)
             {
                 // ↖
-                state.Velocity = new(state.Velocity.X - _hookShootForce * 0.6f, state.Velocity.Y - _hookPullForce);
+                state.Velocity = new(state.Velocity.X - _hookShootForce * 0.6f, state.Velocity.Y - _hookPullForce * 0.5f);
             }
             else if (playerState.Input.Right && playerState.Input.Up)
             {
                 // ↗
-                state.Velocity = new(state.Velocity.X + _hookShootForce * 0.6f, state.Velocity.Y - _hookPullForce);
+                state.Velocity = new(state.Velocity.X + _hookShootForce * 0.6f, state.Velocity.Y - _hookPullForce * 0.5f);
             }
             else if (playerState.Input.Left)
             {
                 // ↖
-                state.Velocity = new(state.Velocity.X - _hookShootForce, state.Velocity.Y - _hookPullForce);
+                state.Velocity = new(state.Velocity.X - _hookShootForce, state.Velocity.Y - _hookPullForce * 0.5f);
             }
             else if (playerState.Input.Right)
             {
                 // ↗
-                state.Velocity = new(state.Velocity.X + _hookShootForce, state.Velocity.Y - _hookPullForce);
+                state.Velocity = new(state.Velocity.X + _hookShootForce, state.Velocity.Y - _hookPullForce * 0.5f);
             }
             else if (playerState.Input.Up)
             {
                 // ↑
-                state.Velocity = new(state.Velocity.X, state.Velocity.Y - _hookPullForce);
+                state.Velocity = new(0, state.Velocity.Y - _hookPullForce * 0.8f);
             }
             else
             {
                 // This will use the player direction
                 if (playerState.IsLookingRight())
                 {
-                    state.Velocity = new(state.Velocity.X + _hookShootForce, state.Velocity.Y - _hookPullForce);
+                    state.Velocity = new(state.Velocity.X + _hookShootForce, state.Velocity.Y - _hookPullForce * 0.5f);
                 }
                 else
                 {
-                    state.Velocity = new(state.Velocity.X - _hookShootForce, state.Velocity.Y - _hookPullForce);
+                    state.Velocity = new(state.Velocity.X - _hookShootForce, state.Velocity.Y - _hookPullForce * 0.5f);
 
                 }
             }
