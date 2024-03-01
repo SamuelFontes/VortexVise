@@ -10,11 +10,11 @@ public static class PlayerLogic
     static public Vector2 SpawnPoint;
     static private Texture2D _texture;
     static private readonly float _maxMoveSpeed = 700;
-    static private readonly float _jumpForce = 800;
+    static public readonly float _jumpForce = 800;
     static private readonly float _maxGravity = 1000;
     static private readonly float _acceleration = 1500;
     static private Camera2D _camera;
-    static private  Vector2 _collisionOffset = new(20, 12);
+    static private Vector2 _collisionOffset = new(20, 12);
 
     static public void Init(bool isServer)
     {
@@ -48,7 +48,7 @@ public static class PlayerLogic
         return direction;
     }
 
-    static public (Vector2,bool) ProcessVelocity(float deltaTime, InputState input, PlayerState lastState, float gravity)
+    static public (Vector2, bool) ProcessVelocity(float deltaTime, InputState input, PlayerState lastState, float gravity)
     {
         var velocity = lastState.Velocity;
         bool isTouchingTheGround = lastState.IsTouchingTheGround;
@@ -85,7 +85,7 @@ public static class PlayerLogic
                 velocity.Y = maxGravity;
         }
 
-        return (velocity,isTouchingTheGround);
+        return (velocity, isTouchingTheGround);
     }
 
     static public InputState GetInput()
@@ -97,9 +97,10 @@ public static class PlayerLogic
         if (Raylib.IsKeyDown(KeyboardKey.D))
             input.Right = true;
         if (Raylib.IsKeyDown(KeyboardKey.Space) || Raylib.IsKeyDown(KeyboardKey.K))
+        {
             input.Jump = true;
-        if (Raylib.IsKeyPressed(KeyboardKey.Space))
             input.CancelHook = true;
+        }
         if (Raylib.IsMouseButtonDown(MouseButton.Right) || Raylib.IsKeyDown(KeyboardKey.J))
             input.Hook = true;
         if (Raylib.IsKeyDown(KeyboardKey.W))
@@ -124,7 +125,7 @@ public static class PlayerLogic
         return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 25, 40);
     }
 
-    public static (Vector2,Vector2,Rectangle,bool) ApplyCollisions(Vector2 currentPlayerPosition, Vector2 currentPlayerVelocity, Rectangle lastPlayerCollision)
+    public static (Vector2, Vector2, Rectangle, bool) ApplyCollisions(Vector2 currentPlayerPosition, Vector2 currentPlayerVelocity, Rectangle lastPlayerCollision)
     {
         // TODO: Refactor this please this makes my brain melt
         Vector2 newPosition = currentPlayerPosition;
@@ -264,11 +265,11 @@ public static class PlayerLogic
 
             if (colided)
             {
-                return (newPosition,newVelocity,newCollision,isTouchingTheGround);
+                return (newPosition, newVelocity, newCollision, isTouchingTheGround);
             }
         }
         newCollision = endingCollision;
-        return (newPosition,newVelocity,newCollision,isTouchingTheGround);
+        return (newPosition, newVelocity, newCollision, isTouchingTheGround);
     }
 
     public static void ProcessCamera(Vector2 targetPosition)
