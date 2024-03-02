@@ -18,17 +18,17 @@ public static class HookLogic
     public static HookState SimulateState(float gravity, float deltaTime, PlayerState playerState)
     {
         var state = playerState.HookState;
-        // if (playerState.Input.CancelHook && state.IsHookAttached)
-        // {
-        //     state.IsHookReleased = false;
-        //     state.IsHookAttached = false;
-        //     state.Velocity = new(0, 0);
-        //     if(playerState.IsLookingRight())
-        //         playerState.AddVelocity(new(0,-PlayerLogic._jumpForce), deltaTime);
-        //     else
-        //         playerState.AddVelocity(new(0,-PlayerLogic._jumpForce), deltaTime);
+        if (playerState.Input.CancelHook && state.IsHookAttached)
+        {
+            state.IsHookReleased = false;
+            state.IsHookAttached = false;
+            state.Velocity = new(0, 0);
+            if (playerState.IsLookingRight())
+                playerState.AddVelocity(new(PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
+            else
+                playerState.AddVelocity(new(-PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
 
-        // }
+        }
         if (!state.IsPressingHookKey && playerState.Input.Hook)
         {
             // start Hook shoot
@@ -142,7 +142,7 @@ public static class HookLogic
             if (distance > _hookPullOffset)
             {
                 Vector2 velocity = Raymath.Vector2Scale(direction, _hookPullForce);
-                playerState.AddVelocity(velocity, deltaTime);
+                playerState.AddVelocityWithDeltaTime(velocity, deltaTime);
             }
         }
         state.IsPressingHookKey = playerState.Input.Hook;

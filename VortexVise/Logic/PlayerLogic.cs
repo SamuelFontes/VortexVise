@@ -55,14 +55,14 @@ public static class PlayerLogic
         if (input.Right)
         {
             velocity.X += _acceleration * deltaTime;
-            if (velocity.X > _maxMoveSpeed)// && gravitationalForce == 0) // TODO: fix when player is in the air it should increase the max velocity
-                velocity.X = _maxMoveSpeed;
+            if (velocity.X > _maxMoveSpeed)
+                velocity.X = Raymath.Lerp(velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime));
         }
         else if (input.Left)
         {
             velocity.X -= _acceleration * deltaTime;
-            if (velocity.X < _maxMoveSpeed * -1)// && gravitationalForce == 0)
-                velocity.X = _maxMoveSpeed * -1;
+            if (velocity.X < _maxMoveSpeed * -1)
+                velocity.X = Raymath.Lerp(velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime));
         }
         else
         {
