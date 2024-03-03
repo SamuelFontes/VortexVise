@@ -36,15 +36,11 @@ lastState.PlayerStates.Add(new(playerId));
 //gameStates.Add(lastState);
 GameState state = new GameState();
 var client = new GameClient();
+    int targetFPS = Utils.GetFPS();
 while (!Raylib.WindowShouldClose())
 {
     bool isSlowerThanTickRate = false;
-    int targetFPS = Utils.GetFPS();
-    if (targetFPS != 0)
-    {
-        double time = 1d / targetFPS;
-        Raylib.WaitTime(time);
-    }
+    Raylib.SetTargetFPS(targetFPS);
 
     currentTime = Raylib.GetTime();
     double simulationTime = currentTime - lastTime;
@@ -131,9 +127,10 @@ Raylib.BeginTextureMode(target);
 
     if (Raylib.IsKeyPressed(KeyboardKey.F8))
     {
-
         Utils.UnlockFPS();
+        targetFPS = Utils.GetFPS();
     }
+
     if (Raylib.IsKeyPressed(KeyboardKey.F9))
     {
         client.Connect();
