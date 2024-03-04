@@ -312,7 +312,10 @@ public static class PlayerLogic
 
         Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, (float)_texture.Width, (float)_texture.Height);
 
-        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f), 0, Color.White); // Draw Player 
+        var rotation = playerState.Animation.GetRotationAnimation(playerState.Velocity);
+        if(rotation != 0) destRec.Y -= 3f; // this adds a little bump to the walking animation
+
+        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f), rotation, Color.White); // Draw Player 
 
 
         if (Utils.Debug())

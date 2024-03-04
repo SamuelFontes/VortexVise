@@ -15,6 +15,7 @@ public class PlayerState
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
     public InputState Input { get; set; } = new InputState();
     public HookState HookState { get; set; } = new HookState();
+    public AnimationState Animation { get; set; } = new AnimationState();
     public PlayerState(Guid id)
     {
         Id = id;

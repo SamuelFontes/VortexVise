@@ -35,6 +35,8 @@ namespace VortexVise.Logic
 
                 (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
 
+                currentPlayerState.Animation = lastPlayerState.Animation;
+
                 state.PlayerStates.Add(currentPlayerState);
             }
 
