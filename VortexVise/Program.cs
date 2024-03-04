@@ -111,7 +111,7 @@ Raylib.BeginTextureMode(target);
     else
         Raylib.DrawText($"CONNECTED - {client.Ping}ms", 12, 12, 32, Color.White);
     Raylib.DrawFPS(12,46);
-    Raylib.DrawText(Utils.GetDebugString(), 12, 58, 32, Color.White);
+    Raylib.DrawText(Utils.GetDebugString(), 12, 64, 16, Color.White);
     Raylib.EndTextureMode();
     var rec = new Rectangle() { X = 0, Y = 0, Width = (float)target.Texture.Width, Height = (float)target.Texture.Height };
     Raylib.DrawTexturePro(target.Texture, new Rectangle(0, 0, (float)target.Texture.Width, (float)target.Texture.Height * -1), rec, new Vector2(0, 0), 0, Color.White);

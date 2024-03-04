@@ -10,8 +10,8 @@ namespace VortexVise.Logic
 {
     public class GameClient
     {
-        string ip = "samuguel-46439.portmap.io";
-        //string ip = "localhost";
+        //string ip = "samuguel-46439.portmap.io";
+        string ip = "localhost";
         int port = 46439;
         public bool IsConnected = false;
         private UdpClient _udpClient = new UdpClient(11000);
