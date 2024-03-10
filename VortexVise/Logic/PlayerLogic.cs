@@ -10,7 +10,7 @@ public static class PlayerLogic
     static public Vector2 SpawnPoint;
     static private Texture2D _texture;
     static private readonly float _maxMoveSpeed = 350;
-    static public readonly float _jumpForce = 500;
+    static public readonly float _jumpForce = 400;
     static private readonly float _maxGravity = 1000;
     static private readonly float _acceleration = 750;
     static private Camera2D _camera;
@@ -21,18 +21,18 @@ public static class PlayerLogic
         if (!isServer)
         {
             _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-            HookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook_head.png");
+            HookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
         }
         else
         {
             _texture = new Texture2D() { Width = 16, Height = 16 }; // Player will always be this size
-            HookLogic._texture = new Texture2D() { Width = 32, Height = 32 }; // if there are diffent kinds of hook change it here
+            HookLogic._texture = new Texture2D() { Width = 8, Height = 8 }; // if there are diffent kinds of hook change it here
 
         }
-        SpawnPoint = new Vector2(MapLogic._mapTexture.Width / 2.0f, MapLogic._mapTexture.Height / 2.0f);
-        var cameraView = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f);
+        SpawnPoint = new Vector2(MapLogic._mapTexture.Width * 0.5f, MapLogic._mapTexture.Height * 0.5f);
+        var cameraView = new Vector2(Raylib.GetScreenWidth() * 0.5f, Raylib.GetScreenHeight() * 0.5f);
 
-        _camera = new Camera2D(cameraView, new Vector2(0, 0), 0, 2);
+        _camera = new Camera2D(cameraView, new Vector2(0, 0), 0, 1);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {
@@ -97,10 +97,9 @@ public static class PlayerLogic
         if (Raylib.IsKeyDown(KeyboardKey.D))
             input.Right = true;
         if (Raylib.IsKeyDown(KeyboardKey.Space) || Raylib.IsKeyDown(KeyboardKey.K))
-        {
             input.Jump = true;
+        if (Raylib.IsKeyPressed(KeyboardKey.Space) || Raylib.IsKeyPressed(KeyboardKey.K))
             input.CancelHook = true;
-        }
         if (Raylib.IsMouseButtonDown(MouseButton.Right) || Raylib.IsKeyDown(KeyboardKey.J))
             input.Hook = true;
         if (Raylib.IsKeyDown(KeyboardKey.W))
@@ -144,7 +143,7 @@ public static class PlayerLogic
         else if (endingCollision.Y > mapSize.Y)
         {
             // TODO: Kill the player
-            newPosition = new(MapLogic.GetMapSize().X / 2, MapLogic.GetMapSize().Y / 2);
+            newPosition = new(MapLogic.GetMapSize().X * 0.5f, MapLogic.GetMapSize().Y * 0.5f);
             newVelocity.Y = 0;
             newVelocity.X = 0;
 
@@ -277,15 +276,15 @@ public static class PlayerLogic
         Vector2 target = new(targetPosition.X, targetPosition.Y);
 
         // Make it stay inside the map
-        if (target.X - Raylib.GetScreenWidth() / 4 <= 0)
-            target.X = Raylib.GetScreenWidth() / 4;
-        else if (target.X + Raylib.GetScreenWidth() / 4 >= MapLogic.GetMapSize().X)
-            target.X = MapLogic.GetMapSize().X - Raylib.GetScreenWidth() / 4;
+        if (target.X - Raylib.GetScreenWidth() * 0.5f <= 0)
+            target.X = Raylib.GetScreenWidth() * 0.5f;
+        else if (target.X + Raylib.GetScreenWidth() * 0.5f >= MapLogic.GetMapSize().X)
+            target.X = MapLogic.GetMapSize().X - Raylib.GetScreenWidth() * 0.5f;
 
-        if (target.Y - Raylib.GetScreenHeight() / 4 <= 0)
-            target.Y = Raylib.GetScreenHeight() / 4;
-        else if (target.Y + Raylib.GetScreenHeight() / 4 >= MapLogic.GetMapSize().Y)
-            target.Y = MapLogic.GetMapSize().Y - Raylib.GetScreenHeight() / 4;
+        if (target.Y - Raylib.GetScreenHeight() * 0.5f <= 0)
+            target.Y = Raylib.GetScreenHeight() * 0.5f;
+        else if (target.Y + Raylib.GetScreenHeight() * 0.5f >= MapLogic.GetMapSize().Y)
+            target.Y = MapLogic.GetMapSize().Y - Raylib.GetScreenHeight() * 0.5f;
 
         // Make camera smooth
         // FIXME: fix camera jerkness when almost hitting the target
@@ -299,8 +298,8 @@ public static class PlayerLogic
     {
 
         Vector2 position = new(playerPosition.X, playerPosition.Y);
-        position.X += _texture.Width / 2;
-        position.Y += _texture.Height / 2;
+        position.X += _texture.Width * 0.5f;
+        position.Y += _texture.Height * 0.5f;
         return position;
     }
 

@@ -26,7 +26,7 @@ public class AnimationState
         {
             if (State == 0)
             {
-                Rotation = 9;
+                Rotation = 8;
                 State = 1;
             }
             else if (State == 1)
@@ -36,7 +36,7 @@ public class AnimationState
             }
             else if (State == 2)
             {
-                Rotation = -9;
+                Rotation = -8;
                 State = 3;
             }
             else if (State == 3)

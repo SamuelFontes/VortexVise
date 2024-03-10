@@ -32,7 +32,7 @@ public static class MapLogic
         _collisions.Add(new Rectangle(305, 501, 71, 16));
         _collisions.Add(new Rectangle(361, 297, 74, 16));
         _collisions.Add(new Rectangle(442, 308, 135, 16));
-        _collisions.Add(new Rectangle(557, 149, 252, 16));
+        _collisions.Add(new Rectangle(570, 149, 252, 16));
         _collisions.Add(new Rectangle(745, 352, 226, 16));
         _collisions.Add(new Rectangle(670, 456, 347, 16));
         _collisions.Add(new Rectangle(415, 690, 258, 16));

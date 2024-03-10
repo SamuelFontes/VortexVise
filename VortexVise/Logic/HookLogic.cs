@@ -9,9 +9,9 @@ public static class HookLogic
 {
     public static int HookSize = 8;
     public static Texture2D _texture;
-    static float _hookPullForce = 4000;
-    static float _hookPullOffset = 25;
-    static float _hookShootForce = 1500;
+    static float _hookPullForce = 3000;
+    static float _hookPullOffset = 64;
+    static float _hookShootForce = 1000;
     static float _hookSizeLimit = 1000;
     static float _hookTimeout = 0.2f;
 
@@ -165,8 +165,8 @@ public static class HookLogic
     {
         if (playerState.HookState.IsHookReleased)
         {
-            Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 8, playerState.HookState.Position.Y + 8), 2, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X - 8, (int)playerState.HookState.Position.Y - 10, Color.White);
+            Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
+            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Color.White);
 
             if (Utils.Debug())
                 Raylib.DrawRectangleRec(playerState.HookState.Collision, Color.Green); // Debug
