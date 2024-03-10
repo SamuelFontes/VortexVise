@@ -11,8 +11,8 @@ public enum GameMode
     Survival                    // Rogue like survival mode
 };
 
-// GameScreen, defines what screen the game is in 
-public enum GameScreen
+// GameScreen, defines what scene the game is in 
+public enum GameScene
 {
     UNKNOWN = -1,               // Used for transitioning screens
     LOGO = 0,                   // Game and library logo

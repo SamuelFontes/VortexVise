@@ -1,9 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
-using VortexVise.States;
-using VortexVise.Utilities;
 
-namespace VortexVise.GameObjects;
+namespace VortexVise;
 
 public static class HookLogic
 {

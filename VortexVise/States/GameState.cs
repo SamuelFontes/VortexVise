@@ -1,8 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Numerics;
-using VortexVise.GameObjects;
 
-namespace VortexVise.States;
+namespace VortexVise;
 
 public class GameState
 {

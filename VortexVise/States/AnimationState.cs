@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 using Raylib_cs;
-using VortexVise.States;
-using VortexVise.Utilities;
 
 namespace VortexVise;
 

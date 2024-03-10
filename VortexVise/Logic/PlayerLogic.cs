@@ -1,9 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
-using VortexVise.States;
-using VortexVise.Utilities;
 
-namespace VortexVise.GameObjects;
+namespace VortexVise;
 
 public static class PlayerLogic
 {
@@ -30,7 +28,7 @@ public static class PlayerLogic
 
         }
         SpawnPoint = new Vector2(MapLogic._mapTexture.Width * 0.5f, MapLogic._mapTexture.Height * 0.5f);
-        var cameraView = new Vector2(Raylib.GetScreenWidth() * 0.5f, Raylib.GetScreenHeight() * 0.5f);
+        var cameraView = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
         _camera = new Camera2D(cameraView, new Vector2(0, 0), 0, 1);
     }
@@ -276,15 +274,15 @@ public static class PlayerLogic
         Vector2 target = new(targetPosition.X, targetPosition.Y);
 
         // Make it stay inside the map
-        if (target.X - Raylib.GetScreenWidth() * 0.5f <= 0)
-            target.X = Raylib.GetScreenWidth() * 0.5f;
-        else if (target.X + Raylib.GetScreenWidth() * 0.5f >= MapLogic.GetMapSize().X)
-            target.X = MapLogic.GetMapSize().X - Raylib.GetScreenWidth() * 0.5f;
+        if (target.X - GameCore.GameScreenWidth * 0.5f <= 0)
+            target.X = GameCore.GameScreenWidth * 0.5f;
+        else if (target.X + GameCore.GameScreenWidth * 0.5f >= MapLogic.GetMapSize().X)
+            target.X = MapLogic.GetMapSize().X - GameCore.GameScreenWidth * 0.5f;
 
-        if (target.Y - Raylib.GetScreenHeight() * 0.5f <= 0)
-            target.Y = Raylib.GetScreenHeight() * 0.5f;
-        else if (target.Y + Raylib.GetScreenHeight() * 0.5f >= MapLogic.GetMapSize().Y)
-            target.Y = MapLogic.GetMapSize().Y - Raylib.GetScreenHeight() * 0.5f;
+        if (target.Y - GameCore.GameScreenHeight * 0.5f <= 0)
+            target.Y = GameCore.GameScreenHeight * 0.5f;
+        else if (target.Y + GameCore.GameScreenHeight * 0.5f >= MapLogic.GetMapSize().Y)
+            target.Y = MapLogic.GetMapSize().Y - GameCore.GameScreenHeight * 0.5f;
 
         // Make camera smooth
         // FIXME: fix camera jerkness when almost hitting the target
