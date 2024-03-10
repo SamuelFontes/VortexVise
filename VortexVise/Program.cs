@@ -19,7 +19,6 @@ using VortexVise.Utilities;
 Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
 Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);
-
 float gravity = 1000;
 
 MapLogic.LoadMap("SkyArchipelago", false);

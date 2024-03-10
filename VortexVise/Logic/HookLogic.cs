@@ -35,7 +35,7 @@ public static class HookLogic
             state.IsHookReleased = true;
             state.IsHookAttached = false;
             state.Position = PlayerLogic.GetPlayerCenterPosition(playerState.Position);
-            state.Position = new(state.Position.X,playerState.Position.Y);
+            state.Position = new(state.Position.X - _texture.Width * 0.5f, playerState.Position.Y);
             state.Collision = new Rectangle(state.Position, new(HookSize, HookSize));
 
             // Reset velocity
@@ -95,6 +95,7 @@ public static class HookLogic
 
                 }
             }
+            state.Velocity = new(state.Velocity.X+playerState.Velocity.X, state.Velocity.Y);
         }
 
         else if ((state.IsPressingHookKey && !playerState.Input.Hook))
