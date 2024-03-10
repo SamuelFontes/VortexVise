@@ -25,25 +25,25 @@ public static class MapLogic
 
         // TODO: Load from a json or some shit like that
         _collisions.Clear();
-        _collisions.Add(new Rectangle(170, 687, 491, 32));
-        _collisions.Add(new Rectangle(27, 896, 76, 32));
-        _collisions.Add(new Rectangle(109, 932, 359, 32));
-        _collisions.Add(new Rectangle(479, 922, 133, 32));
-        _collisions.Add(new Rectangle(611, 1003, 143, 32));
-        _collisions.Add(new Rectangle(723, 594, 149, 32));
-        _collisions.Add(new Rectangle(885, 616, 270, 32));
-        _collisions.Add(new Rectangle(1154, 298, 504, 33));
-        _collisions.Add(new Rectangle(1491, 705, 453, 36));
-        _collisions.Add(new Rectangle(1335, 912, 694, 39));
-        _collisions.Add(new Rectangle(830, 1380, 516, 33));
-        _collisions.Add(new Rectangle(380, 1392, 127, 32));
-        _collisions.Add(new Rectangle(504, 1456, 78, 32));
-        _collisions.Add(new Rectangle(222, 1626, 563, 32));
-        _collisions.Add(new Rectangle(674, 1711, 122, 32));
-        _collisions.Add(new Rectangle(1542, 1365, 184, 32));
-        _collisions.Add(new Rectangle(1425, 1612, 259, 32));
-        _collisions.Add(new Rectangle(1687, 1639, 173, 32));
-        _collisions.Add(new Rectangle(1219, 1708, 267, 34));
+        _collisions.Add(new Rectangle(85, 343, 245, 16));
+        _collisions.Add(new Rectangle(13, 448, 38, 16));
+        _collisions.Add(new Rectangle(54, 466, 179, 16));
+        _collisions.Add(new Rectangle(240, 460, 66, 16));
+        _collisions.Add(new Rectangle(305, 501, 71, 16));
+        _collisions.Add(new Rectangle(361, 297, 74, 16));
+        _collisions.Add(new Rectangle(442, 308, 135, 16));
+        _collisions.Add(new Rectangle(557, 149, 252, 16));
+        _collisions.Add(new Rectangle(745, 352, 226, 16));
+        _collisions.Add(new Rectangle(670, 456, 347, 16));
+        _collisions.Add(new Rectangle(415, 690, 258, 16));
+        _collisions.Add(new Rectangle(190, 696, 64, 16));
+        _collisions.Add(new Rectangle(252, 728, 39, 16));
+        _collisions.Add(new Rectangle(111, 813, 281, 16));
+        _collisions.Add(new Rectangle(337, 855, 61, 16));
+        _collisions.Add(new Rectangle(771, 682, 92, 16));
+        _collisions.Add(new Rectangle(712, 806, 129, 16));
+        _collisions.Add(new Rectangle(843, 819, 85, 16));
+        _collisions.Add(new Rectangle(609, 854, 128, 16));
     }
 
     public static void Draw()

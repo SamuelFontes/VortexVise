@@ -9,12 +9,12 @@ public static class PlayerLogic
 {
     static public Vector2 SpawnPoint;
     static private Texture2D _texture;
-    static private readonly float _maxMoveSpeed = 700;
-    static public readonly float _jumpForce = 800;
+    static private readonly float _maxMoveSpeed = 350;
+    static public readonly float _jumpForce = 500;
     static private readonly float _maxGravity = 1000;
-    static private readonly float _acceleration = 1500;
+    static private readonly float _acceleration = 750;
     static private Camera2D _camera;
-    static private Vector2 _collisionOffset = new(20, 12);
+    static private Vector2 _collisionOffset = new(10, 6);
 
     static public void Init(bool isServer)
     {
@@ -25,14 +25,14 @@ public static class PlayerLogic
         }
         else
         {
-            _texture = new Texture2D() { Width = 64, Height = 64 }; // Player will always be this size
+            _texture = new Texture2D() { Width = 16, Height = 16 }; // Player will always be this size
             HookLogic._texture = new Texture2D() { Width = 32, Height = 32 }; // if there are diffent kinds of hook change it here
 
         }
         SpawnPoint = new Vector2(MapLogic._mapTexture.Width / 2.0f, MapLogic._mapTexture.Height / 2.0f);
         var cameraView = new Vector2(Raylib.GetScreenWidth() / 2.0f, Raylib.GetScreenHeight() / 2.0f);
 
-        _camera = new Camera2D(cameraView, cameraView, 0, 1);
+        _camera = new Camera2D(cameraView, new Vector2(0, 0), 0, 2);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {
@@ -122,7 +122,7 @@ public static class PlayerLogic
 
     public static Rectangle GetPlayerCollision(Vector2 position)
     {
-        return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 25, 40);
+        return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 12, 20);
     }
 
     public static (Vector2, Vector2, Rectangle, bool) ApplyCollisions(Vector2 currentPlayerPosition, Vector2 currentPlayerVelocity, Rectangle lastPlayerCollision)
@@ -277,15 +277,15 @@ public static class PlayerLogic
         Vector2 target = new(targetPosition.X, targetPosition.Y);
 
         // Make it stay inside the map
-        if (target.X - Raylib.GetScreenWidth() / 2 <= 0)
-            target.X = Raylib.GetScreenWidth() / 2;
-        else if (target.X + Raylib.GetScreenWidth() / 2 >= MapLogic.GetMapSize().X)
-            target.X = MapLogic.GetMapSize().X - Raylib.GetScreenWidth() / 2;
+        if (target.X - Raylib.GetScreenWidth() / 4 <= 0)
+            target.X = Raylib.GetScreenWidth() / 4;
+        else if (target.X + Raylib.GetScreenWidth() / 4 >= MapLogic.GetMapSize().X)
+            target.X = MapLogic.GetMapSize().X - Raylib.GetScreenWidth() / 4;
 
-        if (target.Y - Raylib.GetScreenHeight() / 2 <= 0)
-            target.Y = Raylib.GetScreenHeight() / 2;
-        else if (target.Y + Raylib.GetScreenHeight() / 2 >= MapLogic.GetMapSize().Y)
-            target.Y = MapLogic.GetMapSize().Y - Raylib.GetScreenHeight() / 2;
+        if (target.Y - Raylib.GetScreenHeight() / 4 <= 0)
+            target.Y = Raylib.GetScreenHeight() / 4;
+        else if (target.Y + Raylib.GetScreenHeight() / 4 >= MapLogic.GetMapSize().Y)
+            target.Y = MapLogic.GetMapSize().Y - Raylib.GetScreenHeight() / 4;
 
         // Make camera smooth
         // FIXME: fix camera jerkness when almost hitting the target
@@ -313,7 +313,7 @@ public static class PlayerLogic
         Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, (float)_texture.Width, (float)_texture.Height);
 
         var rotation = playerState.Animation.GetAnimationRotation(playerState.Velocity, playerState.Input);
-        if (rotation != 0) destRec.Y -= 3f; // this adds a little bump to the walking animation
+        if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
         Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f), rotation, Color.White); // Draw Player 
 

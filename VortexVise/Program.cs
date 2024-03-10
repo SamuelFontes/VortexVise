@@ -7,8 +7,8 @@ using VortexVise.Utilities;
 
 float gravity = 1800;
 int tickrate = 64;
-int screenWidth = 1280;
-int screenHeight = 720;
+int screenWidth = 1920;
+int screenHeight = 1080;
 // Raylib.SetConfigFlags(ConfigFlags.VSyncHint); Vsync, feels like shit
 Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise");
 //Raylib.ToggleFullscreen();
@@ -36,6 +36,7 @@ lastState.PlayerStates.Add(new(playerId));
 //gameStates.Add(lastState);
 GameState state = new GameState();
 var client = new GameClient();
+//Raylib.ToggleFullscreen();
     int targetFPS = Utils.GetFPS();
 while (!Raylib.WindowShouldClose())
 {

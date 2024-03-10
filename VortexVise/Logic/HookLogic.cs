@@ -7,12 +7,12 @@ namespace VortexVise.GameObjects;
 
 public static class HookLogic
 {
-    public static int HookSize = 16;
+    public static int HookSize = 8;
     public static Texture2D _texture;
-    static float _hookPullForce = 5000;
-    static float _hookPullOffset = 50;
-    static float _hookShootForce = 2000;
-    static float _hookSizeLimit = 2000;
+    static float _hookPullForce = 4000;
+    static float _hookPullOffset = 25;
+    static float _hookShootForce = 1500;
+    static float _hookSizeLimit = 1000;
     static float _hookTimeout = 0.2f;
 
     public static HookState SimulateState(float gravity, float deltaTime, PlayerState playerState)
@@ -35,6 +35,7 @@ public static class HookLogic
             state.IsHookReleased = true;
             state.IsHookAttached = false;
             state.Position = PlayerLogic.GetPlayerCenterPosition(playerState.Position);
+            state.Position = new(state.Position.X,playerState.Position.Y);
             state.Collision = new Rectangle(state.Position, new(HookSize, HookSize));
 
             // Reset velocity
