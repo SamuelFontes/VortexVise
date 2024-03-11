@@ -33,7 +33,7 @@ public static class PlayerLogic
         SpawnPoint = new Vector2(MapLogic._mapTexture.Width * 0.5f, MapLogic._mapTexture.Height * 0.5f);
         var cameraView = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
-        _camera = new Camera2D(cameraView, new Vector2(0, 0), 0, 1);
+        _camera = new Camera2D(cameraView, cameraView, 0, 1);
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {

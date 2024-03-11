@@ -122,7 +122,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     GameUserInterface.DrawUserInterface();
     Raylib.DrawText(Utils.DebugText, 32, 32, 32, Color.White);
-    Raylib.DrawFPS(500, 32);
+    //Raylib.DrawFPS(500, 32);
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
