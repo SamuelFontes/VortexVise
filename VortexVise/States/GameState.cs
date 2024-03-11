@@ -1,5 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using System.Numerics;
+﻿using System.Numerics;
+using System.Text.RegularExpressions;
 using VortexVise.Logic;
 
 namespace VortexVise.States;
