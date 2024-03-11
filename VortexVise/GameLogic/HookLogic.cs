@@ -1,7 +1,9 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.States;
+using VortexVise.Utilities;
 
-namespace VortexVise;
+namespace VortexVise.Logic;
 
 public static class HookLogic
 {
@@ -93,10 +95,10 @@ public static class HookLogic
 
                 }
             }
-            state.Velocity = new(state.Velocity.X+playerState.Velocity.X, state.Velocity.Y);
+            state.Velocity = new(state.Velocity.X + playerState.Velocity.X, state.Velocity.Y);
         }
 
-        else if ((state.IsPressingHookKey && !playerState.Input.Hook))
+        else if (state.IsPressingHookKey && !playerState.Input.Hook)
         {
             // Hook retracted
             state.IsHookReleased = false;

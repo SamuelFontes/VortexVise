@@ -1,14 +1,14 @@
 ﻿using System.Numerics;
 using Raylib_cs;
 
-namespace VortexVise;
+namespace VortexVise.States;
 
 public class AnimationState
 {
     public float AnimationTimer = 0f;
     public int State = 0;
     public int Rotation = 0;
-    Vector2 Deformation = new Vector2(1,1);
+    Vector2 Deformation = new Vector2(1, 1);
 
     public int GetAnimationRotation(Vector2 vVelocity, InputState input)
     {

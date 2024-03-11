@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
 using System.Numerics;
 
-namespace VortexVise;
+namespace VortexVise.States;
 
 public class HookState
 {

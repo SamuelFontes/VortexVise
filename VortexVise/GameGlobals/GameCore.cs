@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
 using VortexVise.Scenes;
 
-namespace VortexVise;
+namespace VortexVise.GameGlobals;
 
 
 public static class GameCore

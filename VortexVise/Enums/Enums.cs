@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------------
 // Enumerators Definition
 //----------------------------------------------------------------------------------
-namespace VortexVise;
+namespace VortexVise.Enums;
 
 // GameMode, defines the rules for the current match
 public enum GameMode

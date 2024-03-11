@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using VortexVise.GameObjects;
 using VortexVise.Logic;
 using VortexVise.States;
 

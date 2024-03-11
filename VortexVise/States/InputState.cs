@@ -1,4 +1,4 @@
-﻿namespace VortexVise;
+﻿namespace VortexVise.States;
 
 public class InputState
 {

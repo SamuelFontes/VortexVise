@@ -1,7 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using System.Numerics;
+using VortexVise.Logic;
 
-namespace VortexVise;
+namespace VortexVise.States;
 
 public class GameState
 {
@@ -34,8 +35,8 @@ public class GameState
     public static GameState DeserializeState(string serializedState)
     {
         double a;
-        if (double.TryParse("3.3", out a)) 
-            if(a == 3.3d)
+        if (double.TryParse("3.3", out a))
+            if (a == 3.3d)
                 serializedState = serializedState.Replace(",", ".");
         // Do you even regex bro?
         var state = new GameState();
@@ -54,16 +55,16 @@ public class GameState
                 player.Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|VX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|VY))[\s\S]*?(?=\|)").Value));
                 player.Collision = PlayerLogic.GetPlayerCollision(player.Position);
                 player.Direction = Convert.ToInt32(Regex.Match(match.Value, @"(?<=(\|D))[\s\S]*?(?=\|)").Value);
-                player.IsTouchingTheGround = Regex.Match(match.Value,@"(?<=(\|TG))[\s\S]*?(?=\|)").Value == "1";
+                player.IsTouchingTheGround = Regex.Match(match.Value, @"(?<=(\|TG))[\s\S]*?(?=\|)").Value == "1";
                 player.Input = new InputState()
                 {
-                    Left = Regex.Match(match.Value,@"(?<=(\|IL))[\s\S]*?(?=\|)").Value == "1",
-                    Right = Regex.Match(match.Value,@"(?<=(\|IR))[\s\S]*?(?=\|)").Value == "1",
-                    Up = Regex.Match(match.Value,@"(?<=(\|IU))[\s\S]*?(?=\|)").Value == "1",
-                    Down = Regex.Match(match.Value,@"(?<=(\|IPD))[\s\S]*?(?=\|)").Value == "1",
-                    Jump = Regex.Match(match.Value,@"(?<=(\|IJ))[\s\S]*?(?=\|)").Value == "1",
-                    Hook = Regex.Match(match.Value,@"(?<=(\|IH))[\s\S]*?(?=\|)").Value == "1",
-                    CancelHook = Regex.Match(match.Value,@"(?<=(\|IC))[\s\S]*?(?=\|)").Value == "1",
+                    Left = Regex.Match(match.Value, @"(?<=(\|IL))[\s\S]*?(?=\|)").Value == "1",
+                    Right = Regex.Match(match.Value, @"(?<=(\|IR))[\s\S]*?(?=\|)").Value == "1",
+                    Up = Regex.Match(match.Value, @"(?<=(\|IU))[\s\S]*?(?=\|)").Value == "1",
+                    Down = Regex.Match(match.Value, @"(?<=(\|IPD))[\s\S]*?(?=\|)").Value == "1",
+                    Jump = Regex.Match(match.Value, @"(?<=(\|IJ))[\s\S]*?(?=\|)").Value == "1",
+                    Hook = Regex.Match(match.Value, @"(?<=(\|IH))[\s\S]*?(?=\|)").Value == "1",
+                    CancelHook = Regex.Match(match.Value, @"(?<=(\|IC))[\s\S]*?(?=\|)").Value == "1",
                 };
                 player.HookState = new HookState()
                 {
@@ -103,7 +104,7 @@ public class GameState
 
         return serializedInput;
     }
-    public static (Guid,InputState,double) DeserializeInput(string serializedInput)
+    public static (Guid, InputState, double) DeserializeInput(string serializedInput)
     {
         Guid playerId = Guid.Empty;
         var input = new InputState();
@@ -115,13 +116,13 @@ public class GameState
             playerId = Guid.Parse(Regex.Match(serializedInput, @"(?<=(\|ID))[\s\S]*?(?=\|)").Value);
             input = new InputState()
             {
-                Left = Regex.Match(serializedInput,@"(?<=(\|IL))[\s\S]*?(?=\|)").Value == "1",
-                Right = Regex.Match(serializedInput,@"(?<=(\|IR))[\s\S]*?(?=\|)").Value == "1",
-                Up = Regex.Match(serializedInput,@"(?<=(\|IU))[\s\S]*?(?=\|)").Value == "1",
-                Down = Regex.Match(serializedInput,@"(?<=(\|IPD))[\s\S]*?(?=\|)").Value == "1",
-                Jump = Regex.Match(serializedInput,@"(?<=(\|IJ))[\s\S]*?(?=\|)").Value == "1",
-                Hook = Regex.Match(serializedInput,@"(?<=(\|IH))[\s\S]*?(?=\|)").Value == "1",
-                CancelHook = Regex.Match(serializedInput,@"(?<=(\|IC))[\s\S]*?(?=\|)").Value == "1",
+                Left = Regex.Match(serializedInput, @"(?<=(\|IL))[\s\S]*?(?=\|)").Value == "1",
+                Right = Regex.Match(serializedInput, @"(?<=(\|IR))[\s\S]*?(?=\|)").Value == "1",
+                Up = Regex.Match(serializedInput, @"(?<=(\|IU))[\s\S]*?(?=\|)").Value == "1",
+                Down = Regex.Match(serializedInput, @"(?<=(\|IPD))[\s\S]*?(?=\|)").Value == "1",
+                Jump = Regex.Match(serializedInput, @"(?<=(\|IJ))[\s\S]*?(?=\|)").Value == "1",
+                Hook = Regex.Match(serializedInput, @"(?<=(\|IH))[\s\S]*?(?=\|)").Value == "1",
+                CancelHook = Regex.Match(serializedInput, @"(?<=(\|IC))[\s\S]*?(?=\|)").Value == "1",
             };
 
         }
@@ -131,7 +132,7 @@ public class GameState
             Console.WriteLine(e.Message);
         }
 
-        return (playerId,input,time);
+        return (playerId, input, time);
     }
 
     public void ApproximateState(GameState localState, Guid playerId)
@@ -146,9 +147,9 @@ public class GameState
         Vector2 difference = receivedPlayerState.Position - lastLocalPlayerState.Position;
         float distance = difference.Length();
 
-        if ( distance > 2.0f )
+        if (distance > 2.0f)
             lastLocalPlayerState.Position = receivedPlayerState.Position;
-        else if ( distance > 0.1 )
+        else if (distance > 0.1)
             lastLocalPlayerState.Position += difference * 0.1f;
 
         receivedPlayerState.Position = lastLocalPlayerState.Position;

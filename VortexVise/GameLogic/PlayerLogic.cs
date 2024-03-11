@@ -1,7 +1,10 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.GameGlobals;
+using VortexVise.States;
+using VortexVise.Utilities;
 
-namespace VortexVise;
+namespace VortexVise.Logic;
 
 public static class PlayerLogic
 {
@@ -212,7 +215,7 @@ public static class PlayerLogic
                             // Feet collision
                             newPosition.Y = collision.Y - _texture.Height + _collisionOffset.Y;
                             newCollision = playerCollision;
-                            newCollision.Y = (collision.Y - playerCollision.Height);
+                            newCollision.Y = collision.Y - playerCollision.Height;
                             newVelocity.Y = 0;
                             isTouchingTheGround = true;
                             colided = true;
@@ -305,9 +308,9 @@ public static class PlayerLogic
 
     public static void DrawState(PlayerState playerState)
     {
-        Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.Width * playerState.Direction, (float)_texture.Height);
+        Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.Width * playerState.Direction, _texture.Height);
 
-        Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, (float)_texture.Width, (float)_texture.Height);
+        Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, _texture.Width, _texture.Height);
 
         var rotation = playerState.Animation.GetAnimationRotation(playerState.Velocity, playerState.Input);
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation

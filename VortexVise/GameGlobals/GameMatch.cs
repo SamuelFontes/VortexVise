@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VortexVise.Enums;
 
-namespace VortexVise;
+namespace VortexVise.GameGlobals;
 public static class GameMatch
 {
     public static GameMode CurrentGameMode { get; set; } = GameMode.DeathMatch;

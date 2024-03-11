@@ -1,5 +1,6 @@
-﻿
-namespace VortexVise;
+﻿using VortexVise.States;
+
+namespace VortexVise.Logic;
 
 public static class GameLogic
 {
@@ -18,10 +19,11 @@ public static class GameLogic
             if (lastPlayerState.Id == playerId)
             {
                 //if(isNetworkFrame)
-                    currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
-                //else 
-                    //currentPlayerState.Input = lastPlayerState.Input;
-            }else
+                currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
+                                                                   //else 
+                                                                   //currentPlayerState.Input = lastPlayerState.Input;
+            }
+            else
             {
                 currentPlayerState.Input = lastPlayerState.Input;
             }
@@ -29,7 +31,7 @@ public static class GameLogic
             (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);
             currentPlayerState.HookState = lastPlayerState.HookState;
             currentPlayerState.Position = PlayerLogic.ProcessPosition(deltaTime, currentPlayerState, lastPlayerState.Position);
-            currentPlayerState.HookState = HookLogic.SimulateState(state.Gravity,deltaTime, currentPlayerState);
+            currentPlayerState.HookState = HookLogic.SimulateState(state.Gravity, deltaTime, currentPlayerState);
 
             (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
 
@@ -44,7 +46,7 @@ public static class GameLogic
     {
         // All rendering logic should go here
         MapLogic.Draw();
-        foreach(var playerState in state.PlayerStates)
+        foreach (var playerState in state.PlayerStates)
         {
             HookLogic.DrawState(playerState);
             PlayerLogic.DrawState(playerState);

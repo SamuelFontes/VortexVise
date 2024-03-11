@@ -6,9 +6,9 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VortexVise;
+namespace VortexVise.GameGlobals;
 
-static internal class UserInterface
+static internal class GameUserInterface
 {
     public static Texture2D Cursor { get; private set; }
     public static Vector2 CursorPosition { get; private set; }
@@ -28,9 +28,9 @@ static internal class UserInterface
         //---------------------------------------------------------
         Vector2 newCursorPosition = Raylib.GetMousePosition();
         Vector2 virtualMouse = new();
-        virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - (GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f) / GameCore.GameScreenScale;
-        virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - (GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f) / GameCore.GameScreenScale;
-        virtualMouse = Raymath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2((float)GameCore.GameScreenWidth, (float)GameCore.GameScreenHeight));
+        virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - GameCore.GameScreenWidth * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
+        virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - GameCore.GameScreenHeight * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
+        virtualMouse = Raymath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
         if (newCursorPosition.X != CursorPosition.X || newCursorPosition.Y != CursorPosition.Y)

@@ -1,7 +1,8 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.Logic;
 
-namespace VortexVise;
+namespace VortexVise.States;
 
 public class PlayerState
 {

@@ -1,7 +1,8 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.Utilities;
 
-namespace VortexVise;
+namespace VortexVise.Logic;
 
 public static class MapLogic
 {
@@ -19,7 +20,7 @@ public static class MapLogic
         if (!isServer)
             _mapTexture = Raylib.LoadTexture(mapFolder + mapName + ".png");
         else
-            _mapTexture = new Texture2D() { Height = 2048, Width = 2048 } ; // TODO: Get the map size from some place
+            _mapTexture = new Texture2D() { Height = 2048, Width = 2048 }; // TODO: Get the map size from some place
 
 
         // TODO: Load from a json or some shit like that
@@ -65,7 +66,7 @@ public static class MapLogic
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2((float)_mapTexture.Width, (float)_mapTexture.Height);
+        return new Vector2(_mapTexture.Width, _mapTexture.Height);
     }
 
 }

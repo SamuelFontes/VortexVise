@@ -8,8 +8,10 @@
 
 using Raylib_cs;
 using System.Numerics;
-using VortexVise;
+using VortexVise.Enums;
+using VortexVise.GameGlobals;
 using VortexVise.Scenes;
+using VortexVise.Utilities;
 
 // Initialization
 //---------------------------------------------------------
@@ -33,7 +35,7 @@ Raylib.PlayMusicStream(music);
 // Setup and init first screen
 GameSceneManager.CurrentScene = GameScene.GAMEPLAY;
 GameplayScene.InitGameplayScene();
-UserInterface.InitUserInterface();
+GameUserInterface.InitUserInterface();
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------
@@ -46,7 +48,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update user interface
     //----------------------------------------------------------------------------------
-    UserInterface.UnloadUserInterface();
+    GameUserInterface.UnloadUserInterface();
     Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
     // Update scene
@@ -108,7 +110,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     // Draw full screen rectangle in front of everything
     if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
 
-    UserInterface.DrawUserInterface();
+    GameUserInterface.DrawUserInterface();
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
@@ -149,7 +151,7 @@ switch (GameSceneManager.CurrentScene)
     //case GameScene.OPTIONS: UnloadOptionsScreen(); break;
     default: break;
 }
-UserInterface.UnloadUserInterface();
+GameUserInterface.UnloadUserInterface();
 
 // Unload global data loaded
 Raylib.UnloadFont(font);
