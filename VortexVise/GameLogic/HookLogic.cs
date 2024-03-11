@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.GameGlobals;
 using VortexVise.States;
 using VortexVise.Utilities;
 
@@ -20,6 +21,7 @@ public static class HookLogic
         var state = playerState.HookState;
         if (playerState.Input.CancelHook && state.IsHookAttached)
         {
+            GameAudio.PlaySound(GameAudio.Dash, volume: 0.2f);
             state.IsHookReleased = false;
             state.IsHookAttached = false;
             state.Velocity = new(0, 0);
@@ -37,6 +39,9 @@ public static class HookLogic
             state.Position = PlayerLogic.GetPlayerCenterPosition(playerState.Position);
             state.Position = new(state.Position.X - _texture.Width * 0.5f, playerState.Position.Y);
             state.Collision = new Rectangle(state.Position, new(HookSize, HookSize));
+
+            // Play hook shoot sound
+            GameAudio.PlaySound(GameAudio.HookShoot);
 
             // Reset velocity
             state.Velocity = new(0, 0);
@@ -149,13 +154,15 @@ public static class HookLogic
         }
         state.IsPressingHookKey = playerState.Input.Hook;
 
-        if (state.IsHookReleased)
+        if (state.IsHookReleased && !state.IsHookAttached)
         {
             foreach (var collision in MapLogic.GetCollisions())
             {
                 if (Raylib.CheckCollisionRecs(state.Collision, collision))
                 {
+                    // Hook colided
                     state.IsHookAttached = true;
+                    GameAudio.PlaySound(GameAudio.HookHit, volume: 0.5f);
                 }
             }
         }

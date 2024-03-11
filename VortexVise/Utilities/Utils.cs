@@ -5,9 +5,9 @@ namespace VortexVise.Utilities;
 
 public static class Utils
 {
+    public static string DebugText { get; set; } = "Vortex Vise Alpha";
     private static bool _debug = false;
     private static int _fps = 0;
-    private static string _debugString = "Debug Mode";
 
     public static float Roundf(float var)
     {
@@ -48,15 +48,4 @@ public static class Utils
     {
         return _fps;
     }
-    public static void SetDebugString(string debugString)
-    {
-        _debugString = debugString;
-    }
-
-    public static string GetDebugString()
-    {
-        return _debugString;
-    }
-
-
 }

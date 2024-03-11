@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System.Numerics;
+using VortexVise.Utilities;
 
 namespace VortexVise.GameGlobals;
 

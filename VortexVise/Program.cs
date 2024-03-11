@@ -23,6 +23,7 @@ Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
 
 // Load global data (assets that must be available in all scenes, i.e. font)
+GameAudio.InitAudio();
 Font font = Raylib.LoadFont("Resources/Common/moltorspunch.ttf");
 Music music = Raylib.LoadMusicStream("Resources/Audio/Music/ambient.ogg");
 Sound fxClick = Raylib.LoadSound("Resources/Audio/FX/click.wav");
@@ -46,9 +47,8 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (Raylib.IsKeyPressed(KeyboardKey.F11)) Raylib.ToggleBorderlessWindowed();
     if (Raylib.IsKeyPressed(KeyboardKey.F7)) Utils.SwitchDebug();
 
-    // Update user interface
+    // Update music
     //----------------------------------------------------------------------------------
-    GameUserInterface.UnloadUserInterface();
     Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
     // Update scene
@@ -76,11 +76,13 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     // Draw
     //----------------------------------------------------------------------------------
 
-    float MIN(float a, float b)
-    {
-        return ((a) < (b) ? (a) : (b));
-    }
+    // Update user interface
+    //----------------------------------------------------------------------------------
+    GameUserInterface.UpdateUserInterface();
+
+
     // Setup scalling
+    float MIN(float a, float b) { return ((a) < (b) ? (a) : (b));}
     GameCore.GameScreenScale = MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
     /*    if (integerScalling)
         {
@@ -131,6 +133,8 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     //}
 
+    Raylib.DrawText(Utils.DebugText, 32, 32, 32, Color.White);
+
     Raylib.EndDrawing();
     //----------------------------------------------------------------------------------
 }
@@ -155,6 +159,7 @@ GameUserInterface.UnloadUserInterface();
 
 // Unload global data loaded
 Raylib.UnloadFont(font);
+GameAudio.UnloadAudio();
 //UnloadMusicStream(music);
 Raylib.UnloadSound(fxClick);
 Raylib.UnloadSound(fxSelection);

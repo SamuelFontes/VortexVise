@@ -11,7 +11,7 @@ public static class PlayerLogic
     static public Vector2 SpawnPoint;
     static private Texture2D _texture;
     static private readonly float _maxMoveSpeed = 350;
-    static public readonly float _jumpForce = 400;
+    static public readonly float _jumpForce = 450;
     static private readonly float _maxGravity = 1000;
     static private readonly float _acceleration = 750;
     static private Camera2D _camera;
@@ -74,6 +74,7 @@ public static class PlayerLogic
 
         if (input.Jump && isTouchingTheGround)
         {
+            GameAudio.PlaySound(GameAudio.Jump, volume: 1f);
             isTouchingTheGround = false;
             velocity.Y = -_jumpForce;
         }

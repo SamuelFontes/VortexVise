@@ -91,8 +91,10 @@ static internal class GameplayScene
         var player = State.PlayerStates.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return;
         Raylib.ClearBackground(Color.Black);
+
         PlayerLogic.ProcessCamera(player.Position);
         GameLogic.DrawState(State);
+        Raylib.EndMode2D();
     }
 
     static public void UnloadGameplayScene()

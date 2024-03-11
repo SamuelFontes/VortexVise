@@ -8,6 +8,6 @@ public static class GameCore
     public static int GameScreenHeight { get; private set; } = 540;             // Defines internal game resolution
     public static float GameScreenScale { get; set; }                           // How much the screen is scalling 
     public static bool GameShouldClose { get; set; } = false;                   // If true the game will close 
-
+    public static bool IsServer { get; set; } = false;                          // Make sure some things only happen client side, playing sounds for example
 
 }
