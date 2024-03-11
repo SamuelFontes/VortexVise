@@ -74,7 +74,7 @@ public static class PlayerLogic
 
         if (input.Jump && isTouchingTheGround)
         {
-            GameAudio.PlaySound(GameAudio.Jump, volume: 1f);
+            GameAudio.PlaySound(GameAudio.Jump, volume: 0.5f);
             isTouchingTheGround = false;
             velocity.Y = -_jumpForce;
         }

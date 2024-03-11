@@ -44,7 +44,15 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 {
     // Read PC Keys
     //----------------------------------------------------------------------------------
-    if (Raylib.IsKeyPressed(KeyboardKey.F11)) Raylib.ToggleBorderlessWindowed();
+    if (Raylib.IsKeyPressed(KeyboardKey.F11))
+    {
+        if (GameOptions.BorderlessFullScreen)
+            Raylib.ToggleBorderlessWindowed();
+        else
+        {
+            Raylib.ToggleFullscreen();
+        }
+    }
     if (Raylib.IsKeyPressed(KeyboardKey.F7)) Utils.SwitchDebug();
 
     // Update music
@@ -82,19 +90,19 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
 
     // Setup scalling
-    float MIN(float a, float b) { return ((a) < (b) ? (a) : (b));}
+    float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
     GameCore.GameScreenScale = MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
-    /*    if (integerScalling)
-        {
-            scale = (int)scale;
-            screenFiltering = TEXTURE_FILTER_POINT;
-        }
-        else
-        {
-            screenFiltering = TEXTURE_FILTER_BILINEAR;
-        }
-        SetTextureFilter(target.texture, screenFiltering);  // Texture scale filter to use
-    */
+    TextureFilter screenFiltering;
+    if (GameOptions.IntegerScalling && GameCore.GameScreenScale == (int)GameCore.GameScreenScale)
+    {
+        screenFiltering = TextureFilter.Point;
+    }
+    else
+    {
+        screenFiltering = TextureFilter.Bilinear;
+    }
+    Raylib.SetTextureFilter(gameRendering.Texture, screenFiltering);  // Texture scale filter to use
+
     Raylib.BeginTextureMode(gameRendering);
 
 
@@ -113,27 +121,26 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
 
     GameUserInterface.DrawUserInterface();
+    Raylib.DrawText(Utils.DebugText, 32, 32, 32, Color.White);
+    Raylib.DrawFPS(500, 32);
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
     Raylib.ClearBackground(Color.Black);     // Clear screen background
 
     // Draw render texture to screen, properly scaled
-    /*    if (maintainAspectRation)
-        {
-            DrawTexturePro(target.texture, (Rectangle){ 0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height },
-                               (Rectangle){
-                (GetScreenWidth() - ((float)gameScreenWidth * scale)) * 0.5f, (GetScreenHeight() - ((float)gameScreenHeight * scale)) * 0.5f,
-                               (float)gameScreenWidth * scale, (float)gameScreenHeight * scale }, (Vector2){ 0, 0 }, 0.0f, WHITE);
-        }
-        else
-        {
-    */
-    Raylib.DrawTexturePro(gameRendering.Texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.Texture.Width, (float)-gameRendering.Texture.Height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, Color.White);
+    if (GameOptions.MaintainAspectRatio)
+    {
+        Raylib.DrawTexturePro(gameRendering.Texture, new(0.0f, 0.0f, (float)gameRendering.Texture.Width, (float)-gameRendering.Texture.Height), new(
+            (Raylib.GetScreenWidth() - ((float)GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, Color.White);
+    }
+    else
+    {
 
-    //}
+        Raylib.DrawTexturePro(gameRendering.Texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.Texture.Width, (float)-gameRendering.Texture.Height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, Color.White);
 
-    Raylib.DrawText(Utils.DebugText, 32, 32, 32, Color.White);
+    }
+
 
     Raylib.EndDrawing();
     //----------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ public static class HookLogic
         var state = playerState.HookState;
         if (playerState.Input.CancelHook && state.IsHookAttached)
         {
-            GameAudio.PlaySound(GameAudio.Dash, volume: 0.2f);
+            GameAudio.PlaySound(GameAudio.Dash, volume: 0.8f);
             state.IsHookReleased = false;
             state.IsHookAttached = false;
             state.Velocity = new(0, 0);

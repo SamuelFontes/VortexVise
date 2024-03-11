@@ -32,15 +32,12 @@ public static class GameAudio
 
     public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
     {
-        // This is probably not woking properly, tried using the pitch it sounds the same
         if (GameCore.IsServer) return; // Audio don't play on the server
 
+        volume *= GameOptions.VolumeFX;
         Raylib.SetSoundPan(sound, pan);
         Raylib.SetSoundPitch(sound, pitch);
         Raylib.SetSoundVolume(sound, volume);
         Raylib.PlaySound(sound);
-        Raylib.SetSoundPan(sound, 0.5f);
-        Raylib.SetSoundPitch(sound, 1f);
-        Raylib.SetSoundVolume(sound, 1f);
     }
 }
