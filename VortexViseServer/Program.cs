@@ -1,5 +1,4 @@
-﻿using Raylib_cs;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using VortexVise.Logic;
@@ -18,7 +17,7 @@ IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
 
 int tickrate = 64;
 double deltaTime = 1d / tickrate;
-double currentTime = Raylib.GetTime();
+double currentTime = 0;
 var lastTime = currentTime;
 
 

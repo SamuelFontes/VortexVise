@@ -27,7 +27,7 @@ static internal class GameSceneManager
     {
         if (!TransitionFadeOut)
         {
-            TransitionAlpha += 5 * Raylib.GetFrameTime();
+            TransitionAlpha += 1 * Raylib.GetFrameTime();
 
             // NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
             // For that reason we compare against 1.01f, to avoid last frame loading stop
@@ -42,6 +42,7 @@ static internal class GameSceneManager
                     //case TITLE: UnloadTitleScreen(); break;
                     //case OPTIONS: UnloadOptionsScreen(); break;
                     case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(); break;
+                    case GameScene.MENU: MenuScene.UnloadMenuScene(); break;
                     //case ENDING: UnloadEndingScreen(); break;
                     default: break;
                 }
@@ -52,6 +53,7 @@ static internal class GameSceneManager
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
                     case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(); break;
+                    case GameScene.MENU: MenuScene.InitMenuScene(); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
                 }

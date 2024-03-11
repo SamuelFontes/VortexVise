@@ -10,7 +10,7 @@ static internal class GameUserInterface
     public static Vector2 CursorPosition { get; private set; }
     public static float TimeIdle { get; private set; } = 0;
     public static float CursorAlpha { get; private set; } = 0;
-    public static bool IsCursorVisible { get; private set; } = true;
+    public static bool IsCursorVisible { get; set; } = true;
     public static bool DisableCursor { get; set; } = false;
     public static void InitUserInterface()
     {
@@ -49,6 +49,16 @@ static internal class GameUserInterface
 
     public static void DrawUserInterface()
     {
+        DrawDebug();
+        DrawCursor();
+    }
+    public static void UnloadUserInterface()
+    {
+        Raylib.UnloadTexture(Cursor);
+    }
+
+    private static void DrawCursor()
+    {
         // Draw Cursor
         //---------------------------------------------------------
         int alpha = 0;
@@ -62,9 +72,10 @@ static internal class GameUserInterface
         }
 
     }
-    public static void UnloadUserInterface()
+    private static void DrawDebug()
     {
-        Raylib.UnloadTexture(Cursor);
+        DrawTextEx(GameCore.Font, Utils.DebugText, new(32, 32), 32f, 0, WHITE);
+        Raylib.DrawFPS(0, 0);
     }
 
 }

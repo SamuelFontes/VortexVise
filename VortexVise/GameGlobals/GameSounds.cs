@@ -2,12 +2,14 @@
 
 namespace VortexVise.GameGlobals;
 
-public static class GameAudio
+public static class GameSounds
 {
-    public static Sound HookShoot {  get; private set; }    
-    public static Sound HookHit { get; private set; }
-    public static Sound Jump { get; private set; }
-    public static Sound Dash { get; private set; }
+    public static Sound HookShoot;
+    public static Sound HookHit;
+    public static Sound Jump;
+    public static Sound Dash;
+    public static Sound Click;
+    public static Sound Selection;
 
     public static void InitAudio()
     {
@@ -15,6 +17,8 @@ public static class GameAudio
         HookHit = Raylib.LoadSound("Resources/Audio/FX/hook_hit.wav");
         Jump = Raylib.LoadSound("Resources/Audio/FX/jump.wav");
         Dash = Raylib.LoadSound("Resources/Audio/FX/dash.wav");
+        Click = Raylib.LoadSound("Resources/Audio/FX/click.wav");
+        Selection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
     }
 
     public static void UnloadAudio()
@@ -23,13 +27,15 @@ public static class GameAudio
         Raylib.UnloadSound(HookHit);
         Raylib.UnloadSound(Jump);
         Raylib.UnloadSound(Dash);
+        Raylib.UnloadSound(Click);
+        Raylib.UnloadSound(Selection);
     }
 
     public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
     {
         if (GameCore.IsServer) return; // Audio don't play on the server
 
-        volume *= GameOptions.VolumeFX;
+        volume *= GameOptions.VolumeSounds;
         Raylib.SetSoundPan(sound, pan);
         Raylib.SetSoundPitch(sound, pitch);
         Raylib.SetSoundVolume(sound, volume);

@@ -16,7 +16,7 @@ public enum GameScene
 {
     UNKNOWN = -1,               // Used for transitioning screens
     LOGO = 0,                   // Game and library logo
-    TITLE,                      // Title screen
+    MENU,                       // Title screen
     OPTIONS,                    // Options screen
     GAMEPLAY,                   // Gameplay screen
     ENDING                      // Ending screen

@@ -23,19 +23,17 @@ Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
 
 // Load global data (assets that must be available in all scenes, i.e. font)
-GameAudio.InitAudio();
-Font font = Raylib.LoadFont("Resources/Common/moltorspunch.ttf");
+GameSounds.InitAudio();
 Music music = Raylib.LoadMusicStream("Resources/Audio/Music/ambient.ogg");
-Sound fxClick = Raylib.LoadSound("Resources/Audio/FX/click.wav");
-Sound fxSelection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
+GameCore.Font = Raylib.LoadFont("Resources/Common/moltorspunch.ttf");
 
 // Initiate music
 Raylib.SetMusicVolume(music, 1.0f);
 Raylib.PlayMusicStream(music);
 
 // Setup and init first screen
-GameSceneManager.CurrentScene = GameScene.GAMEPLAY;
-GameplayScene.InitGameplayScene();
+GameSceneManager.CurrentScene = GameScene.MENU;
+MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
 
 // Main Game Loop
@@ -61,7 +59,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update scene
     //----------------------------------------------------------------------------------
-    if (!GameSceneManager.TransitionFadeOut)
+    if (!GameSceneManager.OnTransition)
     {
 
         // Update
@@ -71,10 +69,16 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
             case GameScene.GAMEPLAY:
                 {
                     GameplayScene.UpdateGameplayScene();
-
                     //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
                     //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
+                }
+                break;
+            case GameScene.MENU:
+                {
+                    MenuScene.UpdateMenuScene();
+                    if(MenuScene.FinishMenuScene() == 2) GameSceneManager.TransitionToNewScene(GameScene.GAMEPLAY);
+                    else if(MenuScene.FinishMenuScene() == -1) GameSceneManager.TransitionToNewScene(GameScene.UNKNOWN);
                 }
                 break;
             default: break;
@@ -106,7 +110,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     Raylib.BeginTextureMode(gameRendering);
 
 
-    Raylib.ClearBackground(WHITE);
+    Raylib.ClearBackground(BLACK);
 
     // Deal with resolution
     //----------------------------------------------------------------------------------
@@ -114,6 +118,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     switch (GameSceneManager.CurrentScene)
     {
         case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(); break;
+        case GameScene.MENU: MenuScene.DrawMenuScene(); break;
         default: break;
     }
 
@@ -121,8 +126,6 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
 
     GameUserInterface.DrawUserInterface();
-    Raylib.DrawText(Utils.DebugText, 32, 32, 32, WHITE);
-    Raylib.DrawFPS(500, 32);
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
@@ -149,27 +152,26 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 // Fade screen to black when exit
 //--------------------------------------------------------------------------------------
 GameSceneManager.TransitionToNewScene(GameScene.UNKNOWN);
+while (!GameSceneManager.TransitionFadeOut)
+{
+    GameSceneManager.UpdateTransition();
+}
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
 // Unload current screen data before closing
 switch (GameSceneManager.CurrentScene)
 {
-    //case GameScene.LOGO: UnloadLogoScreen(); break;
-    //case GameScene.TITLE: UnloadTitleScreen(); break;
     case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(); break;
-    //case GameScene.ENDING: UnloadEndingScreen(); break;
-    //case GameScene.OPTIONS: UnloadOptionsScreen(); break;
+    case GameScene.MENU: MenuScene.UnloadMenuScene(); break;
     default: break;
 }
 GameUserInterface.UnloadUserInterface();
 
 // Unload global data loaded
-Raylib.UnloadFont(font);
-GameAudio.UnloadAudio();
+Raylib.UnloadFont(GameCore.Font);
+GameSounds.UnloadAudio();
 //UnloadMusicStream(music);
-Raylib.UnloadSound(fxClick);
-Raylib.UnloadSound(fxSelection);
 
 Raylib.CloseAudioDevice();     // Close audio context
 Raylib.CloseWindow();          // Close window and OpenGL context

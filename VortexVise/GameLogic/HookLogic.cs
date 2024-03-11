@@ -21,7 +21,7 @@ public static class HookLogic
         var state = playerState.HookState;
         if (playerState.Input.CancelHook && state.IsHookAttached)
         {
-            GameAudio.PlaySound(GameAudio.Dash, volume: 0.8f);
+            GameSounds.PlaySound(GameSounds.Dash, volume: 0.8f);
             state.IsHookReleased = false;
             state.IsHookAttached = false;
             state.Velocity = new(0, 0);
@@ -41,7 +41,7 @@ public static class HookLogic
             state.Collision = new Rectangle(state.Position.X, state.Position.Y, HookSize, HookSize);
 
             // Play hook shoot sound
-            GameAudio.PlaySound(GameAudio.HookShoot);
+            GameSounds.PlaySound(GameSounds.HookShoot);
 
             // Reset velocity
             state.Velocity = new(0, 0);
@@ -162,7 +162,7 @@ public static class HookLogic
                 {
                     // Hook colided
                     state.IsHookAttached = true;
-                    GameAudio.PlaySound(GameAudio.HookHit, volume: 0.5f);
+                    GameSounds.PlaySound(GameSounds.HookHit, volume: 0.5f);
                 }
             }
         }
