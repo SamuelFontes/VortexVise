@@ -1,4 +1,4 @@
-﻿using Raylib_cs;
+﻿using ZeroElectric.Vinculum;
 using System.Numerics;
 using VortexVise.Utilities;
 
@@ -20,7 +20,7 @@ public static class MapLogic
         if (!isServer)
             _mapTexture = Raylib.LoadTexture(mapFolder + mapName + ".png");
         else
-            _mapTexture = new Texture2D() { Height = 2048, Width = 2048 }; // TODO: Get the map size from some place
+            _mapTexture = new Texture2D() { height = 2048, width = 2048 }; // TODO: Get the map size from some place
 
 
         // TODO: Load from a json or some shit like that
@@ -48,12 +48,12 @@ public static class MapLogic
 
     public static void Draw()
     {
-        Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, Color.White);
+        Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, WHITE);
         if (Utils.Debug())
         {
             foreach (var collision in _collisions) // DEBUG
             {
-                Raylib.DrawRectangleRec(collision, Color.Blue);
+                Raylib.DrawRectangleRec(collision, BLUE);
             }
         }
 
@@ -66,7 +66,7 @@ public static class MapLogic
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(_mapTexture.Width, _mapTexture.Height);
+        return new Vector2(_mapTexture.width, _mapTexture.height);
     }
 
 }

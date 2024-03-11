@@ -1,4 +1,4 @@
-﻿using Raylib_cs;
+﻿using ZeroElectric.Vinculum;
 using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.States;
@@ -37,8 +37,8 @@ public static class HookLogic
             state.IsHookReleased = true;
             state.IsHookAttached = false;
             state.Position = PlayerLogic.GetPlayerCenterPosition(playerState.Position);
-            state.Position = new(state.Position.X - _texture.Width * 0.5f, playerState.Position.Y);
-            state.Collision = new Rectangle(state.Position, new(HookSize, HookSize));
+            state.Position = new(state.Position.X - _texture.width * 0.5f, playerState.Position.Y);
+            state.Collision = new Rectangle(state.Position.X, state.Position.Y, HookSize, HookSize);
 
             // Play hook shoot sound
             GameAudio.PlaySound(GameAudio.HookShoot);
@@ -116,7 +116,7 @@ public static class HookLogic
             state.Velocity += new Vector2(0, gravity * 0.5f * deltaTime);
 
             Vector2 direction = Utils.GetVector2Direction(PlayerLogic.GetPlayerCenterPosition(playerState.Position), state.Position);
-            float distance = Raymath.Vector2Distance(state.Position, playerState.Position);
+            float distance = RayMath.Vector2Distance(state.Position, playerState.Position);
 
             if (distance > _hookSizeLimit && (state.Velocity.X != 0 || state.Velocity.Y < 0))
             {
@@ -124,7 +124,7 @@ public static class HookLogic
             }
 
             state.Position = new(state.Position.X + state.Velocity.X * deltaTime * 0.5f, state.Position.Y + state.Velocity.Y * deltaTime * 0.5f);
-            state.Collision = new Rectangle(state.Position, state.Collision.Width, state.Collision.Height);
+            state.Collision = new Rectangle(state.Position.X, state.Position.Y, state.Collision.Width, state.Collision.Height);
 
         }
         else if (state.IsHookAttached)
@@ -132,7 +132,7 @@ public static class HookLogic
             // Should pull player here
             Vector2 direction = Utils.GetVector2Direction(PlayerLogic.GetPlayerCenterPosition(playerState.Position), state.Position);
 
-            float distance = Raymath.Vector2Distance(state.Position, playerState.Position);
+            float distance = RayMath.Vector2Distance(state.Position, playerState.Position);
 
             // TODO: implement this crap here
             //if((_hookPullOffset > _originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
@@ -148,7 +148,7 @@ public static class HookLogic
 
             if (distance > _hookPullOffset)
             {
-                Vector2 velocity = Raymath.Vector2Scale(direction, _hookPullForce);
+                Vector2 velocity = RayMath.Vector2Scale(direction, _hookPullForce);
                 playerState.AddVelocityWithDeltaTime(velocity, deltaTime);
             }
         }
@@ -174,10 +174,10 @@ public static class HookLogic
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Color.White);
+            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, WHITE);
 
             if (Utils.Debug())
-                Raylib.DrawRectangleRec(playerState.HookState.Collision, Color.Green); // Debug
+                Raylib.DrawRectangleRec(playerState.HookState.Collision, GREEN); // Debug
         }
 
 

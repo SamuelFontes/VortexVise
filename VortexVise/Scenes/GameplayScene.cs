@@ -1,4 +1,4 @@
-﻿using Raylib_cs;
+﻿using ZeroElectric.Vinculum;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
@@ -90,7 +90,7 @@ static internal class GameplayScene
     {
         var player = State.PlayerStates.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return;
-        Raylib.ClearBackground(Color.Black);
+        Raylib.ClearBackground(BLACK);
 
         PlayerLogic.ProcessCamera(player.Position);
         GameLogic.DrawState(State);

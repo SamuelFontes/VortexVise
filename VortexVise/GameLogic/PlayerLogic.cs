@@ -1,8 +1,9 @@
-﻿using Raylib_cs;
+﻿using ZeroElectric.Vinculum;
 using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.States;
 using VortexVise.Utilities;
+using ZeroElectric.Vinculum.Extensions;
 
 namespace VortexVise.Logic;
 
@@ -26,14 +27,18 @@ public static class PlayerLogic
         }
         else
         {
-            _texture = new Texture2D() { Width = 16, Height = 16 }; // Player will always be this size
-            HookLogic._texture = new Texture2D() { Width = 8, Height = 8 }; // if there are diffent kinds of hook change it here
+            _texture = new Texture2D() { width = 16, height = 16 }; // Player will always be this size
+            HookLogic._texture = new Texture2D() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
-        SpawnPoint = new Vector2(MapLogic._mapTexture.Width * 0.5f, MapLogic._mapTexture.Height * 0.5f);
+        SpawnPoint = new Vector2(MapLogic._mapTexture.width * 0.5f, MapLogic._mapTexture.height * 0.5f);
         var cameraView = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
-        _camera = new Camera2D(cameraView, cameraView, 0, 1);
+        _camera = new Camera2D();
+        _camera.offset = cameraView;
+        _camera.target = cameraView;
+        _camera.rotation = 0;
+        _camera.zoom = 1;
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {
@@ -57,18 +62,18 @@ public static class PlayerLogic
         {
             velocity.X += _acceleration * deltaTime;
             if (velocity.X > _maxMoveSpeed)
-                velocity.X = Raymath.Lerp(velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime));
+                velocity.X = RayMath.Lerp(velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime));
         }
         else if (input.Left)
         {
             velocity.X -= _acceleration * deltaTime;
             if (velocity.X < _maxMoveSpeed * -1)
-                velocity.X = Raymath.Lerp(velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime));
+                velocity.X = RayMath.Lerp(velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime));
         }
         else
         {
             float desaceleration = isTouchingTheGround || velocity.Y == 0f ? 10f : 0.5f;
-            velocity.X = Raymath.Lerp(velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime));
+            velocity.X = RayMath.Lerp(velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime));
         }
 
 
@@ -94,19 +99,19 @@ public static class PlayerLogic
     {
         // TODO: Implement gamepad and stuff
         InputState input = new();
-        if (Raylib.IsKeyDown(KeyboardKey.A))
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             input.Left = true;
-        if (Raylib.IsKeyDown(KeyboardKey.D))
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             input.Right = true;
-        if (Raylib.IsKeyDown(KeyboardKey.Space) || Raylib.IsKeyDown(KeyboardKey.K))
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K))
             input.Jump = true;
-        if (Raylib.IsKeyPressed(KeyboardKey.Space) || Raylib.IsKeyPressed(KeyboardKey.K))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_K))
             input.CancelHook = true;
-        if (Raylib.IsMouseButtonDown(MouseButton.Right) || Raylib.IsKeyDown(KeyboardKey.J))
+        if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT) || Raylib.IsKeyDown(KeyboardKey.KEY_J))
             input.Hook = true;
-        if (Raylib.IsKeyDown(KeyboardKey.W))
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_W))
             input.Up = true;
-        if (Raylib.IsKeyDown(KeyboardKey.S))
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_S))
             input.Down = true;
         return input;
     }
@@ -204,7 +209,7 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (newPosition.Y == collision.Y - _texture.Height + _collisionOffset.Y)
+                    if (newPosition.Y == collision.Y - _texture.height + _collisionOffset.Y)
                         isTouchingTheGround = true;
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
@@ -214,7 +219,7 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            newPosition.Y = collision.Y - _texture.Height + _collisionOffset.Y;
+                            newPosition.Y = collision.Y - _texture.height + _collisionOffset.Y;
                             newCollision = playerCollision;
                             newCollision.Y = collision.Y - playerCollision.Height;
                             newVelocity.Y = 0;
@@ -290,8 +295,8 @@ public static class PlayerLogic
 
         // Make camera smooth
         // FIXME: fix camera jerkness when almost hitting the target
-        _camera.Target.X = Raymath.Lerp(_camera.Target.X, target.X, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
-        _camera.Target.Y = Raymath.Lerp(_camera.Target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
+        _camera.target.X = RayMath.Lerp(_camera.target.X, target.X, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
+        _camera.target.Y = RayMath.Lerp(_camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
 
         Raylib.BeginMode2D(_camera);
     }
@@ -300,8 +305,8 @@ public static class PlayerLogic
     {
 
         Vector2 position = new(playerPosition.X, playerPosition.Y);
-        position.X += _texture.Width * 0.5f;
-        position.Y += _texture.Height * 0.5f;
+        position.X += _texture.width * 0.5f;
+        position.Y += _texture.height * 0.5f;
         return position;
     }
 
@@ -309,19 +314,19 @@ public static class PlayerLogic
 
     public static void DrawState(PlayerState playerState)
     {
-        Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.Width * playerState.Direction, _texture.Height);
+        Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.width * playerState.Direction, _texture.height);
 
-        Rectangle destRec = new(playerState.Position.X + _texture.Width * 0.5f, playerState.Position.Y + _texture.Height * 0.5f, _texture.Width, _texture.Height);
+        Rectangle destRec = new(playerState.Position.X + _texture.width * 0.5f, playerState.Position.Y + _texture.height * 0.5f, _texture.width, _texture.height);
 
         var rotation = playerState.Animation.GetAnimationRotation(playerState.Velocity, playerState.Input);
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
-        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.Width * 0.5f, _texture.Height * 0.5f), rotation, Color.White); // Draw Player 
+        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, WHITE); // Draw Player 
 
 
         if (Utils.Debug())
         {
-            Raylib.DrawRectangleRec(playerState.Collision, Color.Green); // Debug
+            Raylib.DrawRectangleRec(playerState.Collision, GREEN); // Debug
         }
     }
 }

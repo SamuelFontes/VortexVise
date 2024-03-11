@@ -1,6 +1,6 @@
-﻿using Raylib_cs;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.Utilities;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
@@ -26,7 +26,7 @@ static internal class GameUserInterface
         Vector2 virtualMouse = new();
         virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - GameCore.GameScreenWidth * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
         virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - GameCore.GameScreenHeight * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
-        virtualMouse = Raymath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
+        virtualMouse = RayMath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
         if (newCursorPosition.X != CursorPosition.X || newCursorPosition.Y != CursorPosition.Y)

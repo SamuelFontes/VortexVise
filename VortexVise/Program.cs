@@ -6,16 +6,16 @@
 *
 ********************************************************************************************/
 
-using Raylib_cs;
 using System.Numerics;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
+using ZeroElectric.Vinculum;
 
 // Initialization
 //---------------------------------------------------------
-Raylib.SetConfigFlags(ConfigFlags.ResizableWindow);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
 Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);
 RenderTexture2D gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
@@ -44,7 +44,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 {
     // Read PC Keys
     //----------------------------------------------------------------------------------
-    if (Raylib.IsKeyPressed(KeyboardKey.F11))
+    if (Raylib.IsKeyPressed(KeyboardKey.KEY_F11))
     {
         if (GameOptions.BorderlessFullScreen)
             Raylib.ToggleBorderlessWindowed();
@@ -53,7 +53,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
             Raylib.ToggleFullscreen();
         }
     }
-    if (Raylib.IsKeyPressed(KeyboardKey.F7)) Utils.SwitchDebug();
+    if (Raylib.IsKeyPressed(KeyboardKey.KEY_F7)) Utils.SwitchDebug();
 
     // Update music
     //----------------------------------------------------------------------------------
@@ -95,18 +95,18 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     TextureFilter screenFiltering;
     if (GameOptions.IntegerScalling && GameCore.GameScreenScale == (int)GameCore.GameScreenScale)
     {
-        screenFiltering = TextureFilter.Point;
+        screenFiltering = TextureFilter.TEXTURE_FILTER_POINT;
     }
     else
     {
-        screenFiltering = TextureFilter.Bilinear;
+        screenFiltering = TextureFilter.TEXTURE_FILTER_BILINEAR;
     }
-    Raylib.SetTextureFilter(gameRendering.Texture, screenFiltering);  // Texture scale filter to use
+    Raylib.SetTextureFilter(gameRendering.texture, screenFiltering);  // Texture scale filter to use
 
     Raylib.BeginTextureMode(gameRendering);
 
 
-    Raylib.ClearBackground(Color.RayWhite);
+    Raylib.ClearBackground(WHITE);
 
     // Deal with resolution
     //----------------------------------------------------------------------------------
@@ -121,23 +121,23 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
 
     GameUserInterface.DrawUserInterface();
-    Raylib.DrawText(Utils.DebugText, 32, 32, 32, Color.White);
-    //Raylib.DrawFPS(500, 32);
+    Raylib.DrawText(Utils.DebugText, 32, 32, 32, WHITE);
+    Raylib.DrawFPS(500, 32);
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
-    Raylib.ClearBackground(Color.Black);     // Clear screen background
+    Raylib.ClearBackground(BLACK);     // Clear screen background
 
     // Draw render texture to screen, properly scaled
     if (GameOptions.MaintainAspectRatio)
     {
-        Raylib.DrawTexturePro(gameRendering.Texture, new(0.0f, 0.0f, (float)gameRendering.Texture.Width, (float)-gameRendering.Texture.Height), new(
-            (Raylib.GetScreenWidth() - ((float)GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, Color.White);
+        Raylib.DrawTexturePro(gameRendering.texture, new(0.0f, 0.0f, gameRendering.texture.width, -gameRendering.texture.height), new(
+            (Raylib.GetScreenWidth() - (GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, WHITE);
     }
     else
     {
 
-        Raylib.DrawTexturePro(gameRendering.Texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.Texture.Width, (float)-gameRendering.Texture.Height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, Color.White);
+        Raylib.DrawTexturePro(gameRendering.texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.texture.width, (float)-gameRendering.texture.height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, WHITE);
 
     }
 

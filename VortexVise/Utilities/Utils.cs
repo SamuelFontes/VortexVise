@@ -1,4 +1,4 @@
-﻿using Raylib_cs;
+﻿using ZeroElectric.Vinculum;
 using System.Numerics;
 
 namespace VortexVise.Utilities;
@@ -22,7 +22,7 @@ public static class Utils
     public static Vector2 GetVector2Direction(Vector2 from, Vector2 to)
     {
         Vector2 direction = new Vector2() { X = to.X - from.X, Y = to.Y - from.Y };
-        direction = Raymath.Vector2Normalize(direction);
+        direction = RayMath.Vector2Normalize(direction);
         return direction;
     }
 
