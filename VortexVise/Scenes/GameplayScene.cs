@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VortexVise;
+namespace VortexVise.Scenes;
 static internal class GameplayScene
 {
     public static double LastTimeAccumulator { get; set; }
@@ -80,7 +80,7 @@ static internal class GameplayScene
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
             double accumulatorSimulationTime = CurrentTime - LastTimeAccumulator;
             Accumulator += accumulatorSimulationTime;
-            State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)(accumulatorSimulationTime), false);
+            State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)accumulatorSimulationTime, false);
             LastTimeAccumulator = CurrentTime;
         }
         //gameStates.Add(state);

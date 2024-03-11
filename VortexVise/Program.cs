@@ -9,6 +9,7 @@
 using Raylib_cs;
 using System.Numerics;
 using VortexVise;
+using VortexVise.Scenes;
 
 // Initialization
 //---------------------------------------------------------
@@ -19,17 +20,18 @@ RenderTexture2D gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidt
 Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
 
-// Load global data (assets that must be available in all screens, i.e. font)
+// Load global data (assets that must be available in all scenes, i.e. font)
 Font font = Raylib.LoadFont("Resources/Common/moltorspunch.ttf");
 Music music = Raylib.LoadMusicStream("Resources/Audio/Music/ambient.ogg");
 Sound fxClick = Raylib.LoadSound("Resources/Audio/FX/click.wav");
 Sound fxSelection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
 
+// Initiate music
 Raylib.SetMusicVolume(music, 1.0f);
 Raylib.PlayMusicStream(music);
 
 // Setup and init first screen
-GameCore.CurrentScene = GameScene.GAMEPLAY;
+GameSceneManager.CurrentScene = GameScene.GAMEPLAY;
 GameplayScene.InitGameplayScene();
 UserInterface.InitUserInterface();
 
@@ -49,12 +51,12 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update scene
     //----------------------------------------------------------------------------------
-    if (!GameCore.TransitionFadeOut)
+    if (!GameSceneManager.TransitionFadeOut)
     {
 
         // Update
         //----------------------------------------------------------------------------------
-        switch (GameCore.CurrentScene)
+        switch (GameSceneManager.CurrentScene)
         {
             case GameScene.GAMEPLAY:
                 {
@@ -68,7 +70,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
             default: break;
         }
     }
-    else GameCore.UpdateTransition();    // Update transition (fade-in, fade-out)
+    else GameSceneManager.UpdateTransition();    // Update transition (fade-in, fade-out)
     // Draw
     //----------------------------------------------------------------------------------
 
@@ -97,14 +99,14 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     // Deal with resolution
     //----------------------------------------------------------------------------------
 
-    switch (GameCore.CurrentScene)
+    switch (GameSceneManager.CurrentScene)
     {
         case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(); break;
         default: break;
     }
 
     // Draw full screen rectangle in front of everything
-    if (GameCore.OnTransition) GameCore.DrawTransition();
+    if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
 
     UserInterface.DrawUserInterface();
 
@@ -133,12 +135,12 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
 // Fade screen to black when exit
 //--------------------------------------------------------------------------------------
-GameCore.TransitionToNewScene(GameScene.UNKNOWN);
+GameSceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
 // Unload current screen data before closing
-switch (GameCore.CurrentScene)
+switch (GameSceneManager.CurrentScene)
 {
     //case GameScene.LOGO: UnloadLogoScreen(); break;
     //case GameScene.TITLE: UnloadTitleScreen(); break;
