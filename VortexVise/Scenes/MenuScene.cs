@@ -37,8 +37,8 @@ public static class MenuScene
 
         // Load textures
         //----------------------------------------------------------------------------------
-        logo = LoadTexture("Resources/Common/vortex-vise-logo.png");
-        background = LoadTexture("resources/Common/MenuBackground.png");// TODO: load random map 
+        logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
+        background = Raylib.LoadTexture("resources/Common/MenuBackground.png");// TODO: load random map 
 /*        box = LoadTexture("resources/common/box.png");
         xboxController = LoadTexture("resources/common/xboxController.png");
         keyboard = LoadTexture("resources/common/keyboard.png");
@@ -50,7 +50,7 @@ public static class MenuScene
     {
         // Handle inputs
         //----------------------------------------------------------------------------------
-        if (IsKeyPressed(KeyboardKey.KEY_ENTER) || IsGestureDetected(Gesture.GESTURE_TAP))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
         {
             GameUserInterface.IsCursorVisible = false;
             switch (selected)
@@ -94,7 +94,7 @@ public static class MenuScene
                 default: break;
             }
         }
-        else if (IsKeyPressed(KeyboardKey.KEY_S) || IsKeyPressed(KeyboardKey.KEY_DOWN))
+        else if (Raylib.IsKeyPressed(KeyboardKey.KEY_S) || Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))
         {
             GameUserInterface.IsCursorVisible = false;
             switch (selected)
@@ -111,7 +111,7 @@ public static class MenuScene
                 default: break;
             }
         }
-        else if (IsKeyPressed(KeyboardKey.KEY_W) || IsKeyPressed(KeyboardKey.KEY_UP))
+        else if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) || Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
         {
             GameUserInterface.IsCursorVisible = false;
             switch (selected)
@@ -139,8 +139,8 @@ public static class MenuScene
         // Draw Background and Logo
         //----------------------------------------------------------------------------------
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
-        DrawTextureEx(background, backgroundPos, 0, 1, DARKGRAY); // FIXME: this should scale like the camera zoom
-        DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, WHITE); // TODO: Create a logo 
+        Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY); // FIXME: this should scale like the camera zoom
+        Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE); // TODO: Create a logo 
 
         // Draw menu
         //----------------------------------------------------------------------------------
@@ -171,29 +171,29 @@ public static class MenuScene
             float originalX = textPosition.X;
             textPosition.Y -= size * 2;
             textPosition.X -= box.width * 2.5f; // P1
-            DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, WHITE);
+            Raylib.DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, Raylib.WHITE);
             textPosition.X += box.width * 0.25f;
             textPosition.Y += box.width * 0.25f;
-            DrawTextEx(GameCore.Font, "P1", textPosition, size, 0, LIGHTGRAY);
+            Raylib.DrawTextEx(GameCore.Font, "P1", textPosition, size, 0, Raylib.LIGHTGRAY);
             textPosition.Y -= box.width * 0.25f;
             textPosition.X -= box.width * 0.25f;
-            DrawTextureEx(keyboard, textPosition, 0, 2, WHITE);
+            Raylib.DrawTextureEx(keyboard, textPosition, 0, 2, Raylib.WHITE);
             textPosition.X += box.width * 1.25f; // P2
-            DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, LIGHTGRAY);
+            Raylib.DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, Raylib.LIGHTGRAY);
             textPosition.Y += box.width * 0.25f;
-            DrawTextEx(GameCore.Font, "press\nenter", textPosition, 16, 0, LIGHTGRAY);
+            Raylib.DrawTextEx(GameCore.Font, "press\nenter", textPosition, 16, 0, Raylib.LIGHTGRAY);
             textPosition.Y -= box.width * 0.25f;
             textPosition.X += box.width * 1; // P3
-            DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, LIGHTGRAY);
+            Raylib.DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, Raylib.LIGHTGRAY);
             textPosition.X += box.width * 0.25f;
             textPosition.Y += box.width * 0.25f;
-            DrawTextEx(GameCore.Font, "P3", textPosition, size, 0, LIGHTGRAY);
+            Raylib.DrawTextEx(GameCore.Font, "P3", textPosition, size, 0, Raylib.LIGHTGRAY);
             textPosition.Y -= box.width * 0.25f;
             textPosition.X += box.width * 1; // P4
-            DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, LIGHTGRAY);
+            Raylib.DrawTexture(box, (int)textPosition.X, (int)textPosition.Y, Raylib.LIGHTGRAY);
             textPosition.X += box.width * 0.25f;
             textPosition.Y += box.width * 0.25f;
-            DrawTextEx(GameCore.Font, "P4", textPosition, size, 0, LIGHTGRAY);
+            Raylib.DrawTextEx(GameCore.Font, "P4", textPosition, size, 0, Raylib.LIGHTGRAY);
             textPosition.Y -= box.width * 0.25f;
             textPosition.Y += size * 4;
 
@@ -239,19 +239,19 @@ public static class MenuScene
     static bool RenderTextCentered(Vector2 pos, string text, int size, bool disabled, MainMenuItens item)
     {
         bool wasSelected = false;
-        Vector2 textSize = MeasureTextEx(GameCore.Font, text, size, 0);
+        Vector2 textSize = Raylib.MeasureTextEx(GameCore.Font, text, size, 0);
         pos.X -= textSize.X * 0.5f;
         pos.Y -= textSize.Y * 0.5f;
-        Color color = RAYWHITE;
-        if (disabled) color = GRAY;
-        else if ((CheckCollisionRecs(new Rectangle(pos.X, pos.Y, textSize.X, textSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1))
+        Color color = Raylib.RAYWHITE;
+        if (disabled) color = Raylib.GRAY;
+        else if ((Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, textSize.X, textSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1))
 
         && GameUserInterface.IsCursorVisible) || selected == item)
         {
             wasSelected = true;
-            color = ORANGE;
+            color = Raylib.ORANGE;
         }
-        DrawTextEx(GameCore.Font, text, pos, size, 0, color);
+        Raylib.DrawTextEx(GameCore.Font, text, pos, size, 0, color);
         return wasSelected;
     }
 

@@ -174,10 +174,10 @@ public static class HookLogic
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, WHITE);
+            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
 
             if (Utils.Debug())
-                Raylib.DrawRectangleRec(playerState.HookState.Collision, GREEN); // Debug
+                Raylib.DrawRectangleRec(playerState.HookState.Collision, Raylib.GREEN); // Debug
         }
 
 

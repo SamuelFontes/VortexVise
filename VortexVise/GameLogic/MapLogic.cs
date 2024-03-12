@@ -48,12 +48,12 @@ public static class MapLogic
 
     public static void Draw()
     {
-        Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, WHITE);
+        Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, Raylib.WHITE);
         if (Utils.Debug())
         {
             foreach (var collision in _collisions) // DEBUG
             {
-                Raylib.DrawRectangleRec(collision, BLUE);
+                Raylib.DrawRectangleRec(collision, Raylib.BLUE);
             }
         }
 

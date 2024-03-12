@@ -321,12 +321,12 @@ public static class PlayerLogic
         var rotation = playerState.Animation.GetAnimationRotation(playerState.Velocity, playerState.Input);
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
-        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, WHITE); // Draw Player 
+        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
 
 
         if (Utils.Debug())
         {
-            Raylib.DrawRectangleRec(playerState.Collision, GREEN); // Debug
+            Raylib.DrawRectangleRec(playerState.Collision, Raylib.GREEN); // Debug
         }
     }
 }

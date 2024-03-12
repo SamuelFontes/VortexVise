@@ -86,7 +86,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     Raylib.BeginTextureMode(gameRendering);
 
 
-    Raylib.ClearBackground(BLACK);
+    Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw
     //----------------------------------------------------------------------------------
@@ -99,18 +99,18 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     Raylib.EndTextureMode();
     Raylib.BeginDrawing();
-    Raylib.ClearBackground(BLACK);     // Clear screen background
+    Raylib.ClearBackground(Raylib.BLACK);     // Clear screen background
 
     // Draw render texture to screen, properly scaled
     if (GameOptions.MaintainAspectRatio)
     {
         Raylib.DrawTexturePro(gameRendering.texture, new(0.0f, 0.0f, gameRendering.texture.width, -gameRendering.texture.height), new(
-            (Raylib.GetScreenWidth() - (GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, WHITE);
+            (Raylib.GetScreenWidth() - (GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, Raylib.WHITE);
     }
     else
     {
 
-        Raylib.DrawTexturePro(gameRendering.texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.texture.width, (float)-gameRendering.texture.height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, WHITE);
+        Raylib.DrawTexturePro(gameRendering.texture, new Rectangle(0.0f, 0.0f, (float)gameRendering.texture.width, (float)-gameRendering.texture.height), new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight()), new Vector2(0, 0), 0.0f, Raylib.WHITE);
 
     }
 

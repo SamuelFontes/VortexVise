@@ -1,14 +1,14 @@
 ﻿using ZeroElectric.Vinculum;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace VortexVise.States;
 
-public class AnimationState
+public class AnimationState // This is only client side
 {
     public float AnimationTimer = 0f;
     public int State = 0;
     public int Rotation = 0;
-    Vector2 Deformation = new Vector2(1, 1);
 
     public int GetAnimationRotation(Vector2 vVelocity, InputState input)
     {
@@ -44,6 +44,10 @@ public class AnimationState
             }
             AnimationTimer = 0f;
         }
+        else if(velocity <= 20)
+        {
+            Rotation = 0;
+        }
 
         if (input.Left || input.Right)
         {
@@ -55,7 +59,7 @@ public class AnimationState
             Rotation = 0;
             State = 0;
         }
-        //Utils.SetDebugString($"v{(int)velocity}s:{State},r:{Rotation},t:{AnimationTimer},");
         return Rotation;
     }
+  
 }

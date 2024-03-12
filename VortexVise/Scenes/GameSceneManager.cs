@@ -82,7 +82,7 @@ static internal class GameSceneManager
     // Draw transition effect (full-screen rectangle)
     public static void DrawTransition()
     {
-        Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, Raylib.Fade(BLACK, TransitionAlpha));
+        Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, Raylib.Fade(Raylib.BLACK, TransitionAlpha));
     }
 
     public static void UpdateScene()

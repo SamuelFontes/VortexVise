@@ -74,7 +74,7 @@ static internal class GameUserInterface
     }
     private static void DrawDebug()
     {
-        DrawTextEx(GameCore.Font, Utils.DebugText, new(8, 540-32), 32f, 0, WHITE);
+        Raylib.DrawTextEx(GameCore.Font, Utils.DebugText, new(8, 540-32), 32f, 0, Raylib.WHITE);
         Raylib.DrawFPS(0, 0);
     }
 
