@@ -1,7 +1,7 @@
-﻿using ZeroElectric.Vinculum;
-using VortexVise.GameGlobals;
+﻿using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 static internal class GameplayScene

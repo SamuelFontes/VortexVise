@@ -1,6 +1,6 @@
-﻿using ZeroElectric.Vinculum;
-using VortexVise.Enums;
+﻿using VortexVise.Enums;
 using VortexVise.GameGlobals;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 

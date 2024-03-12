@@ -1,6 +1,5 @@
-﻿using ZeroElectric.Vinculum;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Numerics;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
@@ -44,7 +43,7 @@ public class AnimationState // This is only client side
             }
             AnimationTimer = 0f;
         }
-        else if(velocity <= 20)
+        else if (velocity <= 20)
         {
             Rotation = 0;
         }
@@ -61,5 +60,5 @@ public class AnimationState // This is only client side
         }
         return Rotation;
     }
-  
+
 }

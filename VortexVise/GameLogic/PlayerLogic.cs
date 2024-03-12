@@ -1,9 +1,8 @@
-﻿using ZeroElectric.Vinculum;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.States;
 using VortexVise.Utilities;
-using ZeroElectric.Vinculum.Extensions;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 

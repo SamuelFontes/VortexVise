@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using ZeroElectric.Vinculum;
 
@@ -39,10 +34,10 @@ public static class MenuScene
         //----------------------------------------------------------------------------------
         logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
         background = Raylib.LoadTexture("resources/Common/MenuBackground.png");// TODO: load random map 
-/*        box = LoadTexture("resources/common/box.png");
-        xboxController = LoadTexture("resources/common/xboxController.png");
-        keyboard = LoadTexture("resources/common/keyboard.png");
-*/
+        /*        box = LoadTexture("resources/common/box.png");
+                xboxController = LoadTexture("resources/common/xboxController.png");
+                keyboard = LoadTexture("resources/common/keyboard.png");
+        */
 
     }
 

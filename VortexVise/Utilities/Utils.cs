@@ -1,5 +1,5 @@
-﻿using ZeroElectric.Vinculum;
-using System.Numerics;
+﻿using System.Numerics;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.Utilities;
 

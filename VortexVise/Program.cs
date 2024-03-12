@@ -47,9 +47,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
         if (GameOptions.BorderlessFullScreen)
             Raylib.ToggleBorderlessWindowed();
         else
-        {
             Raylib.ToggleFullscreen();
-        }
     }
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_F7)) Utils.SwitchDebug();
 
@@ -57,7 +55,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     //----------------------------------------------------------------------------------
     Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
-    // Update scene
+    // Update game
     //----------------------------------------------------------------------------------
     GameSceneManager.UpdateScene();
 
@@ -88,7 +86,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     Raylib.ClearBackground(Raylib.BLACK);
 
-    // Draw
+    // Draw Game
     //----------------------------------------------------------------------------------
     GameSceneManager.DrawScene();
 

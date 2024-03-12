@@ -1,6 +1,6 @@
-﻿using ZeroElectric.Vinculum;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.Logic;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
