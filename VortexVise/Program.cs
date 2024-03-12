@@ -59,40 +59,16 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update scene
     //----------------------------------------------------------------------------------
-    if (!GameSceneManager.OnTransition)
-    {
+    GameSceneManager.UpdateScene();
 
-        // Update
-        //----------------------------------------------------------------------------------
-        switch (GameSceneManager.CurrentScene)
-        {
-            case GameScene.GAMEPLAY:
-                {
-                    GameplayScene.UpdateGameplayScene();
-                    //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
-                    //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
-
-                }
-                break;
-            case GameScene.MENU:
-                {
-                    MenuScene.UpdateMenuScene();
-                    if(MenuScene.FinishMenuScene() == 2) GameSceneManager.TransitionToNewScene(GameScene.GAMEPLAY);
-                    else if(MenuScene.FinishMenuScene() == -1) GameSceneManager.TransitionToNewScene(GameScene.UNKNOWN);
-                }
-                break;
-            default: break;
-        }
-    }
-    else GameSceneManager.UpdateTransition();    // Update transition (fade-in, fade-out)
-    // Draw
-    //----------------------------------------------------------------------------------
 
     // Update user interface
     //----------------------------------------------------------------------------------
     GameUserInterface.UpdateUserInterface();
 
 
+    // Deal with resolution
+    //----------------------------------------------------------------------------------
     // Setup scalling
     float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
     GameCore.GameScreenScale = MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
@@ -112,15 +88,9 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     Raylib.ClearBackground(BLACK);
 
-    // Deal with resolution
+    // Draw
     //----------------------------------------------------------------------------------
-
-    switch (GameSceneManager.CurrentScene)
-    {
-        case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(); break;
-        case GameScene.MENU: MenuScene.DrawMenuScene(); break;
-        default: break;
-    }
+    GameSceneManager.DrawScene();
 
     // Draw full screen rectangle in front of everything
     if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
@@ -159,13 +129,6 @@ while (!GameSceneManager.TransitionFadeOut)
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
-// Unload current screen data before closing
-switch (GameSceneManager.CurrentScene)
-{
-    case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(); break;
-    case GameScene.MENU: MenuScene.UnloadMenuScene(); break;
-    default: break;
-}
 GameUserInterface.UnloadUserInterface();
 
 // Unload global data loaded

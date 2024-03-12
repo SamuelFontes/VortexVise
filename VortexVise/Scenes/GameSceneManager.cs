@@ -27,7 +27,7 @@ static internal class GameSceneManager
     {
         if (!TransitionFadeOut)
         {
-            TransitionAlpha += 1 * Raylib.GetFrameTime();
+            TransitionAlpha += Raylib.GetFrameTime();
 
             // NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
             // For that reason we compare against 1.01f, to avoid last frame loading stop
@@ -66,7 +66,7 @@ static internal class GameSceneManager
         }
         else  // Transition fade out logic
         {
-            TransitionAlpha -= 2 * Raylib.GetFrameTime();
+            TransitionAlpha -= Raylib.GetFrameTime();
 
             if (TransitionAlpha < -0.01f)
             {
@@ -85,4 +85,42 @@ static internal class GameSceneManager
         Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, Raylib.Fade(BLACK, TransitionAlpha));
     }
 
+    public static void UpdateScene()
+    {
+        if (!OnTransition)
+        {
+            // Update
+            //----------------------------------------------------------------------------------
+            switch (CurrentScene)
+            {
+                case GameScene.GAMEPLAY:
+                    {
+                        GameplayScene.UpdateGameplayScene();
+                        //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                        //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+
+                    }
+                    break;
+                case GameScene.MENU:
+                    {
+                        MenuScene.UpdateMenuScene();
+                        if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
+                        else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
+                    }
+                    break;
+                default: break;
+            }
+        }
+        else UpdateTransition();    // Update transition (fade-in, fade-out)
+    }
+
+    public static void DrawScene()
+    {
+        switch (CurrentScene)
+        {
+            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(); break;
+            case GameScene.MENU: MenuScene.DrawMenuScene(); break;
+            default: break;
+        }
+    }
 }
