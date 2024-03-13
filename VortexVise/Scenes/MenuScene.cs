@@ -103,6 +103,9 @@ public static class MenuScene
         PlaySelectionSound();
         Vector2 textPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
         foreach (var item in menuItems) if (item.State == currentState) item.Update(ref textPosition.X, ref textPosition.Y);
+        var s = menuItems.FirstOrDefault(x => x.IsSelected);
+        if (s == null) selected = MainMenuItens.MENU_NONE;
+        else selected = s.Item;
     }
 
     static public void DrawMenuScene()
@@ -167,12 +170,10 @@ public static class MenuScene
             if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, textSize.X, textSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
             {
                 IsSelected = true;
-                selected = Item;
             }
             else
             {
                 IsSelected = false;
-                selected = MainMenuItens.MENU_NONE;
             }
 
             // Paint the text
