@@ -78,23 +78,57 @@ public static class MenuScene
         else if (Raylib.IsKeyPressed(KeyboardKey.KEY_S) || Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))
         {
             GameUserInterface.IsCursorVisible = false;
-            switch (selected)
+            var shouldSelectNext = false;
+            foreach(var item in menuItems)
             {
-                case MainMenuItens.MENU_NONE: selected = MainMenuItens.MENU_VERSUS; break;
-                case MainMenuItens.MENU_VERSUS: selected = MainMenuItens.MENU_EXIT; break;
-                case MainMenuItens.MENU_EXIT: selected = MainMenuItens.MENU_VERSUS; break;
-                default: break;
+                if (item.State != currentState) continue;
+                if (item.IsSelected)
+                {
+                    shouldSelectNext = true;
+                    item.IsSelected = false;
+                    selected = MainMenuItens.MENU_NONE;
+                }
+                else if (shouldSelectNext && item.IsEnabled)
+                {
+                    shouldSelectNext = false;
+                    item.IsSelected = true;
+                    selected = item.Item;
+
+                }
+            }
+            if (shouldSelectNext || selected == MainMenuItens.MENU_NONE)
+            {
+                var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).Last();
+                item.IsSelected = true; // Means the item is the last
+                selected = item.Item;
             }
         }
         else if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) || Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
         {
             GameUserInterface.IsCursorVisible = false;
-            switch (selected)
+            var shouldSelectNext = false;
+            for (int i = menuItems.Count-1; i >= 0; i--)
             {
-                case MainMenuItens.MENU_NONE: selected = MainMenuItens.MENU_VERSUS; break;
-                case MainMenuItens.MENU_VERSUS: selected = MainMenuItens.MENU_EXIT; break;
-                case MainMenuItens.MENU_EXIT: selected = MainMenuItens.MENU_VERSUS; break;
-                default: break;
+                var item = menuItems[i];
+                if (item.State != currentState) continue;
+                if (item.IsSelected)
+                {
+                    shouldSelectNext = true;
+                    item.IsSelected = false;
+                    selected = MainMenuItens.MENU_NONE;
+                }
+                else if (shouldSelectNext && item.IsEnabled)
+                {
+                    shouldSelectNext = false;
+                    item.IsSelected = true;
+                    selected = item.Item;
+                }
+            }
+            if (shouldSelectNext || selected == MainMenuItens.MENU_NONE)
+            {
+                var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).First();
+                item.IsSelected = true; // Means the item is the first
+                selected = item.Item;
             }
         }
 
@@ -171,7 +205,7 @@ public static class MenuScene
             {
                 IsSelected = true;
             }
-            else
+            else if(GameUserInterface.IsCursorVisible || selected != Item)
             {
                 IsSelected = false;
             }
