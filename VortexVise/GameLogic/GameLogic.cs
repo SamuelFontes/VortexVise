@@ -4,6 +4,7 @@ namespace VortexVise.Logic;
 
 public static class GameLogic
 {
+    private static InputState InputBuffer = new InputState(); // records all input and send them on network frames
     public static GameState SimulateState(GameState lastState, double currentTime, Guid playerId, float deltaTime, bool isNetworkFrame)
     {
         GameState state = new()
@@ -18,10 +19,17 @@ public static class GameLogic
             PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
             if (lastPlayerState.Id == playerId)
             {
-                //if(isNetworkFrame)
-                currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
-                                                                   //else 
-                                                                   //currentPlayerState.Input = lastPlayerState.Input;
+                if (isNetworkFrame)
+                {
+                    currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
+                    currentPlayerState.Input.ApplyInputBuffer(InputBuffer);
+                    InputBuffer.ClearInputBuffer();
+                }
+                else
+                {
+                    currentPlayerState.Input = lastPlayerState.Input;
+                    InputBuffer.ApplyInputBuffer(PlayerLogic.GetInput());
+                }
             }
             else
             {

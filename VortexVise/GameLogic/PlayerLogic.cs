@@ -57,13 +57,13 @@ public static class PlayerLogic
     {
         var velocity = lastState.Velocity;
         bool isTouchingTheGround = lastState.IsTouchingTheGround;
-        if (input.Right)
+        if (input.Right && !input.Left)
         {
             velocity.X += _acceleration * deltaTime;
             if (velocity.X > _maxMoveSpeed)
                 velocity.X = RayMath.Lerp(velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime));
         }
-        else if (input.Left)
+        else if (input.Left && !input.Right)
         {
             velocity.X -= _acceleration * deltaTime;
             if (velocity.X < _maxMoveSpeed * -1)
