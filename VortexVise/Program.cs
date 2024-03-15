@@ -44,7 +44,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     //----------------------------------------------------------------------------------
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_F11))
     {
-        if (GameOptions.BorderlessFullScreen)
+        if (GameSettings.BorderlessFullScreen)
             Raylib.ToggleBorderlessWindowed();
         else
             Raylib.ToggleFullscreen();
@@ -71,7 +71,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
     GameCore.GameScreenScale = MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
     TextureFilter screenFiltering;
-    if (GameOptions.IntegerScalling && GameCore.GameScreenScale == (int)GameCore.GameScreenScale)
+    if (GameSettings.IntegerScalling && GameCore.GameScreenScale == (int)GameCore.GameScreenScale)
     {
         screenFiltering = TextureFilter.TEXTURE_FILTER_POINT;
     }
@@ -100,7 +100,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);     // Clear screen background
 
     // Draw render texture to screen, properly scaled
-    if (GameOptions.MaintainAspectRatio)
+    if (GameSettings.MaintainAspectRatio)
     {
         Raylib.DrawTexturePro(gameRendering.texture, new(0.0f, 0.0f, gameRendering.texture.width, -gameRendering.texture.height), new(
             (Raylib.GetScreenWidth() - (GameCore.GameScreenWidth * GameCore.GameScreenScale)) * 0.5f, (Raylib.GetScreenHeight() - ((float)GameCore.GameScreenHeight * GameCore.GameScreenScale)) * 0.5f, (float)GameCore.GameScreenWidth * GameCore.GameScreenScale, (float)GameCore.GameScreenHeight * GameCore.GameScreenScale), new Vector2(0, 0), 0.0f, Raylib.WHITE);

@@ -1,6 +1,6 @@
 ﻿namespace VortexVise.GameGlobals;
 
-public static class GameOptions
+public static class GameSettings
 {
     public static bool IntegerScalling { get; set; } = true;
     public static bool MaintainAspectRatio { get; set; } = true;

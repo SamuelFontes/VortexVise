@@ -35,7 +35,7 @@ public static class GameSounds
     {
         if (GameCore.IsServer) return; // Audio don't play on the server
 
-        volume *= GameOptions.VolumeSounds;
+        volume *= GameSettings.VolumeSounds;
         Raylib.SetSoundPan(sound, pan);
         Raylib.SetSoundPitch(sound, pitch);
         Raylib.SetSoundVolume(sound, volume);
