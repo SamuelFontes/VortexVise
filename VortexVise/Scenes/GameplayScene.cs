@@ -18,6 +18,7 @@ static internal class GameplayScene
     public static Guid playerId = Guid.NewGuid();
     static public void InitGameplayScene()
     {
+        CurrentTime = Raylib.GetTime();
 
         MapLogic.LoadMap("SkyArchipelago", false);
 
@@ -42,6 +43,7 @@ static internal class GameplayScene
 
         while (simulationTime >= DeltaTime) // perform one update for every interval passed
         {
+            CurrentTime = Raylib.GetTime();
             isSlowerThanTickRate = true;
 
             if (Client.IsConnected)
@@ -71,7 +73,7 @@ static internal class GameplayScene
             LastTime += DeltaTime;
             Accumulator = 0;
             LastTimeAccumulator = CurrentTime;
-
+            LastState = State;
         }
         if (!isSlowerThanTickRate)
         {
@@ -80,9 +82,9 @@ static internal class GameplayScene
             Accumulator += accumulatorSimulationTime;
             State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)accumulatorSimulationTime, false);
             LastTimeAccumulator = CurrentTime;
+            LastState = State;
         }
         //gameStates.Add(state);
-        LastState = State;
 
     }
 

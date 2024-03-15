@@ -21,7 +21,7 @@ Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);
 RenderTexture2D gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
 Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
-//Raylib.SetTargetFPS(GameCore.GameTickRate);
+Raylib.SetTargetFPS(GameCore.TargetFPS);
 
 // Load global data (assets that must be available in all scenes, i.e. font)
 GameSounds.InitAudio();
