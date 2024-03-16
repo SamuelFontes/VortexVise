@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.GameGlobals;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Utilities;
@@ -52,18 +53,23 @@ public static class Utils
     public static void UpdateTextUsingKeyboard(ref string text)
     {
         // TODO: add other input features
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && text.Length > 0) text = text.Remove(text.Length - 1);
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && text.Length > 0)
+        {
+            GameUserInterface.IsCursorVisible = false;
+            text = text.Remove(text.Length - 1);
+        }
         else
         {
             int keyPressed = Raylib.GetCharPressed();
             if (keyPressed != 0)
             {
+                GameUserInterface.IsCursorVisible = false;
                 unsafe
                 {
                     int codepointSize = 0;
                     string textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
-                    if(textPressed.Length > codepointSize)
-                        textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length-codepointSize));
+                    if (textPressed.Length > codepointSize)
+                        textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length - codepointSize));
                     text += textPressed;
                 }
             }

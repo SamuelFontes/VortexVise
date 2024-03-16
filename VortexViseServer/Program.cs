@@ -5,6 +5,7 @@ using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
 
+GameCore.IsServer = true;
 
 Console.WriteLine("VortexVise Server Started!");
 IPEndPoint ipep = new IPEndPoint(IPAddress.Any, GameCore.NetworkPort);
