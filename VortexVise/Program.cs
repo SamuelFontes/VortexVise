@@ -9,6 +9,7 @@
 using System.Numerics;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
+using VortexVise.Logic;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
@@ -36,6 +37,7 @@ Raylib.PlayMusicStream(music);
 GameSceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
+MapLogic.Init();
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------
