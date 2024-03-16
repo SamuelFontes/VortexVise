@@ -48,4 +48,26 @@ public static class Utils
     {
         return _fps;
     }
+
+    public static void UpdateTextUsingKeyboard(ref string text)
+    {
+        // TODO: add other input features
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && text.Length > 0) text = text.Remove(text.Length - 1);
+        else
+        {
+            int keyPressed = Raylib.GetCharPressed();
+            string textPressed;
+            if (keyPressed != 0)
+            {
+                unsafe
+                {
+                    int codepointSize = 0;
+                    textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
+                    if(textPressed.Length > codepointSize)
+                        textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length-codepointSize));
+                    text += textPressed;
+                }
+            }
+        }
+    }
 }

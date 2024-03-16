@@ -18,6 +18,7 @@ static internal class GameplayScene
     public static Guid playerId = Guid.NewGuid();
     static public void InitGameplayScene()
     {
+        GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
 
         MapLogic.LoadMap("SkyArchipelago", false);
