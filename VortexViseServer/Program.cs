@@ -7,10 +7,9 @@ using VortexVise.States;
 
 
 Console.WriteLine("VortexVise Server Started!");
-int port  = 9050;
-IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
+IPEndPoint ipep = new IPEndPoint(IPAddress.Any, GameCore.NetworkPort);
 UdpClient newsock = new UdpClient(ipep);
-Console.WriteLine("Server running on port "+port);
+Console.WriteLine("Server running on port "+GameCore.NetworkPort);
 
 Console.WriteLine("Waiting for a client...");
 

@@ -9,7 +9,6 @@ namespace VortexVise.Logic;
 
 public static class GameClient
 {
-    static int port = 46439;
     static public bool IsConnected = false;
     static private UdpClient _udpClient = new UdpClient(11000);
     static public GameState LastServerState = new GameState();
@@ -21,7 +20,7 @@ public static class GameClient
         // This constructor arbitrarily assigns the local port number.
         try
         {
-            _udpClient.Connect(GameCore.ServerIPAddress, port);
+            _udpClient.Connect(GameCore.ServerIPAddress, GameCore.NetworkPort);
             IsConnected = true;
             UpdatePing();
             Thread getPingThread = new Thread(new ThreadStart(GetServerLatency));

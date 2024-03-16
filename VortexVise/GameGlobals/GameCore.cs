@@ -16,4 +16,5 @@ public static class GameCore
     public static int TargetFPS { get; private set; } = 0;                      // Simulate game fps
     public static string ServerIPAddress { get; set; } = "";                    // Currently connected server ip
     public static bool IsNetworkGame { get; set; } = false;                     // Defines if it's a network game
+    public static int NetworkPort { get; set; } = 9050;                         // Defines the game port
 }
