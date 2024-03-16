@@ -30,7 +30,7 @@ public static class PlayerLogic
             HookLogic._texture = new Texture2D() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
-        SpawnPoint = new Vector2(MapLogic._mapTexture.width * 0.5f, MapLogic._mapTexture.height * 0.5f);
+        SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);
         var cameraView = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
         _camera = new Camera2D();

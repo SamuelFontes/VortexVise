@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.Models;
@@ -9,13 +10,13 @@ namespace VortexVise.Logic;
 
 public static class MapLogic
 {
-    static List<Map> Maps { get; set; } = new List<Map>();
-    static string _mapName;
-    static string _mapDescription;
-    static string _texturePath;
-    public static Texture2D _mapTexture; // This is the whole map baked into an image
-    static List<Rectangle> _collisions = new List<Rectangle>();
+    public static List<Map> Maps { get; set; } = new List<Map>();
+    public static Texture2D MapTexture; // This is the whole map baked into an image
+    public static List<Rectangle> MapCollisions = new List<Rectangle>();
+    public static Map CurrentMap { get; set; }
+
     static string mapLocation = "Resources/Maps";
+    static int mapMirrored = 1;
 
     public static void Init()
     {
@@ -112,18 +113,43 @@ public static class MapLogic
 
     public static void LoadRandomMap()
     {
-        var map = Maps.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+        CurrentMap = Maps.OrderBy(x => Guid.NewGuid()).First();
+        MapTexture = Raylib.LoadTexture(CurrentMap.TextureLocation);
 
-        _mapTexture = Raylib.LoadTexture(map.TextureLocation);
-        _collisions = map.Collisions;
+        // Mirror map random
+        var random = new Random().Next(2);
+        if (random == 0)
+        {
+            // Regular Map
+            mapMirrored = 1;
+            MapCollisions = CurrentMap.Collisions;
+        }
+        else
+        {
+            // Inverted map
+            var collisions = CurrentMap.Collisions;
+            var mirroredCollisions = new List<Rectangle>();
+            mapMirrored = -1;
+            foreach(var collision in collisions)
+            {
+                var mirroredCollision = new Rectangle();
+                mirroredCollision.X = MapTexture.width - collision.x - collision.width;
+                mirroredCollision.Y = collision.Y;
+                mirroredCollision.width = collision.width;
+                mirroredCollision.height = collision.height;
+                mirroredCollisions.Add(mirroredCollision);
+            }
+            MapCollisions = mirroredCollisions;
+        }
+
     }
 
     public static void Draw()
     {
-        Raylib.DrawTextureEx(_mapTexture, new Vector2(0, 0), 0, 1, Raylib.WHITE);
+        Raylib.DrawTextureRec(MapTexture, new(0, 0, MapTexture.width * mapMirrored, MapTexture.height), new Vector2(0, 0), Raylib.WHITE);
         if (Utils.Debug())
         {
-            foreach (var collision in _collisions) // DEBUG
+            foreach (var collision in MapCollisions) // DEBUG
             {
                 Raylib.DrawRectangleRec(collision, Raylib.BLUE);
             }
@@ -133,12 +159,12 @@ public static class MapLogic
 
     public static List<Rectangle> GetCollisions()
     {
-        return _collisions;
+        return MapCollisions;
     }
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(_mapTexture.width, _mapTexture.height);
+        return new Vector2(MapTexture.width, MapTexture.height);
     }
 
 }
