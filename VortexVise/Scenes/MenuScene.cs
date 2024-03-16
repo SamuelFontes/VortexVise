@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.GameGlobals;
+using VortexVise.Logic;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -79,6 +80,7 @@ public static class MenuScene
                 case MainMenuItens.Versus:
                     {
                         finishScreen = 2;   // GAMEPLAY
+                        GameCore.IsNetworkGame = false;
                         GameSounds.PlaySound(GameSounds.Click);
                         break;
                     }
@@ -88,6 +90,15 @@ public static class MenuScene
                         currentState = MainMenuState.StateOnline;
                         currentState = MainMenuState.StateMain;
                         GameSounds.PlaySound(GameSounds.Click);
+                        break;
+                    }
+                case MainMenuItens.Connect:
+                    {
+                        var item = menuItems.First(x => x.Item == MainMenuItens.IP);
+                        GameCore.IsNetworkGame = true;
+                        GameCore.ServerIPAddress = item.Text;
+                        if(GameClient.Connect())
+                            finishScreen = 2;
                         break;
                     }
                 default: break;

@@ -14,7 +14,6 @@ static internal class GameplayScene
     public static GameState LastState = new();
     public static double Accumulator = 0;
     public static GameState State = new GameState();
-    public static GameClient Client = new GameClient();
     public static Guid playerId = Guid.NewGuid();
     static public void InitGameplayScene()
     {
@@ -47,18 +46,18 @@ static internal class GameplayScene
             CurrentTime = Raylib.GetTime();
             isSlowerThanTickRate = true;
 
-            if (Client.IsConnected)
+            if (GameClient.IsConnected)
             {
                 // Do all the network magic
-                Client.SendInput(PlayerLogic.GetInput(), playerId, CurrentTime);
+                GameClient.SendInput(PlayerLogic.GetInput(), playerId, CurrentTime);
 
                 // This should not stop the game, so make it run in another task
-                GameState receivedState = Client.LastServerState;
-                if (receivedState.CurrentTime != Client.LastSimulatedTime)
+                GameState receivedState = GameClient.LastServerState;
+                if (receivedState.CurrentTime != GameClient.LastSimulatedTime)
                 {
                     receivedState.ApproximateState(LastState, playerId);
                     State = GameLogic.SimulateState(receivedState, CurrentTime, playerId, (float)(DeltaTime - Accumulator), true);
-                    Client.LastSimulatedTime = receivedState.CurrentTime;
+                    GameClient.LastSimulatedTime = receivedState.CurrentTime;
                 }
                 else
                 {
@@ -98,6 +97,8 @@ static internal class GameplayScene
         PlayerLogic.ProcessCamera(player.Position);
         GameLogic.DrawState(State);
         Raylib.EndMode2D();
+
+        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(),0, 32, 32, Raylib.RAYWHITE);
     }
 
     static public void UnloadGameplayScene()

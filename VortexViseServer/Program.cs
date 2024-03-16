@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
 
@@ -15,7 +16,7 @@ Console.WriteLine("Waiting for a client...");
 
 IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
 
-int tickrate = 64;
+int tickrate = GameCore.GameTickRate;
 double deltaTime = 1d / tickrate;
 double currentTime = 0;
 var lastTime = currentTime;

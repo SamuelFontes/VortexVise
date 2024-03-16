@@ -2,27 +2,26 @@
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using VortexVise.GameGlobals;
 using VortexVise.States;
 
 namespace VortexVise.Logic;
 
-public class GameClient
+public static class GameClient
 {
-    //string ip = "samuguel-46439.portmap.io";
-    string ip = "localhost";
-    int port = 46439;
-    public bool IsConnected = false;
-    private UdpClient _udpClient = new UdpClient(11000);
-    public GameState LastServerState = new GameState();
-    public double LastSimulatedTime = 0;
-    public long Ping = 0;
-    public void Connect()
+    static int port = 46439;
+    static public bool IsConnected = false;
+    static private UdpClient _udpClient = new UdpClient(11000);
+    static public GameState LastServerState = new GameState();
+    static public double LastSimulatedTime = 0;
+    static public long Ping = 0;
+    static public bool Connect()
     {
 
         // This constructor arbitrarily assigns the local port number.
         try
         {
-            _udpClient.Connect(ip, port);
+            _udpClient.Connect(GameCore.ServerIPAddress, port);
             IsConnected = true;
             UpdatePing();
             Thread getPingThread = new Thread(new ThreadStart(GetServerLatency));
@@ -35,9 +34,10 @@ public class GameClient
             _udpClient.Close();
             IsConnected = false;
         }
+        return IsConnected;
     }
 
-    public void Disconnect()
+    static public void Disconnect()
     {
         try
         {
@@ -52,7 +52,7 @@ public class GameClient
 
     }
 
-    public bool SendState(GameState state)
+    static public bool SendState(GameState state)
     {
         bool wasSent = false;
         try
@@ -73,7 +73,7 @@ public class GameClient
 
         return wasSent;
     }
-    public bool SendInput(InputState input, Guid playerId, double time)
+    static public bool SendInput(InputState input, Guid playerId, double time)
     {
         bool wasSent = false;
         try
@@ -94,7 +94,7 @@ public class GameClient
 
         return wasSent;
     }
-    public void GetState()
+    static public void GetState()
     {
         while (true)
         {
@@ -120,7 +120,7 @@ public class GameClient
 
         }
     }
-    public async void GetServerLatency()
+    static public async void GetServerLatency()
     {
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
 
@@ -130,10 +130,10 @@ public class GameClient
             UpdatePing();
         }
     }
-    void UpdatePing()
+    static void UpdatePing()
     {
         Ping ping = new Ping();
-        PingReply reply = ping.Send(ip, 1000);
+        PingReply reply = ping.Send(GameCore.ServerIPAddress, 1000);
         Ping = reply.RoundtripTime;
     }
 }

@@ -56,13 +56,12 @@ public static class Utils
         else
         {
             int keyPressed = Raylib.GetCharPressed();
-            string textPressed;
             if (keyPressed != 0)
             {
                 unsafe
                 {
                     int codepointSize = 0;
-                    textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
+                    string textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
                     if(textPressed.Length > codepointSize)
                         textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length-codepointSize));
                     text += textPressed;
