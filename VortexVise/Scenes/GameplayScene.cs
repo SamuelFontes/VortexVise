@@ -20,7 +20,7 @@ static internal class GameplayScene
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
 
-        MapLogic.LoadMap("SkyArchipelago", false);
+        MapLogic.LoadRandomMap();
 
         LastTimeAccumulator = CurrentTime;
         DeltaTime = 1d / GameCore.GameTickRate;

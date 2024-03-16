@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.Models;
 using VortexVise.Utilities;
@@ -14,12 +15,13 @@ public static class MapLogic
     static string _texturePath;
     public static Texture2D _mapTexture; // This is the whole map baked into an image
     static List<Rectangle> _collisions = new List<Rectangle>();
+    static string mapLocation = "Resources/Maps";
 
     public static void Init()
     {
         // Get all files from the Resources/Maps folder to read list of avaliable game levels aka maps
-        string[] mapFiles = Directory.GetFiles("Resources/Maps", "*.ini", SearchOption.TopDirectoryOnly);
-        string[] pngFiles = Directory.GetFiles("Resources/Maps", "*.png", SearchOption.TopDirectoryOnly);
+        string[] mapFiles = Directory.GetFiles(mapLocation, "*.ini", SearchOption.TopDirectoryOnly);
+        string[] pngFiles = Directory.GetFiles(mapLocation, "*.png", SearchOption.TopDirectoryOnly);
         foreach (var file in mapFiles)
         {
             string fileContent = File.ReadAllText(file);
@@ -93,9 +95,9 @@ public static class MapLogic
                 if (map.GameModes.Count == 0) throw new Exception("Can't read map GAME_MODES");
 
                 // Check for image file
-                var mapFileName = Regex.Match(fileContent, @"[\s\w\d]+(?=\.ini)").Value;
+                var mapFileName = Regex.Match(file, @"[\s\S]+(?=\.ini)").Value;
                 mapFileName += ".png";
-                if(!pngFiles.Contains(mapFileName)) throw new Exception($"Can't find image file {mapFileName}");
+                if (!pngFiles.Contains(mapFileName)) throw new Exception($"Can't find image file {mapFileName}");
                 map.TextureLocation = mapFileName;
 
                 Maps.Add(map);
@@ -103,41 +105,17 @@ public static class MapLogic
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error reading map {file}: {ex.Message}");
+                if (Maps.Count == 0) throw new Exception("Can't find any map");
             }
         }
     }
 
-    public static void LoadMap(string mapName, bool isServer)
+    public static void LoadRandomMap()
     {
-        // TODO: Load collisions and image from a file
-        string mapFolder = "Resources/Sprites/Maps/";
-        if (!isServer)
-            _mapTexture = Raylib.LoadTexture(mapFolder + mapName + ".png");
-        else
-            _mapTexture = new Texture2D() { height = 2048, width = 2048 }; // TODO: Get the map size from some place
+        var map = Maps.OrderBy(x => Guid.NewGuid()).FirstOrDefault();
 
-
-        // TODO: Load from a json or some shit like that
-        _collisions.Clear();
-        _collisions.Add(new Rectangle(85, 343, 245, 16));
-        _collisions.Add(new Rectangle(13, 448, 38, 16));
-        _collisions.Add(new Rectangle(54, 466, 179, 16));
-        _collisions.Add(new Rectangle(240, 460, 66, 16));
-        _collisions.Add(new Rectangle(305, 501, 71, 16));
-        _collisions.Add(new Rectangle(361, 297, 74, 16));
-        _collisions.Add(new Rectangle(442, 308, 135, 16));
-        _collisions.Add(new Rectangle(570, 149, 252, 16));
-        _collisions.Add(new Rectangle(745, 352, 226, 16));
-        _collisions.Add(new Rectangle(670, 456, 347, 16));
-        _collisions.Add(new Rectangle(415, 690, 258, 16));
-        _collisions.Add(new Rectangle(190, 696, 64, 16));
-        _collisions.Add(new Rectangle(252, 728, 39, 16));
-        _collisions.Add(new Rectangle(111, 813, 281, 16));
-        _collisions.Add(new Rectangle(337, 855, 61, 16));
-        _collisions.Add(new Rectangle(771, 682, 92, 16));
-        _collisions.Add(new Rectangle(712, 806, 129, 16));
-        _collisions.Add(new Rectangle(843, 819, 85, 16));
-        _collisions.Add(new Rectangle(609, 854, 128, 16));
+        _mapTexture = Raylib.LoadTexture(map.TextureLocation);
+        _collisions = map.Collisions;
     }
 
     public static void Draw()

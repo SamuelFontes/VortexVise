@@ -32,7 +32,7 @@ var watch = System.Diagnostics.Stopwatch.StartNew();
 
 GameState state = new GameState();
 state = lastState;
-MapLogic.LoadMap("SkyArchipelago", true);
+MapLogic.LoadRandomMap();
 PlayerLogic.Init(true);
 
 // Start receiving networking packets
