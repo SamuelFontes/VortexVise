@@ -1,4 +1,32 @@
-﻿using System.Net;
+using Microsoft.AspNetCore.ResponseCompression;
+using VortexViseServer;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+          new[] { "application/octet-stream" });
+});
+
+// Add services to the container.
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseHttpsRedirection();
+
+app.MapGet("/", () =>
+{
+    return "VortexViseServer";
+});
+
+app.UseResponseCompression();
+app.MapHub<GameHub>("/GameHub");
+
+
+app.Run();
+/*
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using VortexVise.GameGlobals;
@@ -149,3 +177,5 @@ class Player
     public double Time;
     public IPEndPoint Sender;
 };
+
+*/

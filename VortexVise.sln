@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexVise", "VortexVise\Vo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexViseEditor", "VortexViseEditor\VortexViseEditor.csproj", "{4DBFB6B5-D4FD-4EB5-B546-2D81B4076789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexViseServer", "VortexViseServer\VortexViseServer.csproj", "{4DEA9D79-00D4-43BD-A696-80B3DFAF26DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexViseServer", "VortexViseServer\VortexViseServer.csproj", "{DDB313C9-32DF-4C91-BD85-DBF4D121BE29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{4DBFB6B5-D4FD-4EB5-B546-2D81B4076789}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DBFB6B5-D4FD-4EB5-B546-2D81B4076789}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DBFB6B5-D4FD-4EB5-B546-2D81B4076789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DEA9D79-00D4-43BD-A696-80B3DFAF26DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DEA9D79-00D4-43BD-A696-80B3DFAF26DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DEA9D79-00D4-43BD-A696-80B3DFAF26DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DEA9D79-00D4-43BD-A696-80B3DFAF26DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDB313C9-32DF-4C91-BD85-DBF4D121BE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB313C9-32DF-4C91-BD85-DBF4D121BE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB313C9-32DF-4C91-BD85-DBF4D121BE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB313C9-32DF-4C91-BD85-DBF4D121BE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

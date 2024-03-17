@@ -6,6 +6,7 @@
 *
 ********************************************************************************************/
 
+using Microsoft.AspNetCore.SignalR.Client;
 using System.Numerics;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
@@ -38,6 +39,12 @@ GameSceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
 MapLogic.Init();
+
+// Start multiplayer
+GameCore.HubConnection = new HubConnectionBuilder()
+    .WithUrl(new Uri("https://localhost:7094/GameHub"))
+    .WithAutomaticReconnect()
+            .Build();
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------

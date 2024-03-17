@@ -1,4 +1,5 @@
-﻿using ZeroElectric.Vinculum;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
@@ -17,4 +18,5 @@ public static class GameCore
     public static string ServerIPAddress { get; set; } = "";                    // Currently connected server ip
     public static bool IsNetworkGame { get; set; } = false;                     // Defines if it's a network game
     public static int NetworkPort { get; set; } = 9050;                         // Defines the game port
+    public static HubConnection HubConnection { get; set; }
 }
