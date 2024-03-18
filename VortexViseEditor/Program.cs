@@ -1,7 +1,20 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
+using VortexVise.Logic;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
+
+
+MapLogic.Init();
+var mapId = 0;
+foreach (var m in MapLogic.Maps)
+{
+    Console.WriteLine($"{mapId} - {m.TextureLocation}");
+    mapId++;
+}
+int selected = Convert.ToInt32(Console.ReadLine());
+Map map = MapLogic.Maps[selected];
+
 
 // THIS CODE IS SHIT, IT WAS DONE REALLY FAST
 float roundf(float var)
@@ -28,13 +41,11 @@ camera.offset = new(0, 0);
 camera.rotation = 0.0f;
 camera.zoom = 1.0f;
 
-var mapname = "CookhouseShootout";
-var mapTexture = Raylib.LoadTexture("C:/code/personal/VortexVise/VortexVise/Resources/Maps/" + mapname + ".png");
-var mouseTexture = Raylib.LoadTexture("C:\\code\\personal\\VortexVise\\VortexVise\\Resources\\Common\\cursor.png");
+var mapTexture = Raylib.LoadTexture(map.TextureLocation);
+var mouseTexture = Raylib.LoadTexture("Resources\\Common\\cursor.png");
 
 Vector2 oldMousePosition = new(0, 0);
 Vector2 mapPos = new(0, 0);
-Map map = new Map();
 Raylib.HideCursor();
 
 int state = 0;
@@ -160,6 +171,34 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
 
     }
     if (isDrawing) selection = new((int)selection.x, (int)selection.y, (int)mapCursorX - (int)selection.x, (int)mapCursorY - (int)selection.y);
+
+
+    // SAVE
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && Raylib.IsKeyPressed(KeyboardKey.KEY_S))
+    {
+        Console.WriteLine($"Choose Map Name(Leave empty to use \"{map.Name}\"):");
+        var mapName = Console.ReadLine();
+        if (mapName == null || mapName.Length == 0) mapName = map.Name;
+        string collisions = "";
+        foreach (var c in map.Collisions) collisions += $"{(int)c.x},{(int)c.y},{(int)c.width},{(int)c.height};";
+        string playerSpawn = "";
+        foreach (var c in map.PlayerSpawnPoints) playerSpawn += $"{(int)c.X},{(int)c.Y};";
+        string enemySpawn = "";
+        foreach (var c in map.EnemySpawnPoints) enemySpawn += $"{(int)c.X},{(int)c.Y};";
+        string itemSpawn = "";
+        foreach (var c in map.ItemSpawnPoints) itemSpawn += $"{(int)c.X},{(int)c.Y};";
+
+
+
+        var save = $@"[VortexViseMap]
+NAME={mapName}
+COLLISIONS={collisions}
+PLAYER_SPAWN={playerSpawn}
+ENEMY_SPAWN={enemySpawn}
+ITEM_SPAWN={itemSpawn}
+GAME_MODES = DM,TDM,SURVIVAL";
+        Console.WriteLine(save);
+    }
 
     // Draw
     //-----------------------------------------------------

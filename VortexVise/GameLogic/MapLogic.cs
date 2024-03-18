@@ -33,15 +33,15 @@ public static class MapLogic
                 if (map.Name == null || map.Name.Length == 0) throw new Exception("Can't read map NAME");
 
                 // Read map collisions
-                var txtCollisions = Regex.Match(fileContent, @"(?<=COLLISIONS \s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
+                var txtCollisions = Regex.Match(fileContent, @"(?<=COLLISIONS\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
                 var matchesCollisions = Regex.Matches(txtCollisions, @"[\s\S]*?;");
                 foreach (Match match in matchesCollisions)
                 {
                     var collision = new Rectangle();
-                    collision.x = float.Parse(Regex.Match(match.Value, @"\d+(?=,\d+,\d+,\d+;)").Value);
-                    collision.y = float.Parse(Regex.Match(match.Value, @"(?<=\d+,)\d+(?=,\d+,\d+;)").Value);
-                    collision.width = float.Parse(Regex.Match(match.Value, @"(?<=\d+,\d+,)\d+(?=,\d+;)").Value);
-                    collision.height = float.Parse(Regex.Match(match.Value, @"(?<=\d+,\d+,\d+,)\d+(?=;)").Value);
+                    collision.x = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+,[\d\.]+,[\d\.]+;)").Value);
+                    collision.y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=,[\d\.]+,[\d\.]+;)").Value);
+                    collision.width = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,)[\d\.]+(?=,[\d\.]+;)").Value);
+                    collision.height = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,[\d\.]+,)[\d\.]+(?=;)").Value);
                     map.Collisions.Add(collision);
                 }
                 if (map.Collisions.Count == 0) throw new Exception("Can't read map COLLISIONS");
@@ -52,8 +52,8 @@ public static class MapLogic
                 foreach (Match match in matchesPlayerSpawn)
                 {
                     var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"\d+(?=,\d+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=\d+,)\d+(?=;)").Value);
+                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
+                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.],)[\d\.]+(?=;)").Value);
                     map.PlayerSpawnPoints.Add(spawn);
                 }
                 if (map.PlayerSpawnPoints.Count == 0) throw new Exception("Can't read map PlayerSpawnPoints");
@@ -64,8 +64,8 @@ public static class MapLogic
                 foreach (Match match in matchesEnemySpawn)
                 {
                     var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"\d+(?=,\d+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=\d+,)\d+(?=;)").Value);
+                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
+                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value);
                     map.EnemySpawnPoints.Add(spawn);
                 }
                 if (map.EnemySpawnPoints.Count == 0) throw new Exception("Can't read map EnemySpawnPoints");
@@ -76,8 +76,8 @@ public static class MapLogic
                 foreach (Match match in matchesItemSpawn)
                 {
                     var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"\d+(?=,\d+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=\d+,)\d+(?=;)").Value);
+                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
+                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value);
                     map.ItemSpawnPoints.Add(spawn);
                 }
                 if (map.ItemSpawnPoints.Count == 0) throw new Exception("Can't read map ItemSpawnPoints");
@@ -98,15 +98,16 @@ public static class MapLogic
                 mapFileName += ".png";
                 if (!pngFiles.Contains(mapFileName)) throw new Exception($"Can't find image file {mapFileName}");
                 map.TextureLocation = mapFileName;
+                map.MapLocation = file;
 
                 Maps.Add(map);
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error reading map {file}: {ex.Message}");
-                if (Maps.Count == 0) throw new Exception("Can't find any map");
             }
         }
+        if (Maps.Count == 0) throw new Exception("Can't find any map");
     }
 
     public static void LoadRandomMap()
