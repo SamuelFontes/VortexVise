@@ -85,6 +85,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
     var mapCursorX = mouse.X - mapX;
     var mapCursorY = mouse.Y - mapY;
 
+    if (isDrawing && state != 0) isDrawing = false;
     if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
     {
         if (state == 0)
@@ -97,19 +98,25 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             }
             else
             {
-                if(!(selection.x<0 || selection.y<0 || selection.width < 0 || selection.height < 0))
+                if (!(selection.x < 0 || selection.y < 0 || selection.width < 0 || selection.height < 0))
                     map.Collisions.Add(selection);
                 isDrawing = false;
             }
 
         }
-        else if(state == 4)
+        else if (state == 1)
+            map.PlayerSpawnPoints.Add(new(mapCursorX, mapCursorY));
+        else if (state == 2)
+            map.EnemySpawnPoints.Add(new(mapCursorX, mapCursorY));
+        else if (state == 3)
+            map.ItemSpawnPoints.Add(new(mapCursorX, mapCursorY));
+        else if (state == 4)
         {
             Rectangle rec = new(0, 0, 1, 1);
             rec.x = mapCursorX;
             rec.y = mapCursorY;
             var index = 0;
-            foreach(var c in map.Collisions)
+            foreach (var c in map.Collisions)
             {
                 if (Raylib.CheckCollisionRecs(c, rec))
                 {
@@ -118,7 +125,37 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
                 index++;
 
             }
-            map.Collisions.RemoveAt(index);
+            if (index < map.Collisions.Count) map.Collisions.RemoveAt(index);
+
+            index = 0;
+            foreach (var c in map.PlayerSpawnPoints)
+            {
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                    break;
+                index++;
+
+            }
+            if (index < map.PlayerSpawnPoints.Count) map.PlayerSpawnPoints.RemoveAt(index);
+
+            index = 0;
+            foreach (var c in map.EnemySpawnPoints)
+            {
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                    break;
+                index++;
+
+            }
+            if (index < map.EnemySpawnPoints.Count) map.EnemySpawnPoints.RemoveAt(index);
+
+            index = 0;
+            foreach (var c in map.ItemSpawnPoints)
+            {
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                    break;
+                index++;
+
+            }
+            if (index < map.ItemSpawnPoints.Count) map.ItemSpawnPoints.RemoveAt(index);
         }
 
     }
@@ -137,7 +174,10 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
     {
         Raylib.DrawRectangle((int)selection.x + (int)mapX, (int)selection.y + (int)mapY, (int)selection.width, (int)selection.height, Raylib.BLUE);
     }
-    foreach(var rec in map.Collisions) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, (int)rec.Width, (int)rec.Height, Raylib.BLUE);
+    foreach (var rec in map.Collisions) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, (int)rec.Width, (int)rec.Height, Raylib.BLUE);
+    foreach (var rec in map.PlayerSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.GREEN);
+    foreach (var rec in map.EnemySpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.RED);
+    foreach (var rec in map.ItemSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.PURPLE);
 
 
     Raylib.DrawTexturePro(mouseTexture, new(0, 0, mouseTexture.width, mouseTexture.height), cursorRec, new(0, 0), 0, color);
