@@ -109,13 +109,13 @@ public static class PlayerLogic
                 input.Up = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_S) || Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
                 input.Down = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT))
                 input.UILeft = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT))
                 input.UIRight = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_UP))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
                 input.UIUp = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))
                 input.UIDown = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K))
                 input.Jump = true;
@@ -132,25 +132,21 @@ public static class PlayerLogic
         {
             // Gamepad
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) < 0)
-            {
                 input.Left = true;
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) < 0)
                 input.UILeft = true;
-            }
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0)
-            {
                 input.Right = true;
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0)
                 input.UIRight = true;
-            }
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < 0)
-            {
                 input.Up = true;
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < 0)
                 input.UIUp = true;
-            }
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0)
-            {
                 input.Down = true;
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0)
                 input.UIDown = true;
-            }
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
                 input.Jump = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_DOWN))

@@ -54,6 +54,7 @@ public static class MenuScene
 
     static public void UpdateMenuScene()
     {
+        //TODO: Create input boxes 300x200 4x4
         if (currentState == MenuState.PressStart)
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
@@ -71,6 +72,7 @@ public static class MenuScene
                 GameSounds.PlaySound(GameSounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
                 selected = Scenes.MenuItem.None;
+                menuItems[0].IsSelected = false;
             }
         }
         else
@@ -99,21 +101,14 @@ public static class MenuScene
                             GameSounds.PlaySound(GameSounds.Click);
                             break;
                         }
-                    /*                case Scenes.MenuItem.Online:
-                                        {
-                                            foreach (var item in menuItems) item.IsSelected = false;
-                                            currentState = MenuState.StateOnline;
-                                            GameSounds.PlaySound(GameSounds.Click);
-                                            break;
-                    }
-                                    /*                case Scenes.MenuItem.Versus:
-                                                        {
-                                                            finishScreen = 2;   // GAMEPLAY
-                                                            GameCore.IsNetworkGame = false;
-                                                            GameSounds.PlaySound(GameSounds.Click);
-                                                            break;
-                                                        }
-                                    */
+                    case Scenes.MenuItem.Offline:
+                        {
+                            finishScreen = 2;   // GAMEPLAY
+                            GameCore.IsNetworkGame = false;
+                            GameSounds.PlaySound(GameSounds.Click);
+                            break;
+                        }
+
                     case Scenes.MenuItem.Return:
                         {
                             foreach (var item in menuItems) item.IsSelected = false;
@@ -124,7 +119,7 @@ public static class MenuScene
                     default: break;
                 }
             }
-            else if (input.Down)
+            else if (input.UIDown)
             {
                 GameUserInterface.IsCursorVisible = false;
                 var shouldSelectNext = false;
@@ -152,7 +147,7 @@ public static class MenuScene
                     selected = item.Item;
                 }
             }
-            else if (input.Up)
+            else if (input.UIUp)
             {
                 GameUserInterface.IsCursorVisible = false;
                 var shouldSelectNext = false;
