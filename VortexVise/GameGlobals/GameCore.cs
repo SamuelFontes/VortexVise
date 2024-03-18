@@ -18,5 +18,9 @@ public static class GameCore
     public static string ServerIPAddress { get; set; } = "";                    // Currently connected server ip
     public static bool IsNetworkGame { get; set; } = false;                     // Defines if it's a network game
     public static int NetworkPort { get; set; } = 9050;                         // Defines the game port
-    public static HubConnection HubConnection { get; set; }
+    public static HubConnection HubConnection { get; set; }                     // Network connection
+    public static int PlayerOneGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
+    public static int PlayerTwoGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
+    public static int PlayerThreeGamepad { get; set; } = -9;                     // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
+    public static int PlayerFourGamepad { get; set; } = -9;                      // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
 }

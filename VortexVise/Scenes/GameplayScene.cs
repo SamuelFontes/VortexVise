@@ -49,7 +49,7 @@ static internal class GameplayScene
             if (GameClient.IsConnected)
             {
                 // Do all the network magic
-                GameClient.SendInput(PlayerLogic.GetInput(), playerId, CurrentTime);
+                GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerOneGamepad), playerId, CurrentTime);
 
                 // This should not stop the game, so make it run in another task
                 GameState receivedState = GameClient.LastServerState;

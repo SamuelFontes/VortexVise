@@ -10,6 +10,14 @@ public class InputState
     public bool Jump { get; set; } = false;
     public bool Hook { get; set; } = false;
     public bool CancelHook { get; set; } = false;
+    public bool Confirm { get; set; } = false;
+    public bool Back { get; set; } = false;
+    public bool Start { get; set; } = false;
+    public bool Select { get; set; } = false;
+    public bool UILeft { get; set; } = false;
+    public bool UIRight { get; set; } = false;
+    public bool UIUp { get; set; } = false;
+    public bool UIDown { get; set; } = false;
 
     public void ApplyInputBuffer(InputState buffer)
     {

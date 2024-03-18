@@ -1,4 +1,5 @@
-﻿using VortexVise.States;
+﻿using VortexVise.GameGlobals;
+using VortexVise.States;
 
 namespace VortexVise.Logic;
 
@@ -21,14 +22,14 @@ public static class GameLogic
             {
                 if (isNetworkFrame)
                 {
-                    currentPlayerState.Input = PlayerLogic.GetInput(); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
+                    currentPlayerState.Input = PlayerLogic.GetInput(GameCore.PlayerOneGamepad); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
                     currentPlayerState.Input.ApplyInputBuffer(InputBuffer);
                     InputBuffer.ClearInputBuffer();
                 }
                 else
                 {
                     currentPlayerState.Input = lastPlayerState.Input;
-                    InputBuffer.ApplyInputBuffer(PlayerLogic.GetInput());
+                    InputBuffer.ApplyInputBuffer(PlayerLogic.GetInput(GameCore.PlayerOneGamepad));
                 }
             }
             else
