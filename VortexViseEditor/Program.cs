@@ -71,12 +71,14 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
     if (Raylib.IsKeyDown(KeyboardKey.KEY_W)) state = 1; // PlayerSpawn
     if (Raylib.IsKeyDown(KeyboardKey.KEY_E)) state = 2; // EnemySpawn
     if (Raylib.IsKeyDown(KeyboardKey.KEY_R)) state = 3; // ItemSpawn
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_D)) state = 4; // Delete
 
     Color color = Raylib.WHITE;
     if (state == 0) color = Raylib.BLUE;
     if (state == 1) color = Raylib.GREEN;
     if (state == 2) color = Raylib.RED;
     if (state == 3) color = Raylib.PURPLE;
+    if (state == 4) color = Raylib.DARKPURPLE;
 
     var mapX = (int)mapPos.X - (int)(mapTexture.width * 0.5f);
     var mapY = (int)mapPos.Y - (int)(mapTexture.height * 0.5f);
@@ -95,10 +97,28 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             }
             else
             {
-                map.Collisions.Add(selection);
+                if(!(selection.x<0 || selection.y<0 || selection.width < 0 || selection.height < 0))
+                    map.Collisions.Add(selection);
                 isDrawing = false;
             }
 
+        }
+        else if(state == 4)
+        {
+            Rectangle rec = new(0, 0, 1, 1);
+            rec.x = mapCursorX;
+            rec.y = mapCursorY;
+            var index = 0;
+            foreach(var c in map.Collisions)
+            {
+                if (Raylib.CheckCollisionRecs(c, rec))
+                {
+                    break;
+                }
+                index++;
+
+            }
+            map.Collisions.RemoveAt(index);
         }
 
     }
