@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Raylib-cs" Version="6.0.0" />
+    <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VortexVise\VortexVise.csproj" />
   </ItemGroup>
 
 </Project>
