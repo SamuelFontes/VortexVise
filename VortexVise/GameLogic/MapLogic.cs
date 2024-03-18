@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.Models;
 using VortexVise.Utilities;
@@ -11,7 +9,7 @@ namespace VortexVise.Logic;
 public static class MapLogic
 {
     public static List<Map> Maps { get; set; } = new List<Map>();
-    public static Texture2D MapTexture; // This is the whole map baked into an image
+    public static Texture MapTexture; // This is the whole map baked into an image
     public static List<Rectangle> MapCollisions = new List<Rectangle>();
     public static Map CurrentMap { get; set; }
 
@@ -130,7 +128,7 @@ public static class MapLogic
             var collisions = CurrentMap.Collisions;
             var mirroredCollisions = new List<Rectangle>();
             mapMirrored = -1;
-            foreach(var collision in collisions)
+            foreach (var collision in collisions)
             {
                 var mirroredCollision = new Rectangle();
                 mirroredCollision.X = MapTexture.width - collision.x - collision.width;

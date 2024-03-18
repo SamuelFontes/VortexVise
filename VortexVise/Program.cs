@@ -20,7 +20,7 @@ using ZeroElectric.Vinculum;
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
 Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);
-RenderTexture2D gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
+RenderTexture gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
 Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
 Raylib.SetTargetFPS(GameCore.TargetFPS);

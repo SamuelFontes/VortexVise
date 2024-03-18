@@ -13,8 +13,8 @@ public static class MenuScene
 {
     static List<MenuItem> menuItems = new List<MenuItem>();
     static int finishScreen = 0;
-    static Texture2D logo;
-    static Texture2D background;
+    static Texture logo;
+    static Texture background;
     static MainMenuItens selected;
     static MainMenuItens lastSelected;
     static MainMenuState currentState;
@@ -97,7 +97,7 @@ public static class MenuScene
                         var item = menuItems.First(x => x.Item == MainMenuItens.IP);
                         GameCore.IsNetworkGame = true;
                         GameCore.ServerIPAddress = item.Text;
-                        if(GameClient.Connect())
+                        if (GameClient.Connect())
                             finishScreen = 2;
                         break;
                     }
@@ -242,7 +242,7 @@ public static class MenuScene
         Vector2 TextSize;
         public void Update(ref float x, ref float y)
         {
-            if(Type == MainMenuTypes.TextInput && IsSelected)
+            if (Type == MainMenuTypes.TextInput && IsSelected)
             {
                 Utils.UpdateTextUsingKeyboard(ref Text);
             }
@@ -276,7 +276,7 @@ public static class MenuScene
         {
             // Draw input box
             if (Type == MainMenuTypes.TextInput)
-                Raylib.DrawRectangle((int)Position.X -4,(int)Position.Y-2,(int)TextSize.X+8,(int)TextSize.Y+4,new(0,0,0,100));
+                Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
             // Draw the text
             Raylib.DrawTextEx(GameCore.Font, Text, Position, Size, 0, Color);
         }

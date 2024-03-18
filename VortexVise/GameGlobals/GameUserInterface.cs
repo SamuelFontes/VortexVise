@@ -6,7 +6,7 @@ namespace VortexVise.GameGlobals;
 
 static internal class GameUserInterface
 {
-    public static Texture2D Cursor { get; private set; }
+    public static Texture Cursor { get; private set; }
     public static Vector2 CursorPosition { get; private set; }
     public static float TimeIdle { get; private set; } = 0;
     public static float CursorAlpha { get; private set; } = 0;

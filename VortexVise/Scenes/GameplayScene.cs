@@ -98,7 +98,7 @@ static internal class GameplayScene
         GameLogic.DrawState(State);
         Raylib.EndMode2D();
 
-        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(),0, 32, 32, Raylib.RAYWHITE);
+        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
     }
 
     static public void UnloadGameplayScene()

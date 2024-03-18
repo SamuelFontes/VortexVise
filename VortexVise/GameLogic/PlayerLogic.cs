@@ -9,7 +9,7 @@ namespace VortexVise.Logic;
 public static class PlayerLogic
 {
     static public Vector2 SpawnPoint;
-    static private Texture2D _texture;
+    static private Texture _texture;
     static private readonly float _maxMoveSpeed = 350;
     static public readonly float _jumpForce = 450;
     static private readonly float _maxGravity = 1000;
@@ -26,8 +26,8 @@ public static class PlayerLogic
         }
         else
         {
-            _texture = new Texture2D() { width = 16, height = 16 }; // Player will always be this size
-            HookLogic._texture = new Texture2D() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
+            _texture = new Texture() { width = 16, height = 16 }; // Player will always be this size
+            HookLogic._texture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
         SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);

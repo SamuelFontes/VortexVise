@@ -9,7 +9,7 @@ namespace VortexVise.Logic;
 public static class HookLogic
 {
     public static int HookSize = 8;
-    public static Texture2D _texture;
+    public static Texture _texture;
     static float _hookPullForce = 3000;
     static float _hookPullOffset = 64;
     static float _hookShootForce = 1000;
