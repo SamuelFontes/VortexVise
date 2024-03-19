@@ -36,6 +36,7 @@ static internal class GameplayScene
 
     static public void UpdateGameplayScene()
     {
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadRandomMap();
         bool isSlowerThanTickRate = false;
 
         CurrentTime = Raylib.GetTime();
