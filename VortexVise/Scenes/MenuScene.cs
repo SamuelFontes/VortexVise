@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Utilities;
@@ -8,13 +9,17 @@ namespace VortexVise.Scenes;
 
 enum MenuItem { None, Online, Offline, Settings, Exit, Return, PressStart };
 enum MenuItemType { Button, TextInput };
-enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, Input, OnlineMain, Lobby };
+enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby };
 public static class MenuScene
 {
     static List<MenuItem> menuItems = new List<MenuItem>();
     static int finishScreen = 0;
     static Texture logo;
     static Texture background;
+    static Texture box;
+    static Texture player;
+    static Texture keyboard;
+    static Texture gamepad;
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
     static MenuState currentState;
@@ -33,6 +38,10 @@ public static class MenuScene
         //----------------------------------------------------------------------------------
         logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
         background = Raylib.LoadTexture("resources/Common/MenuBackground.png");
+        box = Raylib.LoadTexture("resources/Common/rounded_box.png");
+        keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
+        gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
+        player = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 
         // Initialize items
         //----------------------------------------------------------------------------------
@@ -80,14 +89,14 @@ public static class MenuScene
             var input = PlayerLogic.GetInput(GameCore.PlayerOneGamepad);
             if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
             {
+                if (currentState == MenuState.InputSelection)
+                {
+                    finishScreen = 2;
+                    return;
+                }
                 GameUserInterface.IsCursorVisible = false;
                 switch (selected)
                 {
-                    case Scenes.MenuItem.PressStart:
-                        {
-
-                            break;
-                        }
                     case Scenes.MenuItem.Exit:
                         {
                             finishScreen = -1;   // EXIT
@@ -103,12 +112,13 @@ public static class MenuScene
                         }
                     case Scenes.MenuItem.Offline:
                         {
-                            finishScreen = 2;   // GAMEPLAY
+
+                            //finishScreen = 2;   // GAMEPLAY
                             GameCore.IsNetworkGame = false;
                             GameSounds.PlaySound(GameSounds.Click);
+                            currentState = MenuState.InputSelection;
                             break;
                         }
-
                     case Scenes.MenuItem.Return:
                         {
                             foreach (var item in menuItems) item.IsSelected = false;
@@ -199,12 +209,21 @@ public static class MenuScene
         // Draw Background and Logo
         //----------------------------------------------------------------------------------
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
-        Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY); // FIXME: this should scale like the camera zoom
-        Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE); // TODO: Create a logo 
+        Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY);
+        if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
+            Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
 
         // Draw menu
         //----------------------------------------------------------------------------------
         foreach (var item in menuItems) if (item.State == currentState) item.Draw();
+
+        // Input Selection
+        if (currentState == MenuState.InputSelection)
+        {
+            DrawInputSelection();
+        }
+        if (Utils.Debug())
+            Raylib.DrawRectangle(80, 0, 800, 600, new(255, 0, 0, 20));
 
 
         // Play selection sound
@@ -305,11 +324,43 @@ public static class MenuScene
                 Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
             // Draw the text
             Raylib.DrawTextEx(GameCore.Font, Text, Position, Size, 0, Color);
-            if (Utils.Debug())
-                Raylib.DrawRectangle(80, 0, 800, 600, new(0, 0, 0, 20));
         }
     }
 
+
+    private static void DrawInputSelection()
+    {
+        Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100)); // Overlay
+
+        Vector2 screenCenter = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
+
+        // Render BoxPlayerOne
+        Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 216);
+        Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
+
+        Raylib.DrawTextureEx(player, new((int)screenCenter.X - 300, (int)screenCenter.Y - 180), 0, 4, Raylib.WHITE);
+        Raylib.DrawTextureEx(keyboard, new((int)screenCenter.X - 100 - 40, (int)screenCenter.Y - 116), 0, 2, Raylib.WHITE);
+        var profileName = "ProfileName";
+        var size = 20;
+        var textX = (int)screenCenter.X - 108;
+        var textY = (int)screenCenter.Y - 132;
+        var textSize = Raylib.MeasureTextEx(GameCore.Font, profileName, size, 0);
+        var pos = new Vector2(textX - textSize.X * 0.5f, textY - textSize.Y * 0.5f); // Centers text
+        Raylib.DrawTextEx(GameCore.Font, profileName, pos, size, 0, Raylib.WHITE);
+
+
+
+
+
+        Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 216);
+        Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
+        Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 16);
+        Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
+        Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 16);
+        Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
+
+
+    }
 }
 
 

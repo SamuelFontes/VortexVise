@@ -75,4 +75,18 @@ public static class Utils
             }
         }
     }
+
+    public static Vector2 GetRecCenter(int x, int y, int width, int height)
+    {
+        var pos = new Vector2(x + width * 0.5f, y + height * 0.5f);
+        return pos;
+    }
+
+    public static void DrawTextCentered(string text, Vector2 textPosition, int textSize, Color color)
+    {
+        var textBoxSize = Raylib.MeasureTextEx(GameCore.Font, text, textSize, 0);
+        var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
+        Raylib.DrawTextEx(GameCore.Font, text, pos, textSize, 0, color);
+
+    }
 }
