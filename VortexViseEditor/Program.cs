@@ -176,9 +176,10 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
     // SAVE
     if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && Raylib.IsKeyPressed(KeyboardKey.KEY_S))
     {
-        Console.WriteLine($"Choose Map Name(Leave empty to use \"{map.Name}\"):");
-        var mapName = Console.ReadLine();
-        if (mapName == null || mapName.Length == 0) mapName = map.Name;
+        //Console.WriteLine($"Choose Map Name(Leave empty to use \"{map.Name}\"):");
+        //var mapName = Console.ReadLine();
+        //if (mapName == null || mapName.Length == 0) mapName = map.Name;
+        var mapName = map.Name;
         string collisions = "";
         foreach (var c in map.Collisions) collisions += $"{(int)c.x},{(int)c.y},{(int)c.width},{(int)c.height};";
         string playerSpawn = "";
