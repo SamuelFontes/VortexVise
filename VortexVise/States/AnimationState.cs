@@ -9,7 +9,7 @@ public class AnimationState // This is only client side
     public int State = 0;
     public int Rotation = 0;
 
-    public int GetAnimationRotation(Vector2 vVelocity, InputState input)
+    public void ProcessAnimationRotation(Vector2 vVelocity, InputState input)
     {
         float velocity = 0;
         if (vVelocity.X >= 0)
@@ -58,6 +58,10 @@ public class AnimationState // This is only client side
             Rotation = 0;
             State = 0;
         }
+    }
+
+    public int GetAnimationRotation()
+    {
         return Rotation;
     }
 

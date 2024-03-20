@@ -182,8 +182,9 @@ public static class PlayerLogic
         // Apply ouside map collisions
         if (endingCollision.Y <= 0)
         {
-            newPosition.Y = 11.9f;
             newPosition.Y = 0;
+            newVelocity.Y = 0;
+
         }
         else if (endingCollision.Y > mapSize.Y)
         {
@@ -333,7 +334,7 @@ public static class PlayerLogic
 
         Rectangle destRec = new(playerState.Position.X + _texture.width * 0.5f, playerState.Position.Y + _texture.height * 0.5f, _texture.width, _texture.height);
 
-        var rotation = playerState.Animation.GetAnimationRotation(playerState.Velocity, playerState.Input);
+        var rotation = playerState.Animation.GetAnimationRotation();
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
         Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 

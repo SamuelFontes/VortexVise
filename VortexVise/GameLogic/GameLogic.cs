@@ -38,7 +38,9 @@ public static class GameLogic
 
             (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
 
+            // Handle animation
             currentPlayerState.Animation = lastPlayerState.Animation;
+            currentPlayerState.Animation.ProcessAnimationRotation(currentPlayerState.Velocity, currentPlayerState.Input);
 
             state.PlayerStates.Add(currentPlayerState);
         }
