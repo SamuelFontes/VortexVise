@@ -87,6 +87,15 @@ public static class Utils
         var textBoxSize = Raylib.MeasureTextEx(GameCore.Font, text, textSize, 0);
         var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
         Raylib.DrawTextEx(GameCore.Font, text, pos, textSize, 0, color);
+    }
 
+    public static int GetNumberOfLocalPlayers()
+    {
+        var players = 0;
+        if (GameCore.PlayerOneGamepad != -9) players++;
+        if (GameCore.PlayerTwoGamepad != -9) players++;
+        if (GameCore.PlayerThreeGamepad != -9) players++;
+        if (GameCore.PlayerFourGamepad != -9) players++;
+        return players;
     }
 }

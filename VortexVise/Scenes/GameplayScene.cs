@@ -1,6 +1,8 @@
-﻿using VortexVise.GameGlobals;
+﻿using System.Numerics;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
+using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
@@ -14,8 +16,10 @@ static internal class GameplayScene
     public static GameState LastState = new();
     public static double Accumulator = 0;
     public static GameState State = new GameState();
+    public static int NumberOfLocalPlayers = 0;
     static public void InitGameplayScene()
     {
+        NumberOfLocalPlayers = Utils.GetNumberOfLocalPlayers();
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
 
@@ -29,10 +33,12 @@ static internal class GameplayScene
         LastState.CurrentTime = CurrentTime;
         LastState.Gravity = Gravity;
         PlayerLogic.Init(false);
-        if(GameCore.PlayerOneGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id));
-        if(GameCore.PlayerTwoGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id));
-        if(GameCore.PlayerThreeGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id));
-        if(GameCore.PlayerFourGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id));
+        CameraLogic.Init();
+        if (GameCore.PlayerOneGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id));
+        if (GameCore.PlayerTwoGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id));
+        if (GameCore.PlayerThreeGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id));
+        if (GameCore.PlayerFourGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id));
+
 
     }
 
@@ -65,7 +71,7 @@ static internal class GameplayScene
                     if (GameCore.PlayerTwoGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
                     if (GameCore.PlayerThreeGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
                     if (GameCore.PlayerFourGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
-                    
+
                     State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
                     GameClient.LastSimulatedTime = receivedState.CurrentTime;
                 }
@@ -100,19 +106,32 @@ static internal class GameplayScene
 
     static public void DrawGameplayScene()
     {
-        var player = State.PlayerStates.FirstOrDefault(p => p.Id == GameCore.PlayerOneProfile.Id);
-        if (player == null) return;
         Raylib.ClearBackground(Raylib.BLACK);
+        if (State.PlayerStates.Count == 0) return;
 
-        PlayerLogic.ProcessCamera(player.Position);
-        GameLogic.DrawState(State);
-        Raylib.EndMode2D();
+        for (int i = 0; i < NumberOfLocalPlayers; i++)
+        {
+            PlayerState player;
+            if (i == 0) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerOneProfile.Id);
+            else if (i == 1) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerTwoProfile.Id);
+            else if (i == 2) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerThreeProfile.Id);
+            else if (i == 3) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerFourProfile.Id);
+            else return;
+
+            CameraLogic.BeginDrawingToCamera(i, player.Position);
+            GameLogic.DrawState(State);
+            // TODO: draw hud here
+            CameraLogic.EndDrawingToCamera(i);
+        }
+
+
 
         if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
     }
 
     static public void UnloadGameplayScene()
     {
+        CameraLogic.Unload();
     }
     static public int FinishGameplayScene()
     {

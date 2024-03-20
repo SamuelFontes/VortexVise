@@ -14,7 +14,6 @@ public static class PlayerLogic
     static public readonly float _jumpForce = 450;
     static private readonly float _maxGravity = 1000;
     static private readonly float _acceleration = 750;
-    static private Camera2D _camera;
     static private Vector2 _collisionOffset = new(10, 6);
 
     static public void Init(bool isServer)
@@ -31,13 +30,6 @@ public static class PlayerLogic
 
         }
         SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);
-        var cameraView = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
-
-        _camera = new Camera2D();
-        _camera.offset = cameraView;
-        _camera.target = cameraView;
-        _camera.rotation = 0;
-        _camera.zoom = 1;
     }
     static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
     {
@@ -322,29 +314,6 @@ public static class PlayerLogic
         }
         newCollision = endingCollision;
         return (newPosition, newVelocity, newCollision, isTouchingTheGround);
-    }
-
-    public static void ProcessCamera(Vector2 targetPosition)
-    {
-        Vector2 target = new(targetPosition.X, targetPosition.Y);
-
-        // Make it stay inside the map
-        if (target.X - GameCore.GameScreenWidth * 0.5f <= 0)
-            target.X = GameCore.GameScreenWidth * 0.5f;
-        else if (target.X + GameCore.GameScreenWidth * 0.5f >= MapLogic.GetMapSize().X)
-            target.X = MapLogic.GetMapSize().X - GameCore.GameScreenWidth * 0.5f;
-
-        if (target.Y - GameCore.GameScreenHeight * 0.5f <= 0)
-            target.Y = GameCore.GameScreenHeight * 0.5f;
-        else if (target.Y + GameCore.GameScreenHeight * 0.5f >= MapLogic.GetMapSize().Y)
-            target.Y = MapLogic.GetMapSize().Y - GameCore.GameScreenHeight * 0.5f;
-
-        // Make camera smooth
-        // FIXME: fix camera jerkness when almost hitting the target
-        _camera.target.X = RayMath.Lerp(_camera.target.X, target.X, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
-        _camera.target.Y = RayMath.Lerp(_camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
-
-        Raylib.BeginMode2D(_camera);
     }
 
     public static Vector2 GetPlayerCenterPosition(Vector2 playerPosition)
