@@ -72,7 +72,7 @@ public static class CameraLogic
             camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
             camera.CameraPosition = new((int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f));
             camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 025f);
+            camera.SetupCamera(0.25f, 0.25f);
             PlayerCameras.Add(camera);
         }
         else if (players == 4)
