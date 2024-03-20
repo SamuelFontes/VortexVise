@@ -112,6 +112,7 @@ public static class MapLogic
 
     public static void LoadRandomMap()
     {
+        if (CurrentMap != null) Raylib.UnloadTexture(MapTexture);
         CurrentMap = Maps.OrderBy(x => Guid.NewGuid()).First();
         MapTexture = Raylib.LoadTexture(CurrentMap.TextureLocation);
 
