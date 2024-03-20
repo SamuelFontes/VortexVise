@@ -20,6 +20,7 @@ public static class MenuScene
     static Texture player;
     static Texture keyboard;
     static Texture gamepad;
+    static Texture disconnected;
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
     static MenuState currentState;
@@ -41,6 +42,7 @@ public static class MenuScene
         box = Raylib.LoadTexture("resources/Common/rounded_box.png");
         keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
+        disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
         player = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
 
         // Initialize items
@@ -337,28 +339,58 @@ public static class MenuScene
         // Render BoxPlayerOne
         Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 216);
         Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
-
-        Raylib.DrawTextureEx(player, new((int)screenCenter.X - 300, (int)screenCenter.Y - 180), 0, 4, Raylib.WHITE);
-        Raylib.DrawTextureEx(keyboard, new((int)screenCenter.X - 100 - 40, (int)screenCenter.Y - 116), 0, 2, Raylib.WHITE);
-        var profileName = "ProfileName";
-        var size = 20;
-        var textX = (int)screenCenter.X - 108;
-        var textY = (int)screenCenter.Y - 132;
-        var textSize = Raylib.MeasureTextEx(GameCore.Font, profileName, size, 0);
-        var pos = new Vector2(textX - textSize.X * 0.5f, textY - textSize.Y * 0.5f); // Centers text
-        Raylib.DrawTextEx(GameCore.Font, profileName, pos, size, 0, Raylib.WHITE);
-
-
-
-
+        DrawPlayerCard(boxPlayerOne, box.width, box.height, GameCore.PlayerOneGamepad, GameCore.PlayerOneProfile.Name);
 
         Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 216);
         Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
+        DrawPlayerCard(boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoGamepad, GameCore.PlayerTwoProfile.Name);
+
         Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 16);
         Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
+        DrawPlayerCard(boxPlayerThree, box.width, box.height, GameCore.PlayerThreeGamepad, GameCore.PlayerThreeProfile.Name);
+
         Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 16);
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
+        DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourGamepad, GameCore.PlayerFourProfile.Name);
 
+        void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName)
+        {
+            Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
+            Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);
+            Vector2 profileNamePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.4f);
+            if (playerGamepadNumber == -1)
+            {
+                // mouse and keyboard
+                Raylib.DrawTextureEx(keyboard, new(inputDevicePosition.X - keyboard.width * 1f, inputDevicePosition.Y - keyboard.height * 1f), 0, 2, Raylib.WHITE);
+            }
+            else if (playerGamepadNumber == 0)
+            {
+
+            }
+            else if (playerGamepadNumber == 1)
+            {
+
+            }
+            else if (playerGamepadNumber == 2)
+            {
+
+            }
+            else if (playerGamepadNumber == 3)
+            {
+
+            }
+            else if (playerGamepadNumber == -9)
+            {
+                // Disconnected
+                Vector2 disconnectedPosition = new(cardPosition.X + cardWidth * 0.5f, cardPosition.Y + cardHeight * 0.5f);
+                Raylib.DrawTextureEx(disconnected, new(disconnectedPosition.X - disconnected.width * 2f, disconnectedPosition.Y - disconnected.height * 2f), 0, 4, Raylib.WHITE);
+            }
+            if (playerGamepadNumber != -9)
+            {
+                Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
+                Utils.DrawTextCentered(profileName, profileNamePosition, 12, Raylib.WHITE);
+            }
+        }
 
     }
 }
