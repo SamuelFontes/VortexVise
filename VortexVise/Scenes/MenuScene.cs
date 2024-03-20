@@ -195,6 +195,50 @@ public static class MenuScene
 
         }
 
+        // Handle local player joining
+        if (currentState == MenuState.InputSelection)
+        {
+            for (int i = -1; i < 4; i++)
+            {
+                var input = PlayerLogic.GetInput(i);
+                if (input.Back)
+                {
+                    // Disconnect or go back one screen 
+                    if (i == GameCore.PlayerOneGamepad)
+                    {
+                        currentState = MenuState.MainMenu;
+                        break;
+                    }
+                    else if (i == GameCore.PlayerTwoGamepad)
+                    {
+                        GameCore.PlayerTwoGamepad = -9;
+                    }
+                    else if (i == GameCore.PlayerThreeGamepad)
+                    {
+                        GameCore.PlayerThreeGamepad = -9;
+                    }
+                    else if (i == GameCore.PlayerFourGamepad)
+                    {
+                        GameCore.PlayerFourGamepad = -9;
+                    }
+
+                }
+                else if (input.Confirm)
+                {
+                    if (i != GameCore.PlayerOneGamepad && i != GameCore.PlayerTwoGamepad && i != GameCore.PlayerThreeGamepad && i != GameCore.PlayerFourGamepad)
+                    {
+                        if (GameCore.PlayerTwoGamepad == -9)
+                            GameCore.PlayerTwoGamepad = i;
+                        else if (GameCore.PlayerThreeGamepad == -9)
+                            GameCore.PlayerThreeGamepad = i;
+                        else if (GameCore.PlayerFourGamepad == -9)
+                            GameCore.PlayerFourGamepad = i;
+                    }
+                }
+            }
+
+        }
+
         // Handle inputs
         //----------------------------------------------------------------------------------
         // Play selection sound

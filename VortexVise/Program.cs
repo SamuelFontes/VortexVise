@@ -24,6 +24,7 @@ RenderTexture gameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth,
 Raylib.InitAudioDevice();      // Initialize audio device
 Raylib.HideCursor();
 Raylib.SetTargetFPS(GameCore.TargetFPS);
+Raylib.SetExitKey(0); // Disable escape closing the game
 
 // Load global data (assets that must be available in all scenes, i.e. font)
 GameSounds.InitAudio();
