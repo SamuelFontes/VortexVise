@@ -20,6 +20,8 @@ public static class MenuScene
     static Texture player;
     static Texture keyboard;
     static Texture gamepad;
+    static Texture gamepadSlotOn;
+    static Texture gamepadSlotOff;
     static Texture disconnected;
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
@@ -44,6 +46,8 @@ public static class MenuScene
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
         player = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+        gamepadSlotOn = Raylib.LoadTexture("resources/Common/gamepad_slot_on.png");
+        gamepadSlotOff = Raylib.LoadTexture("resources/Common/gamepad_slot_off.png");
 
         // Initialize items
         //----------------------------------------------------------------------------------
@@ -358,6 +362,7 @@ public static class MenuScene
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);
             Vector2 profileNamePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.4f);
+            Vector2 gamepadSlotPostion = new(cardPosition.X + cardWidth * 0.59f, cardPosition.Y + cardHeight * 0.5f);
             if (playerGamepadNumber == -1)
             {
                 // mouse and keyboard
@@ -365,19 +370,36 @@ public static class MenuScene
             }
             else if (playerGamepadNumber == 0)
             {
-
+                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
             }
             else if (playerGamepadNumber == 1)
             {
+                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
 
             }
             else if (playerGamepadNumber == 2)
             {
-
+                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
             }
             else if (playerGamepadNumber == 3)
             {
-
+                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
             }
             else if (playerGamepadNumber == -9)
             {
