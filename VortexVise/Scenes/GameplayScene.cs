@@ -14,7 +14,6 @@ static internal class GameplayScene
     public static GameState LastState = new();
     public static double Accumulator = 0;
     public static GameState State = new GameState();
-    public static Guid playerId = Guid.NewGuid();
     static public void InitGameplayScene()
     {
         GameUserInterface.DisableCursor = true;
@@ -30,7 +29,10 @@ static internal class GameplayScene
         LastState.CurrentTime = CurrentTime;
         LastState.Gravity = Gravity;
         PlayerLogic.Init(false);
-        LastState.PlayerStates.Add(new(playerId));
+        if(GameCore.PlayerOneGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id));
+        if(GameCore.PlayerTwoGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id));
+        if(GameCore.PlayerThreeGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id));
+        if(GameCore.PlayerFourGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id));
 
     }
 
@@ -50,25 +52,32 @@ static internal class GameplayScene
             if (GameClient.IsConnected)
             {
                 // Do all the network magic
-                GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerOneGamepad), playerId, CurrentTime);
+                if (GameCore.PlayerOneGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerOneGamepad), GameCore.PlayerOneProfile.Id, CurrentTime);
+                if (GameCore.PlayerTwoGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerTwoGamepad), GameCore.PlayerTwoProfile.Id, CurrentTime);
+                if (GameCore.PlayerThreeGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerThreeGamepad), GameCore.PlayerThreeProfile.Id, CurrentTime);
+                if (GameCore.PlayerFourGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerFourGamepad), GameCore.PlayerFourProfile.Id, CurrentTime);
 
                 // This should not stop the game, so make it run in another task
                 GameState receivedState = GameClient.LastServerState;
                 if (receivedState.CurrentTime != GameClient.LastSimulatedTime)
                 {
-                    receivedState.ApproximateState(LastState, playerId);
-                    State = GameLogic.SimulateState(receivedState, CurrentTime, playerId, (float)(DeltaTime - Accumulator), true);
+                    if (GameCore.PlayerOneGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
+                    if (GameCore.PlayerTwoGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
+                    if (GameCore.PlayerThreeGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
+                    if (GameCore.PlayerFourGamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
+                    
+                    State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
                     GameClient.LastSimulatedTime = receivedState.CurrentTime;
                 }
                 else
                 {
                     // Client-Side Prediction
-                    State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)(DeltaTime - Accumulator), true);
+                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
                 }
             }
             else
             {
-                State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)(DeltaTime - Accumulator), true);
+                State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
             }
             simulationTime -= DeltaTime;
             LastTime += DeltaTime;
@@ -81,7 +90,7 @@ static internal class GameplayScene
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
             double accumulatorSimulationTime = CurrentTime - LastTimeAccumulator;
             Accumulator += accumulatorSimulationTime;
-            State = GameLogic.SimulateState(LastState, CurrentTime, playerId, (float)accumulatorSimulationTime, false);
+            State = GameLogic.SimulateState(LastState, CurrentTime, (float)accumulatorSimulationTime, false);
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
@@ -91,7 +100,7 @@ static internal class GameplayScene
 
     static public void DrawGameplayScene()
     {
-        var player = State.PlayerStates.FirstOrDefault(p => p.Id == playerId);
+        var player = State.PlayerStates.FirstOrDefault(p => p.Id == GameCore.PlayerOneProfile.Id);
         if (player == null) return;
         Raylib.ClearBackground(Raylib.BLACK);
 
