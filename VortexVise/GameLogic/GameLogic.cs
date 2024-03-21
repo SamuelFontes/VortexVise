@@ -18,19 +18,12 @@ public static class GameLogic
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
             PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
-            if (GameCore.PlayerOneGamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
-                ReadPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState, GameCore.PlayerOneGamepad, 0);
-            else if (GameCore.PlayerTwoGamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
-                ReadPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState, GameCore.PlayerTwoGamepad, 1);
-            else if (GameCore.PlayerThreeGamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
-                ReadPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState, GameCore.PlayerThreeGamepad, 2);
-            else if (GameCore.PlayerFourGamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
-                ReadPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState, GameCore.PlayerFourGamepad, 3);
-            else
-            {
+
+            // Either read player input or get input from last frame TODO: update input with last input received for all the players here, unless it's going back in time to correct stuff
+            if (!ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
-            }
-            currentPlayerState.Direction = PlayerLogic.ProcessDirection(deltaTime, currentPlayerState.Input, lastPlayerState);
+
+            PlayerLogic.SetPlayerDirection(currentPlayerState, lastPlayerState);
             (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);
             currentPlayerState.HookState = lastPlayerState.HookState;
             currentPlayerState.Position = PlayerLogic.ProcessPosition(deltaTime, currentPlayerState, lastPlayerState.Position);
@@ -57,8 +50,37 @@ public static class GameLogic
             PlayerLogic.DrawState(playerState);
         }
     }
-    private static void ReadPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState, int gamepad, int playerIndex)
+    private static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
+        bool isLocalPlayer = false;
+        int gamepad = -9;
+        var playerIndex = 0;
+        if (GameCore.PlayerOneGamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
+        {
+            isLocalPlayer = true;
+            gamepad = GameCore.PlayerOneGamepad;
+            playerIndex = 0;
+        }
+        else if (GameCore.PlayerTwoGamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
+        {
+            isLocalPlayer = true;
+            gamepad = GameCore.PlayerTwoGamepad;
+            playerIndex = 1;
+        }
+        else if (GameCore.PlayerThreeGamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
+        {
+            isLocalPlayer = true;
+            gamepad = GameCore.PlayerThreeGamepad;
+            playerIndex = 2;
+        }
+        else if (GameCore.PlayerFourGamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
+        {
+            isLocalPlayer = true;
+            gamepad = GameCore.PlayerFourGamepad;
+            playerIndex = 3;
+        }
+        if (!isLocalPlayer || gamepad == -9) return isLocalPlayer;
+
         if (isNetworkFrame)
         {
             currentPlayerState.Input = PlayerLogic.GetInput(gamepad); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
@@ -70,6 +92,6 @@ public static class GameLogic
             currentPlayerState.Input = lastPlayerState.Input;
             InputBuffer[playerIndex].ApplyInputBuffer(PlayerLogic.GetInput(gamepad));
         }
-
+        return isLocalPlayer;
     }
 }

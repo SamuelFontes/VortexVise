@@ -84,9 +84,11 @@ public static class MenuScene
                 GameCore.PlayerOneGamepad = 3;
             if (GameCore.PlayerOneGamepad != -9)
             {
+                GameUserInterface.IsCursorVisible = false;
                 GameSounds.PlaySound(GameSounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
-                selected = Scenes.MenuItem.None;
+                selected = Scenes.MenuItem.Offline;
+                menuItems.First(x => x.Item == selected).IsSelected = true;
                 menuItems[0].IsSelected = false;
             }
         }

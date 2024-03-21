@@ -31,18 +31,13 @@ public static class PlayerLogic
         }
         SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);
     }
-    static public int ProcessDirection(float deltaTime, InputState input, PlayerState lastState)
+    static public void SetPlayerDirection(PlayerState playerState, PlayerState lastState)
     {
-        var direction = lastState.Direction;
-        if (input.Right)
-        {
-            direction = -1;
-        }
-        else if (input.Left)
-        {
-            direction = 1;
-        }
-        return direction;
+        playerState.Direction = lastState.Direction;
+        if (playerState.Input.Right)
+            playerState.Direction = -1;
+        else if (playerState.Input.Left)
+            playerState.Direction = 1;
     }
 
     static public (Vector2, bool) ProcessVelocity(float deltaTime, InputState input, PlayerState lastState, float gravity)
