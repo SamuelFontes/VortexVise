@@ -31,7 +31,7 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.IsHookReleased = true;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Position = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - _texture.width * 0.5f, currentPlayerState.Position.Y);
+            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - _texture.width * 0.5f, currentPlayerState.HookState.Position.Y);
             currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, HookSize, HookSize);
 
             // Play hook shoot sound
