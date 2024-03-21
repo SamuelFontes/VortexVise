@@ -24,13 +24,14 @@ public static class GameLogic
                 currentPlayerState.Input = lastPlayerState.Input;
 
             PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
+            PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
             PlayerLogic.SetPlayerDirection(currentPlayerState);
             PlayerLogic.ProcessPlayerMovement(currentPlayerState, deltaTime);
-            PlayerLogic.ProcessPlayerJump(currentPlayerState);
+            PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);
             PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
             PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
-            PlayerLogic.ApplyCollisions(currentPlayerState);
+            PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
             // Handle animation
             currentPlayerState.Animation = lastPlayerState.Animation;

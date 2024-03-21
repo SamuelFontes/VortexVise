@@ -20,15 +20,10 @@ public static class PlayerHookLogic
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
         {
-            GameSounds.PlaySound(GameSounds.Dash, volume: 0.8f);
             currentPlayerState.HookState.IsHookReleased = false;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Velocity = new(0, 0);
-            if (currentPlayerState.IsLookingRight())
-                currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
-            else
-                currentPlayerState.AddVelocity(new(-PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
-
+            PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false);
         }
         if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {

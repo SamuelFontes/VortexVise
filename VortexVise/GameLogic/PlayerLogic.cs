@@ -39,6 +39,14 @@ public static class PlayerLogic
         currentPlayerState.Velocity = lastPlayerState.Velocity;
         currentPlayerState.IsTouchingTheGround = lastPlayerState.IsTouchingTheGround;
         currentPlayerState.HookState = lastPlayerState.HookState;
+        currentPlayerState.CanDash = lastPlayerState.CanDash;
+        currentPlayerState.TimeSinceJump = lastPlayerState.TimeSinceJump;
+    }
+
+    public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
+    {
+        Utils.DebugText = currentPlayerState.TimeSinceJump.ToString();
+        if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
     }
 
     static public void SetPlayerDirection(PlayerState playerState)
@@ -70,13 +78,19 @@ public static class PlayerLogic
         }
     }
 
-    public static void ProcessPlayerJump(PlayerState currentPlayerState)
+    public static void ProcessPlayerJump(PlayerState currentPlayerState, float deltaTime)
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
             GameSounds.PlaySound(GameSounds.Jump, volume: 0.5f);
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-_jumpForce);
+            currentPlayerState.CanDash = true;
+            currentPlayerState.TimeSinceJump += deltaTime;
+        }
+        else if (currentPlayerState.Input.CancelHook && currentPlayerState.CanDash && currentPlayerState.TimeSinceJump > 0.1f)
+        {
+            MakePlayerDashOrDoubleJump(currentPlayerState, true);
         }
 
     }
@@ -170,8 +184,9 @@ public static class PlayerLogic
         return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 12, 20);
     }
 
-    public static void ApplyCollisions(PlayerState currentPlayerState)
+    public static void ApplyCollisions(PlayerState currentPlayerState, float deltaTime)
     {
+        var wasTouchingTheGround = currentPlayerState.IsTouchingTheGround;
         currentPlayerState.IsTouchingTheGround = false;
         Rectangle endingCollision = GetPlayerCollision(currentPlayerState.Position);
 
@@ -258,6 +273,7 @@ public static class PlayerLogic
                             currentPlayerState.Collision = new(currentPlayerState.Collision.X, collision.Y - playerCollision.Height, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
                             currentPlayerState.SetVelocityY(0);
                             currentPlayerState.IsTouchingTheGround = true;
+                            currentPlayerState.TimeSinceJump = 0;
                             colided = true;
                             continue;
                         }
@@ -301,10 +317,21 @@ public static class PlayerLogic
                 }
             }
 
+            if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
+            {
+                currentPlayerState.TimeSinceJump += deltaTime;
+                currentPlayerState.CanDash = true;
+            }
+
             if (colided)
             {
                 return;
             }
+        }
+        if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
+        {
+            currentPlayerState.TimeSinceJump += deltaTime;
+            currentPlayerState.CanDash = true;
         }
         currentPlayerState.Collision = endingCollision;
         return;
@@ -318,7 +345,30 @@ public static class PlayerLogic
         position.Y += _texture.height * 0.5f;
         return position;
     }
+    public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)
+    {
+        GameSounds.PlaySound(GameSounds.Dash, volume: 0.8f);
+        if (isDoubleJump)
+        {
+            if (currentPlayerState.Velocity.Y < -_jumpForce)
+            {
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, -_jumpForce * 0.2f + currentPlayerState.Velocity.Y);
+            }
+            else
+            {
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, -_jumpForce);
+            }
+        }
+        else
+        {
+            if (currentPlayerState.IsLookingRight())
+                currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
+            else
+                currentPlayerState.AddVelocity(new(-PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
+        }
 
+        currentPlayerState.CanDash = false;
+    }
 
 
     public static void DrawState(PlayerState playerState)
