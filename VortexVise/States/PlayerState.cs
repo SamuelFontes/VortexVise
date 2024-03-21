@@ -24,15 +24,27 @@ public class PlayerState
     {
         return Direction == -1;
     }
+
+    public void SetVelocityX(float newVelocityX)
+    {
+        Velocity = new(newVelocityX, Velocity.Y);
+    }
+
+    public void SetVelocityY(float newVelocityY)
+    {
+        Velocity = new(Velocity.X, newVelocityY);
+    }
+
     public void AddVelocity(Vector2 velocity)
     {
-        Velocity += new Vector2(velocity.X, velocity.Y);
+        Velocity += velocity;
     }
 
     public void AddVelocityWithDeltaTime(Vector2 velocity, float deltaTime)
     {
         Velocity += new Vector2(velocity.X * deltaTime, velocity.Y * deltaTime);
     }
+
     public void ResetVelocity()
     {
         Velocity = Vector2.Zero;

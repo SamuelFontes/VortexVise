@@ -75,7 +75,7 @@ public class GameState
                     IsPressingHookKey = Regex.Match(match.Value, @"(?<=(\|HPR))[\s\S]*?(?=\|)").Value == "1",
 
                 };
-                player.HookState.Collision = HookLogic.GetHookCollision(player.HookState.Position);
+                player.HookState.Collision = PlayerHookLogic.GetHookCollision(player.HookState.Position);
                 state.PlayerStates.Add(player);
             }
 

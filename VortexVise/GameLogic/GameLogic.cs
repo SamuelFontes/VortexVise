@@ -23,13 +23,14 @@ public static class GameLogic
             if (!ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
 
-            PlayerLogic.SetPlayerDirection(currentPlayerState, lastPlayerState);
-            (currentPlayerState.Velocity, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ProcessVelocity(deltaTime, currentPlayerState.Input, lastPlayerState, state.Gravity);
-            currentPlayerState.HookState = lastPlayerState.HookState;
-            currentPlayerState.Position = PlayerLogic.ProcessPosition(deltaTime, currentPlayerState, lastPlayerState.Position);
-            currentPlayerState.HookState = HookLogic.SimulateState(state.Gravity, deltaTime, currentPlayerState);
-
-            (currentPlayerState.Position, currentPlayerState.Velocity, currentPlayerState.Collision, currentPlayerState.IsTouchingTheGround) = PlayerLogic.ApplyCollisions(currentPlayerState.Position, currentPlayerState.Velocity, lastPlayerState.Collision);
+            PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
+            PlayerLogic.SetPlayerDirection(currentPlayerState);
+            PlayerLogic.ProcessPlayerMovement(currentPlayerState, deltaTime);
+            PlayerLogic.ProcessPlayerJump(currentPlayerState);
+            PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
+            PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
+            PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
+            PlayerLogic.ApplyCollisions(currentPlayerState);
 
             // Handle animation
             currentPlayerState.Animation = lastPlayerState.Animation;
@@ -46,7 +47,7 @@ public static class GameLogic
         MapLogic.Draw();
         foreach (var playerState in state.PlayerStates)
         {
-            HookLogic.DrawState(playerState);
+            PlayerHookLogic.DrawState(playerState);
             PlayerLogic.DrawState(playerState);
         }
     }

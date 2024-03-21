@@ -21,64 +21,75 @@ public static class PlayerLogic
         if (!isServer)
         {
             _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-            HookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
+            PlayerHookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
         }
         else
         {
             _texture = new Texture() { width = 16, height = 16 }; // Player will always be this size
-            HookLogic._texture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
+            PlayerHookLogic._texture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
         SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);
     }
-    static public void SetPlayerDirection(PlayerState playerState, PlayerState lastState)
+    public static void CopyLastPlayerState(PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
-        playerState.Direction = lastState.Direction;
+        currentPlayerState.Position = lastPlayerState.Position;
+        currentPlayerState.Direction = lastPlayerState.Direction;
+        currentPlayerState.Collision = lastPlayerState.Collision;
+        currentPlayerState.Velocity = lastPlayerState.Velocity;
+        currentPlayerState.IsTouchingTheGround = lastPlayerState.IsTouchingTheGround;
+        currentPlayerState.HookState = lastPlayerState.HookState;
+    }
+
+    static public void SetPlayerDirection(PlayerState playerState)
+    {
         if (playerState.Input.Right)
             playerState.Direction = -1;
         else if (playerState.Input.Left)
             playerState.Direction = 1;
     }
 
-    static public (Vector2, bool) ProcessVelocity(float deltaTime, InputState input, PlayerState lastState, float gravity)
+    static public void ProcessPlayerMovement(PlayerState currentPlayerState, float deltaTime)
     {
-        var velocity = lastState.Velocity;
-        bool isTouchingTheGround = lastState.IsTouchingTheGround;
-        if (input.Right && !input.Left)
+        if (currentPlayerState.Input.Right && !currentPlayerState.Input.Left)
         {
-            velocity.X += _acceleration * deltaTime;
-            if (velocity.X > _maxMoveSpeed)
-                velocity.X = RayMath.Lerp(velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime));
+            currentPlayerState.AddVelocity(new(_acceleration * deltaTime, 0));
+            if (currentPlayerState.Velocity.X > _maxMoveSpeed)
+                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
-        else if (input.Left && !input.Right)
+        else if (currentPlayerState.Input.Left && !currentPlayerState.Input.Right)
         {
-            velocity.X -= _acceleration * deltaTime;
-            if (velocity.X < _maxMoveSpeed * -1)
-                velocity.X = RayMath.Lerp(velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime));
+            currentPlayerState.AddVelocity(new(-(_acceleration * deltaTime), 0));
+            if (currentPlayerState.Velocity.X < _maxMoveSpeed * -1)
+                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
         else
         {
-            float desaceleration = isTouchingTheGround || velocity.Y == 0f ? 10f : 0.5f;
-            velocity.X = RayMath.Lerp(velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime));
+            float desaceleration = currentPlayerState.IsTouchingTheGround || currentPlayerState.Velocity.Y == 0f ? 10f : 0.5f;
+            currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime)));
         }
+    }
 
-
-        if (input.Jump && isTouchingTheGround)
+    public static void ProcessPlayerJump(PlayerState currentPlayerState)
+    {
+        if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
             GameSounds.PlaySound(GameSounds.Jump, volume: 0.5f);
-            isTouchingTheGround = false;
-            velocity.Y = -_jumpForce;
+            currentPlayerState.IsTouchingTheGround = false;
+            currentPlayerState.SetVelocityY(-_jumpForce);
         }
 
+    }
+
+    public static void ApplyPlayerGravity(PlayerState currentPlayerState, float deltaTime, float gravity)
+    {
         float maxGravity = _maxGravity;
-        if (!isTouchingTheGround)
+        if (!currentPlayerState.IsTouchingTheGround)
         {
-            velocity.Y += gravity * deltaTime;
-            if (velocity.Y >= maxGravity)
-                velocity.Y = maxGravity;
+            currentPlayerState.AddVelocity(new(0, gravity * deltaTime));
+            if (currentPlayerState.Velocity.Y >= maxGravity)
+                currentPlayerState.SetVelocityY(maxGravity);
         }
-
-        return (velocity, isTouchingTheGround);
     }
 
     static public InputState GetInput(int gamepad)
@@ -118,21 +129,21 @@ public static class PlayerLogic
         else
         {
             // Gamepad
-            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) < -0.5f)
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_X) < -0.5f)
                 input.Left = true;
-            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) < -0.5f)
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_LEFT) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_X) < -0.5f)
                 input.UILeft = true;
-            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0.5f)
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0.5f)
                 input.Right = true;
-            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0.5f)
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_RIGHT) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_X) > 0.5f)
                 input.UIRight = true;
-            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < -0.5f)
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < -0.5f)
                 input.Up = true;
-            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < -0.5f)
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < -0.5f)
                 input.UIUp = true;
-            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
                 input.Down = true;
-            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad,GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
                 input.UIDown = true;
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_DOWN))
                 input.Jump = true;
@@ -149,14 +160,9 @@ public static class PlayerLogic
         return input;
     }
 
-    public static Vector2 ProcessPosition(float deltaTime, PlayerState currentPlayerState, Vector2 lastPosition)
+    public static void ApplyPlayerVelocity(PlayerState currentPlayerState, float deltaTime)
     {
-        var position = lastPosition;
-        if (currentPlayerState.Velocity.X != 0)
-            position.X += currentPlayerState.Velocity.X * deltaTime;
-
-        position.Y += currentPlayerState.Velocity.Y * deltaTime;
-        return position;
+        currentPlayerState.Position += new Vector2(currentPlayerState.Velocity.X * deltaTime, currentPlayerState.Velocity.Y * deltaTime);
     }
 
     public static Rectangle GetPlayerCollision(Vector2 position)
@@ -164,65 +170,59 @@ public static class PlayerLogic
         return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 12, 20);
     }
 
-    public static (Vector2, Vector2, Rectangle, bool) ApplyCollisions(Vector2 currentPlayerPosition, Vector2 currentPlayerVelocity, Rectangle lastPlayerCollision)
+    public static void ApplyCollisions(PlayerState currentPlayerState)
     {
-        // TODO: Refactor this please this makes my brain melt
-        Vector2 newPosition = currentPlayerPosition;
-        Vector2 newVelocity = currentPlayerVelocity;
-        Rectangle newCollision = lastPlayerCollision;
-        var isTouchingTheGround = false;
-        Rectangle endingCollision = GetPlayerCollision(currentPlayerPosition);
+        currentPlayerState.IsTouchingTheGround = false;
+        Rectangle endingCollision = GetPlayerCollision(currentPlayerState.Position);
 
         Vector2 mapSize = MapLogic.GetMapSize();
         // Apply ouside map collisions
         if (endingCollision.Y <= 0)
         {
-            newPosition.Y = 0;
-            newVelocity.Y = 0;
+            // TODO: if there is the invert world effect, this should be lethal
+            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X, 0);
+            currentPlayerState.Velocity = new Vector2(currentPlayerState.Velocity.X, 0);
 
         }
         else if (endingCollision.Y > mapSize.Y)
         {
             // TODO: Kill the player
-            newPosition = new(MapLogic.GetMapSize().X * 0.5f, MapLogic.GetMapSize().Y * 0.5f);
-            newVelocity.Y = 0;
-            newVelocity.X = 0;
-
+            currentPlayerState.Position = new(MapLogic.GetMapSize().X * 0.5f, MapLogic.GetMapSize().Y * 0.5f); // TODO: get spawnpoint
+            currentPlayerState.Velocity = new(0, 0);
         }
         if (endingCollision.X <= 0)
         {
-            newPosition.X = 0 - (endingCollision.X - newPosition.X);
-            newVelocity.X = 0;
+            currentPlayerState.Position = new(0 - (endingCollision.X - currentPlayerState.Position.X), currentPlayerState.Position.Y);
+            currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
         else if (endingCollision.X + endingCollision.Width >= mapSize.X)
         {
-            newPosition.X = mapSize.X - endingCollision.Width - _collisionOffset.X;
-            newVelocity.X = 0;
+            currentPlayerState.Position = new(mapSize.X - endingCollision.Width - _collisionOffset.X, currentPlayerState.Position.Y);
+            currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
 
         // This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
-        // WARNING: This solution only works if the player never goes in the minus coordinates, why? because at least for now he can't, if this changes please redo this collision interpolation crap
         var playerCollisions = new List<Rectangle>();
         float interpolationAmount = 2f;
         for (float i = interpolationAmount; i > 0; i -= 0.2f)
         {
             Rectangle interpolatedCollision = endingCollision;
-            if (newCollision.X < endingCollision.X && endingCollision.X - newCollision.X >= newCollision.Width * i)
+            if (currentPlayerState.Collision.X < endingCollision.X && endingCollision.X - currentPlayerState.Collision.X >= currentPlayerState.Collision.Width * i)
             {
-                interpolatedCollision.X += newCollision.Width * i;
+                interpolatedCollision.X += currentPlayerState.Collision.Width * i;
             }
-            else if (newCollision.X > endingCollision.X && newCollision.X - endingCollision.X >= newCollision.Width * i)
+            else if (currentPlayerState.Collision.X > endingCollision.X && currentPlayerState.Collision.X - endingCollision.X >= currentPlayerState.Collision.Width * i)
             {
-                interpolatedCollision.X -= newCollision.Width * i;
+                interpolatedCollision.X -= currentPlayerState.Collision.Width * i;
             }
 
-            if (newCollision.Y < endingCollision.Y && endingCollision.Y - newCollision.Y >= newCollision.Height * i)
+            if (currentPlayerState.Collision.Y < endingCollision.Y && endingCollision.Y - currentPlayerState.Collision.Y >= currentPlayerState.Collision.Height * i)
             {
-                interpolatedCollision.Y += newCollision.Height * i;
+                interpolatedCollision.Y += currentPlayerState.Collision.Height * i;
             }
-            else if (newCollision.Y > endingCollision.Y && newCollision.Y - endingCollision.Y >= newCollision.Height * i)
+            else if (currentPlayerState.Collision.Y > endingCollision.Y && currentPlayerState.Collision.Y - endingCollision.Y >= currentPlayerState.Collision.Height * i)
             {
-                interpolatedCollision.Y -= newCollision.Height * i;
+                interpolatedCollision.Y -= currentPlayerState.Collision.Height * i;
             }
             if (interpolatedCollision.X != endingCollision.X || interpolatedCollision.Y != endingCollision.Y)
                 playerCollisions.Add(interpolatedCollision);
@@ -243,8 +243,8 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (newPosition.Y == collision.Y - _texture.height + _collisionOffset.Y)
-                        isTouchingTheGround = true;
+                    if (currentPlayerState.Position.Y == collision.Y - _texture.height + _collisionOffset.Y)
+                        currentPlayerState.IsTouchingTheGround = true;
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
 
@@ -253,23 +253,21 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            newPosition.Y = collision.Y - _texture.height + _collisionOffset.Y;
-                            newCollision = playerCollision;
-                            newCollision.Y = collision.Y - playerCollision.Height;
-                            newVelocity.Y = 0;
-                            isTouchingTheGround = true;
+                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - _texture.height + _collisionOffset.Y);
+                            currentPlayerState.Collision = playerCollision;
+                            currentPlayerState.Collision = new(currentPlayerState.Collision.X, collision.Y - playerCollision.Height, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
+                            currentPlayerState.SetVelocityY(0);
+                            currentPlayerState.IsTouchingTheGround = true;
                             colided = true;
                             continue;
                         }
                         else
                         {
                             // Head collision
-                            //newPosition.Y = collision.Y + collision.height + collisionOffset.Y;
-                            //playerCollision.Y = collision.Y + collision.height;
-                            newPosition.Y += collisionOverlap.Height;
-                            newCollision = playerCollision;
-                            newCollision.Y += collisionOverlap.Height;
-                            newVelocity.Y = 0.01f;
+                            currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
+                            currentPlayerState.Collision = playerCollision;
+                            currentPlayerState.Collision = new Rectangle(currentPlayerState.Collision.X, currentPlayerState.Collision.Y + collisionOverlap.Height, currentPlayerState.Collision.Width, collisionOverlap.Height);
+                            currentPlayerState.SetVelocityY(0.01f);
                             colided = true;
                             continue;
                         }
@@ -279,21 +277,21 @@ public static class PlayerLogic
 
                         if (collisionOverlap.X > colliderCenter.X)
                         {
-                            newVelocity.X = 0;
+                            currentPlayerState.SetVelocityX(0);
                             // Right side of collision block on map
-                            newPosition.X += collisionOverlap.Width;
-                            newCollision = playerCollision;
-                            newCollision.X += collisionOverlap.Width;
+                            currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
+                            currentPlayerState.Collision = playerCollision;
+                            currentPlayerState.Collision = new Rectangle(currentPlayerState.Collision.X + collisionOverlap.Width, currentPlayerState.Collision.Y, currentPlayerState.Collision.Width, currentPlayerState.Collision.height);
                             colided = true;
                             continue;
                         }
                         else
                         {
-                            newVelocity.X = 0;
+                            currentPlayerState.SetVelocityX(0);
                             // Left collision
-                            newPosition.X -= collisionOverlap.Width;
-                            newCollision = playerCollision;
-                            newCollision.X -= collisionOverlap.Width;
+                            currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
+                            currentPlayerState.Collision = playerCollision;
+                            currentPlayerState.Collision = new(currentPlayerState.Collision.X - collisionOverlap.Width, currentPlayerState.Collision.Y, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
                             colided = true;
                             continue;
                         }
@@ -305,11 +303,11 @@ public static class PlayerLogic
 
             if (colided)
             {
-                return (newPosition, newVelocity, newCollision, isTouchingTheGround);
+                return;
             }
         }
-        newCollision = endingCollision;
-        return (newPosition, newVelocity, newCollision, isTouchingTheGround);
+        currentPlayerState.Collision = endingCollision;
+        return;
     }
 
     public static Vector2 GetPlayerCenterPosition(Vector2 playerPosition)
