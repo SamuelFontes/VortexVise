@@ -361,10 +361,15 @@ public static class PlayerLogic
         }
         else
         {
+            var verticalForce = -_jumpForce * 0.2f;
+            if (currentPlayerState.Input.Up) verticalForce *= 2;
             if (currentPlayerState.IsLookingRight())
-                currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
+                currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, verticalForce));
             else
-                currentPlayerState.AddVelocity(new(-PlayerLogic._jumpForce, -PlayerLogic._jumpForce * 0.2f));
+                currentPlayerState.AddVelocity(new(-PlayerLogic._jumpForce, verticalForce));
+
+            if (currentPlayerState.Velocity.Y > 0)
+                currentPlayerState.SetVelocityY(verticalForce);
         }
 
         currentPlayerState.CanDash = false;
