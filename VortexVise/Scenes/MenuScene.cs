@@ -7,7 +7,7 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
-enum MenuItem { None, Online, Offline, Settings, Exit, Return, PressStart };
+enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart };
 enum MenuItemType { Button, TextInput };
 enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby };
 public static class MenuScene
@@ -57,7 +57,7 @@ public static class MenuScene
         selected = menuItems[0].Item;
         currentState = state;
         state = MenuState.MainMenu;
-        menuItems.Add(new MenuItem("LOCAL PLAY", Scenes.MenuItem.Offline, state, true));
+        menuItems.Add(new MenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true));
         menuItems.Add(new MenuItem("ONLINE", Scenes.MenuItem.Online, state, true));
         menuItems.Add(new MenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false));
         menuItems.Add(new MenuItem("EXIT", Scenes.MenuItem.Exit, state, true));
@@ -87,7 +87,7 @@ public static class MenuScene
                 GameUserInterface.IsCursorVisible = false;
                 GameSounds.PlaySound(GameSounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
-                selected = Scenes.MenuItem.Offline;
+                selected = Scenes.MenuItem.Arcade;
                 menuItems.First(x => x.Item == selected).IsSelected = true;
                 menuItems[0].IsSelected = false;
             }
@@ -118,7 +118,7 @@ public static class MenuScene
                             GameSounds.PlaySound(GameSounds.Click);
                             break;
                         }
-                    case Scenes.MenuItem.Offline:
+                    case Scenes.MenuItem.Arcade:
                         {
 
                             //finishScreen = 2;   // GAMEPLAY
