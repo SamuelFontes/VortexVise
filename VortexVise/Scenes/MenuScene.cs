@@ -57,6 +57,7 @@ public static class MenuScene
         selected = menuItems[0].Item;
         currentState = state;
         state = MenuState.MainMenu;
+        menuItems.Add(new MenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false));
         menuItems.Add(new MenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true));
         menuItems.Add(new MenuItem("ONLINE", Scenes.MenuItem.Online, state, true));
         menuItems.Add(new MenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false));
