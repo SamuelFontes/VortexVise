@@ -45,7 +45,7 @@ public static class MenuScene
         keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
-        player = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+        player = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         gamepadSlotOn = Raylib.LoadTexture("resources/Common/gamepad_slot_on.png");
         gamepadSlotOff = Raylib.LoadTexture("resources/Common/gamepad_slot_off.png");
 
@@ -407,7 +407,7 @@ public static class MenuScene
         {
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);
-            Vector2 profileNamePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.4f);
+            Vector2 profileNamePosition = new(cardPosition.X + cardWidth * 0.5f, cardPosition.Y + cardHeight * 0.2f);
             Vector2 gamepadSlotPostion = new(cardPosition.X + cardWidth * 0.59f, cardPosition.Y + cardHeight * 0.5f);
             if (playerGamepadNumber == -1)
             {
@@ -456,7 +456,7 @@ public static class MenuScene
             if (playerGamepadNumber != -9)
             {
                 Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
-                Utils.DrawTextCentered(profileName, profileNamePosition, 12, Raylib.WHITE);
+                Utils.DrawTextCentered(profileName, profileNamePosition, 32, Raylib.WHITE);
             }
         }
 

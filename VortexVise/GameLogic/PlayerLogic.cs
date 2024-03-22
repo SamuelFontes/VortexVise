@@ -20,7 +20,7 @@ public static class PlayerLogic
     {
         if (!isServer)
         {
-            _texture = Raylib.LoadTexture("Resources/Sprites/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+            _texture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
             PlayerHookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
         }
         else
