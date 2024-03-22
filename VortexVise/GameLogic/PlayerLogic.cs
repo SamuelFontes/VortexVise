@@ -347,12 +347,14 @@ public static class PlayerLogic
     }
     public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)
     {
+        var verticalForce = -_jumpForce * 0.2f;
+        if (currentPlayerState.Input.Up) verticalForce *= 2;
         GameSounds.PlaySound(GameSounds.Dash, volume: 0.8f);
         if (isDoubleJump)
         {
             if (currentPlayerState.Velocity.Y < -_jumpForce)
             {
-                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, -_jumpForce * 0.2f + currentPlayerState.Velocity.Y);
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, verticalForce + currentPlayerState.Velocity.Y);
             }
             else
             {
@@ -361,8 +363,6 @@ public static class PlayerLogic
         }
         else
         {
-            var verticalForce = -_jumpForce * 0.2f;
-            if (currentPlayerState.Input.Up) verticalForce *= 2;
             if (currentPlayerState.IsLookingRight())
                 currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, verticalForce));
             else
