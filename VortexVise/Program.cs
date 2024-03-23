@@ -28,12 +28,12 @@ Raylib.SetExitKey(0); // Disable escape closing the game
 
 // Load global data (assets that must be available in all scenes, i.e. font)
 GameSounds.InitAudio();
-Music music = Raylib.LoadMusicStream("Resources/Audio/Music/PixelatedDiscordance.mp3");
+//Music music = Raylib.LoadMusicStream("Resources/Audio/Music/PixelatedDiscordance.mp3");
 GameCore.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
 
 // Initiate music
-Raylib.SetMusicVolume(music, 1.0f);
-Raylib.PlayMusicStream(music);
+//Raylib.SetMusicVolume(music, 1.0f);
+//Raylib.PlayMusicStream(music);
 
 // Setup and init first screen
 GameSceneManager.CurrentScene = GameScene.MENU;
@@ -64,7 +64,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update music
     //----------------------------------------------------------------------------------
-    Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
+    //Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
     // Update game
     //----------------------------------------------------------------------------------

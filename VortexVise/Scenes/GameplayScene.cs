@@ -34,6 +34,7 @@ static internal class GameplayScene
         LastState.Gravity = Gravity;
         PlayerLogic.Init(false);
         CameraLogic.Init();
+        WeaponLogic.Init();
         if (GameCore.PlayerOneGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id));
         if (GameCore.PlayerTwoGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id));
         if (GameCore.PlayerThreeGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id));
@@ -132,6 +133,8 @@ static internal class GameplayScene
     static public void UnloadGameplayScene()
     {
         CameraLogic.Unload();
+        //PlayerLogic.Unload();
+        WeaponLogic.Unload();
     }
     static public int FinishGameplayScene()
     {

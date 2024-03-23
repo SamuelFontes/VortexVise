@@ -38,6 +38,7 @@ public enum WeaponType
 // StatusEffects
 public enum StatusEffects
 {
+    None,
     Cold,                       // Cause slow, if accumulated it will cause freeze, fires remove this
     Wet,                        // If it is wet, it can get stunned longer with eleticity, can remove fire, fire removes this but don't burn, increase cold effect 
     Fire,                       // Cause constant damage, removes with water, cold or freeze, can spread to others if stay too close 
@@ -49,4 +50,4 @@ public enum StatusEffects
     Bleeding,                   // Deals damage over time, fast
     Poison,                     // Deals damage over time, slow
     Heal,                       // Heal target
-};
+}; // TODO: Check if we can add things like shrink or enlarge effects, ivunerable would be also cool
