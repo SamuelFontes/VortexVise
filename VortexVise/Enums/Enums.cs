@@ -45,7 +45,7 @@ public enum StatusEffects
     Freezed,                    // Covered in ice, is stunned, any hit causes double damage but remove this effect, this is only caused by stacking a certain amout of cold
     Confusion,                  // Invert player controls
     Dizzy,                      // Simple stun
-    GetRotatedIdiot,            // Inverts map and gravity for this entity
+    GetRotatedIdiot,            // Inverts map horizontally and invert gravity for this entity, dude will fall upwards
     Bleeding,                   // Deals damage over time, fast
     Poison,                     // Deals damage over time, slow
     Heal,                       // Heal target

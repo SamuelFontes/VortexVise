@@ -28,7 +28,7 @@ Raylib.SetExitKey(0); // Disable escape closing the game
 
 // Load global data (assets that must be available in all scenes, i.e. font)
 GameSounds.InitAudio();
-Music music = Raylib.LoadMusicStream("Resources/Audio/Music/ost-test.mp3");
+Music music = Raylib.LoadMusicStream("Resources/Audio/Music/PixelatedDiscordance.mp3");
 GameCore.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
 
 // Initiate music
