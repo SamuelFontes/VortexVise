@@ -45,7 +45,6 @@ public static class PlayerLogic
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
     {
-        Utils.DebugText = currentPlayerState.TimeSinceJump.ToString();
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
     }
 
@@ -129,9 +128,9 @@ public static class PlayerLogic
                 input.UIUp = true;
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))
                 input.UIDown = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K))
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_ALT))
                 input.Jump = true;
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_K))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_K) || Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT_ALT))
                 input.CancelHook = true;
             if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT) || Raylib.IsKeyDown(KeyboardKey.KEY_J))
                 input.Hook = true;

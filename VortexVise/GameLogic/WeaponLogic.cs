@@ -120,11 +120,11 @@ public static class WeaponLogic
 
 
                     // Load the texture
-                    weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation);
+                    weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loding replicated textures
 
                     // Define Id and add to list
                     weapon.Id = id;
-                    Weapons.Add(weapon);
+                    Weapons.Add(weapon); 
                     id++;
                     Console.WriteLine($"WEAPON \"{weapon.Name}\" ADDED");
                 }
