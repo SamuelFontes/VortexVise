@@ -8,8 +8,9 @@ namespace VortexVise.Logic;
 
 public static class PlayerLogic
 {
-    static public Vector2 SpawnPoint;
+    static public Vector2 SpawnPoint { get { return MapLogic.CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }
     static private Texture _texture;
+
     static private readonly float _maxMoveSpeed = 350;
     static public readonly float _jumpForce = 450;
     static private readonly float _maxGravity = 1000;
@@ -29,7 +30,6 @@ public static class PlayerLogic
             PlayerHookLogic._texture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
-        SpawnPoint = new Vector2(MapLogic.MapTexture.width * 0.5f, MapLogic.MapTexture.height * 0.5f);
     }
     public static void CopyLastPlayerState(PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
@@ -201,10 +201,10 @@ public static class PlayerLogic
         else if (endingCollision.Y > mapSize.Y)
         {
             // TODO: Kill the player
-            currentPlayerState.Position = new(MapLogic.GetMapSize().X * 0.5f, MapLogic.GetMapSize().Y * 0.5f); // TODO: get spawnpoint
+            currentPlayerState.Position = SpawnPoint; // TODO: get spawnpoint
             currentPlayerState.Velocity = new(0, 0);
         }
-        if (endingCollision.X <= 0)
+        else if (endingCollision.X <= 0)
         {
             currentPlayerState.Position = new(0 - (endingCollision.X - currentPlayerState.Position.X), currentPlayerState.Position.Y);
             currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
