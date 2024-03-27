@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using VortexVise.GameGlobals;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
@@ -13,6 +14,7 @@ public static class WeaponLogic
 {
     static string weaponLocation = "Resources/Weapons";
     public static List<Weapon> Weapons { get; set; } = new List<Weapon>();
+    public static float WeaponSpawnTimer { get; set; } = 0;
     public static void Init()
     {
         // Read weapons from Resources/Weapons
@@ -136,9 +138,17 @@ public static class WeaponLogic
             }
         }
         if (Weapons.Count == 0) throw new Exception("Can't find any weapon");
+    }
 
-
-
+    public static void SpawnWeapons(float deltaTime)
+    {
+        WeaponSpawnTimer += deltaTime;
+        if(WeaponSpawnTimer > MatchSettings.WeaponSpawnDelay)
+        {
+            WeaponSpawnTimer = 0;
+            var weapon = Weapons.OrderBy(x => Guid.NewGuid()).First();
+            var spawnPoint = MapLogic.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First();
+        }
     }
 
     public static void Unload()
