@@ -7,10 +7,14 @@ public class AnimationState // This is only client side
 {
     public float AnimationTimer = 0f;
     public int State = 0;
-    public int Rotation = 0;
+    public float Rotation = 0;
+    public bool IsDashing = false;
+    public bool IsDashFacingRight = false;
 
-    public void ProcessAnimationRotation(Vector2 vVelocity, InputState input)
+    public void ProcessAnimationRotation(Vector2 vVelocity, InputState input, float deltaTime)
     {
+        if (IsDashing) return;
+
         float velocity = 0;
         if (vVelocity.X >= 0)
             velocity += vVelocity.X;
@@ -50,7 +54,7 @@ public class AnimationState // This is only client side
 
         if (input.Left || input.Right)
         {
-            AnimationTimer += Raylib.GetFrameTime();
+            AnimationTimer += deltaTime;
         }
         else
         {
@@ -59,10 +63,30 @@ public class AnimationState // This is only client side
             State = 0;
         }
     }
+    
+    public void ProcessDash(float deltaTime)
+    {
+        var rotationForce = deltaTime * 1800;
+        if (!IsDashing) return;
+        if(Rotation < -360 || Rotation > 360)
+        {
+            AnimationTimer = 0;
+            IsDashing = false;
+            Rotation = 0;
+        }
+        else
+        {
+            if(IsDashFacingRight)
+                Rotation += rotationForce;
+            else
+                Rotation -= rotationForce;
+        }
+
+    }
 
     public int GetAnimationRotation()
     {
-        return Rotation;
+        return (int)Rotation;
     }
 
 }

@@ -41,6 +41,7 @@ public static class PlayerLogic
         currentPlayerState.HookState = lastPlayerState.HookState;
         currentPlayerState.CanDash = lastPlayerState.CanDash;
         currentPlayerState.TimeSinceJump = lastPlayerState.TimeSinceJump;
+        currentPlayerState.Animation = lastPlayerState.Animation;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
@@ -372,6 +373,10 @@ public static class PlayerLogic
         }
 
         currentPlayerState.CanDash = false;
+        // Triggers dash animation
+        currentPlayerState.Animation.IsDashing = true;
+        currentPlayerState.Animation.Rotation = 0;
+        currentPlayerState.Animation.IsDashFacingRight = currentPlayerState.IsLookingRight();
     }
 
 

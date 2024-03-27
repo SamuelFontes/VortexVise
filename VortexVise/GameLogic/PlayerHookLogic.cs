@@ -156,6 +156,7 @@ public static class PlayerHookLogic
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
+                    //currentPlayerState.CanDash = true;
                     GameSounds.PlaySound(GameSounds.HookHit, volume: 0.5f);
                 }
             }

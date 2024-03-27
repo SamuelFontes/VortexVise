@@ -34,8 +34,8 @@ public static class GameLogic
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
             // Handle animation
-            currentPlayerState.Animation = lastPlayerState.Animation;
-            currentPlayerState.Animation.ProcessAnimationRotation(currentPlayerState.Velocity, currentPlayerState.Input);
+            currentPlayerState.Animation.ProcessDash(deltaTime);
+            currentPlayerState.Animation.ProcessAnimationRotation(currentPlayerState.Velocity, currentPlayerState.Input, deltaTime);
 
             state.PlayerStates.Add(currentPlayerState);
         }
