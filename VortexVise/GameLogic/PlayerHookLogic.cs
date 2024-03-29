@@ -25,7 +25,7 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.Velocity = new(0, 0);
             PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false);
         }
-        if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
+        else if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {
             // start Hook shoot
             currentPlayerState.HookState.IsHookReleased = true;
@@ -99,10 +99,15 @@ public static class PlayerHookLogic
 
         else if (currentPlayerState.HookState.IsPressingHookKey && !currentPlayerState.Input.Hook)
         {
+            // Allow player to jump again if the hook retract while was attached
+            if (currentPlayerState.HookState.IsHookAttached)
+                currentPlayerState.CanDash = true;
+
             // Hook retracted
             currentPlayerState.HookState.IsHookReleased = false;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Velocity = new(0, 0);
+
         }
         else if (!currentPlayerState.HookState.IsHookAttached && currentPlayerState.HookState.IsHookReleased)
         {
@@ -156,7 +161,6 @@ public static class PlayerHookLogic
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
-                    //currentPlayerState.CanDash = true;
                     GameSounds.PlaySound(GameSounds.HookHit, volume: 0.5f);
                 }
             }
