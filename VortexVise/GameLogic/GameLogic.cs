@@ -36,8 +36,9 @@ public static class GameLogic
 
 
             // Handle Weapon Drops
-            WeaponLogic.SpawnWeapons(deltaTime);
-            WeaponLogic.UpdateWeaponDrops(deltaTime);
+            WeaponLogic.CopyLastState(state, lastState);
+            WeaponLogic.SpawnWeapons(state, deltaTime);
+            WeaponLogic.UpdateWeaponDrops(state, deltaTime);
 
             // Handle animation
             currentPlayerState.Animation.ProcessDash(deltaTime);
@@ -52,12 +53,12 @@ public static class GameLogic
     {
         // All rendering logic should go here
         MapLogic.Draw();
+        WeaponLogic.DrawWeaponDrops(state);
         foreach (var playerState in state.PlayerStates)
         {
             PlayerHookLogic.DrawState(playerState);
             PlayerLogic.DrawState(playerState);
         }
-        WeaponLogic.DrawWeaponDrops();
     }
     private static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
     {

@@ -16,7 +16,6 @@ public static class WeaponLogic
 {
     static string weaponLocation = "Resources/Weapons";
     public static List<Weapon> Weapons { get; set; } = new List<Weapon>();
-    public static List<WeaponDropState> WeaponDrops { get; set; } = new();
     public static float WeaponSpawnTimer { get; set; } = 0;
     public static void Init()
     {
@@ -143,10 +142,17 @@ public static class WeaponLogic
         if (Weapons.Count == 0) throw new Exception("Can't find any weapon");
     }
 
-    public static void SpawnWeapons(float deltaTime)
+    public static void CopyLastState(GameState currentGameState, GameState lastGameState)
+    {
+        foreach(var dropState in lastGameState.WeaponDrops)
+        {
+            currentGameState.WeaponDrops.Add(new WeaponDropState(dropState.WeaponState, dropState.DropTimer, dropState.Position, dropState.Velocity));
+        }
+    }
+    public static void SpawnWeapons(GameState currentGameState, float deltaTime)
     {
         WeaponSpawnTimer += deltaTime;
-        if (WeaponSpawnTimer > MatchSettings.WeaponSpawnDelay && WeaponDrops.Count < 4)
+        if (WeaponSpawnTimer > MatchSettings.WeaponSpawnDelay && currentGameState.WeaponDrops.Count < 4)
         {
             WeaponSpawnTimer = 0;
             var weapon = Weapons.OrderBy(x => Guid.NewGuid()).First();
@@ -154,22 +160,22 @@ public static class WeaponLogic
             var weaponDrop = new WeaponDropState();
             weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
             weaponDrop.Position = spawnPoint;
-            WeaponDrops.Add(weaponDrop);
+            currentGameState.WeaponDrops.Add(weaponDrop);
         }
     }
 
-    public static void UpdateWeaponDrops(float deltaTime)
+    public static void UpdateWeaponDrops(GameState currentGameState, float deltaTime)
     {
-        foreach (var drop in WeaponDrops)
+        foreach (var drop in currentGameState.WeaponDrops)
         {
             drop.DropTimer += deltaTime;
         }
-        WeaponDrops.RemoveAll(x => x.DropTimer > 60);
+        currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
     }
 
-    public static void DrawWeaponDrops()
+    public static void DrawWeaponDrops(GameState currentGameState)
     {
-        foreach (var drop in WeaponDrops)
+        foreach (var drop in currentGameState.WeaponDrops)
         {
             Raylib.DrawTextureEx(drop.WeaponState.Weapon.Texture, drop.Position, 0, 1, Raylib.WHITE);
         }
