@@ -23,6 +23,7 @@ public static class GameLogic
             if (!ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
 
+            // Handle Player Behaviour
             PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
             PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
             PlayerLogic.SetPlayerDirection(currentPlayerState);
@@ -32,6 +33,11 @@ public static class GameLogic
             PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
+
+
+            // Handle Weapon Drops
+            WeaponLogic.SpawnWeapons(deltaTime);
+            WeaponLogic.UpdateWeaponDrops(deltaTime);
 
             // Handle animation
             currentPlayerState.Animation.ProcessDash(deltaTime);
@@ -51,6 +57,7 @@ public static class GameLogic
             PlayerHookLogic.DrawState(playerState);
             PlayerLogic.DrawState(playerState);
         }
+        WeaponLogic.DrawWeaponDrops();
     }
     private static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
     {

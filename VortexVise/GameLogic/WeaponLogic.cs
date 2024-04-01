@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
+using VortexVise.States;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
@@ -14,6 +16,7 @@ public static class WeaponLogic
 {
     static string weaponLocation = "Resources/Weapons";
     public static List<Weapon> Weapons { get; set; } = new List<Weapon>();
+    public static List<WeaponDropState> WeaponDrops { get; set; } = new();
     public static float WeaponSpawnTimer { get; set; } = 0;
     public static void Init()
     {
@@ -71,7 +74,7 @@ public static class WeaponLogic
                     weapon.Damage = Convert.ToInt32(Regex.Match(match.Value, @"(?<=DAMAGE=)\d+").Value);
 
                     // Target Knockback
-                    if(match.Value.Contains("TARGET_KNOCKBACK")) weapon.Knockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_KNOCKBACK=)\d+").Value);
+                    if (match.Value.Contains("TARGET_KNOCKBACK")) weapon.Knockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_KNOCKBACK=)\d+").Value);
 
                     // Target Effect
                     string effect = Regex.Match(match.Value, @"(?<=TARGET_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\s\s)").Value.Trim();
@@ -95,7 +98,7 @@ public static class WeaponLogic
                     }
 
                     // Self Knockback
-                    if(match.Value.Contains("SELF_KNOCKBACK")) weapon.SelfKnockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_KNOCKBACK=)\d+").Value);
+                    if (match.Value.Contains("SELF_KNOCKBACK")) weapon.SelfKnockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_KNOCKBACK=)\d+").Value);
 
                     // Self Effect
                     effect = Regex.Match(match.Value, @"(?<=SELF_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\s\s)").Value.Trim();
@@ -126,7 +129,7 @@ public static class WeaponLogic
 
                     // Define Id and add to list
                     weapon.Id = id;
-                    Weapons.Add(weapon); 
+                    Weapons.Add(weapon);
                     id++;
                     Console.WriteLine($"WEAPON \"{weapon.Name}\" ADDED");
                 }
@@ -143,11 +146,32 @@ public static class WeaponLogic
     public static void SpawnWeapons(float deltaTime)
     {
         WeaponSpawnTimer += deltaTime;
-        if(WeaponSpawnTimer > MatchSettings.WeaponSpawnDelay)
+        if (WeaponSpawnTimer > MatchSettings.WeaponSpawnDelay && WeaponDrops.Count < 4)
         {
             WeaponSpawnTimer = 0;
             var weapon = Weapons.OrderBy(x => Guid.NewGuid()).First();
             var spawnPoint = MapLogic.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First();
+            var weaponDrop = new WeaponDropState();
+            weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
+            weaponDrop.Position = spawnPoint;
+            WeaponDrops.Add(weaponDrop);
+        }
+    }
+
+    public static void UpdateWeaponDrops(float deltaTime)
+    {
+        foreach (var drop in WeaponDrops)
+        {
+            drop.DropTimer += deltaTime;
+        }
+        WeaponDrops.RemoveAll(x => x.DropTimer > 60);
+    }
+
+    public static void DrawWeaponDrops()
+    {
+        foreach (var drop in WeaponDrops)
+        {
+            Raylib.DrawTextureEx(drop.WeaponState.Weapon.Texture, drop.Position, 0, 1, Raylib.WHITE);
         }
     }
 

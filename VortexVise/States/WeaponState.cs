@@ -4,6 +4,16 @@ namespace VortexVise.States;
 
 public class WeaponState
 {
+    public WeaponState(Weapon weapon, int currentAmmo, int maxAmmo, bool isEquipped, float reloadTimer, int weaponSlot)
+    {
+        Weapon = weapon;
+        CurrentAmmo = currentAmmo;
+        MaxAmmo = maxAmmo;
+        IsEquipped = isEquipped;
+        ReloadTimer = reloadTimer;
+        WeaponSlot = weaponSlot;
+    }
+
     public Weapon Weapon { get; set; } 
     public int CurrentAmmo { get; set; } 
     public int MaxAmmo { get; set; }
