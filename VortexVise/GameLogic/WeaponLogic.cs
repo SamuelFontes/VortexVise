@@ -17,6 +17,8 @@ public static class WeaponLogic
     static string weaponLocation = "Resources/Weapons";
     public static List<Weapon> Weapons { get; set; } = new List<Weapon>();
     public static float WeaponSpawnTimer { get; set; } = 0;
+    public static float WeaponRotation { get; set; } = 0;
+    public static bool AnimationCicle { get; set; } = false;
     public static void Init()
     {
         // Read weapons from Resources/Weapons
@@ -144,7 +146,7 @@ public static class WeaponLogic
 
     public static void CopyLastState(GameState currentGameState, GameState lastGameState)
     {
-        foreach(var dropState in lastGameState.WeaponDrops)
+        foreach (var dropState in lastGameState.WeaponDrops)
         {
             currentGameState.WeaponDrops.Add(new WeaponDropState(dropState.WeaponState, dropState.DropTimer, dropState.Position, dropState.Velocity));
         }
@@ -161,6 +163,7 @@ public static class WeaponLogic
             weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
             weaponDrop.Position = spawnPoint;
             currentGameState.WeaponDrops.Add(weaponDrop);
+            GameSounds.PlaySound(GameSounds.WeaponDrop);
         }
     }
 
@@ -171,13 +174,20 @@ public static class WeaponLogic
             drop.DropTimer += deltaTime;
         }
         currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
+
+        // create animation
+            WeaponRotation -= deltaTime * 100;
     }
 
     public static void DrawWeaponDrops(GameState currentGameState)
     {
         foreach (var drop in currentGameState.WeaponDrops)
         {
-            Raylib.DrawTextureEx(drop.WeaponState.Weapon.Texture, drop.Position, 0, 1, Raylib.WHITE);
+            Rectangle sourceRec = new(0.0f, 0.0f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
+
+            Rectangle destRec = new(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f, drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
+
+            Raylib.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.width * 0.5f, drop.WeaponState.Weapon.Texture.height * 0.5f), (int)WeaponRotation, Raylib.WHITE);
         }
     }
 

@@ -9,5 +9,5 @@ namespace VortexVise.GameGlobals;
 public static class MatchSettings
 {
     public static int PlayerSpawnDelay { get; set; } = 3;
-    public static int WeaponSpawnDelay { get; set; } = 5;
+    public static int WeaponSpawnDelay { get; set; } = 8;
 }

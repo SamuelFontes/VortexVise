@@ -7,7 +7,7 @@ namespace VortexVise.GameGlobals;
 
 public static class GameCore
 {
-    public static int GameTickRate { get; private set; } = 128;                  // Defines tickrate the game and server runs at
+    public static int GameTickRate { get; private set; } = 72;                  // Defines tickrate the game and server runs at
     public static RenderTexture GameRendering { get; set; }
     public static int GameScreenWidth { get; private set; } = 960;              // Defines internal game resolution
     public static int GameScreenHeight { get; private set; } = 540;             // Defines internal game resolution
@@ -16,7 +16,7 @@ public static class GameCore
     public static bool IsServer { get; set; } = false;                          // Make sure some things only happen client side, playing sounds for example
 
     public static Font Font;                                                    // Global font
-    public static int TargetFPS { get; private set; } = 0;                      // Simulate game fps
+    public static int TargetFPS { get; private set; } = 60;                      // Simulate game fps
     public static string ServerIPAddress { get; set; } = "";                    // Currently connected server ip
     public static bool IsNetworkGame { get; set; } = false;                     // Defines if it's a network game
     public static int NetworkPort { get; set; } = 9050;                         // Defines the game port
