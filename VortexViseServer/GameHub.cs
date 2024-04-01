@@ -19,11 +19,19 @@ public class GameHub : Hub
         await Clients.Caller.SendAsync("JoinGame", true);
     }
 
+    public async Task JoinOrCreateGame()
+    {
+        var match = matches.FirstOrDefault(m => m.Players.Count < m.MaxPlayers);
+        if (match == null)
+            await CreateGame();
+        else
+            await JoinGame(match.Id);
+    }
+
     public async Task CreateGame()
     {
         var game = new GameMatch();
         game.MatchOwner = Context.ConnectionId;
-        game.MaxPlayers = 8;
         game.Players.Add(Context.ConnectionId);
         game.Id = Guid.NewGuid();
         matches.Add(game);
@@ -50,6 +58,6 @@ public class GameHub : Hub
         if (match == null || match.Players.Contains(Context.ConnectionId)) return;
         input.Owner = Context.ConnectionId;
 
-        await Clients.Group(matchId.ToString()).SendAsync("SendInput",input);
+        await Clients.Group(matchId.ToString()).SendAsync("SendInput", input);
     }
 }
