@@ -7,7 +7,7 @@ namespace VortexVise.GameGlobals;
 
 public static class GameCore
 {
-    public static int GameTickRate { get; private set; } = 72;                  // Defines tickrate the game and server runs at
+    public static int GameTickRate { get; private set; } = 120;                  // Defines tickrate the game and server runs at
     public static RenderTexture GameRendering { get; set; }
     public static int GameScreenWidth { get; private set; } = 960;              // Defines internal game resolution
     public static int GameScreenHeight { get; private set; } = 540;             // Defines internal game resolution

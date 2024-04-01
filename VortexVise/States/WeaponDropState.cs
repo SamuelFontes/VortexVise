@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
@@ -24,4 +25,5 @@ public class WeaponDropState
     public float DropTimer { get; set; } = 0;
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
+    public Rectangle Collision { get { return new Rectangle((int)Position.X, (int)Position.Y, 32, 32); } }
 }

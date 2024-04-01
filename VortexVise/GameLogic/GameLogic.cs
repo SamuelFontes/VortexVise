@@ -14,6 +14,9 @@ public static class GameLogic
             CurrentTime = currentTime
         };
 
+        // Copy last state
+        WeaponLogic.CopyLastState(state, lastState);
+
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
@@ -22,6 +25,7 @@ public static class GameLogic
             // Either read player input or get input from last frame TODO: update input with last input received for all the players here, unless it's going back in time to correct stuff
             if (!ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
+
 
             // Handle Player Behaviour
             PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
@@ -34,11 +38,7 @@ public static class GameLogic
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
-
-            // Handle Weapon Drops
-            WeaponLogic.CopyLastState(state, lastState);
-            WeaponLogic.SpawnWeapons(state, deltaTime);
-            WeaponLogic.UpdateWeaponDrops(state, deltaTime);
+            PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState, deltaTime);
 
             // Handle animation
             currentPlayerState.Animation.ProcessDash(deltaTime);
@@ -46,6 +46,11 @@ public static class GameLogic
 
             state.PlayerStates.Add(currentPlayerState);
         }
+
+        // Handle Weapon Drops
+        WeaponLogic.SpawnWeapons(state, deltaTime);
+        WeaponLogic.UpdateWeaponDrops(state, deltaTime);
+
 
         return state;
     }

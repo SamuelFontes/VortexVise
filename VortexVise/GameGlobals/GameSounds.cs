@@ -11,6 +11,7 @@ public static class GameSounds
     public static Sound Click;
     public static Sound Selection;
     public static Sound WeaponDrop;
+    public static Sound WeaponClick;
 
     public static void InitAudio()
     {
@@ -21,6 +22,7 @@ public static class GameSounds
         Click = Raylib.LoadSound("Resources/Audio/FX/click.wav");
         Selection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
         WeaponDrop = Raylib.LoadSound("Resources/Audio/FX/metal_drop.wav");
+        WeaponClick = Raylib.LoadSound("Resources/Audio/FX/weapon_click.wav");
     }
 
     public static void UnloadAudio()
@@ -32,6 +34,7 @@ public static class GameSounds
         Raylib.UnloadSound(Click);
         Raylib.UnloadSound(Selection);
         Raylib.UnloadSound(WeaponDrop);
+        Raylib.UnloadSound(WeaponClick);
     }
 
     public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)

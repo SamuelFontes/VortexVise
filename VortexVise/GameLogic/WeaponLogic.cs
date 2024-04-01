@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;
+using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
@@ -188,6 +189,8 @@ public static class WeaponLogic
             Rectangle destRec = new(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f, drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
 
             Raylib.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.width * 0.5f, drop.WeaponState.Weapon.Texture.height * 0.5f), (int)WeaponRotation, Raylib.WHITE);
+
+            if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
         }
     }
 

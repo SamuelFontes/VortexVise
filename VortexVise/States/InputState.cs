@@ -18,6 +18,8 @@ public class InputState
     public bool UIRight { get; set; } = false;
     public bool UIUp { get; set; } = false;
     public bool UIDown { get; set; } = false;
+    public bool GrabDrop { get; set; } = false;
+    public bool FireWeapon { get; set; } = false;
 
     public void ApplyInputBuffer(InputState buffer)
     {
@@ -28,6 +30,8 @@ public class InputState
         Jump = buffer.Jump || Jump;
         Hook = buffer.Hook || Hook;
         CancelHook = buffer.CancelHook || CancelHook;
+        GrabDrop = buffer.GrabDrop || GrabDrop;
+        FireWeapon = buffer.FireWeapon || FireWeapon;
     }
 
     public void ClearInputBuffer()
@@ -39,6 +43,8 @@ public class InputState
         Jump = false;
         Hook = false;
         CancelHook = false;
+        GrabDrop = false;
+        FireWeapon = false;
     }
 
 }

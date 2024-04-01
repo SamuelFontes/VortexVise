@@ -133,6 +133,8 @@ public static class PlayerLogic
                 input.Jump = true;
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_K) || Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT_ALT))
                 input.CancelHook = true;
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_E) || Raylib.IsKeyPressed(KeyboardKey.KEY_L))
+                input.GrabDrop = true;
             if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT) || Raylib.IsKeyDown(KeyboardKey.KEY_J))
                 input.Hook = true;
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_J) || Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
@@ -169,6 +171,8 @@ public static class PlayerLogic
                 input.Confirm = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
                 input.Back = true;
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+                input.GrabDrop = true;
 
         }
         return input;
@@ -395,6 +399,24 @@ public static class PlayerLogic
         if (Utils.Debug())
         {
             Raylib.DrawRectangleRec(playerState.Collision, Raylib.GREEN); // Debug
+        }
+    }
+
+    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState, float deltaTime)
+    {
+        if (currentPlayerState.Input.GrabDrop)
+        {
+            foreach (var drop in currentState.WeaponDrops)
+            {
+                if(Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
+                {
+                    currentPlayerState.WeaponStates.Add(drop.WeaponState);
+                    drop.DropTimer += 900000; // Gambiarra to remove weapon from map
+                    GameSounds.PlaySound(GameSounds.WeaponClick);
+                    break;
+                }
+            }
+            currentState.WeaponDrops.RemoveAll(x => x.DropTimer >= 900000); // Gambiarra to remove weapon from map
         }
     }
 }
