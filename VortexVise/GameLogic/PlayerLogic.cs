@@ -42,6 +42,7 @@ public static class PlayerLogic
         currentPlayerState.CanDash = lastPlayerState.CanDash;
         currentPlayerState.TimeSinceJump = lastPlayerState.TimeSinceJump;
         currentPlayerState.Animation = lastPlayerState.Animation;
+        currentPlayerState.WeaponStates = lastPlayerState.WeaponStates;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
@@ -395,6 +396,19 @@ public static class PlayerLogic
 
         Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
 
+        var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
+        if (weapon != null)
+        {
+            switch (weapon.Weapon.WeaponType)
+            {
+                case Enums.WeaponType.Shotgun: destRec.Y += 5; break;
+                case Enums.WeaponType.SMG: destRec.Y += 5; break;
+                case Enums.WeaponType.Pistol: destRec.Y += 5; break;
+                case Enums.WeaponType.MeleeBlunt: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
+                case Enums.WeaponType.MeleeCut: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
+            }
+            Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
+        }
 
         if (Utils.Debug())
         {
@@ -408,8 +422,11 @@ public static class PlayerLogic
         {
             foreach (var drop in currentState.WeaponDrops)
             {
-                if(Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
+                if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision)) // TODO: if holding max weapons trade with current
                 {
+                    //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;
+                    currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more waepons
+                    drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
                     drop.DropTimer += 900000; // Gambiarra to remove weapon from map
                     GameSounds.PlaySound(GameSounds.WeaponClick);

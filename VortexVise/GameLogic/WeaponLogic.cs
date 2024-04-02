@@ -177,7 +177,7 @@ public static class WeaponLogic
         currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
 
         // create animation
-            WeaponRotation -= deltaTime * 100;
+        WeaponRotation -= deltaTime * 100;
     }
 
     public static void DrawWeaponDrops(GameState currentGameState)
@@ -199,4 +199,5 @@ public static class WeaponLogic
         foreach (var w in Weapons) Raylib.UnloadTexture(w.Texture);
 
     }
+
 }

@@ -29,4 +29,5 @@ public static class GameCore
     public static PlayerProfile PlayerThreeProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerThree", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
     public static int PlayerFourGamepad { get; set; } = -9;                      // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
     public static PlayerProfile PlayerFourProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerFour", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
+    public static int MaxWeapons { get; set; } = 4;
 }
