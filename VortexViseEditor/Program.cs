@@ -6,6 +6,7 @@ using ZeroElectric.Vinculum;
 
 
 MapLogic.Init();
+MapLogic.Maps.OrderBy(x => x.Name);
 var mapId = 0;
 foreach (var m in MapLogic.Maps)
 {
@@ -116,11 +117,11 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
 
         }
         else if (state == 1)
-            map.PlayerSpawnPoints.Add(new(mapCursorX, mapCursorY));
+            map.PlayerSpawnPoints.Add(new(mapCursorX - 16, mapCursorY - 16));
         else if (state == 2)
-            map.EnemySpawnPoints.Add(new(mapCursorX, mapCursorY));
+            map.EnemySpawnPoints.Add(new(mapCursorX - 16, mapCursorY - 16));
         else if (state == 3)
-            map.ItemSpawnPoints.Add(new(mapCursorX, mapCursorY));
+            map.ItemSpawnPoints.Add(new(mapCursorX - 16, mapCursorY - 16));
         else if (state == 4)
         {
             Rectangle rec = new(0, 0, 1, 1);
@@ -141,7 +142,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             index = 0;
             foreach (var c in map.PlayerSpawnPoints)
             {
-                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 32, 32), rec))
                     break;
                 index++;
 
@@ -151,7 +152,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             index = 0;
             foreach (var c in map.EnemySpawnPoints)
             {
-                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 32, 32), rec))
                     break;
                 index++;
 
@@ -161,7 +162,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             index = 0;
             foreach (var c in map.ItemSpawnPoints)
             {
-                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 16, 16), rec))
+                if (Raylib.CheckCollisionRecs(new(c.X, c.Y, 32, 32), rec))
                     break;
                 index++;
 
@@ -215,9 +216,9 @@ GAME_MODES = DM,TDM,SURVIVAL";
         Raylib.DrawRectangle((int)selection.x + (int)mapX, (int)selection.y + (int)mapY, (int)selection.width, (int)selection.height, Raylib.BLUE);
     }
     foreach (var rec in map.Collisions) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, (int)rec.Width, (int)rec.Height, Raylib.BLUE);
-    foreach (var rec in map.PlayerSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.GREEN);
-    foreach (var rec in map.EnemySpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.RED);
-    foreach (var rec in map.ItemSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 16, 16, Raylib.PURPLE);
+    foreach (var rec in map.PlayerSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 32, 32, Raylib.GREEN);
+    foreach (var rec in map.EnemySpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 32, 32, Raylib.RED);
+    foreach (var rec in map.ItemSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 32, 32, Raylib.PURPLE);
 
 
     Raylib.DrawTexturePro(mouseTexture, new(0, 0, mouseTexture.width, mouseTexture.height), cursorRec, new(0, 0), 0, color);
