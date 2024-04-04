@@ -160,6 +160,10 @@ public static class WeaponLogic
             WeaponSpawnTimer = 0;
             var weapon = Weapons.OrderBy(x => Guid.NewGuid()).First();
             var spawnPoint = MapLogic.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First();
+            // Remove old weapons if there is anoter in same place
+            var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
+            if (existingWeapon != null) currentGameState.WeaponDrops.Remove(existingWeapon);
+
             var weaponDrop = new WeaponDropState();
             weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
             weaponDrop.Position = spawnPoint;
