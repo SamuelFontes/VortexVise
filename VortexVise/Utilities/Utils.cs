@@ -84,9 +84,9 @@ public static class Utils
 
     public static void DrawTextCentered(string text, Vector2 textPosition, int textSize, Color color)
     {
-        var textBoxSize = Raylib.MeasureTextEx(GameCore.Font, text, textSize, 0);
+        var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, text, textSize, 0);
         var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
-        Raylib.DrawTextEx(GameCore.Font, text, pos, textSize, 0, color);
+        Raylib.DrawTextEx(GameAssets.Misc.Font, text, pos, textSize, 0, color);
     }
 
     public static int GetNumberOfLocalPlayers()

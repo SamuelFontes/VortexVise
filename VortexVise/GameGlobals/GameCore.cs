@@ -15,7 +15,6 @@ public static class GameCore
     public static bool GameShouldClose { get; set; } = false;                   // If true the game will close 
     public static bool IsServer { get; set; } = false;                          // Make sure some things only happen client side, playing sounds for example
 
-    public static Font Font;                                                    // Global font
     public static int TargetFPS { get; private set; } = 60;                      // Simulate game fps
     public static string ServerIPAddress { get; set; } = "";                    // Currently connected server ip
     public static bool IsNetworkGame { get; set; } = false;                     // Defines if it's a network game

@@ -86,7 +86,7 @@ public static class MenuScene
             if (GameCore.PlayerOneGamepad != -9)
             {
                 GameUserInterface.IsCursorVisible = false;
-                GameSounds.PlaySound(GameSounds.Click, pitch: 0.8f);
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
                 selected = Scenes.MenuItem.Arcade;
                 menuItems.First(x => x.Item == selected).IsSelected = true;
@@ -110,13 +110,13 @@ public static class MenuScene
                         {
                             finishScreen = -1;   // EXIT
                             GameCore.GameShouldClose = true;
-                            GameSounds.PlaySound(GameSounds.Click);
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                             break;
                         }
                     case Scenes.MenuItem.Settings:
                         {
                             finishScreen = 1;   // OPTIONS
-                            GameSounds.PlaySound(GameSounds.Click);
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                             break;
                         }
                     case Scenes.MenuItem.Arcade:
@@ -124,7 +124,7 @@ public static class MenuScene
 
                             //finishScreen = 2;   // GAMEPLAY
                             GameCore.IsNetworkGame = false;
-                            GameSounds.PlaySound(GameSounds.Click);
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                             currentState = MenuState.InputSelection;
                             break;
                         }
@@ -132,7 +132,7 @@ public static class MenuScene
                         {
                             foreach (var item in menuItems) item.IsSelected = false;
                             currentState = MenuState.MainMenu;
-                            GameSounds.PlaySound(GameSounds.Click);
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                             break;
                         }
                     default: break;
@@ -297,7 +297,7 @@ public static class MenuScene
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
-        if (lastSelected != selected && selected != Scenes.MenuItem.None) GameSounds.PlaySound(GameSounds.Selection);
+        if (lastSelected != selected && selected != Scenes.MenuItem.None) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
         lastSelected = selected;
     }
     class MenuItem
@@ -341,7 +341,7 @@ public static class MenuScene
 
 
             // Center the text
-            TextSize = Raylib.MeasureTextEx(GameCore.Font, Text, Size, 0);
+            TextSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
             var pos = new Vector2(x - TextSize.X * 0.5f, y - TextSize.Y * 0.5f); // Centers text
 
             // Check if mouse is selecting the menu
@@ -376,7 +376,7 @@ public static class MenuScene
             if (Type == MenuItemType.TextInput)
                 Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
             // Draw the text
-            Raylib.DrawTextEx(GameCore.Font, Text, Position, Size, 0, Color);
+            Raylib.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color);
         }
     }
 

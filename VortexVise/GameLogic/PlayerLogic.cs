@@ -83,7 +83,7 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
-            GameSounds.PlaySound(GameSounds.Jump, volume: 0.5f);
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-_jumpForce);
             currentPlayerState.CanDash = true;
@@ -354,7 +354,7 @@ public static class PlayerLogic
     {
         var verticalForce = -_jumpForce * 0.2f;
         if (currentPlayerState.Input.Up) verticalForce *= 2;
-        GameSounds.PlaySound(GameSounds.Dash, volume: 0.8f);
+        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
         if (isDoubleJump)
         {
             if (currentPlayerState.Velocity.Y < -_jumpForce)
@@ -429,7 +429,7 @@ public static class PlayerLogic
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
                     drop.DropTimer += 900000; // Gambiarra to remove weapon from map
-                    GameSounds.PlaySound(GameSounds.WeaponClick);
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
                     break;
                 }
             }

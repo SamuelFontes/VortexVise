@@ -164,7 +164,7 @@ public static class WeaponLogic
             weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
             weaponDrop.Position = spawnPoint;
             currentGameState.WeaponDrops.Add(weaponDrop);
-            GameSounds.PlaySound(GameSounds.WeaponDrop);
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponDrop);
         }
     }
 

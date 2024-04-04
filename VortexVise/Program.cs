@@ -17,23 +17,20 @@ using ZeroElectric.Vinculum;
 
 // Initialization
 //---------------------------------------------------------
-Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");
-Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);
+Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
+Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
+Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);                           // Set minimal window size
+Raylib.InitAudioDevice();                                                                               // Initialize audio device
+Raylib.HideCursor();                                                                                    // Hide windows cursor
+Raylib.SetTargetFPS(GameCore.TargetFPS);                                                                // Set game target FPS
+Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
+GameAssets.InitializeAssets();                                                                          // Load global data 
 GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
-Raylib.InitAudioDevice();      // Initialize audio device
-Raylib.HideCursor();
-Raylib.SetTargetFPS(GameCore.TargetFPS);
-Raylib.SetExitKey(0); // Disable escape closing the game
 
-// Load global data (assets that must be available in all scenes, i.e. font)
-GameSounds.InitAudio();
-//Music music = Raylib.LoadMusicStream("Resources/Audio/Music/PixelatedDiscordance.mp3");
-GameCore.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
 
 // Initiate music
-//Raylib.SetMusicVolume(music, 1.0f);
-//Raylib.PlayMusicStream(music);
+GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
+Raylib.PlayMusicStream(GameAssets.MusicAndAmbience.Music);
 
 // Setup and init first screen
 GameSceneManager.CurrentScene = GameScene.MENU;
@@ -64,7 +61,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update music
     //----------------------------------------------------------------------------------
-    //Raylib.UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
+    Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
     //----------------------------------------------------------------------------------
@@ -141,9 +138,7 @@ while (!GameSceneManager.TransitionFadeOut)
 GameUserInterface.UnloadUserInterface();
 
 // Unload global data loaded
-Raylib.UnloadFont(GameCore.Font);
-GameSounds.UnloadAudio();
-//UnloadMusicStream(music);
+GameAssets.UnloadAssets();
 
 Raylib.CloseAudioDevice();     // Close audio context
 Raylib.CloseWindow();          // Close window and OpenGL context
