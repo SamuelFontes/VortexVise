@@ -73,10 +73,12 @@ public static class GameAssets
         // Musics
         //---------------------------------------------------------
         public static string MusicAssetPixelatedDiscordance = "Resources/Audio/Music/PixelatedDiscordance.mp3";
+        public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
         public static void PlayMusic(string music)
         {
             if(IsMusicPlaying) Raylib.UnloadMusicStream(Music);
             Music = Raylib.LoadMusicStream(music);
+            Raylib.PlayMusicStream(Music);
         }
 
         // Ambience Sounds

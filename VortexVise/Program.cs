@@ -29,8 +29,7 @@ GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, Game
 
 
 // Initiate music
-GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
-Raylib.PlayMusicStream(GameAssets.MusicAndAmbience.Music);
+GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
 
 // Setup and init first screen
 GameSceneManager.CurrentScene = GameScene.MENU;

@@ -40,6 +40,8 @@ static internal class GameplayScene
         if (GameCore.PlayerThreeGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id));
         if (GameCore.PlayerFourGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id));
 
+        // Play gameplay music
+        GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);      
 
     }
 
