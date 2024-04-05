@@ -17,6 +17,7 @@ public static class GameLogic
 
         // Copy last state
         WeaponLogic.CopyLastState(state, lastState);
+        WeaponLogic.ProcessHitBoxes(state, deltaTime);
 
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)

@@ -21,12 +21,12 @@ public static class GameCore
     public static int NetworkPort { get; set; } = 9050;                         // Defines the game port
     public static HubConnection HubConnection { get; set; }                     // Network connection
     public static int PlayerOneGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerOneProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerOne", SkinLocation = "Resources/Sprites/Skins/fatso.png" }; // TODO: remove this after implementing profiles
+    public static PlayerProfile PlayerOneProfile { get; set; } = new PlayerProfile() { Id = 0, Name = "PlayerOne", SkinLocation = "Resources/Sprites/Skins/fatso.png" }; // TODO: remove this after implementing profiles
     public static int PlayerTwoGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerTwoProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerTwo", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
+    public static PlayerProfile PlayerTwoProfile { get; set; } = new PlayerProfile() { Id = 1, Name = "PlayerTwo", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
     public static int PlayerThreeGamepad { get; set; } = -9;                     // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerThreeProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerThree", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
+    public static PlayerProfile PlayerThreeProfile { get; set; } = new PlayerProfile() { Id = 2, Name = "PlayerThree", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
     public static int PlayerFourGamepad { get; set; } = -9;                      // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerFourProfile { get; set; } = new PlayerProfile() { Id = Guid.NewGuid(), Name = "PlayerFour", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
+    public static PlayerProfile PlayerFourProfile { get; set; } = new PlayerProfile() { Id = 3, Name = "PlayerFour", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
     public static int MaxWeapons { get; set; } = 4;
 }

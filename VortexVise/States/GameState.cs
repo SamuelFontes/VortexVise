@@ -51,7 +51,7 @@ public class GameState
 
             foreach (Match match in playerMatches)
             {
-                Guid playerId = Guid.Parse(Regex.Match(match.Value, @"(?<=(\|ID))[\s\S]*?(?=\|)").Value);
+                int playerId = int.Parse(Regex.Match(match.Value, @"(?<=(\|ID))[\s\S]*?(?=\|)").Value);
                 var player = new PlayerState(playerId);
                 player.Position = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|PX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|PY))[\s\S]*?(?=\|)").Value));
                 player.Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|VX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|VY))[\s\S]*?(?=\|)").Value));
@@ -90,7 +90,7 @@ public class GameState
 
         return state;
     }
-    public static string SerializeInput(InputState input, Guid playerId, double time)
+    public static string SerializeInput(InputState input, int playerId, double time)
     {
         // This will serialize the input to send over udp every frame
         // Why not JSON serialization? AOT
@@ -137,7 +137,7 @@ public class GameState
         return (playerId, input, time);
     }
 
-    public void ApproximateState(GameState localState, Guid playerId)
+    public void ApproximateState(GameState localState, int playerId)
     {
         // When receive the packet do Clients Approximate Physics Locally
         var receivedPlayerState = PlayerStates.FirstOrDefault(p => p.Id == playerId);

@@ -216,7 +216,7 @@ public static class WeaponLogic
                 {
                     var p = currentPlayerState.Position;
                     p.X -= 32 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(0, new(p.X, p.Y, 32, 32), ws.Weapon, 2);
+                    var hitbox = new DamageHitBoxState(0, new(p.X, p.Y, 32, 32), ws.Weapon, 0.2f);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -225,6 +225,15 @@ public static class WeaponLogic
             }
             ws.ReloadTimer = 0;
         }
+    }
+
+    public static void ProcessHitBoxes(GameState gameState, float deltaTime)
+    {
+        foreach(var hitbox in gameState.DamageHitBoxes)
+        {
+            hitbox.HitBoxTimer -= deltaTime;
+        }
+        gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0);
     }
 
     public static void Unload()

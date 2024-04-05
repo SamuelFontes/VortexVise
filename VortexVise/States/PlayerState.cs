@@ -6,7 +6,7 @@ namespace VortexVise.States;
 
 public class PlayerState
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public Vector2 Position { get; set; } = new Vector2(0, 0);
     public Vector2 Velocity { get; set; } = new Vector2(0, 0);
     public int Direction { get; set; } = 1;
@@ -20,7 +20,7 @@ public class PlayerState
     public AnimationState Animation { get; set; } = new AnimationState();
     public List<WeaponState> WeaponStates { get; set; } = new List<WeaponState>();
 
-    public PlayerState(Guid id)
+    public PlayerState(int id)
     {
         Id = id;
         Position = PlayerLogic.SpawnPoint;
