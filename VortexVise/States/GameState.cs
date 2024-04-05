@@ -10,6 +10,7 @@ public class GameState
     public float Gravity { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = new List<PlayerState>();
     public List<WeaponDropState> WeaponDrops { get; set; } = new();
+    public List<DamageHitBoxState> DamageHitBoxes { get; set; } = new();
 
     // TODO: Add compression
     public string SerializeState()

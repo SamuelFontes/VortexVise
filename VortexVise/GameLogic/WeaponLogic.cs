@@ -196,6 +196,35 @@ public static class WeaponLogic
 
             if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
         }
+        if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) Raylib.DrawRectangleRec(h.HitBox, Raylib.RED); // Debug
+    }
+
+    public static void ProcessPlayerShooting(PlayerState currentPlayerState, GameState gameState, float deltaTime)
+    {
+        if (currentPlayerState.WeaponStates.Count <= 0) return; // FIXME: change this when player can grab more weapons
+
+        var ws = currentPlayerState.WeaponStates[0];
+        ws.ReloadTimer += deltaTime;
+        if (currentPlayerState.Input.FireWeapon)
+        {
+
+            if (ws.ReloadTimer < ws.Weapon.ReloadDelay) return;
+
+            switch (ws.Weapon.WeaponType)
+            {
+                case Enums.WeaponType.MeleeBlunt:
+                {
+                    var p = currentPlayerState.Position;
+                    p.X -= 32 * currentPlayerState.Direction;
+                    var hitbox = new DamageHitBoxState(0, new(p.X, p.Y, 32, 32), ws.Weapon, 2);
+
+                    gameState.DamageHitBoxes.Add(hitbox);
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
+                    break;
+                }
+            }
+            ws.ReloadTimer = 0;
+        }
     }
 
     public static void Unload()

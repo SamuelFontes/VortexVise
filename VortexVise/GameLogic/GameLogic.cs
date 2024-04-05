@@ -11,7 +11,8 @@ public static class GameLogic
         GameState state = new()
         {
             Gravity = lastState.Gravity,
-            CurrentTime = currentTime
+            CurrentTime = currentTime,
+            DamageHitBoxes = lastState.DamageHitBoxes,
         };
 
         // Copy last state
@@ -39,6 +40,8 @@ public static class GameLogic
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
             PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState, deltaTime);
+
+            WeaponLogic.ProcessPlayerShooting(currentPlayerState, state, deltaTime);
 
             // Handle animation
             currentPlayerState.Animation.ProcessDash(deltaTime);

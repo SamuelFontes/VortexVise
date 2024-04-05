@@ -142,6 +142,8 @@ public static class PlayerLogic
                 input.Confirm = true;
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                 input.Back = true;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_I))
+                input.FireWeapon = true;
         }
         else
         {
@@ -404,7 +406,21 @@ public static class PlayerLogic
                 case Enums.WeaponType.Shotgun: destRec.Y += 5; break;
                 case Enums.WeaponType.SMG: destRec.Y += 5; break;
                 case Enums.WeaponType.Pistol: destRec.Y += 5; break;
-                case Enums.WeaponType.MeleeBlunt: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
+                case Enums.WeaponType.MeleeBlunt:
+                {
+                    if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
+                    {
+                        destRec.X += 5 * playerState.Direction;
+                        sourceRec.Width = -sourceRec.width;
+                        rotation -= 45 * playerState.Direction;
+                    }
+                    else
+                    {
+                        destRec.X -= 16 * playerState.Direction;
+                        destRec.Y += 5;
+                    }
+                    break;
+                }
                 case Enums.WeaponType.MeleeCut: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
             }
             Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
