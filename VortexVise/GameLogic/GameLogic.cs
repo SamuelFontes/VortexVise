@@ -37,6 +37,7 @@ public static class GameLogic
             PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);
             PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
             PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
+            WeaponLogic.ApplyHitBoxesDamage(state, currentPlayerState, deltaTime);
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 

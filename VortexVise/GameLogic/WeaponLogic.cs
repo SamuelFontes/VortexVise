@@ -216,7 +216,7 @@ public static class WeaponLogic
                 {
                     var p = currentPlayerState.Position;
                     p.X -= 32 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(0, new(p.X, p.Y, 32, 32), ws.Weapon, 0.2f);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X, p.Y, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -229,11 +229,25 @@ public static class WeaponLogic
 
     public static void ProcessHitBoxes(GameState gameState, float deltaTime)
     {
-        foreach(var hitbox in gameState.DamageHitBoxes)
+        foreach (var hitbox in gameState.DamageHitBoxes)
         {
             hitbox.HitBoxTimer -= deltaTime;
         }
         gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0);
+    }
+
+    public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState, float deltaTime)
+    {
+        var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id);
+        foreach (var hitbox in hitboxes)
+        {
+            if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
+            {
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 0.5f);
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
+            }
+
+        }
     }
 
     public static void Unload()
