@@ -142,7 +142,7 @@ public static class PlayerLogic
                 input.Confirm = true;
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                 input.Back = true;
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_I))
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_I) || Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
                 input.FireWeapon = true;
         }
         else
@@ -176,6 +176,8 @@ public static class PlayerLogic
                 input.Back = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
                 input.GrabDrop = true;
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_TRIGGER_2))
+                input.FireWeapon = true;
 
         }
         return input;

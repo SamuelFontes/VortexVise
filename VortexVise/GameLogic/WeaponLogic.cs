@@ -214,9 +214,9 @@ public static class WeaponLogic
             {
                 case Enums.WeaponType.MeleeBlunt:
                 {
-                    var p = currentPlayerState.Position;
-                    p.X -= 32 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X, p.Y, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
+                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                    p.X -= 16 * currentPlayerState.Direction;
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X-16, p.Y-16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
