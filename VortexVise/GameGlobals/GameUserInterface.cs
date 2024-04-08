@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
+/// <summary>
+/// This will handle all game user interface that will overlay over different scenes. For example the custom mouse cursor.
+/// </summary>
 static internal class GameUserInterface
 {
     public static Texture Cursor { get; private set; }

@@ -1,11 +1,14 @@
-﻿using System.Numerics;
-using VortexVise.GameGlobals;
+﻿using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.States;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
+/// <summary>
+/// GameplayScene
+/// All gameplay related logic should start here.
+/// </summary>
 static internal class GameplayScene
 {
     public static double LastTimeAccumulator { get; set; }
@@ -41,7 +44,7 @@ static internal class GameplayScene
         if (GameCore.PlayerFourGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id));
 
         // Play gameplay music
-        GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);      
+        GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
 
     }
 

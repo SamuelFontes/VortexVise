@@ -6,6 +6,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Handle player logic
+/// </summary>
 public static class PlayerLogic
 {
     static public Vector2 SpawnPoint { get { return MapLogic.CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }

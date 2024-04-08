@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;
@@ -13,6 +7,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Handle logic for things that helps us kill other things.
+/// </summary>
 public static class WeaponLogic
 {
     static string weaponLocation = "Resources/Weapons";
@@ -216,7 +213,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X-16, p.Y-16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);

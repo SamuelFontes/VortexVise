@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VortexVise.Enums;
+﻿using VortexVise.Enums;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Models;
 
+/// <summary>
+/// Thing used to kill other things.
+/// </summary>
 public class Weapon
 {
     public int Id { get; set; }
@@ -25,5 +23,5 @@ public class Weapon
     public StatusEffects SelfEffect { get; set; } = StatusEffects.None;
     public int SelfEffectPercentageChance { get; set; }
     public int SelfEffectAmount { get; set; }
-    public Texture Texture { get; set; }    
+    public Texture Texture { get; set; }
 }

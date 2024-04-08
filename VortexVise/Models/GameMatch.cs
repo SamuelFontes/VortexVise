@@ -1,6 +1,9 @@
 ﻿
 namespace VortexVise.Models;
 
+/// <summary>
+/// Used to list game matches on server backend.
+/// </summary>
 public class GameMatch
 {
     public Guid Id { get; set; }

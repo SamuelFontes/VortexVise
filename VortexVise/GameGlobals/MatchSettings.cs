@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace VortexVise.GameGlobals;
 
-namespace VortexVise.GameGlobals;
-
+/// <summary>
+/// The configuration for the current match settings.
+/// </summary>
 public static class MatchSettings
 {
     public static int PlayerSpawnDelay { get; set; } = 3;

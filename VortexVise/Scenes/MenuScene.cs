@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Utilities;
@@ -10,6 +9,9 @@ namespace VortexVise.Scenes;
 enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart };
 enum MenuItemType { Button, TextInput };
 enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby };
+/// <summary>
+/// Main Menu Scene
+/// </summary>
 public static class MenuScene
 {
     static List<MenuItem> menuItems = new List<MenuItem>();
@@ -107,34 +109,34 @@ public static class MenuScene
                 switch (selected)
                 {
                     case Scenes.MenuItem.Exit:
-                        {
-                            finishScreen = -1;   // EXIT
-                            GameCore.GameShouldClose = true;
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                            break;
-                        }
+                    {
+                        finishScreen = -1;   // EXIT
+                        GameCore.GameShouldClose = true;
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                        break;
+                    }
                     case Scenes.MenuItem.Settings:
-                        {
-                            finishScreen = 1;   // OPTIONS
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                            break;
-                        }
+                    {
+                        finishScreen = 1;   // OPTIONS
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                        break;
+                    }
                     case Scenes.MenuItem.Arcade:
-                        {
+                    {
 
-                            //finishScreen = 2;   // GAMEPLAY
-                            GameCore.IsNetworkGame = false;
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                            currentState = MenuState.InputSelection;
-                            break;
-                        }
+                        //finishScreen = 2;   // GAMEPLAY
+                        GameCore.IsNetworkGame = false;
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                        currentState = MenuState.InputSelection;
+                        break;
+                    }
                     case Scenes.MenuItem.Return:
-                        {
-                            foreach (var item in menuItems) item.IsSelected = false;
-                            currentState = MenuState.MainMenu;
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                            break;
-                        }
+                    {
+                        foreach (var item in menuItems) item.IsSelected = false;
+                        currentState = MenuState.MainMenu;
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                        break;
+                    }
                     default: break;
                 }
             }

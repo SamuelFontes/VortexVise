@@ -6,6 +6,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Handles player ninja rope/grappling hook logic.
+/// </summary>
 public static class PlayerHookLogic
 {
     public static int HookSize = 8;

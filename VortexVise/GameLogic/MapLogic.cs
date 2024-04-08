@@ -6,6 +6,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Handles the Map/Level logic for loading and changing maps.
+/// </summary>
 public static class MapLogic
 {
     public static List<Map> Maps { get; set; } = new List<Map>();

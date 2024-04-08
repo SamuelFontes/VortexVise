@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
+/// <summary>
+/// Define a player state in the simulated frame/tick.
+/// </summary>
 public class PlayerState
 {
     public int Id { get; set; }

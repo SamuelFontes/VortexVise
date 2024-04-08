@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Utilities;
 
+/// <summary>
+/// Lazy ass global functions to help create this damn game.
+/// </summary>
 public static class Utils
 {
     public static string DebugText { get; set; } = "Vortex Vise Alpha";

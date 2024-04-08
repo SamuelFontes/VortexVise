@@ -54,7 +54,7 @@ public static class GameAssets
 
         // Music And Ambience
         //---------------------------------------------------------
-        if(MusicAndAmbience.IsMusicPlaying) Raylib.UnloadMusicStream(MusicAndAmbience.Music);
+        if (MusicAndAmbience.IsMusicPlaying) Raylib.UnloadMusicStream(MusicAndAmbience.Music);
     }
 
     public static class Misc
@@ -76,7 +76,7 @@ public static class GameAssets
         public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
         public static void PlayMusic(string music)
         {
-            if(IsMusicPlaying) Raylib.UnloadMusicStream(Music);
+            if (IsMusicPlaying) Raylib.UnloadMusicStream(Music);
             Music = Raylib.LoadMusicStream(music);
             Raylib.PlayMusicStream(Music);
         }
@@ -85,7 +85,7 @@ public static class GameAssets
         //---------------------------------------------------------
         public static void PlayAmbience(string ambience)
         {
-            if(IsAmbiencePlaying) Raylib.UnloadMusicStream(Ambience);
+            if (IsAmbiencePlaying) Raylib.UnloadMusicStream(Ambience);
             Ambience = Raylib.LoadMusicStream(ambience);
         }
 

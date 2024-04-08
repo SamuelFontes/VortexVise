@@ -1,5 +1,9 @@
 ﻿namespace VortexVise.States;
 
+/// <summary>
+/// Player's input information generated every tickrate.
+/// This will be sent over the network every tickrate.
+/// </summary>
 public class InputState
 {
     public string Owner { get; set; }

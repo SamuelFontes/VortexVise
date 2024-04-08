@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace VortexVise.Models;
 
-namespace VortexVise.Models;
-
+/// <summary>
+/// Define information about the player.
+/// </summary>
 public class PlayerProfile
 {
     public int Id { get; set; }
-    public string Name { get; set; }  
+    public string Name { get; set; }
     public string SkinLocation { get; set; }
     // TODO: add more profile stuff here
 }

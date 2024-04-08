@@ -3,6 +3,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
+/// <summary>
+/// State for a player ninja rope/grappling hook.
+/// </summary>
 public class HookState
 {
     public Vector2 Position { get; set; } = new Vector2(0, 0);

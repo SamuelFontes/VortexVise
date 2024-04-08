@@ -3,6 +3,9 @@ using VortexVise.States;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Contains all gameplay logic to simulate a state/frame.
+/// </summary>
 public static class GameLogic
 {
     private static InputState[] InputBuffer = { new(), new(), new(), new() }; // records all input and send them on network frames

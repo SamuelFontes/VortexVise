@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Models;
 
+/// <summary>
+/// Used to create camera logic in CameraLogic.
+/// </summary>
 public class PlayerCamera
 {
     public Camera2D Camera;

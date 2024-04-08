@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Models;
 
+/// <summary>
+/// Game Level/Map
+/// </summary>
 public class Map
 {
     public string Name { get; set; } = "";

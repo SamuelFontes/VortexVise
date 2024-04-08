@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
+/// <summary>
+/// This should handle the scene transitions and define what is the current scene on the game.
+/// </summary>
 static internal class GameSceneManager
 {
     public static float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
@@ -94,20 +97,20 @@ static internal class GameSceneManager
             switch (CurrentScene)
             {
                 case GameScene.GAMEPLAY:
-                    {
-                        GameplayScene.UpdateGameplayScene();
-                        //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
-                        //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+                {
+                    GameplayScene.UpdateGameplayScene();
+                    //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                    //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
-                    }
-                    break;
+                }
+                break;
                 case GameScene.MENU:
-                    {
-                        MenuScene.UpdateMenuScene();
-                        if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
-                        else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
-                    }
-                    break;
+                {
+                    MenuScene.UpdateMenuScene();
+                    if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
+                    else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
+                }
+                break;
                 default: break;
             }
         }

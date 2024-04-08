@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
+/// <summary>
+/// State for dropped itens.
+/// </summary>
 public class WeaponDropState
 {
     public WeaponDropState()

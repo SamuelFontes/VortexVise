@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
 
+/// <summary>
+/// Used to animate sprites when players are walking around.
+/// </summary>
 public class AnimationState // This is only client side
 {
     public float AnimationTimer = 0f;
@@ -63,12 +65,12 @@ public class AnimationState // This is only client side
             State = 0;
         }
     }
-    
+
     public void ProcessDash(float deltaTime)
     {
         var rotationForce = deltaTime * 1800;
         if (!IsDashing) return;
-        if(Rotation < -360 || Rotation > 360)
+        if (Rotation < -360 || Rotation > 360)
         {
             AnimationTimer = 0;
             IsDashing = false;
@@ -76,7 +78,7 @@ public class AnimationState // This is only client side
         }
         else
         {
-            if(IsDashFacingRight)
+            if (IsDashFacingRight)
                 Rotation += rotationForce;
             else
                 Rotation -= rotationForce;

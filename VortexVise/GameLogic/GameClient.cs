@@ -7,6 +7,7 @@ using VortexVise.States;
 
 namespace VortexVise.Logic;
 
+// TODO: Rebuild this using SignalR
 public static class GameClient
 {
     static public bool IsConnected = false;
@@ -20,7 +21,7 @@ public static class GameClient
         // This constructor arbitrarily assigns the local port number.
         try
         {
-            _udpClient.Connect(GameCore.ServerIPAddress, GameCore.NetworkPort);
+            _udpClient.Connect(GameCore.ServerIPAddress, 0);
             IsConnected = true;
             UpdatePing();
             Thread getPingThread = new Thread(new ThreadStart(GetServerLatency));

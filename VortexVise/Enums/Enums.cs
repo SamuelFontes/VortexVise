@@ -3,26 +3,59 @@
 //----------------------------------------------------------------------------------
 namespace VortexVise.Enums;
 
-// GameMode, defines the rules for the current match
+/// <summary>
+/// GameMode, defines the rules for the current match
+/// </summary>
 public enum GameMode
 {
-    DeathMatch = 0,             // Free for all
-    TeamDeathMatch,             // Team based death match
-    Survival                    // Rogue like survival mode
+    /// <summary>
+    /// Free for all
+    /// </summary>
+    DeathMatch = 0,
+    /// <summary>
+    /// Team based death match
+    /// </summary>
+    TeamDeathMatch,
+    /// <summary>
+    /// Rogue like survival mode
+    /// </summary>
+    Survival
 };
 
-// GameScreen, defines what scene the game is in 
+/// <summary>
+/// GameScreen, defines what scene the game is in 
+/// </summary>
 public enum GameScene
 {
-    UNKNOWN = -1,               // Used for transitioning screens
-    LOGO = 0,                   // Game and library logo
-    MENU,                       // Title screen
-    OPTIONS,                    // Options screen
-    GAMEPLAY,                   // Gameplay screen
-    ENDING                      // Ending screen
+    /// <summary>
+    /// Used for transitioning screens
+    /// </summary>
+    UNKNOWN = -1,
+    /// <summary>
+    /// Game and library logo
+    /// </summary>
+    LOGO = 0,
+    /// <summary>
+    /// Title screen
+    /// </summary>
+    MENU,
+    /// <summary>
+    /// Options screen
+    /// </summary>
+    OPTIONS,
+    /// <summary>
+    /// Gameplay screen
+    /// </summary>
+    GAMEPLAY,
+    /// <summary>
+    /// Ending screen
+    /// </summary>
+    ENDING
 };
 
-// Weapon type
+/// <summary>
+/// Weapon type
+/// </summary>
 public enum WeaponType
 {
     Pistol,
@@ -35,19 +68,69 @@ public enum WeaponType
     Bazoka
 };
 
-// StatusEffects
+/// <summary>
+/// StatusEffects
+/// </summary>
 public enum StatusEffects
 {
+    /// <summary>
+    /// No status applied
+    /// </summary>
     None,
-    Cold,                       // Cause slow, if accumulated it will cause freeze, fires remove this
-    Wet,                        // If it is wet, it can get stunned longer with eleticity, can remove fire, fire removes this but don't burn, increase cold effect 
-    Fire,                       // Cause constant damage, removes with water, cold or freeze, can spread to others if stay too close 
-    Eletricity,                 // Stuns, if target was wet it doubles stun time
-    Freezed,                    // Covered in ice, is stunned, any hit causes double damage but remove this effect, this is only caused by stacking a certain amout of cold
-    Confusion,                  // Invert player controls
-    Dizzy,                      // Simple stun
-    GetRotatedIdiot,            // Inverts map horizontally and invert gravity for this entity, dude will fall upwards
-    Bleeding,                   // Deals damage over time, fast
-    Poison,                     // Deals damage over time, slow
-    Heal,                       // Heal target
-}; // TODO: Check if we can add things like shrink or enlarge effects, ivunerable would be also cool
+    /// <summary>
+    /// Cause slow, if accumulated it will cause freeze, fires will remove this effect.
+    /// </summary>
+    Cold,
+    /// <summary>
+    /// If it is wet, it can get stunned longer with eleticity, can remove fire, fire removes this but don't burn, increase cold effect 
+    /// </summary>
+    Wet,                        
+    /// <summary>
+    /// Cause constant damage, removes with water, cold or freeze, can spread to others if stay too close 
+    /// </summary>
+    Fire,                       
+    /// <summary>
+    /// Stuns, if target was wet it doubles stun time
+    /// </summary>
+    Eletricity,                 
+    /// <summary>
+    /// Covered in ice, is stunned, any hit causes double damage but remove this effect, this is only caused by stacking a certain amout of cold
+    /// </summary>
+    Freezed,                    
+    /// <summary>
+    /// Invert player controls
+    /// </summary>
+    Confusion,                  
+    /// <summary>
+    /// Simple stun
+    /// </summary>
+    Dizzy,                      
+    /// <summary>
+    /// Inverts map horizontally and invert gravity for this entity, dude will fall upwards
+    /// </summary>
+    GetRotatedIdiot,            
+    /// <summary>
+    /// Deals damage over time, fast
+    /// </summary>
+    Bleeding,                   
+    /// <summary>
+    /// Deals damage over time, slow
+    /// </summary>
+    Poison,                     
+    /// <summary>
+    /// Heal target
+    /// </summary>
+    Heal,                       
+    /// <summary>
+    /// Shrink entity making it and hitbox smaller
+    /// </summary>
+    Shrink,
+    /// <summary>
+    /// Make entity and hitbox bigger
+    /// </summary>
+    Enlarge,
+    /// <summary>
+    /// Special. Make thing invulnerable to any damage, knockback or status effect changes.
+    /// </summary>
+    Ivunerable,
+}; 

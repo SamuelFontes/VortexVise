@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.Utilities;
@@ -12,6 +6,9 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 
+/// <summary>
+/// Handles all camera logic in the game.
+/// </summary>
 public static class CameraLogic
 {
     public static List<PlayerCamera> PlayerCameras { get; set; } = new List<PlayerCamera>();
