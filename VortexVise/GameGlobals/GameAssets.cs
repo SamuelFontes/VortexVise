@@ -1,17 +1,16 @@
-﻿/*******************************************************************************************
-*
-*   GameAssets
-*
-*   This will hold all the global game assets. 
-*   It's resposible for loading and unloading all assets to memory.
-*
-********************************************************************************************/
-
+﻿
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
 #pragma warning disable CA2211 // Non-constant fields should not be visible
+/// <summary>
+/// 
+/// GameAssets
+///
+/// This will hold all the global game assets. 
+/// It's resposible for loading and unloading all assets to memory.
+/// </summary>
 public static class GameAssets
 {
     public static void InitializeAssets()

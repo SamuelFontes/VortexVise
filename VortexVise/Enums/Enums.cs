@@ -102,7 +102,7 @@ public enum StatusEffects
     /// </summary>
     Confusion,                  
     /// <summary>
-    /// Simple stun
+    /// Simple stun, any damage should remove this effect
     /// </summary>
     Dizzy,                      
     /// <summary>
