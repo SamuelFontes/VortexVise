@@ -1,5 +1,6 @@
 ﻿using VortexVise.GameGlobals;
 using VortexVise.Logic;
+using VortexVise.Networking;
 using VortexVise.States;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;

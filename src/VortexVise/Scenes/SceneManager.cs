@@ -7,7 +7,7 @@ namespace VortexVise.Scenes;
 /// <summary>
 /// This should handle the scene transitions and define what is the current scene on the game.
 /// </summary>
-static internal class GameSceneManager
+static internal class SceneManager
 {
     public static float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
     public static bool OnTransition { get; set; } = false;                      // Is scene transition happening

@@ -32,7 +32,7 @@ GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, Game
 GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
 
 // Setup and init first screen
-GameSceneManager.CurrentScene = GameScene.MENU;
+SceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
 MapLogic.Init();
@@ -64,7 +64,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update game
     //----------------------------------------------------------------------------------
-    GameSceneManager.UpdateScene();
+    SceneManager.UpdateScene();
 
 
     // Update user interface
@@ -95,10 +95,10 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Draw Game
     //----------------------------------------------------------------------------------
-    GameSceneManager.DrawScene();
+    SceneManager.DrawScene();
 
     // Draw full screen rectangle in front of everything
-    if (GameSceneManager.OnTransition) GameSceneManager.DrawTransition();
+    if (SceneManager.OnTransition) SceneManager.DrawTransition();
 
     GameUserInterface.DrawUserInterface();
 
@@ -126,10 +126,10 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
 // Fade screen to black when exit
 //--------------------------------------------------------------------------------------
-GameSceneManager.TransitionToNewScene(GameScene.UNKNOWN);
-while (!GameSceneManager.TransitionFadeOut)
+SceneManager.TransitionToNewScene(GameScene.UNKNOWN);
+while (!SceneManager.TransitionFadeOut)
 {
-    GameSceneManager.UpdateTransition();
+    SceneManager.UpdateTransition();
 }
 
 // De-Initialization

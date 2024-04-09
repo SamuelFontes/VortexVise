@@ -5,7 +5,7 @@ using System.Text;
 using VortexVise.GameGlobals;
 using VortexVise.States;
 
-namespace VortexVise.Logic;
+namespace VortexVise.Networking;
 
 // TODO: Rebuild this using SignalR
 public static class GameClient
