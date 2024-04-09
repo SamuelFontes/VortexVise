@@ -107,6 +107,12 @@ public static class MapLogic
         if (GameAssets.GameLevels.Maps.Count == 0) throw new Exception("Can't find any map");
     }
 
+    public static void Unload()
+    {
+        Raylib.UnloadTexture(GameAssets.GameLevels.CurrentMapTexture);
+
+    }
+
     public static void LoadRandomMap()
     {
         if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.GameLevels.CurrentMapTexture);

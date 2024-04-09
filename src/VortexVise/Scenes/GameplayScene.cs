@@ -65,10 +65,10 @@ static internal class GameplayScene
             if (GameClient.IsConnected)
             {
                 // Do all the network magic
-                if (GameCore.PlayerOneGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerOneGamepad), GameCore.PlayerOneProfile.Id, CurrentTime);
-                if (GameCore.PlayerTwoGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerTwoGamepad), GameCore.PlayerTwoProfile.Id, CurrentTime);
-                if (GameCore.PlayerThreeGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerThreeGamepad), GameCore.PlayerThreeProfile.Id, CurrentTime);
-                if (GameCore.PlayerFourGamepad != -9) GameClient.SendInput(PlayerLogic.GetInput(GameCore.PlayerFourGamepad), GameCore.PlayerFourProfile.Id, CurrentTime);
+                if (GameCore.PlayerOneGamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerOneGamepad), GameCore.PlayerOneProfile.Id, CurrentTime);
+                if (GameCore.PlayerTwoGamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerTwoGamepad), GameCore.PlayerTwoProfile.Id, CurrentTime);
+                if (GameCore.PlayerThreeGamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerThreeGamepad), GameCore.PlayerThreeProfile.Id, CurrentTime);
+                if (GameCore.PlayerFourGamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerFourGamepad), GameCore.PlayerFourProfile.Id, CurrentTime);
 
                 // This should not stop the game, so make it run in another task
                 GameState receivedState = GameClient.LastServerState;

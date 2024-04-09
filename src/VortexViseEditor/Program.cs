@@ -1,20 +1,21 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 
 MapLogic.Init();
-MapLogic.Maps.OrderBy(x => x.Name);
+GameAssets.GameLevels.Maps.OrderBy(x => x.Name);
 var mapId = 0;
-foreach (var m in MapLogic.Maps)
+foreach (var m in GameAssets.GameLevels.Maps)
 {
     Console.WriteLine($"{mapId} - {m.TextureLocation}");
     mapId++;
 }
 int selected = Convert.ToInt32(Console.ReadLine());
-Map map = MapLogic.Maps[selected];
+Map map = GameAssets.GameLevels.Maps[selected];
 
 
 // THIS CODE IS SHIT, IT WAS DONE REALLY FAST

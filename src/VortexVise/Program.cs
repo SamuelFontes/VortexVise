@@ -35,7 +35,6 @@ GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixe
 SceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
-MapLogic.Init();
 
 // Start multiplayer
 GameCore.HubConnection = new HubConnectionBuilder()

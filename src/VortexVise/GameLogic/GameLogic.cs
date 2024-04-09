@@ -8,7 +8,6 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class GameLogic
 {
-    private static InputState[] InputBuffer = { new(), new(), new(), new() }; // records all input and send them on network frames
     public static GameState SimulateState(GameState lastState, double currentTime, float deltaTime, bool isNetworkFrame)
     {
         GameState state = new()
@@ -28,7 +27,7 @@ public static class GameLogic
             PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
 
             // Either read player input or get input from last frame TODO: update input with last input received for all the players here, unless it's going back in time to correct stuff
-            if (!ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
+            if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
 
 
@@ -61,49 +60,5 @@ public static class GameLogic
 
 
         return state;
-    }
-    private static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
-    {
-        bool isLocalPlayer = false;
-        int gamepad = -9;
-        var playerIndex = 0;
-        if (GameCore.PlayerOneGamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
-        {
-            isLocalPlayer = true;
-            gamepad = GameCore.PlayerOneGamepad;
-            playerIndex = 0;
-        }
-        else if (GameCore.PlayerTwoGamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
-        {
-            isLocalPlayer = true;
-            gamepad = GameCore.PlayerTwoGamepad;
-            playerIndex = 1;
-        }
-        else if (GameCore.PlayerThreeGamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
-        {
-            isLocalPlayer = true;
-            gamepad = GameCore.PlayerThreeGamepad;
-            playerIndex = 2;
-        }
-        else if (GameCore.PlayerFourGamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
-        {
-            isLocalPlayer = true;
-            gamepad = GameCore.PlayerFourGamepad;
-            playerIndex = 3;
-        }
-        if (!isLocalPlayer || gamepad == -9) return isLocalPlayer;
-
-        if (isNetworkFrame)
-        {
-            currentPlayerState.Input = PlayerLogic.GetInput(gamepad); // Only read new inputs on frames we send to the server, the other frames are only for rendering 
-            currentPlayerState.Input.ApplyInputBuffer(InputBuffer[playerIndex]);
-            InputBuffer[playerIndex].ClearInputBuffer();
-        }
-        else
-        {
-            currentPlayerState.Input = lastPlayerState.Input;
-            InputBuffer[playerIndex].ApplyInputBuffer(PlayerLogic.GetInput(gamepad));
-        }
-        return isLocalPlayer;
     }
 }

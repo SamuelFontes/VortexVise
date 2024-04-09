@@ -97,7 +97,7 @@ public static class MenuScene
         }
         else
         {
-            var input = PlayerLogic.GetInput(GameCore.PlayerOneGamepad);
+            var input = GameInput.GetInput(GameCore.PlayerOneGamepad);
             if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
             {
                 if (currentState == MenuState.InputSelection)
@@ -205,7 +205,7 @@ public static class MenuScene
         {
             for (int i = -1; i < 4; i++)
             {
-                var input = PlayerLogic.GetInput(i);
+                var input = GameInput.GetInput(i);
                 if (input.Back)
                 {
                     // Disconnect or go back one screen 

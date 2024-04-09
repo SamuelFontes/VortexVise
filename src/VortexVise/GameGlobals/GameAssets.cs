@@ -1,4 +1,5 @@
 ﻿
+using VortexVise.Logic;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
@@ -33,6 +34,10 @@ public static class GameAssets
 
         // Music And Ambience
         //---------------------------------------------------------
+
+        // Game Levels
+        //---------------------------------------------------------
+        MapLogic.Init();
     }
 
     public static void UnloadAssets()
@@ -55,6 +60,10 @@ public static class GameAssets
         // Music And Ambience
         //---------------------------------------------------------
         if (MusicAndAmbience.IsMusicPlaying) Raylib.UnloadMusicStream(MusicAndAmbience.Music);
+
+        // Game Levels
+        //---------------------------------------------------------
+        MapLogic.Unload();
     }
 
     public static class Misc

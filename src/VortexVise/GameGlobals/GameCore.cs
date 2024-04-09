@@ -10,7 +10,7 @@ namespace VortexVise.GameGlobals;
 public static class GameCore
 {
     /// <summary>
-    /// Defines tickrate the game and server runs at.
+    /// Defines tickrate the game and server runs at. This tick defines the minimal amount of game simulations per second that need to occur even if the performs badly and cause low FPS. This will ensure a consistent game behaviour independently of low performance.
     /// </summary>
     public static int GameTickRate { get; private set; } = 120;
     /// <summary>
