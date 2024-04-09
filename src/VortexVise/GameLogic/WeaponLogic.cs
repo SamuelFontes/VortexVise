@@ -13,13 +13,12 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class WeaponLogic
 {
-    static readonly string weaponLocation = "Resources/Weapons";
-    public static List<Weapon> Weapons { get; set; } = [];
     public static float WeaponSpawnTimer { get; set; } = 0;
     public static float WeaponRotation { get; set; } = 0;
     public static bool AnimationCicle { get; set; } = false;
     public static void Init()
     {
+        string weaponLocation = "Resources/Weapons";
         // Read weapons from Resources/Weapons
         string[] weaponFiles = Directory.GetFiles(weaponLocation, "*.ini", SearchOption.TopDirectoryOnly);
         //string[] pngFiles = Directory.GetFiles(weaponLocation, "*.png", SearchOption.TopDirectoryOnly);
@@ -130,7 +129,7 @@ public static class WeaponLogic
 
                     // Define Id and add to list
                     weapon.Id = id;
-                    Weapons.Add(weapon);
+                    GameAssets.Gameplay.Weapons.Add(weapon);
                     id++;
                     Console.WriteLine($"WEAPON \"{weapon.Name}\" ADDED");
                 }
@@ -141,7 +140,7 @@ public static class WeaponLogic
                 Console.Error.WriteLine($"Error reading weapon {file}: {ex.Message}");
             }
         }
-        if (Weapons.Count == 0) throw new Exception("Can't find any weapon");
+        if (GameAssets.Gameplay.Weapons.Count == 0) throw new Exception("Can't find any weapon");
     }
 
     public static void CopyLastState(GameState currentGameState, GameState lastGameState)
@@ -157,7 +156,7 @@ public static class WeaponLogic
         if (WeaponSpawnTimer > GameMatch.WeaponSpawnDelay && currentGameState.WeaponDrops.Count < 4)
         {
             WeaponSpawnTimer = 0;
-            var weapon = Weapons.OrderBy(x => Guid.NewGuid()).First();
+            var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
             var spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First();
             // Remove old weapons if there is anoter in same place
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
@@ -234,7 +233,7 @@ public static class WeaponLogic
 
     public static void Unload()
     {
-        foreach (var w in Weapons) Raylib.UnloadTexture(w.Texture);
+        foreach (var w in GameAssets.Gameplay.Weapons) Raylib.UnloadTexture(w.Texture);
 
     }
 

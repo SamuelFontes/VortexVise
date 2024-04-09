@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using ZeroElectric.Vinculum;
 
@@ -26,7 +27,7 @@ public class PlayerState
     public PlayerState(int id)
     {
         Id = id;
-        Position = PlayerLogic.SpawnPoint;
+        Position = GameMatch.PlayerSpawnPoint;
     }
     public bool IsLookingRight()
     {

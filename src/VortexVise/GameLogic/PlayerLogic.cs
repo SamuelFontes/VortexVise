@@ -11,28 +11,10 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class PlayerLogic
 {
-    static public Vector2 SpawnPoint { get { return GameMatch.CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }
-    static private Texture _texture;
-
-    static private readonly float _maxMoveSpeed = 350;
-    static public readonly float _jumpForce = 450;
-    static private readonly float _maxGravity = 1000;
-    static private readonly float _acceleration = 750;
-    static private Vector2 _collisionOffset = new(10, 6);
-
     static public void Init(bool isServer)
     {
-        if (!isServer)
-        {
-            _texture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-            GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
-        }
-        else
-        {
-            _texture = new Texture() { width = 16, height = 16 }; // Player will always be this size
-            GameAssets.Gameplay.HookTexture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
-
-        }
+        GameAssets.Gameplay.PlayerTexture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
+        GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
     }
     public static void CopyLastPlayerState(PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
@@ -65,15 +47,15 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.Right && !currentPlayerState.Input.Left)
         {
-            currentPlayerState.AddVelocity(new(_acceleration * deltaTime, 0));
-            if (currentPlayerState.Velocity.X > _maxMoveSpeed)
-                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, _maxMoveSpeed, 1f - (float)Math.Exp(-5f * deltaTime)));
+            currentPlayerState.AddVelocity(new(GameMatch.PlayerAcceleration * deltaTime, 0));
+            if (currentPlayerState.Velocity.X > GameMatch.PlayerMaxSpeed)
+                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
         else if (currentPlayerState.Input.Left && !currentPlayerState.Input.Right)
         {
-            currentPlayerState.AddVelocity(new(-(_acceleration * deltaTime), 0));
-            if (currentPlayerState.Velocity.X < _maxMoveSpeed * -1)
-                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, _maxMoveSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime)));
+            currentPlayerState.AddVelocity(new(-(GameMatch.PlayerAcceleration * deltaTime), 0));
+            if (currentPlayerState.Velocity.X < GameMatch.PlayerMaxSpeed * -1)
+                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
         else
         {
@@ -88,7 +70,7 @@ public static class PlayerLogic
         {
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
             currentPlayerState.IsTouchingTheGround = false;
-            currentPlayerState.SetVelocityY(-_jumpForce);
+            currentPlayerState.SetVelocityY(-GameMatch.PlayerJumpForce);
             currentPlayerState.CanDash = true;
             currentPlayerState.TimeSinceJump += deltaTime;
         }
@@ -101,7 +83,7 @@ public static class PlayerLogic
 
     public static void ApplyPlayerGravity(PlayerState currentPlayerState, float deltaTime, float gravity)
     {
-        float maxGravity = _maxGravity;
+        float maxGravity = GameMatch.PlayerMaxGravity;
         if (!currentPlayerState.IsTouchingTheGround)
         {
             currentPlayerState.AddVelocity(new(0, gravity * deltaTime));
@@ -117,7 +99,7 @@ public static class PlayerLogic
 
     public static Rectangle GetPlayerCollision(Vector2 position)
     {
-        return new(position.X + _collisionOffset.X, position.Y + _collisionOffset.Y, 12, 20);
+        return new(position.X + GameMatch.PlayerCollisionOffset.X, position.Y + GameMatch.PlayerCollisionOffset.Y, 12, 20);
     }
 
     public static void ApplyCollisions(PlayerState currentPlayerState, float deltaTime)
@@ -138,7 +120,7 @@ public static class PlayerLogic
         else if (endingCollision.Y > mapSize.Y)
         {
             // TODO: Kill the player
-            currentPlayerState.Position = SpawnPoint; // TODO: get spawnpoint
+            currentPlayerState.Position = GameMatch.PlayerSpawnPoint; // TODO: get spawnpoint
             currentPlayerState.Velocity = new(0, 0);
         }
         else if (endingCollision.X <= 0)
@@ -148,7 +130,7 @@ public static class PlayerLogic
         }
         else if (endingCollision.X + endingCollision.Width >= mapSize.X)
         {
-            currentPlayerState.Position = new(mapSize.X - endingCollision.Width - _collisionOffset.X, currentPlayerState.Position.Y);
+            currentPlayerState.Position = new(mapSize.X - endingCollision.Width - GameMatch.PlayerCollisionOffset.X, currentPlayerState.Position.Y);
             currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
 
@@ -194,7 +176,7 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (currentPlayerState.Position.Y == collision.Y - _texture.height + _collisionOffset.Y)
+                    if (currentPlayerState.Position.Y == collision.Y - GameAssets.Gameplay.PlayerTexture.height + GameMatch.PlayerCollisionOffset.Y)
                         currentPlayerState.IsTouchingTheGround = true;
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
@@ -204,7 +186,7 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - _texture.height + _collisionOffset.Y);
+                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - GameAssets.Gameplay.PlayerTexture.height + GameMatch.PlayerCollisionOffset.Y);
                             currentPlayerState.Collision = playerCollision;
                             currentPlayerState.Collision = new(currentPlayerState.Collision.X, collision.Y - playerCollision.Height, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
                             currentPlayerState.SetVelocityY(0);
@@ -277,32 +259,32 @@ public static class PlayerLogic
     {
 
         Vector2 position = new(playerPosition.X, playerPosition.Y);
-        position.X += _texture.width * 0.5f;
-        position.Y += _texture.height * 0.5f;
+        position.X += GameAssets.Gameplay.PlayerTexture.width * 0.5f;
+        position.Y += GameAssets.Gameplay.PlayerTexture.height * 0.5f;
         return position;
     }
     public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)
     {
-        var verticalForce = -_jumpForce * 0.2f;
+        var verticalForce = -GameMatch.PlayerJumpForce * 0.2f;
         if (currentPlayerState.Input.Up) verticalForce *= 2;
         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
         if (isDoubleJump)
         {
-            if (currentPlayerState.Velocity.Y < -_jumpForce)
+            if (currentPlayerState.Velocity.Y < -GameMatch.PlayerJumpForce)
             {
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, verticalForce + currentPlayerState.Velocity.Y);
             }
             else
             {
-                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, -_jumpForce);
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X, -GameMatch.PlayerJumpForce);
             }
         }
         else
         {
             if (currentPlayerState.IsLookingRight())
-                currentPlayerState.AddVelocity(new(PlayerLogic._jumpForce, verticalForce));
+                currentPlayerState.AddVelocity(new(GameMatch.PlayerJumpForce, verticalForce));
             else
-                currentPlayerState.AddVelocity(new(-PlayerLogic._jumpForce, verticalForce));
+                currentPlayerState.AddVelocity(new(-GameMatch.PlayerJumpForce, verticalForce));
 
             if (currentPlayerState.Velocity.Y > 0)
                 currentPlayerState.SetVelocityY(verticalForce);
@@ -315,51 +297,6 @@ public static class PlayerLogic
         currentPlayerState.Animation.IsDashFacingRight = currentPlayerState.IsLookingRight();
     }
 
-
-    public static void DrawState(PlayerState playerState)
-    {
-        Rectangle sourceRec = new(0.0f, 0.0f, (float)_texture.width * playerState.Direction, _texture.height);
-
-        Rectangle destRec = new(playerState.Position.X + _texture.width * 0.5f, playerState.Position.Y + _texture.height * 0.5f, _texture.width, _texture.height);
-
-        var rotation = playerState.Animation.GetAnimationRotation();
-        if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
-
-        Raylib.DrawTexturePro(_texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
-
-        var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
-        if (weapon != null)
-        {
-            switch (weapon.Weapon.WeaponType)
-            {
-                case Enums.WeaponType.Shotgun: destRec.Y += 5; break;
-                case Enums.WeaponType.SMG: destRec.Y += 5; break;
-                case Enums.WeaponType.Pistol: destRec.Y += 5; break;
-                case Enums.WeaponType.MeleeBlunt:
-                {
-                    if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
-                    {
-                        destRec.X += 5 * playerState.Direction;
-                        sourceRec.Width = -sourceRec.width;
-                        rotation -= 45 * playerState.Direction;
-                    }
-                    else
-                    {
-                        destRec.X -= 16 * playerState.Direction;
-                        destRec.Y += 5;
-                    }
-                    break;
-                }
-                case Enums.WeaponType.MeleeCut: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
-            }
-            Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(_texture.width * 0.5f, _texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
-        }
-
-        if (Utils.Debug())
-        {
-            Raylib.DrawRectangleRec(playerState.Collision, Raylib.GREEN); // Debug
-        }
-    }
 
     public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState)
     {
