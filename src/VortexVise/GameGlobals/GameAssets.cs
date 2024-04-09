@@ -70,10 +70,11 @@ public static class GameAssets
         public static Font Font;                                                    // Global font
     }
 
-    public static class GameLevels
+    public static class Gameplay
     {
         public static List<Map> Maps { get; set; } = [];
         public static Texture CurrentMapTexture; // This is the whole map baked into an image
+        public static Texture HookTexture;
     }
 
     public static class MusicAndAmbience

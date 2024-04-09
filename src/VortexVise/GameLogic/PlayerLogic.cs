@@ -25,12 +25,12 @@ public static class PlayerLogic
         if (!isServer)
         {
             _texture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
-            PlayerHookLogic._texture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
+            GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
         }
         else
         {
             _texture = new Texture() { width = 16, height = 16 }; // Player will always be this size
-            PlayerHookLogic._texture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
+            GameAssets.Gameplay.HookTexture = new Texture() { width = 8, height = 8 }; // if there are diffent kinds of hook change it here
 
         }
     }

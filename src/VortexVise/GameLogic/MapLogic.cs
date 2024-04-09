@@ -107,27 +107,27 @@ public static class MapLogic
                 map.TextureLocation = mapFileName;
                 map.MapLocation = file;
 
-                GameAssets.GameLevels.Maps.Add(map);
+                GameAssets.Gameplay.Maps.Add(map);
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error reading map {file}: {ex.Message}");
             }
         }
-        if (GameAssets.GameLevels.Maps.Count == 0) throw new Exception("Can't find any map");
+        if (GameAssets.Gameplay.Maps.Count == 0) throw new Exception("Can't find any map");
     }
 
     public static void Unload()
     {
-        Raylib.UnloadTexture(GameAssets.GameLevels.CurrentMapTexture);
+        Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
 
     }
 
     public static void LoadRandomMap()
     {
-        if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.GameLevels.CurrentMapTexture);
-        GameMatch.CurrentMap = GameAssets.GameLevels.Maps.OrderBy(x => Guid.NewGuid()).First();
-        GameAssets.GameLevels.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
+        if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
+        GameMatch.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
+        GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
 
         // Mirror map random
         var random = new Random().Next(2);
@@ -147,7 +147,7 @@ public static class MapLogic
             {
                 var mirroredCollision = new Rectangle
                 {
-                    X = GameAssets.GameLevels.CurrentMapTexture.width - collision.x - collision.width,
+                    X = GameAssets.Gameplay.CurrentMapTexture.width - collision.x - collision.width,
                     Y = collision.Y,
                     width = collision.width,
                     height = collision.height
@@ -167,7 +167,7 @@ public static class MapLogic
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(GameAssets.GameLevels.CurrentMapTexture.width, GameAssets.GameLevels.CurrentMapTexture.height);
+        return new Vector2(GameAssets.Gameplay.CurrentMapTexture.width, GameAssets.Gameplay.CurrentMapTexture.height);
     }
 
 }

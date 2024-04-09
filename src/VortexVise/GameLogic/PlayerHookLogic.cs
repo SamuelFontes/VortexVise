@@ -11,14 +11,6 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class PlayerHookLogic
 {
-    public static int HookSize = 8;
-    public static Texture _texture;
-    static readonly float _hookPullForce = 3000;
-    static readonly float _hookPullOffset = 64;
-    static readonly float _hookShootForce = 1000;
-    static readonly float _hookSizeLimit = 1000;
-    //static float _hookTimeout = 0.2f;
-
     public static void SimulateHookState(PlayerState currentPlayerState, float gravity, float deltaTime)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
@@ -34,8 +26,8 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.IsHookReleased = true;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Position = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - _texture.width * 0.5f, currentPlayerState.HookState.Position.Y);
-            currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, HookSize, HookSize);
+            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - GameAssets.Gameplay.HookTexture.width * 0.5f, currentPlayerState.HookState.Position.Y);
+            currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, GameMatch.HookSize, GameMatch.HookSize);
 
             // Play hook shoot sound
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookShoot);
@@ -47,53 +39,53 @@ public static class PlayerHookLogic
             if (currentPlayerState.Input.Left && currentPlayerState.Input.Down)
             {
                 // ↙ 
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - _hookShootForce, currentPlayerState.HookState.Velocity.Y + _hookPullForce);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
             }
             else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down)
             {
                 // ↘
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + _hookShootForce, currentPlayerState.HookState.Velocity.Y + _hookPullForce);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
             }
             else if (currentPlayerState.Input.Down)
             {
                 // ↓
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X, currentPlayerState.HookState.Velocity.Y + _hookPullForce);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
             }
             else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up)
             {
                 // ↖
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - _hookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
             }
             else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up)
             {
                 // ↗
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + _hookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
             }
             else if (currentPlayerState.Input.Left)
             {
                 // ↖
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - _hookShootForce, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
             }
             else if (currentPlayerState.Input.Right)
             {
                 // ↗
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + _hookShootForce, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
             }
             else if (currentPlayerState.Input.Up)
             {
                 // ↑
-                currentPlayerState.HookState.Velocity = new(0, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.8f);
+                currentPlayerState.HookState.Velocity = new(0, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.8f);
             }
             else
             {
                 // This will use the player direction
                 if (currentPlayerState.IsLookingRight())
                 {
-                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + _hookShootForce, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
                 }
                 else
                 {
-                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - _hookShootForce, currentPlayerState.HookState.Velocity.Y - _hookPullForce * 0.5f);
+                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
 
                 }
             }
@@ -119,7 +111,7 @@ public static class PlayerHookLogic
 
             float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
-            if (distance > _hookSizeLimit && (currentPlayerState.HookState.Velocity.X != 0 || currentPlayerState.HookState.Velocity.Y < 0))
+            if (distance > GameMatch.HookSizeLimit && (currentPlayerState.HookState.Velocity.X != 0 || currentPlayerState.HookState.Velocity.Y < 0))
             {
                 currentPlayerState.HookState.Velocity = new(0, 0);  // Stop hook in all directions
             }
@@ -136,9 +128,9 @@ public static class PlayerHookLogic
             float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
             // TODO: implement this crap here
-            //if((_hookPullOffset > _originalPullOffset && _offsetChanger < 0) || (_hookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
+            //if((GameMatch.HookPullOffset > _originalPullOffset && _offsetChanger < 0) || (GameMatch.HookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
             //{
-            //_hookPullOffset += _offsetChanger * Time.deltaTime * 10;
+            //GameMatch.HookPullOffset += _offsetChanger * Time.deltaTime * 10;
 
             //if(_soundTimer == 0)  // This is to not spam the audio 
             //{
@@ -147,9 +139,9 @@ public static class PlayerHookLogic
             //}
 
 
-            if (distance > _hookPullOffset)
+            if (distance > GameMatch.HookPullOffset)
             {
-                Vector2 velocity = RayMath.Vector2Scale(direction, _hookPullForce);
+                Vector2 velocity = RayMath.Vector2Scale(direction, GameMatch.HookPullForce);
                 currentPlayerState.AddVelocityWithDeltaTime(velocity, deltaTime);
             }
         }
@@ -174,7 +166,7 @@ public static class PlayerHookLogic
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(_texture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
+            Raylib.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
 
             if (Utils.Debug())
                 Raylib.DrawRectangleRec(playerState.HookState.Collision, Raylib.GREEN); // Debug
@@ -185,6 +177,6 @@ public static class PlayerHookLogic
     }
     public static Rectangle GetHookCollision(Vector2 position)
     {
-        return new(position.X, position.Y, HookSize, HookSize);
+        return new(position.X, position.Y, GameMatch.HookSize, GameMatch.HookSize);
     }
 }

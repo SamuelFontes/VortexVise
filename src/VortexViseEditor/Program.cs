@@ -7,15 +7,15 @@ using ZeroElectric.Vinculum;
 
 
 MapLogic.Init();
-IOrderedEnumerable<Map> maps = GameAssets.GameLevels.Maps.OrderBy(x => x.Name);
+IOrderedEnumerable<Map> maps = GameAssets.Gameplay.Maps.OrderBy(x => x.Name);
 var mapId = 0;
-foreach (var m in GameAssets.GameLevels.Maps)
+foreach (var m in GameAssets.Gameplay.Maps)
 {
     Console.WriteLine($"{mapId} - {m.TextureLocation}");
     mapId++;
 }
 int selected = Convert.ToInt32(Console.ReadLine());
-Map map = GameAssets.GameLevels.Maps[selected];
+Map map = GameAssets.Gameplay.Maps[selected];
 
 
 // THIS CODE IS SHIT, IT WAS DONE REALLY FAST
