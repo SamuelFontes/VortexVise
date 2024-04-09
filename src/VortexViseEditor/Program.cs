@@ -65,8 +65,8 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
     if (camera.zoom <= 0.4)
         camera.zoom = 0.4f;
 
-    mouse.X = (mouse.X / camera.zoom);
-    mouse.Y = (mouse.Y / camera.zoom);
+    mouse.X /= camera.zoom;
+    mouse.Y /= camera.zoom;
     cursorRec.X = mouse.X;
     cursorRec.Y = mouse.Y;
 

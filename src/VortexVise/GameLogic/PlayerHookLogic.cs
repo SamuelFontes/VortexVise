@@ -17,7 +17,7 @@ public static class PlayerHookLogic
     static float _hookPullOffset = 64;
     static float _hookShootForce = 1000;
     static float _hookSizeLimit = 1000;
-    static float _hookTimeout = 0.2f;
+    //static float _hookTimeout = 0.2f;
 
     public static void SimulateHookState(PlayerState currentPlayerState, float gravity, float deltaTime)
     {

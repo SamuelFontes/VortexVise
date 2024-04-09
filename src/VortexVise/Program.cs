@@ -37,10 +37,7 @@ MenuScene.InitMenuScene();
 GameUserInterface.InitUserInterface();
 
 // Start multiplayer
-GameCore.HubConnection = new HubConnectionBuilder()
-    .WithUrl(new Uri("https://localhost:7094/GameHub"))
-    .WithAutomaticReconnect()
-            .Build();
+GameCore.HubConnection = new HubConnectionBuilder().WithUrl(new Uri("https://localhost:7094/GameHub")).WithAutomaticReconnect().Build();
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------

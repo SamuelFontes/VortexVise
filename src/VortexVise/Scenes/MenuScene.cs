@@ -28,7 +28,7 @@ public static class MenuScene
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
     static MenuState currentState;
-    static bool IsOnline = false;
+    //static bool IsOnline = false;
 
 
     static public void InitMenuScene()
