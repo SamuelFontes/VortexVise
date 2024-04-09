@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/MenuStyle.uss?fileID=7433441132597879392&amp;guid=a50b35b5dfa9d04488a8a26586cac826&amp;type=3#MenuStyle" />
-    <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" class="button" style="height: 99px;" />
-</ui:UXML>
