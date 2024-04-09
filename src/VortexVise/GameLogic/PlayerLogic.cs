@@ -11,7 +11,7 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class PlayerLogic
 {
-    static public Vector2 SpawnPoint { get { return MapLogic.CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }
+    static public Vector2 SpawnPoint { get { return GameMatch.CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }
     static private Texture _texture;
 
     static private readonly float _maxMoveSpeed = 350;

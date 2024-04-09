@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
+using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
@@ -11,16 +12,9 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class MapLogic
 {
-    public static List<Map> Maps { get; set; } = new List<Map>();
-    public static Texture MapTexture; // This is the whole map baked into an image
-    public static List<Rectangle> MapCollisions = new List<Rectangle>();
-    public static Map CurrentMap { get; set; }
-
-    static string mapLocation = "Resources/Maps";
-    static int mapMirrored = 1;
-
     public static void Init()
     {
+        string mapLocation = "Resources/Maps";
         // Get all files from the Resources/Maps folder to read list of avaliable game levels aka maps
         string[] mapFiles = Directory.GetFiles(mapLocation, "*.ini", SearchOption.TopDirectoryOnly);
         string[] pngFiles = Directory.GetFiles(mapLocation, "*.png", SearchOption.TopDirectoryOnly);
@@ -103,71 +97,59 @@ public static class MapLogic
                 map.TextureLocation = mapFileName;
                 map.MapLocation = file;
 
-                Maps.Add(map);
+                GameAssets.GameLevels.Maps.Add(map);
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Error reading map {file}: {ex.Message}");
             }
         }
-        if (Maps.Count == 0) throw new Exception("Can't find any map");
+        if (GameAssets.GameLevels.Maps.Count == 0) throw new Exception("Can't find any map");
     }
 
     public static void LoadRandomMap()
     {
-        if (CurrentMap != null) Raylib.UnloadTexture(MapTexture);
-        CurrentMap = Maps.OrderBy(x => Guid.NewGuid()).First();
-        MapTexture = Raylib.LoadTexture(CurrentMap.TextureLocation);
+        if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.GameLevels.CurrentMapTexture);
+        GameMatch.CurrentMap = GameAssets.GameLevels.Maps.OrderBy(x => Guid.NewGuid()).First();
+        GameAssets.GameLevels.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
 
         // Mirror map random
         var random = new Random().Next(2);
         if (random == 0)
         {
             // Regular Map
-            mapMirrored = 1;
-            MapCollisions = CurrentMap.Collisions;
+            GameMatch.MapMirrored = 1;
+            GameMatch.MapCollisions = GameMatch.CurrentMap.Collisions;
         }
         else
         {
             // Inverted map
-            var collisions = CurrentMap.Collisions;
+            var collisions = GameMatch.CurrentMap.Collisions;
             var mirroredCollisions = new List<Rectangle>();
-            mapMirrored = -1;
+            GameMatch.MapMirrored = -1;
             foreach (var collision in collisions)
             {
                 var mirroredCollision = new Rectangle();
-                mirroredCollision.X = MapTexture.width - collision.x - collision.width;
+                mirroredCollision.X = GameAssets.GameLevels.CurrentMapTexture.width - collision.x - collision.width;
                 mirroredCollision.Y = collision.Y;
                 mirroredCollision.width = collision.width;
                 mirroredCollision.height = collision.height;
                 mirroredCollisions.Add(mirroredCollision);
             }
-            MapCollisions = mirroredCollisions;
+            GameMatch.MapCollisions = mirroredCollisions;
         }
 
     }
 
-    public static void Draw()
-    {
-        Raylib.DrawTextureRec(MapTexture, new(0, 0, MapTexture.width * mapMirrored, MapTexture.height), new Vector2(0, 0), Raylib.WHITE);
-        if (Utils.Debug())
-        {
-            foreach (var collision in MapCollisions) // DEBUG
-            {
-                Raylib.DrawRectangleRec(collision, Raylib.BLUE);
-            }
-        }
-
-    }
 
     public static List<Rectangle> GetCollisions()
     {
-        return MapCollisions;
+        return GameMatch.MapCollisions;
     }
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(MapTexture.width, MapTexture.height);
+        return new Vector2(GameAssets.GameLevels.CurrentMapTexture.width, GameAssets.GameLevels.CurrentMapTexture.height);
     }
 
 }

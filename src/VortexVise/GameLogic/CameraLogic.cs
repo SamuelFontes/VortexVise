@@ -11,7 +11,6 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class CameraLogic
 {
-    public static List<PlayerCamera> PlayerCameras { get; set; } = new List<PlayerCamera>();
     public static void Init()
     {
         // Setup cameras for split screen, this is kind of a mess but since it's self contained it shouldn't be a problem
@@ -23,7 +22,7 @@ public static class CameraLogic
             camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.5f, 0.5f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 2)
         {
@@ -33,7 +32,7 @@ public static class CameraLogic
             camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.5f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
             camera = new PlayerCamera();
@@ -42,7 +41,7 @@ public static class CameraLogic
             camera.CameraPosition = new((int)(GameCore.GameScreenWidth * 0.5f), 0);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.5f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 3)
         {
@@ -52,7 +51,7 @@ public static class CameraLogic
             camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.5f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
             camera = new PlayerCamera();
@@ -61,7 +60,7 @@ public static class CameraLogic
             camera.CameraPosition = new(0, (int)(GameCore.GameScreenHeight * 0.5f));
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
             camera = new PlayerCamera();
@@ -70,7 +69,7 @@ public static class CameraLogic
             camera.CameraPosition = new((int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f));
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 4)
         {
@@ -80,7 +79,7 @@ public static class CameraLogic
             camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
             camera = new PlayerCamera();
@@ -89,7 +88,7 @@ public static class CameraLogic
             camera.CameraPosition = new((int)(GameCore.GameScreenWidth * 0.5f), 0);
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
             camera = new PlayerCamera();
@@ -98,7 +97,7 @@ public static class CameraLogic
             camera.CameraPosition = new(0, (int)(GameCore.GameScreenHeight * 0.5f));
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
             // Player 4
             camera = new PlayerCamera();
@@ -107,31 +106,31 @@ public static class CameraLogic
             camera.CameraPosition = new((int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f));
             camera.Camera = new Camera2D();
             camera.SetupCamera(0.25f, 0.25f);
-            PlayerCameras.Add(camera);
+            GameMatch.PlayerCameras.Add(camera);
 
         }
     }
     public static void BeginDrawingToCamera(int index, Vector2 targetPosition)
     {
         Raylib.EndTextureMode();
-        Raylib.BeginTextureMode(PlayerCameras[index].RenderTexture);
-        ProcessCamera(ref targetPosition, PlayerCameras[index], ref PlayerCameras[index].Camera);
-        Raylib.BeginMode2D(PlayerCameras[index].Camera);
+        Raylib.BeginTextureMode(GameMatch.PlayerCameras[index].RenderTexture);
+        ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera);
+        Raylib.BeginMode2D(GameMatch.PlayerCameras[index].Camera);
     }
     public static void EndDrawingToCamera(int index)
     {
         Raylib.EndMode2D();
         Raylib.EndTextureMode();
         Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
-        Raylib.DrawTextureRec(PlayerCameras[index].RenderTexture.texture, PlayerCameras[index].RenderRectangle, PlayerCameras[index].CameraPosition, Raylib.WHITE);
+        Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.WHITE);
     }
     public static void Unload()
     {
-        foreach (var camera in PlayerCameras)
+        foreach (var camera in GameMatch.PlayerCameras)
         {
             Raylib.UnloadRenderTexture(camera.RenderTexture);
         }
-        PlayerCameras.Clear();
+        GameMatch.PlayerCameras.Clear();
     }
     static void ProcessCamera(ref Vector2 targetPosition, PlayerCamera playerCamera, ref Camera2D camera)
     {

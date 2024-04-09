@@ -1,4 +1,5 @@
 ﻿
+using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
@@ -59,6 +60,12 @@ public static class GameAssets
     public static class Misc
     {
         public static Font Font;                                                    // Global font
+    }
+
+    public static class GameLevels
+    {
+        public static List<Map> Maps { get; set; } = new List<Map>();
+        public static Texture CurrentMapTexture; // This is the whole map baked into an image
     }
 
     public static class MusicAndAmbience

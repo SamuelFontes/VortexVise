@@ -62,17 +62,6 @@ public static class GameLogic
 
         return state;
     }
-    public static void DrawState(GameState state)
-    {
-        // All rendering logic should go here
-        MapLogic.Draw();
-        WeaponLogic.DrawWeaponDrops(state);
-        foreach (var playerState in state.PlayerStates)
-        {
-            PlayerHookLogic.DrawState(playerState);
-            PlayerLogic.DrawState(playerState);
-        }
-    }
     private static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
         bool isLocalPlayer = false;

@@ -126,7 +126,7 @@ static internal class GameplayScene
             else return;
 
             CameraLogic.BeginDrawingToCamera(i, player.Position);
-            GameLogic.DrawState(State);
+            GameRenderer.DrawGameState(State);
             // TODO: draw hud here
             CameraLogic.EndDrawingToCamera(i);
         }
