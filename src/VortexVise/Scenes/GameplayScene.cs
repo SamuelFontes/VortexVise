@@ -19,7 +19,7 @@ static internal class GameplayScene
     public static double LastTime { get; set; }
     public static GameState LastState = new();
     public static double Accumulator = 0;
-    public static GameState State = new GameState();
+    public static GameState State = new();
     public static int NumberOfLocalPlayers = 0;
     static public void InitGameplayScene()
     {

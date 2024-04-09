@@ -6,7 +6,7 @@
 /// </summary>
 public class InputState
 {
-    public string Owner { get; set; }
+    public string Owner { get; set; } = string.Empty;
     public bool Left { get; set; } = false;
     public bool Right { get; set; } = false;
     public bool Up { get; set; } = false;

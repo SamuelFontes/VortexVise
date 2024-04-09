@@ -6,7 +6,7 @@
 public class PlayerProfile
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string SkinLocation { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string SkinLocation { get; set; } = string.Empty;
     // TODO: add more profile stuff here
 }

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
+using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
@@ -23,22 +24,25 @@ public static class MapLogic
             string fileContent = File.ReadAllText(file);
             try
             {
-                var map = new Map();
-
-                // Read map name
-                map.Name = Regex.Match(fileContent, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim();
+                var map = new Map
+                {
+                    // Read map name
+                    Name = Regex.Match(fileContent, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim()
+                };
                 if (map.Name == null || map.Name.Length == 0) throw new Exception("Can't read map NAME");
 
                 // Read map collisions
                 var txtCollisions = Regex.Match(fileContent, @"(?<=COLLISIONS\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
                 var matchesCollisions = Regex.Matches(txtCollisions, @"[\s\S]*?;");
-                foreach (Match match in matchesCollisions)
+                foreach (Match match in matchesCollisions.Cast<Match>())
                 {
-                    var collision = new Rectangle();
-                    collision.x = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+,[\d\.]+,[\d\.]+;)").Value);
-                    collision.y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=,[\d\.]+,[\d\.]+;)").Value);
-                    collision.width = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,)[\d\.]+(?=,[\d\.]+;)").Value);
-                    collision.height = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,[\d\.]+,)[\d\.]+(?=;)").Value);
+                    var collision = new Rectangle
+                    {
+                        x = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+,[\d\.]+,[\d\.]+;)").Value),
+                        y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=,[\d\.]+,[\d\.]+;)").Value),
+                        width = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,)[\d\.]+(?=,[\d\.]+;)").Value),
+                        height = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,[\d\.]+,)[\d\.]+(?=;)").Value)
+                    };
                     map.Collisions.Add(collision);
                 }
                 if (map.Collisions.Count == 0) throw new Exception("Can't read map COLLISIONS");
@@ -46,11 +50,13 @@ public static class MapLogic
                 // Read map player spawn
                 var txtPlayerSpawn = Regex.Match(fileContent, @"(?<=PLAYER_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
                 var matchesPlayerSpawn = Regex.Matches(txtPlayerSpawn, @"[\s\S]*?;");
-                foreach (Match match in matchesPlayerSpawn)
+                foreach (Match match in matchesPlayerSpawn.Cast<Match>())
                 {
-                    var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.],)[\d\.]+(?=;)").Value);
+                    var spawn = new Vector2
+                    {
+                        X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                        Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.],)[\d\.]+(?=;)").Value)
+                    };
                     map.PlayerSpawnPoints.Add(spawn);
                 }
                 if (map.PlayerSpawnPoints.Count == 0) throw new Exception("Can't read map PlayerSpawnPoints");
@@ -58,11 +64,13 @@ public static class MapLogic
                 // Read map enemy spawn
                 var txtEnemySpawn = Regex.Match(fileContent, @"(?<=ENEMY_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
                 var matchesEnemySpawn = Regex.Matches(txtEnemySpawn, @"[\s\S]*?;");
-                foreach (Match match in matchesEnemySpawn)
+                foreach (Match match in matchesEnemySpawn.Cast<Match>())
                 {
-                    var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value);
+                    var spawn = new Vector2
+                    {
+                        X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                        Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
+                    };
                     map.EnemySpawnPoints.Add(spawn);
                 }
                 if (map.EnemySpawnPoints.Count == 0) throw new Exception("Can't read map EnemySpawnPoints");
@@ -70,11 +78,13 @@ public static class MapLogic
                 // Read map item spawn
                 var txtItemSpawn = Regex.Match(fileContent, @"(?<=ITEM_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
                 var matchesItemSpawn = Regex.Matches(txtItemSpawn, @"[\s\S]*?;");
-                foreach (Match match in matchesItemSpawn)
+                foreach (Match match in matchesItemSpawn.Cast<Match>())
                 {
-                    var spawn = new Vector2();
-                    spawn.X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value);
-                    spawn.Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value);
+                    var spawn = new Vector2
+                    {
+                        X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                        Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
+                    };
                     map.ItemSpawnPoints.Add(spawn);
                 }
                 if (map.ItemSpawnPoints.Count == 0) throw new Exception("Can't read map ItemSpawnPoints");
@@ -135,11 +145,13 @@ public static class MapLogic
             GameMatch.MapMirrored = -1;
             foreach (var collision in collisions)
             {
-                var mirroredCollision = new Rectangle();
-                mirroredCollision.X = GameAssets.GameLevels.CurrentMapTexture.width - collision.x - collision.width;
-                mirroredCollision.Y = collision.Y;
-                mirroredCollision.width = collision.width;
-                mirroredCollision.height = collision.height;
+                var mirroredCollision = new Rectangle
+                {
+                    X = GameAssets.GameLevels.CurrentMapTexture.width - collision.x - collision.width,
+                    Y = collision.Y,
+                    width = collision.width,
+                    height = collision.height
+                };
                 mirroredCollisions.Add(mirroredCollision);
             }
             GameMatch.MapCollisions = mirroredCollisions;
@@ -159,3 +171,4 @@ public static class MapLogic
     }
 
 }
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.

@@ -8,8 +8,10 @@ namespace VortexVise.States;
 /// </summary>
 public class WeaponDropState
 {
-    public WeaponDropState()
+    public WeaponDropState(WeaponState weaponState, Vector2 position)
     {
+        WeaponState = weaponState;
+        Position = position;
     }
     public WeaponDropState(WeaponState weaponState, float dropTimer, Vector2 position, Vector2 velocity)
     {

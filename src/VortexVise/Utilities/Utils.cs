@@ -25,7 +25,7 @@ public static class Utils
 
     public static Vector2 GetVector2Direction(Vector2 from, Vector2 to)
     {
-        Vector2 direction = new Vector2() { X = to.X - from.X, Y = to.Y - from.Y };
+        Vector2 direction = new() { X = to.X - from.X, Y = to.Y - from.Y };
         direction = RayMath.Vector2Normalize(direction);
         return direction;
     }
@@ -101,4 +101,6 @@ public static class Utils
         if (GameCore.PlayerFourGamepad != -9) players++;
         return players;
     }
+
+    public static float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
 }

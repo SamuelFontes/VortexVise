@@ -11,8 +11,8 @@ namespace VortexVise.Networking;
 public static class GameClient
 {
     static public bool IsConnected = false;
-    static private UdpClient _udpClient = new UdpClient(11000);
-    static public GameState LastServerState = new GameState();
+    private static readonly UdpClient _udpClient = new(11000);
+    static public GameState LastServerState = new();
     static public double LastSimulatedTime = 0;
     static public long Ping = 0;
     static public bool Connect()
@@ -24,7 +24,7 @@ public static class GameClient
             _udpClient.Connect(GameCore.ServerIPAddress, 0);
             IsConnected = true;
             UpdatePing();
-            Thread getPingThread = new Thread(new ThreadStart(GetServerLatency));
+            Thread getPingThread = new(new ThreadStart(GetServerLatency));
             getPingThread.Start();
 
         }
@@ -101,7 +101,7 @@ public static class GameClient
             try
             {
                 //IPEndPoint object will allow us to read datagrams sent from any source.
-                IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                IPEndPoint RemoteIpEndPoint = new(IPAddress.Any, 0);
 
                 // Blocks until a message returns on this socket from a remote host.
                 byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
@@ -132,7 +132,7 @@ public static class GameClient
     }
     static void UpdatePing()
     {
-        Ping ping = new Ping();
+        Ping ping = new();
         PingReply reply = ping.Send(GameCore.ServerIPAddress, 1000);
         Ping = reply.RoundtripTime;
     }

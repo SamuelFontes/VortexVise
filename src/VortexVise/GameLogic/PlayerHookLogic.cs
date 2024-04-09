@@ -13,10 +13,10 @@ public static class PlayerHookLogic
 {
     public static int HookSize = 8;
     public static Texture _texture;
-    static float _hookPullForce = 3000;
-    static float _hookPullOffset = 64;
-    static float _hookShootForce = 1000;
-    static float _hookSizeLimit = 1000;
+    static readonly float _hookPullForce = 3000;
+    static readonly float _hookPullOffset = 64;
+    static readonly float _hookShootForce = 1000;
+    static readonly float _hookSizeLimit = 1000;
     //static float _hookTimeout = 0.2f;
 
     public static void SimulateHookState(PlayerState currentPlayerState, float gravity, float deltaTime)
@@ -117,7 +117,6 @@ public static class PlayerHookLogic
             // Shooting the hook
             currentPlayerState.HookState.Velocity += new Vector2(0, gravity * 0.5f * deltaTime);
 
-            Vector2 direction = Utils.GetVector2Direction(PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position), currentPlayerState.HookState.Position);
             float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
             if (distance > _hookSizeLimit && (currentPlayerState.HookState.Velocity.X != 0 || currentPlayerState.HookState.Velocity.Y < 0))

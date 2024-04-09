@@ -24,7 +24,7 @@ public static class GameLogic
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
-            PlayerState currentPlayerState = new PlayerState(lastPlayerState.Id);
+            PlayerState currentPlayerState = new(lastPlayerState.Id);
 
             // Either read player input or get input from last frame TODO: update input with last input received for all the players here, unless it's going back in time to correct stuff
             if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
@@ -39,11 +39,11 @@ public static class GameLogic
             PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);
             PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
             PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
-            WeaponLogic.ApplyHitBoxesDamage(state, currentPlayerState, deltaTime);
+            WeaponLogic.ApplyHitBoxesDamage(state, currentPlayerState);
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
-            PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState, deltaTime);
+            PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState);
 
             WeaponLogic.ProcessPlayerShooting(currentPlayerState, state, deltaTime);
 

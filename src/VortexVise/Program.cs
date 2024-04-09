@@ -71,8 +71,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     // Deal with resolution
     //----------------------------------------------------------------------------------
     // Setup scalling
-    float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
-    GameCore.GameScreenScale = MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
+    GameCore.GameScreenScale = Utils.MIN((float)Raylib.GetScreenWidth() / GameCore.GameScreenWidth, (float)Raylib.GetScreenHeight() / GameCore.GameScreenHeight); // TODO: This should be calculated only on screen size change
     TextureFilter screenFiltering;
     if (GameSettings.IntegerScalling && GameCore.GameScreenScale == (int)GameCore.GameScreenScale)
     {

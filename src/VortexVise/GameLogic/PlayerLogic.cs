@@ -361,7 +361,7 @@ public static class PlayerLogic
         }
     }
 
-    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState, float deltaTime)
+    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState)
     {
         if (currentPlayerState.Input.GrabDrop)
         {

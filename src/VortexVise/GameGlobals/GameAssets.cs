@@ -5,7 +5,6 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
-#pragma warning disable CA2211 // Non-constant fields should not be visible
 /// <summary>
 /// 
 /// GameAssets
@@ -73,7 +72,7 @@ public static class GameAssets
 
     public static class GameLevels
     {
-        public static List<Map> Maps { get; set; } = new List<Map>();
+        public static List<Map> Maps { get; set; } = [];
         public static Texture CurrentMapTexture; // This is the whole map baked into an image
     }
 
@@ -128,4 +127,3 @@ public static class GameAssets
         }
     }
 }
-#pragma warning restore CA2211 // Non-constant fields should not be visible

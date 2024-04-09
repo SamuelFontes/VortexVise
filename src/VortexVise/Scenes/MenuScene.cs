@@ -14,7 +14,7 @@ enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Load
 /// </summary>
 public static class MenuScene
 {
-    static List<MenuItem> menuItems = new List<MenuItem>();
+    static readonly List<MenuItem> menuItems = [];
     static int finishScreen = 0;
     static Texture logo;
     static Texture background;
@@ -406,7 +406,7 @@ public static class MenuScene
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourGamepad, GameCore.PlayerFourProfile.Name);
 
-        void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName)
+        static void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName)
         {
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
+using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;
@@ -12,8 +13,8 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class WeaponLogic
 {
-    static string weaponLocation = "Resources/Weapons";
-    public static List<Weapon> Weapons { get; set; } = new List<Weapon>();
+    static readonly string weaponLocation = "Resources/Weapons";
+    public static List<Weapon> Weapons { get; set; } = [];
     public static float WeaponSpawnTimer { get; set; } = 0;
     public static float WeaponRotation { get; set; } = 0;
     public static bool AnimationCicle { get; set; } = false;
@@ -21,7 +22,7 @@ public static class WeaponLogic
     {
         // Read weapons from Resources/Weapons
         string[] weaponFiles = Directory.GetFiles(weaponLocation, "*.ini", SearchOption.TopDirectoryOnly);
-        string[] pngFiles = Directory.GetFiles(weaponLocation, "*.png", SearchOption.TopDirectoryOnly);
+        //string[] pngFiles = Directory.GetFiles(weaponLocation, "*.png", SearchOption.TopDirectoryOnly);
         var id = 0;
         foreach (var file in weaponFiles)
         {
@@ -30,15 +31,16 @@ public static class WeaponLogic
             {
 
                 var matchesWeapons = Regex.Matches(fileContent, @"\[WEAPON\][\s\S]*?(?=(\[WEAPON\]|$))");
-                foreach (Match match in matchesWeapons)
+                foreach (Match match in matchesWeapons.Cast<Match>())
                 {
-                    var weapon = new Weapon();
+                    var weapon = new Weapon
+                    {
+                        // Name
+                        Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim(),
 
-                    // Name
-                    weapon.Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim();
-
-                    // Texture
-                    weapon.TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value.Trim();
+                        // Texture
+                        TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value.Trim()
+                    };
                     if (string.IsNullOrEmpty(weapon.TextureLocation)) throw new Exception("Can't find the texture location");
                     weapon.TextureLocation = weaponLocation + "/" + weapon.TextureLocation;
 
@@ -161,9 +163,7 @@ public static class WeaponLogic
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
             if (existingWeapon != null) currentGameState.WeaponDrops.Remove(existingWeapon);
 
-            var weaponDrop = new WeaponDropState();
-            weaponDrop.WeaponState = new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0);
-            weaponDrop.Position = spawnPoint;
+            var weaponDrop = new WeaponDropState(new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0), spawnPoint);
             currentGameState.WeaponDrops.Add(weaponDrop);
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponDrop);
         }
@@ -233,7 +233,7 @@ public static class WeaponLogic
         gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0);
     }
 
-    public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState, float deltaTime)
+    public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)
     {
         var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id);
         foreach (var hitbox in hitboxes)
@@ -254,3 +254,4 @@ public static class WeaponLogic
     }
 
 }
+#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.

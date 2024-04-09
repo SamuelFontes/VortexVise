@@ -7,7 +7,7 @@ using ZeroElectric.Vinculum;
 
 
 MapLogic.Init();
-GameAssets.GameLevels.Maps.OrderBy(x => x.Name);
+IOrderedEnumerable<Map> maps = GameAssets.GameLevels.Maps.OrderBy(x => x.Name);
 var mapId = 0;
 foreach (var m in GameAssets.GameLevels.Maps)
 {
@@ -19,7 +19,7 @@ Map map = GameAssets.GameLevels.Maps[selected];
 
 
 // THIS CODE IS SHIT, IT WAS DONE REALLY FAST
-float roundf(float var)
+static float roundf(float var)
 {
     // 37.66666 * 100 =3766.66
     // 3766.66 + .5 =3767.16    for rounding off value
@@ -37,11 +37,13 @@ Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise Editor");
 Rectangle cursorRec = new(Raylib.GetScreenWidth() / 2.0f - 30, Raylib.GetScreenHeight() / 2.0f - 30, 16, 16);
 
 // Define camera
-Camera2D camera = new();
-camera.target = new(0, 0);
-camera.offset = new(0, 0);
-camera.rotation = 0.0f;
-camera.zoom = 1.0f;
+Camera2D camera = new()
+{
+    target = new(0, 0),
+    offset = new(0, 0),
+    rotation = 0.0f,
+    zoom = 1.0f
+};
 
 var mapTexture = Raylib.LoadTexture(map.TextureLocation);
 var mouseTexture = Raylib.LoadTexture("Resources\\Common\\cursor.png");
@@ -125,9 +127,11 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             map.ItemSpawnPoints.Add(new(mapCursorX - 16, mapCursorY - 16));
         else if (state == 4)
         {
-            Rectangle rec = new(0, 0, 1, 1);
-            rec.x = mapCursorX;
-            rec.y = mapCursorY;
+            Rectangle rec = new(0, 0, 1, 1)
+            {
+                x = mapCursorX,
+                y = mapCursorY
+            };
             var index = 0;
             foreach (var c in map.Collisions)
             {

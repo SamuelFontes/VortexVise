@@ -6,7 +6,7 @@ namespace VortexViseServer;
 
 public class GameHub : Hub
 {
-    public List<GameLobby> matches = new List<GameLobby>();
+    public List<GameLobby> matches = [];
 
     public async Task JoinGame(Guid id)
     {
@@ -34,8 +34,10 @@ public class GameHub : Hub
 
     public async Task CreateGame()
     {
-        var game = new GameLobby();
-        game.MatchOwner = Context.ConnectionId;
+        var game = new GameLobby
+        {
+            MatchOwner = Context.ConnectionId
+        };
         game.Players.Add(Context.ConnectionId);
         game.Id = Guid.NewGuid();
         matches.Add(game);
