@@ -130,7 +130,8 @@ public static class MapLogic
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
 
         // Mirror map random
-        var random = new Random().Next(2);
+        //var random = new Random().Next(2);
+        var random = 0; // Removed mirrored map feature from the random maps because the windowXP map was weird
         if (random == 0)
         {
             // Regular Map

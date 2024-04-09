@@ -153,7 +153,7 @@ public static class WeaponLogic
     public static void SpawnWeapons(GameState currentGameState, float deltaTime)
     {
         WeaponSpawnTimer += deltaTime;
-        if (WeaponSpawnTimer > GameMatch.WeaponSpawnDelay && currentGameState.WeaponDrops.Count < 4)
+        if (WeaponSpawnTimer > GameMatch.WeaponSpawnDelay)
         {
             WeaponSpawnTimer = 0;
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
