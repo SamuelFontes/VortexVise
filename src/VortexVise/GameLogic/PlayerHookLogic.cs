@@ -11,6 +11,12 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class PlayerHookLogic
 {
+    /// <summary>
+    /// Simulate hook state for current frame.
+    /// </summary>
+    /// <param name="currentPlayerState">Current player state.</param>
+    /// <param name="gravity">Current gravity</param>
+    /// <param name="deltaTime">Time since last frame</param>
     public static void SimulateHookState(PlayerState currentPlayerState, float gravity, float deltaTime)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
@@ -161,20 +167,6 @@ public static class PlayerHookLogic
         }
     }
 
-    public static void DrawState(PlayerState playerState)
-    {
-        if (playerState.HookState.IsHookReleased)
-        {
-            Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
-
-            if (Utils.Debug())
-                Raylib.DrawRectangleRec(playerState.HookState.Collision, Raylib.GREEN); // Debug
-        }
-
-
-
-    }
     public static Rectangle GetHookCollision(Vector2 position)
     {
         return new(position.X, position.Y, GameMatch.HookSize, GameMatch.HookSize);

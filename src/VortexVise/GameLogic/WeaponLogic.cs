@@ -181,21 +181,6 @@ public static class WeaponLogic
         WeaponRotation -= deltaTime * 100;
     }
 
-    public static void DrawWeaponDrops(GameState currentGameState)
-    {
-        foreach (var drop in currentGameState.WeaponDrops)
-        {
-            Rectangle sourceRec = new(0.0f, 0.0f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
-
-            Rectangle destRec = new(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f, drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
-
-            Raylib.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.width * 0.5f, drop.WeaponState.Weapon.Texture.height * 0.5f), (int)WeaponRotation, Raylib.WHITE);
-
-            if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
-        }
-        if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) Raylib.DrawRectangleRec(h.HitBox, Raylib.RED); // Debug
-    }
-
     public static void ProcessPlayerShooting(PlayerState currentPlayerState, GameState gameState, float deltaTime)
     {
         if (currentPlayerState.WeaponStates.Count <= 0) return; // FIXME: change this when player can grab more weapons

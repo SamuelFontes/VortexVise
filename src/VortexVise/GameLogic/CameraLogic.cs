@@ -11,9 +11,11 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class CameraLogic
 {
+    /// <summary>
+    /// Setup cameras player cameras and handles split screen multiplayer.
+    /// </summary>
     public static void Init()
     {
-        // Setup cameras for split screen, this is kind of a mess but since it's self contained it shouldn't be a problem
         var players = Utils.GetNumberOfLocalPlayers();
         if (players == 1)
         {
@@ -130,6 +132,11 @@ public static class CameraLogic
 
         }
     }
+    /// <summary>
+    /// Start drawing to specific camera.
+    /// </summary>
+    /// <param name="index">Defines what camera it will be drawing to. 0 to 3.</param>
+    /// <param name="targetPosition">Define the position the camera will be targeting. Usually this is the player position.</param>
     public static void BeginDrawingToCamera(int index, Vector2 targetPosition)
     {
         Raylib.EndTextureMode();
@@ -137,6 +144,10 @@ public static class CameraLogic
         ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera);
         Raylib.BeginMode2D(GameMatch.PlayerCameras[index].Camera);
     }
+    /// <summary>
+    /// End drawing to a specific camera.
+    /// </summary>
+    /// <param name="index">Defines what camera it will stop drawing to. 0 to 3.</param>
     public static void EndDrawingToCamera(int index)
     {
         Raylib.EndMode2D();
@@ -144,6 +155,10 @@ public static class CameraLogic
         Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
         Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.WHITE);
     }
+
+    /// <summary>
+    /// Unload all camera related textures.
+    /// </summary>
     public static void Unload()
     {
         foreach (var camera in GameMatch.PlayerCameras)
@@ -152,6 +167,7 @@ public static class CameraLogic
         }
         GameMatch.PlayerCameras.Clear();
     }
+
     static void ProcessCamera(ref Vector2 targetPosition, PlayerCamera playerCamera, ref Camera2D camera)
     {
         Vector2 target = new(targetPosition.X, targetPosition.Y);

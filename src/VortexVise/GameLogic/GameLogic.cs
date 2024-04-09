@@ -26,9 +26,10 @@ public static class GameLogic
         {
             PlayerState currentPlayerState = new(lastPlayerState.Id);
 
-            // Either read player input or get input from last frame TODO: update input with last input received for all the players here, unless it's going back in time to correct stuff
+            // Either read player input or get input from last frame 
             if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
+            // TODO: Get input from network players here for the corresponding tick
 
 
             // Handle Player Behaviour
