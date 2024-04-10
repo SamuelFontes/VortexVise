@@ -17,4 +17,6 @@ public class Map
     public List<GameMode> GameModes { get; set; } = new List<GameMode> { };
     public string TextureLocation { get; set; } = "";
     public string MapLocation { get; set; } = "";
+    public string BGM { get; set; } = "";
+    public string BGS { get; set; } = "";
 }

@@ -106,10 +106,18 @@ public static class GameAssets
         //---------------------------------------------------------
         public static string MusicAssetPixelatedDiscordance = "Resources/Audio/Music/PixelatedDiscordance.mp3";
         public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
+
         public static void PlayMusic(string music)
         {
             if (IsMusicPlaying) Raylib.UnloadMusicStream(Music);
             Music = Raylib.LoadMusicStream(music);
+            Raylib.PlayMusicStream(Music);
+        }
+
+        public static void PlayCustomMusic(string musicName)
+        {
+            if (IsMusicPlaying) Raylib.UnloadMusicStream(Music);
+            Music = Raylib.LoadMusicStream($"Resources/Audio/Music/{musicName}.mp3");
             Raylib.PlayMusicStream(Music);
         }
 

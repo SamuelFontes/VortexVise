@@ -27,7 +27,9 @@ public static class MapLogic
                 var map = new Map
                 {
                     // Read map name
-                    Name = Regex.Match(fileContent, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim()
+                    Name = Regex.Match(fileContent, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim(),
+                    BGM = Regex.Match(fileContent, @"(?<=BGM\s*=\s*?)[\s\S]+?(?=\s\s)").Value,
+                    BGS = Regex.Match(fileContent, @"(?<=BGS\s*=\s*?)[\s\S]+?(?=\s\s)").Value,
                 };
                 if (map.Name == null || map.Name.Length == 0) throw new Exception("Can't read map NAME");
 
@@ -128,6 +130,8 @@ public static class MapLogic
         if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
         GameMatch.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
+        if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM);
+        else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
 
         // Mirror map random // TODO: add this feature as an option on custom games
         //var random = new Random().Next(2);
