@@ -14,6 +14,9 @@ namespace VortexVise.GameGlobals;
 /// </summary>
 public static class GameAssets
 {
+    /// <summary>
+    /// Initialize all global assets when the game starts.
+    /// </summary>
     public static void InitializeAssets()
     {
         // Misc
@@ -39,6 +42,9 @@ public static class GameAssets
         MapLogic.Init();
     }
 
+    /// <summary>
+    /// Unload all game assets before game closes.
+    /// </summary>
     public static void UnloadAssets()
     {
         // Misc
@@ -65,11 +71,17 @@ public static class GameAssets
         MapLogic.Unload();
     }
 
+    /// <summary>
+    /// Miscellaneous assets
+    /// </summary>
     public static class Misc
     {
         public static Font Font;                                                    // Global font
     }
 
+    /// <summary>
+    /// Gameplay related assets.
+    /// </summary>
     public static class Gameplay
     {
         public static List<Map> Maps { get; set; } = [];
@@ -79,6 +91,9 @@ public static class GameAssets
         public static Texture PlayerTexture; // TODO: load skin
     }
 
+    /// <summary>
+    /// Music and ambience sounds.
+    /// </summary>
     public static class MusicAndAmbience
     {
         public static Music Music;                                                  // Background music
@@ -108,6 +123,9 @@ public static class GameAssets
 
     }
 
+    /// <summary>
+    /// Sound effects.
+    /// </summary>
     public static class Sounds
     {
         public static Sound HookShoot;

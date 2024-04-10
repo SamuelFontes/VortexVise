@@ -24,7 +24,7 @@ public static class GameInput
     /// <param name="isNetworkFrame">If true input will be processed. Otherwise it will buffer for next network/tick frame.</param>
     /// <param name="currentPlayerState">Current player state</param>
     /// <param name="lastPlayerState">Last player state</param>
-    /// <returns></returns>
+    /// <returns>A boolean indicating if this player is one of the local players.</returns>
     public static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
         bool isLocalPlayer = false;
@@ -74,7 +74,7 @@ public static class GameInput
     /// Read player input for the current frame.
     /// </summary>
     /// <param name="gamepad"> Gamepad number. -1 is mouse and keyboard, 0 to 3 are gamepad slots.</param>
-    /// <returns></returns>
+    /// <returns>A input object representing the current inputs pressed this frame for this specific game controller.</returns>
     public static InputState GetInput(int gamepad)
     {
         InputState input = new();

@@ -11,7 +11,7 @@ namespace VortexVise.Logic;
 /// </summary>
 public static class PlayerLogic
 {
-    static public void Init(bool isServer)
+    static public void Init()
     {
         GameAssets.Gameplay.PlayerTexture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");

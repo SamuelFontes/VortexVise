@@ -36,7 +36,7 @@ static internal class GameplayScene
 
         LastState.CurrentTime = CurrentTime;
         LastState.Gravity = Gravity;
-        PlayerLogic.Init(false);
+        PlayerLogic.Init();
         CameraLogic.Init();
         WeaponLogic.Init();
         if (GameCore.PlayerOneGamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id));

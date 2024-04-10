@@ -15,7 +15,6 @@ public static class WeaponLogic
 {
     public static float WeaponSpawnTimer { get; set; } = 0;
     public static float WeaponRotation { get; set; } = 0;
-    public static bool AnimationCicle { get; set; } = false;
     public static void Init()
     {
         string weaponLocation = "Resources/Weapons";

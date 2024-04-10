@@ -22,7 +22,7 @@ Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex V
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);                           // Set minimal window size
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
 Raylib.HideCursor();                                                                                    // Hide windows cursor
-Raylib.SetTargetFPS(GameCore.TargetFPS);                                                                // Set game target FPS
+Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                                // Set game target FPS
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 GameAssets.InitializeAssets();                                                                          // Load global data 
 GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture

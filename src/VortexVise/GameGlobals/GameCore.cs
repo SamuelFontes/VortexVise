@@ -38,10 +38,6 @@ public static class GameCore
     /// </summary>
     public static bool IsServer { get; set; } = false;
     /// <summary>
-    /// Set target FPS for the game. If set to 0 it's unlimited.
-    /// </summary>
-    public static int TargetFPS { get; private set; } = 0;
-    /// <summary>
     /// Current connected server IP. Maybe deprecated.
     /// </summary>
     public static string ServerIPAddress { get; set; } = "";

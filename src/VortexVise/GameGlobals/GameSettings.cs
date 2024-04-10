@@ -1,7 +1,7 @@
 ﻿namespace VortexVise.GameGlobals;
 
 /// <summary>
-/// Configuration for game settings. This should be maintained after the user exits the game.
+/// Configuration for game settings, any configuration that the user have control over should go here. This should be maintained after the user exits the game.
 /// </summary>
 public static class GameSettings
 {
@@ -33,4 +33,8 @@ public static class GameSettings
     /// Define if game should run in fullscreen.
     /// </summary>
     public static bool FullScreen = false;
+    /// <summary>
+    /// Set target FPS for the game. If set to 0 it's unlimited.
+    /// </summary>
+    public static int TargetFPS { get; private set; } = 0;
 }

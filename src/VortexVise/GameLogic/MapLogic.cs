@@ -129,14 +129,13 @@ public static class MapLogic
         GameMatch.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
 
-        // Mirror map random
+        // Mirror map random // TODO: add this feature as an option on custom games
         //var random = new Random().Next(2);
-        var random = 0; // Removed mirrored map feature from the random maps because the windowXP map was weird
+/*        var random = 0; // Removed mirrored map feature from the random maps because the windowXP map was weird
         if (random == 0)
         {
             // Regular Map
             GameMatch.MapMirrored = 1;
-            GameMatch.MapCollisions = GameMatch.CurrentMap.Collisions;
         }
         else
         {
@@ -157,13 +156,13 @@ public static class MapLogic
             }
             GameMatch.MapCollisions = mirroredCollisions;
         }
-
+*/
     }
 
 
     public static List<Rectangle> GetCollisions()
     {
-        return GameMatch.MapCollisions;
+        return GameMatch.CurrentMap.Collisions;
     }
 
     public static Vector2 GetMapSize()
