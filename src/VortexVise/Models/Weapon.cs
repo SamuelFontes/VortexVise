@@ -11,6 +11,7 @@ public class Weapon
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string TextureLocation { get; set; } = string.Empty;
+    public string ProjectileTextureLocation { get; set; } = string.Empty;
     public Color TextureColor { get; set; } = Raylib.WHITE;
     public WeaponType WeaponType { get; set; }
     public float ReloadDelay { get; set; }
@@ -24,4 +25,5 @@ public class Weapon
     public int SelfEffectPercentageChance { get; set; }
     public int SelfEffectAmount { get; set; }
     public Texture Texture { get; set; }
+    public Texture ProjectileTexture { get; set; }
 }

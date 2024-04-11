@@ -30,6 +30,21 @@ public static class GameRenderer
             DrawHookState(playerState);
             DrawPlayerState(playerState);
         }
+        DrawProjectiles(state);
+    }
+
+    private static void DrawProjectiles(GameState state)
+    {
+        foreach(var hitbox in state.DamageHitBoxes)
+        {
+            if (hitbox.Weapon.ProjectileTextureLocation == string.Empty) continue;
+            Rectangle sourceRec = new(0.0f, 0.0f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+
+            Rectangle destRec = new(hitbox.HitBox.X + hitbox.HitBox.width * 0.5f, hitbox.HitBox.Y + hitbox.HitBox.height * 0.5f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+
+            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new(hitbox.Weapon.ProjectileTexture.width * 0.5f, hitbox.Weapon.ProjectileTexture.height * 0.5f), (int)WeaponLogic.WeaponRotation, Raylib.WHITE);
+        }
+
     }
 
     static void DrawMap()

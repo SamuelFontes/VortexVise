@@ -1,4 +1,5 @@
-﻿using VortexVise.Models;
+﻿using System.Numerics;
+using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
@@ -8,19 +9,23 @@ namespace VortexVise.States;
 /// </summary>
 public class DamageHitBoxState
 {
-    public DamageHitBoxState(int playerId, Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction)
+    public DamageHitBoxState(int playerId, Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide)
     {
         PlayerId = playerId;
         HitBox = hitBox;
         Weapon = weapon;
         HitBoxTimer = hitBoxTimer;
         Direction = direction;
+        Velocity = velocity;
+        ShouldColide = shouldColide;
     }
 
     public int PlayerId { get; set; }
     public Rectangle HitBox { get; set; }
+    public Vector2 Velocity { get; set; }
     public Weapon Weapon { get; set; }
     public float HitBoxTimer { get; set; }
     public int Direction { get; set; }
     public bool ShouldDisappear { get; set; } = false;
+    public bool ShouldColide { get; set; } = false;
 }

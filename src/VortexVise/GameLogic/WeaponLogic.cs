@@ -37,10 +37,12 @@ public static class WeaponLogic
                         Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim(),
 
                         // Texture
-                        TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value.Trim()
+                        TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value.Trim(),
+                        ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value
                     };
                     if (string.IsNullOrEmpty(weapon.TextureLocation)) throw new Exception("Can't find the texture location");
                     weapon.TextureLocation = weaponLocation + "/" + weapon.TextureLocation;
+                    if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTextureLocation = weaponLocation + "/" + weapon.ProjectileTextureLocation;
 
                     // Weapon Type
                     string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA)(?=\s\s)").Value.Trim();
@@ -125,6 +127,7 @@ public static class WeaponLogic
 
                     // Load the texture
                     weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loding replicated textures
+                    if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTexture = Raylib.LoadTexture(weapon.ProjectileTextureLocation);
 
                     // Define Id and add to list
                     weapon.Id = id;
@@ -196,7 +199,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -206,14 +209,36 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
                     break;
                 }
+                case Enums.WeaponType.Shotgun:
+                {
+                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                    p.X -= 16 * currentPlayerState.Direction;
+
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true);
+                    gameState.DamageHitBoxes.Add(hitbox);
+
+                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true);
+                    gameState.DamageHitBoxes.Add(hitbox);
+
+                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true);
+                    gameState.DamageHitBoxes.Add(hitbox);
+
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Shotgun, pitch: 1.5f);
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick, pitch: 0.5f);
+                    break;
+                }
             }
             ws.ReloadTimer = 0;
+
+            // Apply self knockback
+            currentPlayerState.Velocity = new(currentPlayerState.Velocity.X + currentPlayerState.Direction * ws.Weapon.SelfKnockback, currentPlayerState.Velocity.Y);
+
         }
     }
 
@@ -221,7 +246,9 @@ public static class WeaponLogic
     {
         foreach (var hitbox in gameState.DamageHitBoxes)
         {
-            hitbox.HitBoxTimer -= deltaTime;
+            if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
+
+            hitbox.HitBox = new Rectangle(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime, hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime, hitbox.HitBox.Width, hitbox.HitBox.Height);
         }
         gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }
@@ -245,8 +272,11 @@ public static class WeaponLogic
 
     public static void Unload()
     {
-        foreach (var w in GameAssets.Gameplay.Weapons) Raylib.UnloadTexture(w.Texture);
-
+        foreach (var w in GameAssets.Gameplay.Weapons)
+        {
+            Raylib.UnloadTexture(w.Texture);
+            Raylib.UnloadTexture(w.ProjectileTexture);
+        }
     }
 
 }

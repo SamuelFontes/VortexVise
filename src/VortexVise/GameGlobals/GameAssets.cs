@@ -34,6 +34,7 @@ public static class GameAssets
         Sounds.WeaponDrop = Raylib.LoadSound("Resources/Audio/FX/metal_drop.wav");
         Sounds.WeaponClick = Raylib.LoadSound("Resources/Audio/FX/weapon_click.wav");
         Sounds.Death = Raylib.LoadSound("Resources/Audio/FX/death3.ogg");
+        Sounds.Shotgun = Raylib.LoadSound("Resources/Audio/FX/shotgun.ogg");
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -63,6 +64,7 @@ public static class GameAssets
         Raylib.UnloadSound(Sounds.WeaponDrop);
         Raylib.UnloadSound(Sounds.WeaponClick);
         Raylib.UnloadSound(Sounds.Death);
+        Raylib.UnloadSound(Sounds.Shotgun);
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -147,6 +149,7 @@ public static class GameAssets
         public static Sound WeaponDrop;
         public static Sound WeaponClick;
         public static Sound Death;
+        public static Sound Shotgun;
         public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
         {
             if (GameCore.IsServer) return; // Audio don't play on the server
