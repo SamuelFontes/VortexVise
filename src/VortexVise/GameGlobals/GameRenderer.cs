@@ -110,7 +110,21 @@ public static class GameRenderer
                     }
                     break;
                 }
-                case Enums.WeaponType.MeleeCut: destRec.X += 5 * playerState.Direction; sourceRec.Width = -sourceRec.width; rotation -= 45 * playerState.Direction; break;
+                case Enums.WeaponType.MeleeCut:
+                {
+                    if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
+                    {
+                        destRec.X += 5 * playerState.Direction;
+                        sourceRec.Width = -sourceRec.width;
+                        rotation -= 45 * playerState.Direction;
+                    }
+                    else
+                    {
+                        destRec.X -= 16 * playerState.Direction;
+                        destRec.Y += 5;
+                    }
+                    break;
+                }
             }
             Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(GameAssets.Gameplay.PlayerTexture.width * 0.5f, GameAssets.Gameplay.PlayerTexture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
         }

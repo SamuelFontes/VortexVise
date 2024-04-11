@@ -202,6 +202,16 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
                     break;
                 }
+                case Enums.WeaponType.MeleeCut:
+                {
+                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                    p.X -= 16 * currentPlayerState.Direction;
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction);
+
+                    gameState.DamageHitBoxes.Add(hitbox);
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
+                    break;
+                }
             }
             ws.ReloadTimer = 0;
         }
