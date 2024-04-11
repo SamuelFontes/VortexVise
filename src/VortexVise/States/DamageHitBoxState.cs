@@ -22,4 +22,5 @@ public class DamageHitBoxState
     public Weapon Weapon { get; set; }
     public float HitBoxTimer { get; set; }
     public int Direction { get; set; }
+    public bool ShouldDisappear { get; set; } = false;
 }

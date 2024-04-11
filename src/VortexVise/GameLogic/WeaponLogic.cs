@@ -213,7 +213,7 @@ public static class WeaponLogic
         {
             hitbox.HitBoxTimer -= deltaTime;
         }
-        gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0);
+        gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }
 
     public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)
@@ -223,8 +223,11 @@ public static class WeaponLogic
         {
             if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
             {
+                // Dude was hit by projectile
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 0.5f);
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
+                currentPlayerState.HeathPoints -= hitbox.Weapon.Damage;
+                hitbox.ShouldDisappear = true;
             }
 
         }
