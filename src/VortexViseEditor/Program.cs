@@ -8,13 +8,16 @@ using ZeroElectric.Vinculum;
 
 MapLogic.Init();
 IOrderedEnumerable<Map> maps = GameAssets.Gameplay.Maps.OrderBy(x => x.Name);
+start:
 var mapId = 0;
 foreach (var m in GameAssets.Gameplay.Maps)
 {
     Console.WriteLine($"{mapId} - {m.TextureLocation}");
     mapId++;
 }
+Console.WriteLine($"-1 - EXIT");
 int selected = Convert.ToInt32(Console.ReadLine());
+if (selected == -1) return;
 Map map = GameAssets.Gameplay.Maps[selected];
 
 
@@ -239,4 +242,5 @@ GAME_MODES = DM,TDM,SURVIVAL";
 //---------------------------------------------------------
 Raylib.CloseWindow();        // Close window and OpenGL context
                              //----------------------------------------------------------
+goto start;
 
