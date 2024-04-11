@@ -62,6 +62,7 @@ public static class GameRenderer
 
     static void DrawHookState(PlayerState playerState)
     {
+        if(playerState.IsDead) return;
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
@@ -76,6 +77,7 @@ public static class GameRenderer
     }
     static void DrawPlayerState(PlayerState playerState)
     {
+        if (playerState.IsDead) return;
         Rectangle sourceRec = new(0.0f, 0.0f, (float)GameAssets.Gameplay.PlayerTexture.width * playerState.Direction, GameAssets.Gameplay.PlayerTexture.height);
 
         Rectangle destRec = new(playerState.Position.X + GameAssets.Gameplay.PlayerTexture.width * 0.5f, playerState.Position.Y + GameAssets.Gameplay.PlayerTexture.height * 0.5f, GameAssets.Gameplay.PlayerTexture.width, GameAssets.Gameplay.PlayerTexture.height);

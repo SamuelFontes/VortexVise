@@ -16,7 +16,10 @@ public class PlayerState
     public int Direction { get; set; } = 1;
     public bool IsTouchingTheGround { get; set; } = false;
     public bool CanDash { get; set; } = true;
-    public float TimeSinceJump = 0;
+    public float TimeSinceJump  { get; set; }= 0;
+    public int HeathPoints = 100;
+    public bool IsDead { get; set; } = false;
+    public float SpawnTimer { get; set; } = 0;
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
 
     public InputState Input { get; set; } = new InputState();

@@ -35,6 +35,13 @@ public static class GameLogic
             // Handle Player Behaviour
             PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
             PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
+            PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime);
+            if (currentPlayerState.IsDead)
+            {
+                // Just skip all calculations for this player
+                state.PlayerStates.Add(currentPlayerState);
+                continue;
+            }
             PlayerLogic.SetPlayerDirection(currentPlayerState);
             PlayerLogic.ProcessPlayerMovement(currentPlayerState, deltaTime);
             PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);

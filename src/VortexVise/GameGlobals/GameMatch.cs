@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Net.NetworkInformation;
+using System.Numerics;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
@@ -27,6 +28,10 @@ public static class GameMatch
     /// If we want to flip the map use -1. Maybe deprecated.
     /// </summary>
     public static int MapMirrored = 1;
+    /// <summary>
+    /// Starting player health.
+    /// </summary>
+    public static int DefaultPlayerHeathPoints = 100; 
     /// <summary>
     /// Current gameplay cameras, used to render player view.
     /// </summary>

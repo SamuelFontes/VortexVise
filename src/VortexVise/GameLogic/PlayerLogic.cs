@@ -28,11 +28,36 @@ public static class PlayerLogic
         currentPlayerState.TimeSinceJump = lastPlayerState.TimeSinceJump;
         currentPlayerState.Animation = lastPlayerState.Animation;
         currentPlayerState.WeaponStates = lastPlayerState.WeaponStates;
+        currentPlayerState.HeathPoints = lastPlayerState.HeathPoints;
+        currentPlayerState.IsDead = lastPlayerState.IsDead;
+        currentPlayerState.SpawnTimer = lastPlayerState.SpawnTimer;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
     {
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
+    }
+    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime)
+    {
+        if (currentPlayerState.HeathPoints <= 0 && !currentPlayerState.IsDead)
+        {
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death);
+            currentPlayerState.IsDead = true;
+            currentPlayerState.WeaponStates.Clear();
+        }
+
+        if (currentPlayerState.IsDead)
+        {
+            currentPlayerState.SpawnTimer += deltaTime;
+            if(currentPlayerState.SpawnTimer > GameMatch.PlayerSpawnDelay)
+            {
+                currentPlayerState.IsDead = false;
+                currentPlayerState.SpawnTimer = 0;
+                currentPlayerState.Position = GameMatch.PlayerSpawnPoint;
+                currentPlayerState.Velocity = new(0, 0);
+                currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
+            }
+        }
     }
 
     static public void SetPlayerDirection(PlayerState playerState)
@@ -120,8 +145,8 @@ public static class PlayerLogic
         else if (endingCollision.Y > mapSize.Y)
         {
             // TODO: Kill the player
-            currentPlayerState.Position = GameMatch.PlayerSpawnPoint; // TODO: get spawnpoint
-            currentPlayerState.Velocity = new(0, 0);
+            currentPlayerState.HeathPoints = -1;
+            return;
         }
         else if (endingCollision.X <= 0)
         {
