@@ -249,6 +249,22 @@ public static class WeaponLogic
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
 
             hitbox.HitBox = new Rectangle(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime, hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime, hitbox.HitBox.Width, hitbox.HitBox.Height);
+
+            // Check projectile collision with map
+            if (hitbox.ShouldColide)
+            {
+                foreach (var collision in GameMatch.CurrentMap.Collisions)
+                {
+                    if (Raylib.CheckCollisionRecs(collision, hitbox.HitBox))
+                    {
+                        hitbox.ShouldDisappear = true;
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 2f);
+                    }
+                }
+            }
+            // Check if projectile is outside the map
+            if ((hitbox.HitBox.X + hitbox.HitBox.Width <= 0) || (hitbox.HitBox.Y > MapLogic.GetMapSize().Y) || (hitbox.HitBox.Y + hitbox.HitBox.Height <= 0) || (hitbox.HitBox.X > MapLogic.GetMapSize().X))
+                hitbox.ShouldDisappear = true;
         }
         gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }

@@ -35,7 +35,7 @@ public static class GameRenderer
 
     private static void DrawProjectiles(GameState state)
     {
-        foreach(var hitbox in state.DamageHitBoxes)
+        foreach (var hitbox in state.DamageHitBoxes)
         {
             if (hitbox.Weapon.ProjectileTextureLocation == string.Empty) continue;
             Rectangle sourceRec = new(0.0f, 0.0f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
@@ -77,7 +77,7 @@ public static class GameRenderer
 
     static void DrawHookState(PlayerState playerState)
     {
-        if(playerState.IsDead) return;
+        if (playerState.IsDead) return;
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
@@ -122,6 +122,7 @@ public static class GameRenderer
                     {
                         destRec.X -= 16 * playerState.Direction;
                         destRec.Y += 5;
+                        rotation = 0;
                     }
                     break;
                 }
@@ -137,6 +138,7 @@ public static class GameRenderer
                     {
                         destRec.X -= 16 * playerState.Direction;
                         destRec.Y += 5;
+                        rotation = 0;
                     }
                     break;
                 }
