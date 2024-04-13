@@ -51,8 +51,13 @@ static internal class GameplayScene
 
     static public void UpdateGameplayScene()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadRandomMap();
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3)) LastState.PlayerStates.Add(new(99, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First())); // Add testing dummy
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
+        {
+            var bot = new PlayerState(99, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            bot.IsBot = true;
+            LastState.PlayerStates.Add(bot); // Add testing dummy
+        }
         bool isSlowerThanTickRate = false;
 
         CurrentTime = Raylib.GetTime();

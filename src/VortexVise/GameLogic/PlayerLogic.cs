@@ -30,6 +30,7 @@ public static class PlayerLogic
         currentPlayerState.HeathPoints = lastPlayerState.HeathPoints;
         currentPlayerState.IsDead = lastPlayerState.IsDead;
         currentPlayerState.SpawnTimer = lastPlayerState.SpawnTimer;
+        currentPlayerState.IsBot = lastPlayerState.IsBot;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)

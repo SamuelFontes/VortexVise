@@ -15,6 +15,7 @@ public static class MapLogic
 {
     public static void Init()
     {
+        var counter = 0;
         string mapLocation = "Resources/Maps";
         // Get all files from the Resources/Maps folder to read list of avaliable game levels aka maps
         string[] mapFiles = Directory.GetFiles(mapLocation, "*.ini", SearchOption.TopDirectoryOnly);
@@ -109,6 +110,7 @@ public static class MapLogic
                 map.TextureLocation = mapFileName;
                 map.MapLocation = file;
 
+                map.Id = counter++;
                 GameAssets.Gameplay.Maps.Add(map);
             }
             catch (Exception ex)
@@ -124,29 +126,20 @@ public static class MapLogic
         Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
 
     }
-
-    public static void LoadRandomMap()
+    public static void LoadMap(Map map)
     {
         if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
-        GameMatch.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
+        GameMatch.CurrentMap = map;
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
         if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM);
         else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
 
-        // Mirror map random // TODO: add this feature as an option on custom games
-        //var random = new Random().Next(2);
-/*        var random = 0; // Removed mirrored map feature from the random maps because the windowXP map was weird
-        if (random == 0)
-        {
-            // Regular Map
-            GameMatch.MapMirrored = 1;
-        }
-        else
+        // Mirror map
+        if (GameMatch.MapMirrored == -1)
         {
             // Inverted map
             var collisions = GameMatch.CurrentMap.Collisions;
             var mirroredCollisions = new List<Rectangle>();
-            GameMatch.MapMirrored = -1;
             foreach (var collision in collisions)
             {
                 var mirroredCollision = new Rectangle
@@ -158,9 +151,21 @@ public static class MapLogic
                 };
                 mirroredCollisions.Add(mirroredCollision);
             }
-            GameMatch.MapCollisions = mirroredCollisions;
+            //FIXME: this shouldn't replace the map collisions
+            //GameMatch.CurrentMap.Collisions = mirroredCollisions;
         }
-*/
+    }
+
+    public static void LoadRandomMap()
+    {
+        var map = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
+        LoadMap(map);
+    }
+
+    public static void LoadNextMap()
+    {
+        var map = GameAssets.Gameplay.Maps.SkipWhile(x => x.Id != GameMatch.CurrentMap.Id).Skip(1).DefaultIfEmpty(GameAssets.Gameplay.Maps.First()).First();
+        LoadMap(map);
     }
 
 

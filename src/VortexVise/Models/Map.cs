@@ -9,6 +9,7 @@ namespace VortexVise.Models;
 /// </summary>
 public class Map
 {
+    public int Id { get; set; } = 0;
     public string Name { get; set; } = "";
     public List<Rectangle> Collisions { get; set; } = new List<Rectangle>();
     public List<Vector2> PlayerSpawnPoints { get; set; } = new List<Vector2>();

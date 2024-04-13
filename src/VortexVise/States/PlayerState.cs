@@ -21,6 +21,7 @@ public class PlayerState
     public int HeathPoints = 100;
     public bool IsDead { get; set; } = false;
     public float SpawnTimer { get; set; } = 0;
+    public bool IsBot { get; set; } = false;
     public Skin Skin { get; set; }
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
 
