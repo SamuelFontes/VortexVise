@@ -3,7 +3,7 @@
 namespace VortexVise.States;
 
 /// <summary>
-/// Used to animate sprites when players are walking around.
+/// Used to animate sprites when players are walking around. Also used to animate things like explosions
 /// </summary>
 public class AnimationState // This is only client side
 {
@@ -13,6 +13,12 @@ public class AnimationState // This is only client side
     public bool IsDashing = false;
     public bool IsDashFacingRight = false;
 
+    /// <summary>
+    /// This is used to process the player animation
+    /// </summary>
+    /// <param name="vVelocity">Player velocity</param>
+    /// <param name="input">Player input state</param>
+    /// <param name="deltaTime">Delta time</param>
     public void ProcessAnimationRotation(Vector2 vVelocity, InputState input, float deltaTime)
     {
         if (IsDashing) return;
@@ -66,6 +72,10 @@ public class AnimationState // This is only client side
         }
     }
 
+    /// <summary>
+    /// Summer salt animation
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void ProcessDash(float deltaTime)
     {
         var rotationForce = deltaTime * 1800;
@@ -86,6 +96,10 @@ public class AnimationState // This is only client side
 
     }
 
+    /// <summary>
+    /// Cast rotation to int 
+    /// </summary>
+    /// <returns>Rotation</returns>
     public int GetAnimationRotation()
     {
         return (int)Rotation;

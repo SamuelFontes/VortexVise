@@ -178,4 +178,9 @@ public static class GameAssets
             Raylib.PlaySound(sound);
         }
     }
+
+    public static class Animations
+    {
+        public static Animation Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5);
+    }
 }

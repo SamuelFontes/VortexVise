@@ -18,6 +18,10 @@ public class GameState
     public List<PlayerState> PlayerStates { get; set; } = new List<PlayerState>();
     public List<WeaponDropState> WeaponDrops { get; set; } = new();
     public List<DamageHitBoxState> DamageHitBoxes { get; set; } = new();
+    /// <summary>
+    /// List of animations like player deaths and explosions
+    /// </summary>
+    public List<AnimationState> Animations { get; set; } = new() { };
 
     // TODO: Add compression
     public string SerializeState()
