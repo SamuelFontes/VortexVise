@@ -14,6 +14,7 @@ namespace VortexVise.States;
 /// </summary>
 public class GameState
 {
+    public int Id { get; set; }
     public double CurrentTime { get; set; }
     public float Gravity { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = new List<PlayerState>();
@@ -175,15 +176,16 @@ public class GameState
     /// </summary>
     public void ResetGameState()
     {
-        foreach(var playerState in PlayerStates)
+        foreach (var playerState in PlayerStates)
         {
             playerState.IsDead = false;
             playerState.Position = GameMatch.PlayerSpawnPoint;
             playerState.Velocity = new(0, 0);
             playerState.WeaponStates.Clear();
+            playerState.HookState.IsHookReleased = false;   
         }
         WeaponDrops.Clear();
-        foreach(var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
+        foreach (var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
         {
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
             var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawn);

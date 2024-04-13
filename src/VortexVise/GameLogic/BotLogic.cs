@@ -78,20 +78,31 @@ public static class BotLogic
         }
         else
         {
-            input.Left = rand.NextDouble() >= 0.5;
-            input.Right = rand.NextDouble() >= 0.5;
+            input.Left = rand.NextDouble() >= 0.8;
+            input.Right = rand.NextDouble() >= 0.8;
             input.Up = rand.NextDouble() >= 0.5;
-            input.Down = rand.NextDouble() >= 0.5;
+            input.Down = rand.NextDouble() >= 0.8;
         }
 
-        if (bot.EnemyTarget != null && (int)bot.EnemyTarget.Position.Y == (int)botState.Position.Y)
+
+        // Try to avoid bot falling from map
+        if (input.Down && botState.Position.Y > GameAssets.Gameplay.CurrentMapTexture.height * 0.7)
+        {
+            input.Down = false;
+            input.Up = true;
+        }
+
+        if (bot.EnemyTarget != null && ((int)bot.EnemyTarget.Position.Y == (int)botState.Position.Y || (bot.EnemyTarget.Position.Y > botState.Position.Y - 8 && bot.EnemyTarget.Position.Y < botState.Position.Y + 32)))
             input.FireWeapon = rand.NextDouble() >= 0.1;
         else
         {
             input.FireWeapon = rand.NextDouble() >= 0.9999;
         }
 
-        input.GrabDrop = rand.NextDouble() >= 0.5;
+        if (botState.WeaponStates.Count > 0)
+            input.GrabDrop = rand.NextDouble() >= 0.9;
+        else
+            input.GrabDrop = rand.NextDouble() >= 0.2;
         input.Jump = rand.NextDouble() >= 0.9;
         input.Hook = rand.NextDouble() >= 0.005;
         input.CancelHook = rand.NextDouble() >= 0.99;

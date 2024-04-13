@@ -8,6 +8,7 @@ namespace VortexVise.States;
 /// </summary>
 public class WeaponDropState
 {
+    public Guid Id { get; set; } = Guid.NewGuid();
     public WeaponDropState(WeaponState weaponState, Vector2 position)
     {
         WeaponState = weaponState;

@@ -185,7 +185,7 @@ public static class WeaponLogic
         {
             drop.DropTimer += deltaTime;
         }
-        currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
+        //currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
 
         // create animation
         WeaponRotation -= deltaTime * 100;

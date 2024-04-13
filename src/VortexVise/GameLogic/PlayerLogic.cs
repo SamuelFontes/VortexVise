@@ -329,6 +329,7 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.GrabDrop)
         {
+            Guid? idToRemove = null;
             foreach (var drop in currentState.WeaponDrops)
             {
                 if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision)) // TODO: if holding max weapons trade with current
@@ -337,13 +338,14 @@ public static class PlayerLogic
                     currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more waepons
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
-                    drop.DropTimer += 900000; // Gambiarra to remove weapon from map
+                    idToRemove = drop.Id;
                     if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
                     break;
                 }
             }
-            currentState.WeaponDrops.RemoveAll(x => x.DropTimer >= 900000); // Gambiarra to remove weapon from map
+            if(idToRemove != null)
+                currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id); 
         }
     }
 
