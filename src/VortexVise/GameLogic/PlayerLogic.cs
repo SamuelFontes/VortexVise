@@ -94,7 +94,8 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
-            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
+            if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-GameMatch.PlayerJumpForce);
             currentPlayerState.CanDash = true;
@@ -292,7 +293,8 @@ public static class PlayerLogic
     {
         var verticalForce = -GameMatch.PlayerJumpForce * 0.2f;
         if (currentPlayerState.Input.Up) verticalForce *= 2;
-        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
+        if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
         if (isDoubleJump)
         {
             if (currentPlayerState.Velocity.Y < -GameMatch.PlayerJumpForce)
@@ -336,11 +338,22 @@ public static class PlayerLogic
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
                     drop.DropTimer += 900000; // Gambiarra to remove weapon from map
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
+                    if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
                     break;
                 }
             }
             currentState.WeaponDrops.RemoveAll(x => x.DropTimer >= 900000); // Gambiarra to remove weapon from map
         }
+    }
+
+    public static bool IsPlayerLocal(int playerId)
+    {
+        bool isPlayerLocal = false; 
+        if(GameCore.PlayerOneProfile.Gamepad != -9 && GameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
+        if(GameCore.PlayerTwoProfile.Gamepad != -9 && GameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
+        if(GameCore.PlayerThreeProfile.Gamepad != -9 && GameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
+        if(GameCore.PlayerFourProfile.Gamepad != -9 && GameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
+        return isPlayerLocal;
     }
 }

@@ -308,7 +308,8 @@ public static class WeaponLogic
         foreach(var weapon in currentPlayerState.WeaponStates)
         {
             if(weapon.CurrentAmmo <= 0)
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
+                if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
         }
         currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);
     }
