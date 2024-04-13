@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 
 namespace VortexVise.States;
@@ -168,4 +169,26 @@ public class GameState
         receivedPlayerState.Position = lastLocalPlayerState.Position;
     }
 
+
+    /// <summary>
+    /// Reset the game state
+    /// </summary>
+    public void ResetGameState()
+    {
+        foreach(var playerState in PlayerStates)
+        {
+            playerState.IsDead = false;
+            playerState.Position = GameMatch.PlayerSpawnPoint;
+            playerState.Velocity = new(0, 0);
+            playerState.WeaponStates.Clear();
+        }
+        WeaponDrops.Clear();
+        foreach(var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
+        {
+            var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
+            var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawn);
+            WeaponDrops.Add(weaponDrop);
+        }
+
+    }
 }

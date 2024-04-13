@@ -45,7 +45,7 @@ static internal class GameplayScene
         if (GameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id, GameCore.PlayerThreeProfile.Skin));
         if (GameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id, GameCore.PlayerFourProfile.Skin));
 
-
+        LastState.ResetGameState();
     }
 
     static public void UpdateGameplayScene()
@@ -116,6 +116,7 @@ static internal class GameplayScene
             LastState = State;
         }
         //gameStates.Add(state);
+        GameMatch.GameState = State;
 
     }
 

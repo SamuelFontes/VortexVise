@@ -1,4 +1,5 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
+using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
@@ -165,7 +166,9 @@ public static class WeaponLogic
         {
             WeaponSpawnTimer = 0;
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
-            var spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First();
+
+            Vector2 spawnPoint= GameMatch.CurrentMap.ItemSpawnPoints.Where(x => !currentGameState.WeaponDrops.Select(d => d.Position).Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+            if (spawnPoint.X == 0 && spawnPoint.Y == 0) return;
             // Remove old weapons if there is anoter in same place
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
             if (existingWeapon != null) currentGameState.WeaponDrops.Remove(existingWeapon);
@@ -246,7 +249,7 @@ public static class WeaponLogic
             currentPlayerState.Velocity = new(currentPlayerState.Velocity.X + currentPlayerState.Direction * ws.Weapon.SelfKnockback, currentPlayerState.Velocity.Y);
 
             // Reduce ammo if not melee
-            if(!(ws.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || ws.Weapon.WeaponType == Enums.WeaponType.MeleeCut))
+            if (!(ws.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || ws.Weapon.WeaponType == Enums.WeaponType.MeleeCut))
             {
                 ws.CurrentAmmo--;
             }
@@ -295,7 +298,7 @@ public static class WeaponLogic
                 hitbox.ShouldDisappear = true;
 
                 // If is melee weapon it should spend ammo when hitting someone
-                if(hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
+                if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
                 {
                     hitbox.WeaponState.CurrentAmmo--;
                 }
@@ -305,10 +308,10 @@ public static class WeaponLogic
     }
     public static void BreakPlayerWeapon(PlayerState currentPlayerState)
     {
-        foreach(var weapon in currentPlayerState.WeaponStates)
+        foreach (var weapon in currentPlayerState.WeaponStates)
         {
-            if(weapon.CurrentAmmo <= 0)
-                if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+            if (weapon.CurrentAmmo <= 0)
+                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
         }
         currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);

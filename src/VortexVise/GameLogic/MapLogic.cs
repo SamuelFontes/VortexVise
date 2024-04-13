@@ -154,6 +154,8 @@ public static class MapLogic
             //FIXME: this shouldn't replace the map collisions
             //GameMatch.CurrentMap.Collisions = mirroredCollisions;
         }
+        if(GameMatch.GameState != null)
+            GameMatch.GameState.ResetGameState();
     }
 
     public static void LoadRandomMap()

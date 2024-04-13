@@ -89,4 +89,8 @@ public static class GameMatch
     public static Vector2 PlayerCollisionOffset = new(10, 6);
 
     public static List<Bot> Bots { get; set; } = new();
+    /// <summary>
+    /// Current game state. Please don't mess with this outside the GameLogic. It's here to reset things when changing maps.
+    /// </summary>
+    public static GameState? GameState { get; set; }
 }
