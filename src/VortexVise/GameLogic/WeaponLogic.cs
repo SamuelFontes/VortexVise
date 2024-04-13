@@ -123,6 +123,12 @@ public static class WeaponLogic
                         weapon.SelfEffectPercentageChance = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_EFFECT_CHANCE=)\d+").Value);
                     }
 
+                    // Ammo
+                    if (match.Value.Contains("AMMO"))
+                        weapon.Ammo = Convert.ToInt32(Regex.Match(match.Value, @"(?<=AMMO=)\d+").Value);
+                    else
+                        weapon.Ammo = 1; // Defaults to 1 use if there is no ammo info
+
 
 
                     // Load the texture
@@ -164,7 +170,7 @@ public static class WeaponLogic
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
             if (existingWeapon != null) currentGameState.WeaponDrops.Remove(existingWeapon);
 
-            var weaponDrop = new WeaponDropState(new WeaponState(weapon, 10, 10, false, weapon.ReloadDelay, 0), spawnPoint);
+            var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawnPoint);
             currentGameState.WeaponDrops.Add(weaponDrop);
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponDrop);
         }
@@ -199,7 +205,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -209,7 +215,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
@@ -220,13 +226,13 @@ public static class WeaponLogic
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
 
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true, currentPlayerState.WeaponStates[0]);
                     gameState.DamageHitBoxes.Add(hitbox);
 
-                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true);
+                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true, currentPlayerState.WeaponStates[0]);
                     gameState.DamageHitBoxes.Add(hitbox);
 
-                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true);
+                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true, currentPlayerState.WeaponStates[0]);
                     gameState.DamageHitBoxes.Add(hitbox);
 
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Shotgun, pitch: 1.5f);
@@ -238,6 +244,12 @@ public static class WeaponLogic
 
             // Apply self knockback
             currentPlayerState.Velocity = new(currentPlayerState.Velocity.X + currentPlayerState.Direction * ws.Weapon.SelfKnockback, currentPlayerState.Velocity.Y);
+
+            // Reduce ammo if not melee
+            if(!(ws.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || ws.Weapon.WeaponType == Enums.WeaponType.MeleeCut))
+            {
+                ws.CurrentAmmo--;
+            }
 
         }
     }
@@ -281,9 +293,24 @@ public static class WeaponLogic
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
                 currentPlayerState.HeathPoints -= hitbox.Weapon.Damage;
                 hitbox.ShouldDisappear = true;
+
+                // If is melee weapon it should spend ammo when hitting someone
+                if(hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
+                {
+                    hitbox.WeaponState.CurrentAmmo--;
+                }
             }
 
         }
+    }
+    public static void BreakPlayerWeapon(PlayerState currentPlayerState)
+    {
+        foreach(var weapon in currentPlayerState.WeaponStates)
+        {
+            if(weapon.CurrentAmmo <= 0)
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
+        }
+        currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);
     }
 
     public static void Unload()

@@ -18,6 +18,7 @@ public class Weapon
     public Color Color { get; set; } = Raylib.WHITE; // This is for the gun and the projectile
     public int Damage { get; set; }
     public int Knockback { get; set; }
+    public int Ammo { get; set; }
     public int SelfKnockback { get; set; }
     public StatusEffects Effect { get; set; } = StatusEffects.None;
     public int EffectAmount { get; set; }

@@ -9,7 +9,7 @@ namespace VortexVise.States;
 /// </summary>
 public class DamageHitBoxState
 {
-    public DamageHitBoxState(int playerId, Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide)
+    public DamageHitBoxState(int playerId, Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide, WeaponState weaponState)
     {
         PlayerId = playerId;
         HitBox = hitBox;
@@ -18,12 +18,14 @@ public class DamageHitBoxState
         Direction = direction;
         Velocity = velocity;
         ShouldColide = shouldColide;
+        WeaponState = weaponState;
     }
 
     public int PlayerId { get; set; }
     public Rectangle HitBox { get; set; }
     public Vector2 Velocity { get; set; }
     public Weapon Weapon { get; set; }
+    public WeaponState WeaponState { get; set; }    
     public float HitBoxTimer { get; set; }
     public int Direction { get; set; }
     public bool ShouldDisappear { get; set; } = false;

@@ -51,6 +51,7 @@ public static class GameLogic
             PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
             PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
 
+            WeaponLogic.BreakPlayerWeapon(currentPlayerState);
             PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState);
 
             WeaponLogic.ProcessPlayerShooting(currentPlayerState, state, deltaTime);
