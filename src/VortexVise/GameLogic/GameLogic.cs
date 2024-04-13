@@ -24,7 +24,7 @@ public static class GameLogic
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
-            PlayerState currentPlayerState = new(lastPlayerState.Id);
+            PlayerState currentPlayerState = new(lastPlayerState.Id,lastPlayerState.Skin);
 
             // Either read player input or get input from last frame 
             if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))

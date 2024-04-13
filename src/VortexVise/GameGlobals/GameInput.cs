@@ -30,28 +30,28 @@ public static class GameInput
         bool isLocalPlayer = false;
         int gamepad = -9;
         var playerIndex = 0;
-        if (GameCore.PlayerOneGamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
+        if (GameCore.PlayerOneProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerOneGamepad;
+            gamepad = GameCore.PlayerOneProfile.Gamepad;
             playerIndex = 0;
         }
-        else if (GameCore.PlayerTwoGamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
+        else if (GameCore.PlayerTwoProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerTwoGamepad;
+            gamepad = GameCore.PlayerTwoProfile.Gamepad;
             playerIndex = 1;
         }
-        else if (GameCore.PlayerThreeGamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
+        else if (GameCore.PlayerThreeProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerThreeGamepad;
+            gamepad = GameCore.PlayerThreeProfile.Gamepad;
             playerIndex = 2;
         }
-        else if (GameCore.PlayerFourGamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
+        else if (GameCore.PlayerFourProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerFourGamepad;
+            gamepad = GameCore.PlayerFourProfile.Gamepad;
             playerIndex = 3;
         }
         if (!isLocalPlayer || gamepad == -9) return isLocalPlayer;
@@ -89,13 +89,13 @@ public static class GameInput
                 input.Up = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_S) || Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
                 input.Down = true;
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT) || Raylib.IsKeyPressed(KeyboardKey.KEY_A))
                 input.UILeft = true;
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT) || Raylib.IsKeyPressed(KeyboardKey.KEY_D))
                 input.UIRight = true;
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP) || Raylib.IsKeyPressed(KeyboardKey.KEY_W))
                 input.UIUp = true;
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN) || Raylib.IsKeyPressed(KeyboardKey.KEY_S))
                 input.UIDown = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_ALT))
                 input.Jump = true;

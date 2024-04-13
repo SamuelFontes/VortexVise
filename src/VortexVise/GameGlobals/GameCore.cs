@@ -45,19 +45,30 @@ public static class GameCore
     /// Define if its a network game.
     /// </summary>
     public static bool IsNetworkGame { get; set; } = false;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Global Network SignalR Hub Connection.
     /// </summary>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public static HubConnection HubConnection { get; set; }
+    /// <summary>
+    /// Player profile
+    /// </summary>
+    public static PlayerProfile PlayerOneProfile { get; set; } = new() { Id = 0, Name = "PlayerOne" };
+    /// <summary>
+    /// Player profile
+    /// </summary>
+    public static PlayerProfile PlayerTwoProfile { get; set; } = new() { Id = 0, Name = "PlayerTwo" };
+    /// <summary>
+    /// Player profile
+    /// </summary>
+    public static PlayerProfile PlayerThreeProfile { get; set; } = new() { Id = 0, Name = "PlayerThree" };
+    /// <summary>
+    /// Player profile
+    /// </summary>
+    public static PlayerProfile PlayerFourProfile { get; set; } = new() { Id = 0, Name = "PlayerFour" };
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public static int PlayerOneGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerOneProfile { get; set; } = new PlayerProfile() { Id = 0, Name = "PlayerOne", SkinLocation = "Resources/Sprites/Skins/fatso.png" }; // TODO: remove this after implementing profiles
-    public static int PlayerTwoGamepad { get; set; } = -9;                       // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerTwoProfile { get; set; } = new PlayerProfile() { Id = 1, Name = "PlayerTwo", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
-    public static int PlayerThreeGamepad { get; set; } = -9;                     // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerThreeProfile { get; set; } = new PlayerProfile() { Id = 2, Name = "PlayerThree", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
-    public static int PlayerFourGamepad { get; set; } = -9;                      // Player gamepad sequence, if -1 is mouse and keyboard, -9 is disconnected
-    public static PlayerProfile PlayerFourProfile { get; set; } = new PlayerProfile() { Id = 3, Name = "PlayerFour", SkinLocation = "Resources/Sprites/Skins/fatso.png" };
+    /// <summary>
+    /// Max amount of weapons a player can carry
+    /// </summary>
     public static int MaxWeapons { get; set; } = 4;
 }

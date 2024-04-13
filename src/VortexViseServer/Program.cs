@@ -76,7 +76,7 @@ while (true)
         // Simulate new game state
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
-            var player = players.FirstOrDefault(_ => _.Id == lastPlayerState.Id); // TODO: optimize this
+            var player = players.FirstOrDefault(_ => _.Id == lastPlayerState.Id); 
             if (player == null) continue;
             lastPlayerState.Input = player.Input;
         }
@@ -151,10 +151,8 @@ void ReceivePlayerPackets()
                     Sender = sender,
                 };
                 players.Add(p);
-                // TODO: New player joined, do the thing
                 Console.WriteLine("Player Connected");
                 lastState.PlayerStates.Add(new(playerId));
-                // TODO: make it handle player disconnect on timeout
             }
             if (p.Time < receivedTime)
             {

@@ -39,9 +39,22 @@ public static class GameAssets
         // Music And Ambience
         //---------------------------------------------------------
 
-        // Game Levels
+        // Gameplay
         //---------------------------------------------------------
         MapLogic.Init();
+        // Load skins
+        string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
+        var counter = 0;
+        foreach (string skin in skins)
+        {
+            var s = new Skin();
+            s.Id = counter++;
+            s.TextureLocation = skin;
+            s.Texture = Raylib.LoadTexture(skin);
+            Gameplay.Skins.Add(s);
+        }
+        if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
+
     }
 
     /// <summary>
@@ -70,9 +83,10 @@ public static class GameAssets
         //---------------------------------------------------------
         if (MusicAndAmbience.IsMusicPlaying) Raylib.UnloadMusicStream(MusicAndAmbience.Music);
 
-        // Game Levels
+        // Gameplay
         //---------------------------------------------------------
         MapLogic.Unload();
+        foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
     }
 
     /// <summary>
@@ -92,7 +106,7 @@ public static class GameAssets
         public static Texture CurrentMapTexture; // This is the whole map baked into an image
         public static Texture HookTexture;
         public static List<Weapon> Weapons { get; set; } = [];
-        public static Texture PlayerTexture; // TODO: load skin
+        public static List<Skin> Skins { get; set; } = new List<Skin>();
     }
 
     /// <summary>

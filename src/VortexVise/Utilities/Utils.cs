@@ -95,10 +95,10 @@ public static class Utils
     public static int GetNumberOfLocalPlayers()
     {
         var players = 0;
-        if (GameCore.PlayerOneGamepad != -9) players++;
-        if (GameCore.PlayerTwoGamepad != -9) players++;
-        if (GameCore.PlayerThreeGamepad != -9) players++;
-        if (GameCore.PlayerFourGamepad != -9) players++;
+        if (GameCore.PlayerOneProfile.Gamepad != -9) players++;
+        if (GameCore.PlayerTwoProfile.Gamepad != -9) players++;
+        if (GameCore.PlayerThreeProfile.Gamepad != -9) players++;
+        if (GameCore.PlayerFourProfile.Gamepad != -9) players++;
         return players;
     }
 

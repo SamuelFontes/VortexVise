@@ -59,7 +59,7 @@ public class GameState
             foreach (Match match in playerMatches)
             {
                 int playerId = int.Parse(Regex.Match(match.Value, @"(?<=(\|ID))[\s\S]*?(?=\|)").Value);
-                var player = new PlayerState(playerId);
+                var player = new PlayerState(playerId, new Models.Skin());
                 player.Position = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|PX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|PY))[\s\S]*?(?=\|)").Value));
                 player.Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|VX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|VY))[\s\S]*?(?=\|)").Value));
                 player.Collision = PlayerLogic.GetPlayerCollision(player.Position);

@@ -13,7 +13,6 @@ public static class PlayerLogic
 {
     static public void Init()
     {
-        GameAssets.Gameplay.PlayerTexture = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
     }
     public static void CopyLastPlayerState(PlayerState currentPlayerState, PlayerState lastPlayerState)
@@ -49,7 +48,7 @@ public static class PlayerLogic
         if (currentPlayerState.IsDead)
         {
             currentPlayerState.SpawnTimer += deltaTime;
-            if(currentPlayerState.SpawnTimer > GameMatch.PlayerSpawnDelay)
+            if (currentPlayerState.SpawnTimer > GameMatch.PlayerSpawnDelay)
             {
                 currentPlayerState.IsDead = false;
                 currentPlayerState.SpawnTimer = 0;
@@ -201,7 +200,7 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (currentPlayerState.Position.Y == collision.Y - GameAssets.Gameplay.PlayerTexture.height + GameMatch.PlayerCollisionOffset.Y)
+                    if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + GameMatch.PlayerCollisionOffset.Y)
                         currentPlayerState.IsTouchingTheGround = true;
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
@@ -211,7 +210,7 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - GameAssets.Gameplay.PlayerTexture.height + GameMatch.PlayerCollisionOffset.Y);
+                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + GameMatch.PlayerCollisionOffset.Y);
                             currentPlayerState.Collision = playerCollision;
                             currentPlayerState.Collision = new(currentPlayerState.Collision.X, collision.Y - playerCollision.Height, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
                             currentPlayerState.SetVelocityY(0);
@@ -282,10 +281,9 @@ public static class PlayerLogic
 
     public static Vector2 GetPlayerCenterPosition(Vector2 playerPosition)
     {
-
         Vector2 position = new(playerPosition.X, playerPosition.Y);
-        position.X += GameAssets.Gameplay.PlayerTexture.width * 0.5f;
-        position.Y += GameAssets.Gameplay.PlayerTexture.height * 0.5f;
+        position.X += 32 * 0.5f;
+        position.Y += 32 * 0.5f;
         return position;
     }
     public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)

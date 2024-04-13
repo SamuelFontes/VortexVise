@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
+using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
@@ -20,6 +21,7 @@ public class PlayerState
     public int HeathPoints = 100;
     public bool IsDead { get; set; } = false;
     public float SpawnTimer { get; set; } = 0;
+    public Skin Skin { get; set; }
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
 
     public InputState Input { get; set; } = new InputState();
@@ -27,10 +29,11 @@ public class PlayerState
     public AnimationState Animation { get; set; } = new AnimationState();
     public List<WeaponState> WeaponStates { get; set; } = new List<WeaponState>();
 
-    public PlayerState(int id)
+    public PlayerState(int id, Skin skin)
     {
         Id = id;
         Position = GameMatch.PlayerSpawnPoint;
+        Skin = skin;
     }
     public bool IsLookingRight()
     {

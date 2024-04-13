@@ -19,7 +19,6 @@ public static class MenuScene
     static Texture logo;
     static Texture background;
     static Texture box;
-    static Texture player;
     static Texture keyboard;
     static Texture gamepad;
     static Texture gamepadSlotOn;
@@ -47,9 +46,15 @@ public static class MenuScene
         keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
-        player = Raylib.LoadTexture("Resources/Skins/fatso.png"); // TODO: make load skin, not this hardcoded crap
         gamepadSlotOn = Raylib.LoadTexture("resources/Common/gamepad_slot_on.png");
         gamepadSlotOff = Raylib.LoadTexture("resources/Common/gamepad_slot_off.png");
+
+        // Load player skins
+        //----------------------------------------------------------------------------------
+        GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------
@@ -68,6 +73,8 @@ public static class MenuScene
         //menuItems.Add(new MenuItem("127.0.0.1", MainMenuItens.IP, state, true, MainMenuTypes.TextInput));
         menuItems.Add(new MenuItem("GO BACK", Scenes.MenuItem.Return, state, true));
 
+
+
     }
 
     static public void UpdateMenuScene()
@@ -76,16 +83,16 @@ public static class MenuScene
         if (currentState == MenuState.PressStart)
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
-                GameCore.PlayerOneGamepad = -1; // Mouse and keyboard
+                GameCore.PlayerOneProfile.Gamepad = -1; // Mouse and keyboard
             else if (Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                GameCore.PlayerOneGamepad = 0;
+                GameCore.PlayerOneProfile.Gamepad = 0;
             else if (Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                GameCore.PlayerOneGamepad = 1;
+                GameCore.PlayerOneProfile.Gamepad = 1;
             else if (Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                GameCore.PlayerOneGamepad = 2;
+                GameCore.PlayerOneProfile.Gamepad = 2;
             else if (Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                GameCore.PlayerOneGamepad = 3;
-            if (GameCore.PlayerOneGamepad != -9)
+                GameCore.PlayerOneProfile.Gamepad = 3;
+            if (GameCore.PlayerOneProfile.Gamepad != -9)
             {
                 GameUserInterface.IsCursorVisible = false;
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.8f);
@@ -97,7 +104,7 @@ public static class MenuScene
         }
         else
         {
-            var input = GameInput.GetInput(GameCore.PlayerOneGamepad);
+            var input = GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad);
             if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
             {
                 if (currentState == MenuState.InputSelection)
@@ -209,35 +216,90 @@ public static class MenuScene
                 if (input.Back)
                 {
                     // Disconnect or go back one screen 
-                    if (i == GameCore.PlayerOneGamepad)
+                    if (i == GameCore.PlayerOneProfile.Gamepad)
                     {
                         currentState = MenuState.MainMenu;
                         break;
                     }
-                    else if (i == GameCore.PlayerTwoGamepad)
+                    else if (i == GameCore.PlayerTwoProfile.Gamepad)
                     {
-                        GameCore.PlayerTwoGamepad = -9;
+                        GameCore.PlayerTwoProfile.Gamepad = -9;
                     }
-                    else if (i == GameCore.PlayerThreeGamepad)
+                    else if (i == GameCore.PlayerThreeProfile.Gamepad)
                     {
-                        GameCore.PlayerThreeGamepad = -9;
+                        GameCore.PlayerThreeProfile.Gamepad = -9;
                     }
-                    else if (i == GameCore.PlayerFourGamepad)
+                    else if (i == GameCore.PlayerFourProfile.Gamepad)
                     {
-                        GameCore.PlayerFourGamepad = -9;
+                        GameCore.PlayerFourProfile.Gamepad = -9;
+                    }
+
+                }
+                else if (input.UIRight)
+                {
+                    if (i == GameCore.PlayerOneProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.First();
+                        GameCore.PlayerOneProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerTwoProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.First();
+                        GameCore.PlayerTwoProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerThreeProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.First();
+                        GameCore.PlayerThreeProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerFourProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.First();
+                        GameCore.PlayerFourProfile.Skin = skin;
+                    }
+                }
+                else if (input.UILeft)
+                {
+                    if (i == GameCore.PlayerOneProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
+                        GameCore.PlayerOneProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerTwoProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
+                        GameCore.PlayerTwoProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerThreeProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
+                        GameCore.PlayerThreeProfile.Skin = skin;
+                    }
+                    else if (i == GameCore.PlayerFourProfile.Gamepad)
+                    {
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
+                        if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
+                        GameCore.PlayerFourProfile.Skin = skin;
                     }
 
                 }
                 else if (input.Confirm)
                 {
-                    if (i != GameCore.PlayerOneGamepad && i != GameCore.PlayerTwoGamepad && i != GameCore.PlayerThreeGamepad && i != GameCore.PlayerFourGamepad)
+                    if (i != GameCore.PlayerOneProfile.Gamepad && i != GameCore.PlayerTwoProfile.Gamepad && i != GameCore.PlayerThreeProfile.Gamepad && i != GameCore.PlayerFourProfile.Gamepad)
                     {
-                        if (GameCore.PlayerTwoGamepad == -9)
-                            GameCore.PlayerTwoGamepad = i;
-                        else if (GameCore.PlayerThreeGamepad == -9)
-                            GameCore.PlayerThreeGamepad = i;
-                        else if (GameCore.PlayerFourGamepad == -9)
-                            GameCore.PlayerFourGamepad = i;
+                        if (GameCore.PlayerTwoProfile.Gamepad == -9)
+                            GameCore.PlayerTwoProfile.Gamepad = i;
+                        else if (GameCore.PlayerThreeProfile.Gamepad == -9)
+                            GameCore.PlayerThreeProfile.Gamepad = i;
+                        else if (GameCore.PlayerFourProfile.Gamepad == -9)
+                            GameCore.PlayerFourProfile.Gamepad = i;
                     }
                 }
             }
@@ -392,21 +454,21 @@ public static class MenuScene
         // Render BoxPlayerOne
         Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 216);
         Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerOne, box.width, box.height, GameCore.PlayerOneGamepad, GameCore.PlayerOneProfile.Name);
+        DrawPlayerCard(boxPlayerOne, box.width, box.height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
 
         Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 216);
         Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoGamepad, GameCore.PlayerTwoProfile.Name);
+        DrawPlayerCard(boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
 
         Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 16);
         Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerThree, box.width, box.height, GameCore.PlayerThreeGamepad, GameCore.PlayerThreeProfile.Name);
+        DrawPlayerCard(boxPlayerThree, box.width, box.height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
 
         Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 16);
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourGamepad, GameCore.PlayerFourProfile.Name);
+        DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
-        static void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName)
+        static void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, Texture player)
         {
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);

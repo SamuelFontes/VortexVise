@@ -93,14 +93,14 @@ public static class GameRenderer
     static void DrawPlayerState(PlayerState playerState)
     {
         if (playerState.IsDead) return;
-        Rectangle sourceRec = new(0.0f, 0.0f, (float)GameAssets.Gameplay.PlayerTexture.width * playerState.Direction, GameAssets.Gameplay.PlayerTexture.height);
+        Rectangle sourceRec = new(0.0f, 0.0f, playerState.Skin.Texture.width * playerState.Direction, playerState.Skin.Texture.height);
 
-        Rectangle destRec = new(playerState.Position.X + GameAssets.Gameplay.PlayerTexture.width * 0.5f, playerState.Position.Y + GameAssets.Gameplay.PlayerTexture.height * 0.5f, GameAssets.Gameplay.PlayerTexture.width, GameAssets.Gameplay.PlayerTexture.height);
+        Rectangle destRec = new(playerState.Position.X + playerState.Skin.Texture.width * 0.5f, playerState.Position.Y + playerState.Skin.Texture.height * 0.5f, playerState.Skin.Texture.width, playerState.Skin.Texture.height);
 
         var rotation = playerState.Animation.GetAnimationRotation();
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
-        Raylib.DrawTexturePro(GameAssets.Gameplay.PlayerTexture, sourceRec, destRec, new Vector2(GameAssets.Gameplay.PlayerTexture.width * 0.5f, GameAssets.Gameplay.PlayerTexture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
+        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
 
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)
@@ -143,7 +143,7 @@ public static class GameRenderer
                     break;
                 }
             }
-            Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(GameAssets.Gameplay.PlayerTexture.width * 0.5f, GameAssets.Gameplay.PlayerTexture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
+            Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
         }
 
         if (Utils.Debug())
