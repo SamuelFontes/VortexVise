@@ -1,5 +1,6 @@
 ﻿using VortexVise.GameGlobals;
 using VortexVise.Logic;
+using VortexVise.Models;
 using VortexVise.Networking;
 using VortexVise.States;
 using VortexVise.Utilities;
@@ -44,8 +45,6 @@ static internal class GameplayScene
         if (GameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id, GameCore.PlayerThreeProfile.Skin));
         if (GameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id, GameCore.PlayerFourProfile.Skin));
 
-        // Play gameplay music
-        GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
 
     }
 
@@ -54,8 +53,11 @@ static internal class GameplayScene
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
         {
-            var bot = new PlayerState(99, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
+            var b = new Bot();
+            b.Id = bot.Id;
+            GameMatch.Bots.Add(b);
             LastState.PlayerStates.Add(bot); // Add testing dummy
         }
         bool isSlowerThanTickRate = false;

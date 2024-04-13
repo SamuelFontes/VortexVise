@@ -44,6 +44,7 @@ public static class PlayerLogic
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death);
             currentPlayerState.IsDead = true;
             currentPlayerState.WeaponStates.Clear();
+            currentPlayerState.HookState.IsHookReleased = false;
         }
 
         if (currentPlayerState.IsDead)

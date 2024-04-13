@@ -88,5 +88,5 @@ public static class GameMatch
     /// </summary>
     public static Vector2 PlayerCollisionOffset = new(10, 6);
 
-
+    public static List<Bot> Bots { get; set; } = new();
 }

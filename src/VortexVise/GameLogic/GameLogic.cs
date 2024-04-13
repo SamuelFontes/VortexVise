@@ -31,7 +31,7 @@ public static class GameLogic
             if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
             // TODO: Get input from network players here for the corresponding tick
-            if (currentPlayerState.IsBot) currentPlayerState.Input = BotLogic.GenerateBotInput();
+            if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state,currentPlayerState);
 
 
             // Handle Player Behaviour
