@@ -20,16 +20,21 @@ public static class GameRenderer
     /// Render game state to the screen.
     /// </summary>
     /// <param name="state">Current game state.</param>
-    public static void DrawGameState(GameState state)
+    public static void DrawGameState(GameState state, PlayerState mainPlayer)
     {
         // All rendering logic should go here
         DrawMap();
         DrawWeaponDrops(state);
         foreach (var playerState in state.PlayerStates)
         {
+            if (playerState.Id == mainPlayer.Id) continue;
+
             DrawHookState(playerState);
             DrawPlayerState(playerState);
         }
+        // Draw main player on top for this screen
+        DrawHookState(mainPlayer);
+        DrawPlayerState(mainPlayer);
         DrawProjectiles(state);
     }
 
