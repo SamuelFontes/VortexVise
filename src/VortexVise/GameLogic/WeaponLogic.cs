@@ -248,23 +248,24 @@ public static class WeaponLogic
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
 
-                    Vector2 velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce * currentPlayerState.Direction * -1,currentPlayerState.Velocity.Y +  -GameMatch.GranadeForce);
+                    Vector2 velocity = new(GameMatch.GranadeForce * currentPlayerState.Direction * -1, -GameMatch.GranadeForce);
                     if (currentPlayerState.Input.Left && currentPlayerState.Input.Down) // ↙ 
-                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                        velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down) // ↘
-                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                        velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Down) // ↓
-                        velocity = new(currentPlayerState.Velocity.X, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                        velocity = new(0, GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up) // ↖
-                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce * 0.6f, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                        velocity = new(-GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up) // ↗
-                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce * 0.6f, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                        velocity = new(GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Left) // ↖
-                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                        velocity = new(-GameMatch.GranadeForce, -GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Right) // ↗
-                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                        velocity = new(GameMatch.GranadeForce, -GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Up) // ↑
-                        velocity = new(0, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.8f);
+                        velocity = new(0, -GameMatch.GranadeForce);
+                    velocity = Utils.OnlyAddVelocity(velocity, currentPlayerState.Velocity, 2);
 
                     var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
                     gameState.DamageHitBoxes.Add(hitbox);

@@ -28,7 +28,6 @@ public static class PlayerHookLogic
         }
         else if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {
-            // FIXME TODO:::::::::::::::::::::::::::: hook pull force being used to throw
             // start Hook shoot
             currentPlayerState.HookState.IsHookReleased = true;
             currentPlayerState.HookState.IsHookAttached = false;
@@ -37,7 +36,7 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, GameMatch.HookSize, GameMatch.HookSize);
 
             // Play hook shoot sound
-            if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookShoot);
 
             // Reset velocity
@@ -47,57 +46,58 @@ public static class PlayerHookLogic
             if (currentPlayerState.Input.Left && currentPlayerState.Input.Down)
             {
                 // ↙ 
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
+                currentPlayerState.HookState.Velocity = new(-GameMatch.HookShootForce, GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down)
             {
                 // ↘
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
+                currentPlayerState.HookState.Velocity = new(GameMatch.HookShootForce, GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Down)
             {
                 // ↓
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X, currentPlayerState.HookState.Velocity.Y + GameMatch.HookPullForce);
+                currentPlayerState.HookState.Velocity = new(0, GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up)
             {
                 // ↖
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(-GameMatch.HookShootForce * 0.5f, -GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up)
             {
                 // ↗
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce * 0.6f, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(GameMatch.HookShootForce * 0.5f, -GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Left)
             {
                 // ↖
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(-GameMatch.HookShootForce, -GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Right)
             {
                 // ↗
-                currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                currentPlayerState.HookState.Velocity = new(GameMatch.HookShootForce, -GameMatch.HookShootForce);
             }
             else if (currentPlayerState.Input.Up)
             {
                 // ↑
-                currentPlayerState.HookState.Velocity = new(0, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.8f);
+                currentPlayerState.HookState.Velocity = new(0, -GameMatch.HookShootForce * 1.5f);
             }
             else
             {
                 // This will use the player direction
                 if (currentPlayerState.IsLookingRight())
                 {
-                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                    currentPlayerState.HookState.Velocity = new(0 + GameMatch.HookShootForce, -GameMatch.HookShootForce);
                 }
                 else
                 {
-                    currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X - GameMatch.HookShootForce, currentPlayerState.HookState.Velocity.Y - GameMatch.HookPullForce * 0.5f);
+                    currentPlayerState.HookState.Velocity = new(0 - GameMatch.HookShootForce, -GameMatch.HookShootForce);
 
                 }
             }
-            currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + currentPlayerState.Velocity.X, currentPlayerState.HookState.Velocity.Y);
+            currentPlayerState.HookState.Velocity = Utils.OnlyAddVelocity(currentPlayerState.HookState.Velocity, currentPlayerState.Velocity, 2);
+            //currentPlayerState.HookState.Velocity = new(currentPlayerState.HookState.Velocity.X + currentPlayerState.Velocity.X, currentPlayerState.HookState.Velocity.Y);
         }
 
         else if (currentPlayerState.HookState.IsPressingHookKey && !currentPlayerState.Input.Hook)
@@ -163,7 +163,7 @@ public static class PlayerHookLogic
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
-                    if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, volume: 0.5f);
                 }
             }

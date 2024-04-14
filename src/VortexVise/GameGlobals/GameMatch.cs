@@ -55,7 +55,7 @@ public static class GameMatch
     /// <summary>
     /// Define how fast the hook goes when shoot.
     /// </summary>
-    public static readonly float HookShootForce = 1000;
+    public static readonly float HookShootForce = 1200;
     /// <summary>
     /// Define max hook length, when it reachs this size it will stop shooting.
     /// </summary>
@@ -90,7 +90,7 @@ public static class GameMatch
     /// <summary>
     /// Define how fast a granade go
     /// </summary>
-    public static readonly float GranadeForce = 500;
+    public static readonly float GranadeForce = 250;
 
     public static List<Bot> Bots { get; set; } = new();
     /// <summary>

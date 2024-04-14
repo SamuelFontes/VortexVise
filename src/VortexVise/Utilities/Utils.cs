@@ -103,4 +103,21 @@ public static class Utils
     }
 
     public static float MIN(float a, float b) { return ((a) < (b) ? (a) : (b)); }
+
+    /// <summary>
+    /// Will add the velocity, it will not subtract if its negative. Also can multiply the velocity being added, I have no idea how that works but doubling the added velocity works nice when throwing things from an entity in movement.
+    /// </summary>
+    /// <param name="velocity">Original velocity</param>
+    /// <param name="velocityToAdd">Velocity to add</param>
+    /// <param name="multiplier">Optional: Will multiply the velocity to add before adding</param>
+    /// <returns>The added velocity</returns>
+    public static Vector2 OnlyAddVelocity(Vector2 velocity, Vector2 velocityToAdd, float multiplier = 1)
+    {
+        Vector2 newVelocity = velocity;
+        if ((velocity.X <= 0 && velocityToAdd.X <= 0) || (velocity.X >= 0 && velocityToAdd.X >= 0))
+            newVelocity += new Vector2(velocityToAdd.X * multiplier, 0);
+        if ((velocity.Y <= 0 && velocityToAdd.Y <= 0) || (velocity.Y >= 0 && velocityToAdd.Y >= 0))
+            newVelocity += new Vector2(0, velocityToAdd.Y * multiplier);
+        return newVelocity;
+    }
 }
