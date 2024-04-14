@@ -105,7 +105,11 @@ public static class GameRenderer
         var rotation = playerState.Animation.GetAnimationRotation();
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
 
-        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
+        // Player color
+        var color = Raylib.WHITE;
+        if (playerState.DamagedTimer > 0) color = Raylib.RED;
+
+        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, color); // Draw Player 
 
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)

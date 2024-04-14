@@ -306,6 +306,7 @@ public static class WeaponLogic
             {
                 // Dude was hit by projectile
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 0.5f);
+                currentPlayerState.DamagedTimer = 0.2f;
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
                 currentPlayerState.HeathPoints -= hitbox.Weapon.Damage;
                 hitbox.ShouldDisappear = true;

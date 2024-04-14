@@ -34,7 +34,7 @@ public static class GameLogic
             if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state, currentPlayerState);
 
 
-            // Handle Player Behaviour
+            // Handle Player Behavior
             PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
             PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime);
             if (currentPlayerState.IsDead)

@@ -31,11 +31,13 @@ public static class PlayerLogic
         currentPlayerState.IsDead = lastPlayerState.IsDead;
         currentPlayerState.SpawnTimer = lastPlayerState.SpawnTimer;
         currentPlayerState.IsBot = lastPlayerState.IsBot;
+        currentPlayerState.DamagedTimer = lastPlayerState.DamagedTimer;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
     {
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
+        if(currentPlayerState.DamagedTimer > 0) currentPlayerState.DamagedTimer -= deltaTime;
     }
     public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime)
     {
