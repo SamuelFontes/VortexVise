@@ -37,9 +37,9 @@ public static class PlayerLogic
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
     {
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
-        if(currentPlayerState.DamagedTimer > 0) currentPlayerState.DamagedTimer -= deltaTime;
+        if (currentPlayerState.DamagedTimer > 0) currentPlayerState.DamagedTimer -= deltaTime;
     }
-    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime)
+    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime, GameState currentGameState)
     {
         if (currentPlayerState.HeathPoints <= 0 && !currentPlayerState.IsDead)
         {
@@ -47,6 +47,7 @@ public static class PlayerLogic
             currentPlayerState.IsDead = true;
             currentPlayerState.WeaponStates.Clear();
             currentPlayerState.HookState.IsHookReleased = false;
+            currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Explosion, Position = currentPlayerState.Position });
         }
 
         if (currentPlayerState.IsDead)
@@ -96,7 +97,7 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
-            if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-GameMatch.PlayerJumpForce);
@@ -295,7 +296,7 @@ public static class PlayerLogic
     {
         var verticalForce = -GameMatch.PlayerJumpForce * 0.2f;
         if (currentPlayerState.Input.Up) verticalForce *= 2;
-        if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
             GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
         if (isDoubleJump)
         {
@@ -341,23 +342,23 @@ public static class PlayerLogic
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
                     idToRemove = drop.Id;
-                    if(PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
                     break;
                 }
             }
-            if(idToRemove != null)
-                currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id); 
+            if (idToRemove != null)
+                currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id);
         }
     }
 
     public static bool IsPlayerLocal(int playerId)
     {
-        bool isPlayerLocal = false; 
-        if(GameCore.PlayerOneProfile.Gamepad != -9 && GameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
-        if(GameCore.PlayerTwoProfile.Gamepad != -9 && GameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
-        if(GameCore.PlayerThreeProfile.Gamepad != -9 && GameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
-        if(GameCore.PlayerFourProfile.Gamepad != -9 && GameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
+        bool isPlayerLocal = false;
+        if (GameCore.PlayerOneProfile.Gamepad != -9 && GameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
+        if (GameCore.PlayerTwoProfile.Gamepad != -9 && GameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
+        if (GameCore.PlayerThreeProfile.Gamepad != -9 && GameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
+        if (GameCore.PlayerFourProfile.Gamepad != -9 && GameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
         return isPlayerLocal;
     }
 }

@@ -21,6 +21,11 @@ public static class GameLogic
         WeaponLogic.CopyLastState(state, lastState);
         WeaponLogic.ProcessHitBoxes(state, lastState, deltaTime, state.Gravity);
 
+        // Update state animations
+        state.Animations = lastState.Animations; // This shouldn't be here
+        state.Animations.RemoveAll(x => x.ShouldDisappear);
+        foreach (var animation in state.Animations) animation.Animate(deltaTime);
+
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
@@ -36,7 +41,7 @@ public static class GameLogic
 
             // Handle Player Behavior
             PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
-            PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime);
+            PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime, state);
             if (currentPlayerState.IsDead)
             {
                 // Just skip all calculations for this player

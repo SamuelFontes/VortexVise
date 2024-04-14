@@ -20,7 +20,7 @@ public static class GameMatch
     /// <summary>
     /// Time in seconds it takes between weapon spawns.
     /// </summary>
-    public static int WeaponSpawnDelay { get; set; } = 3;
+    public static int WeaponSpawnDelay { get; set; } = 4;
     /// <summary>
     /// Current loaded map.
     /// </summary>

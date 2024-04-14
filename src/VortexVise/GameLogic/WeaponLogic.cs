@@ -309,6 +309,7 @@ public static class WeaponLogic
                         {
                             hitbox.Explode();
                         }
+                        break;
                     }
                 }
             }

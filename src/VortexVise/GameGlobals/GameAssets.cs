@@ -56,6 +56,10 @@ public static class GameAssets
         }
         if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
 
+        // Animation
+        //---------------------------------------------------------
+        Animations.LoadAnimations();
+
     }
 
     /// <summary>
@@ -89,6 +93,10 @@ public static class GameAssets
         //---------------------------------------------------------
         MapLogic.Unload();
         foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
+
+        // Animation
+        //---------------------------------------------------------
+        Animations.UnloadAnimations();
     }
 
     /// <summary>
@@ -181,6 +189,14 @@ public static class GameAssets
 
     public static class Animations
     {
-        public static Animation Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5);
+        public static Animation Explosion;
+        public static void LoadAnimations()
+        {
+            Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5);
+        }
+        public static void UnloadAnimations()
+        {
+            Raylib.UnloadTexture(Explosion.Texture);
+        }
     }
 }

@@ -36,6 +36,23 @@ public static class GameRenderer
         DrawHookState(mainPlayer);
         DrawPlayerState(mainPlayer);
         DrawProjectiles(state);
+        DrawStateAnimations(state);
+    }
+
+    private static void DrawStateAnimations(GameState state)
+    {
+        foreach (var animation in state.Animations)
+        {
+            if (animation.Animation == null) continue;
+
+            var frameStartX = animation.State * animation.Animation.Size;
+            Rectangle sourceRec = new(frameStartX, 0.0f, animation.Animation.Size, animation.Animation.Texture.height);
+
+            Rectangle destRec = new(animation.Position.X, animation.Position.Y, animation.Animation.Size, animation.Animation.Texture.height);
+
+            Raylib.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, Raylib.WHITE);
+
+        }
     }
 
     private static void DrawProjectiles(GameState state)

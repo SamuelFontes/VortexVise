@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Models;
 
 namespace VortexVise.States;
 
@@ -7,11 +8,16 @@ namespace VortexVise.States;
 /// </summary>
 public class AnimationState // This is only client side
 {
+    // Using this for character animation and sprite animation is probably a bad idea, but I should just keep going.
     public float AnimationTimer = 0f;
     public int State = 0;
     public float Rotation = 0;
     public bool IsDashing = false;
     public bool IsDashFacingRight = false;
+    public bool Loop = false;
+    public bool ShouldDisappear = false;
+    public Vector2 Position = new(0, 0);
+    public Animation? Animation { get; set; }
 
     /// <summary>
     /// This is used to process the player animation
@@ -105,4 +111,26 @@ public class AnimationState // This is only client side
         return (int)Rotation;
     }
 
+    public void Animate(float deltaTime)
+    {
+        if (Animation == null) return;
+
+        AnimationTimer += deltaTime;
+        if (AnimationTimer > 0.05f) // Animation frame
+        {
+            AnimationTimer = 0;
+            if (State < Animation.StateAmount - 1)
+            {
+                State++;
+            }
+            else if (Loop)
+            {
+                State = 0;
+            }
+            else
+            {
+                ShouldDisappear = true;
+            }
+        }
+    }
 }
