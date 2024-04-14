@@ -3,7 +3,7 @@
 namespace VortexVise.Models;
 
 /// <summary>
-/// Define the player apperance.
+/// Define the player appearance.
 /// </summary>
 public class Skin
 {

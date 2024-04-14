@@ -10,7 +10,7 @@ namespace VortexVise.GameGlobals;
 /// GameAssets
 ///
 /// This will hold all the global game assets. 
-/// It's resposible for loading and unloading all assets to memory.
+/// It's responsible for loading and unloading all assets to memory.
 /// </summary>
 public static class GameAssets
 {
@@ -122,7 +122,7 @@ public static class GameAssets
         public static bool IsMusicPlaying = false;
         public static bool IsAmbiencePlaying = false;
 
-        // Musics
+        // Music list
         //---------------------------------------------------------
         public static string MusicAssetPixelatedDiscordance = "Resources/Audio/Music/PixelatedDiscordance.mp3";
         public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
