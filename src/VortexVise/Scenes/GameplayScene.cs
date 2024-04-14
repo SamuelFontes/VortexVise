@@ -50,8 +50,8 @@ static internal class GameplayScene
 
     static public void UpdateGameplayScene()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_LEFT)) MapLogic.LoadNextMap();
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
         {
             var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
@@ -59,6 +59,10 @@ static internal class GameplayScene
             b.Id = bot.Id;
             GameMatch.Bots.Add(b);
             LastState.PlayerStates.Add(bot); // Add testing dummy
+        }
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_THUMB))
+        {
+            LastState.PlayerStates.RemoveAll(x => x.IsBot);
         }
         bool isSlowerThanTickRate = false;
 
