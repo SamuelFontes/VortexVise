@@ -25,9 +25,20 @@ public class DamageHitBoxState
     public Rectangle HitBox { get; set; }
     public Vector2 Velocity { get; set; }
     public Weapon Weapon { get; set; }
-    public WeaponState WeaponState { get; set; }    
+    public WeaponState WeaponState { get; set; }
     public float HitBoxTimer { get; set; }
     public int Direction { get; set; }
     public bool ShouldDisappear { get; set; } = false;
     public bool ShouldColide { get; set; } = false;
+    public bool IsExplosion { get; set; } = false;
+    public void Explode()
+    {
+        if (IsExplosion) return;
+        HitBox = new(HitBox.X - 64, HitBox.Y - 64, HitBox.Width + 128, HitBox.Height + 128);
+        Velocity = new(0, 0);
+        ShouldColide = false;
+        HitBoxTimer = 0.2f;
+        ShouldDisappear = false;
+        IsExplosion = true;
+    }
 }

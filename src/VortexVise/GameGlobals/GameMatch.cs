@@ -18,9 +18,9 @@ public static class GameMatch
     /// </summary>
     public static int PlayerSpawnDelay { get; set; } = 3;
     /// <summary>
-    /// Time in seconds it takes between wapon spawns.
+    /// Time in seconds it takes between weapon spawns.
     /// </summary>
-    public static int WeaponSpawnDelay { get; set; } = 8;
+    public static int WeaponSpawnDelay { get; set; } = 3;
     /// <summary>
     /// Current loaded map.
     /// </summary>

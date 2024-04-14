@@ -10,11 +10,11 @@ namespace VortexVise.GameGlobals;
 public static class GameCore
 {
     /// <summary>
-    /// Defines tickrate the game and server runs at. This tick defines the minimal amount of game simulations per second that need to occur even if the performs badly and cause low FPS. This will ensure a consistent game behaviour independently of low performance.
+    /// Defines tickrate the game and server runs at. This tick defines the minimal amount of game simulations per second that need to occur even if the performs badly and cause low FPS. This will ensure a consistent game behavior independently of low performance.
     /// </summary>
     public static int GameTickRate { get; private set; } = 120;
     /// <summary>
-    /// Render texture that the game will be rendered at before scalling it to the display's resolution.
+    /// Render texture that the game will be rendered at before scaling it to the display's resolution.
     /// </summary>
     public static RenderTexture GameRendering { get; set; }
     /// <summary>
@@ -26,7 +26,7 @@ public static class GameCore
     /// </summary>
     public static int GameScreenHeight { get; private set; } = 540;
     /// <summary>
-    /// Indicates how much the game is being scalled based on the game resolution and screen resolution.
+    /// Indicates how much the game is being scaled based on the game resolution and screen resolution.
     /// </summary>
     public static float GameScreenScale { get; set; }
     /// <summary>

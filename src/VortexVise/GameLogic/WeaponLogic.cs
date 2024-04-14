@@ -134,7 +134,7 @@ public static class WeaponLogic
 
 
                     // Load the texture
-                    weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loding replicated textures
+                    weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loading replicated textures
                     if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTexture = Raylib.LoadTexture(weapon.ProjectileTextureLocation);
 
                     // Define Id and add to list
@@ -186,7 +186,6 @@ public static class WeaponLogic
         {
             drop.DropTimer += deltaTime;
         }
-        //currentGameState.WeaponDrops.RemoveAll(x => x.DropTimer > 60);
 
         // create animation
         WeaponRotation -= deltaTime * 100;
@@ -293,6 +292,7 @@ public static class WeaponLogic
         foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
+            if (hitbox.IsExplosion) hitbox.ShouldDisappear = false;
 
             hitbox.HitBox = new Rectangle(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime, hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime, hitbox.HitBox.Width, hitbox.HitBox.Height);
 
@@ -305,6 +305,10 @@ public static class WeaponLogic
                     {
                         hitbox.ShouldDisappear = true;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 2f);
+                        if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade)
+                        {
+                            hitbox.Explode();
+                        }
                     }
                 }
             }
@@ -336,17 +340,19 @@ public static class WeaponLogic
 
     public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)
     {
-        var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id);
+        var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || x.IsExplosion);
         foreach (var hitbox in hitboxes)
         {
             if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
             {
                 // Dude was hit by projectile
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 0.5f);
-                currentPlayerState.DamagedTimer = 0.2f;
-                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
                 currentPlayerState.HeathPoints -= hitbox.Weapon.Damage;
                 hitbox.ShouldDisappear = true;
+                currentPlayerState.DamagedTimer = 0.2f;
+                currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
+
+                if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) hitbox.Explode();
 
                 // If is melee weapon it should spend ammo when hitting someone
                 if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
