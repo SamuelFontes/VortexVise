@@ -183,6 +183,7 @@ public class GameState
             playerState.Velocity = new(0, 0);
             playerState.WeaponStates.Clear();
             playerState.HookState.IsHookReleased = false;   
+            playerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
         }
         WeaponDrops.Clear();
         foreach (var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
