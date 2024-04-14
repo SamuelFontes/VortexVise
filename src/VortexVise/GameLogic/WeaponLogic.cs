@@ -167,7 +167,7 @@ public static class WeaponLogic
             WeaponSpawnTimer = 0;
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
 
-            Vector2 spawnPoint= GameMatch.CurrentMap.ItemSpawnPoints.Where(x => !currentGameState.WeaponDrops.Select(d => d.Position).Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+            Vector2 spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.Where(x => !currentGameState.WeaponDrops.Select(d => d.Position).Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
             if (spawnPoint.X == 0 && spawnPoint.Y == 0) return;
             // Remove old weapons if there is anoter in same place
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
@@ -208,7 +208,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -218,7 +218,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 32, 32), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                     gameState.DamageHitBoxes.Add(hitbox);
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
@@ -257,9 +257,9 @@ public static class WeaponLogic
         }
     }
 
-    public static void ProcessHitBoxes(GameState gameState, float deltaTime)
+    public static void ProcessHitBoxes(GameState currentGameState, GameState lastGameState, float deltaTime)
     {
-        foreach (var hitbox in gameState.DamageHitBoxes)
+        foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
 
@@ -280,8 +280,21 @@ public static class WeaponLogic
             // Check if projectile is outside the map
             if ((hitbox.HitBox.X + hitbox.HitBox.Width <= 0) || (hitbox.HitBox.Y > MapLogic.GetMapSize().Y) || (hitbox.HitBox.Y + hitbox.HitBox.Height <= 0) || (hitbox.HitBox.X > MapLogic.GetMapSize().X))
                 hitbox.ShouldDisappear = true;
+
+            // Melee should follow the player that is using the weapon
+            if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
+            {
+                var player = lastGameState.PlayerStates.FirstOrDefault(p => p.Id == hitbox.PlayerId);
+                if (player != null)
+                {
+                    var p = PlayerLogic.GetPlayerCenterPosition(player.Position);
+                    p.X -= 16 * player.Direction;
+                    hitbox.HitBox = new(p.X - 16, p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
+                }
+            }
+
         }
-        gameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
+        currentGameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }
 
     public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)

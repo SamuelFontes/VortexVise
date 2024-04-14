@@ -19,19 +19,19 @@ public static class GameLogic
 
         // Copy last state
         WeaponLogic.CopyLastState(state, lastState);
-        WeaponLogic.ProcessHitBoxes(state, deltaTime);
+        WeaponLogic.ProcessHitBoxes(state, lastState, deltaTime);
 
         // Simulate Player State
         foreach (var lastPlayerState in lastState.PlayerStates)
         {
-            PlayerState currentPlayerState = new(lastPlayerState.Id,lastPlayerState.Skin);
+            PlayerState currentPlayerState = new(lastPlayerState.Id, lastPlayerState.Skin);
             PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
 
             // Either read player input or get input from last frame 
             if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
                 currentPlayerState.Input = lastPlayerState.Input;
             // TODO: Get input from network players here for the corresponding tick
-            if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state,currentPlayerState);
+            if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state, currentPlayerState);
 
 
             // Handle Player Behaviour
