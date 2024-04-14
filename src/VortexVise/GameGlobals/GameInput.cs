@@ -141,7 +141,7 @@ public static class GameInput
                 input.Confirm = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
                 input.Back = true;
-            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_FACE_RIGHT))
+            if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_TRIGGER_1))
                 input.GrabDrop = true;
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_TRIGGER_2))
                 input.FireWeapon = true;

@@ -169,7 +169,7 @@ public static class WeaponLogic
 
             Vector2 spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.Where(x => !currentGameState.WeaponDrops.Select(d => d.Position).Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
             if (spawnPoint.X == 0 && spawnPoint.Y == 0) return;
-            // Remove old weapons if there is anoter in same place
+            // Remove old weapons if there is another in same place
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
             if (existingWeapon != null) currentGameState.WeaponDrops.Remove(existingWeapon);
 

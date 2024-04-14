@@ -337,7 +337,7 @@ public static class PlayerLogic
                 if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision)) // TODO: if holding max weapons trade with current
                 {
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;
-                    currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more waepons
+                    currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more weapons
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
                     idToRemove = drop.Id;

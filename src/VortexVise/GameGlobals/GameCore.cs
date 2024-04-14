@@ -57,15 +57,15 @@ public static class GameCore
     /// <summary>
     /// Player profile
     /// </summary>
-    public static PlayerProfile PlayerTwoProfile { get; set; } = new() { Id = 0, Name = "PlayerTwo" };
+    public static PlayerProfile PlayerTwoProfile { get; set; } = new() { Id = 1, Name = "PlayerTwo" };
     /// <summary>
     /// Player profile
     /// </summary>
-    public static PlayerProfile PlayerThreeProfile { get; set; } = new() { Id = 0, Name = "PlayerThree" };
+    public static PlayerProfile PlayerThreeProfile { get; set; } = new() { Id = 2, Name = "PlayerThree" };
     /// <summary>
     /// Player profile
     /// </summary>
-    public static PlayerProfile PlayerFourProfile { get; set; } = new() { Id = 0, Name = "PlayerFour" };
+    public static PlayerProfile PlayerFourProfile { get; set; } = new() { Id = 3, Name = "PlayerFour" };
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     /// <summary>
     /// Max amount of weapons a player can carry
