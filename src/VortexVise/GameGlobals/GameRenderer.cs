@@ -47,7 +47,7 @@ public static class GameRenderer
 
             Rectangle destRec = new(hitbox.HitBox.X + hitbox.HitBox.width * 0.5f, hitbox.HitBox.Y + hitbox.HitBox.height * 0.5f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
 
-            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new(hitbox.Weapon.ProjectileTexture.width * 0.5f, hitbox.Weapon.ProjectileTexture.height * 0.5f), (int)WeaponLogic.WeaponRotation, Raylib.WHITE);
+            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new(hitbox.Weapon.ProjectileTexture.width * 0.5f, hitbox.Weapon.ProjectileTexture.height * 0.5f), (int)WeaponLogic.WeaponRotation * 23, Raylib.WHITE);
         }
 
     }

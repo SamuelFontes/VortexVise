@@ -1,5 +1,6 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
@@ -242,6 +243,35 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick, pitch: 0.5f);
                     break;
                 }
+                case Enums.WeaponType.Granade:
+                {
+                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                    p.X -= 16 * currentPlayerState.Direction;
+
+                    Vector2 velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce * currentPlayerState.Direction * -1,currentPlayerState.Velocity.Y +  -GameMatch.GranadeForce);
+                    if (currentPlayerState.Input.Left && currentPlayerState.Input.Down) // ↙ 
+                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                    else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down) // ↘
+                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                    else if (currentPlayerState.Input.Down) // ↓
+                        velocity = new(currentPlayerState.Velocity.X, currentPlayerState.Velocity.Y + GameMatch.GranadeForce);
+                    else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up) // ↖
+                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce * 0.6f, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                    else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up) // ↗
+                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce * 0.6f, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                    else if (currentPlayerState.Input.Left) // ↖
+                        velocity = new(currentPlayerState.Velocity.X - GameMatch.GranadeForce, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                    else if (currentPlayerState.Input.Right) // ↗
+                        velocity = new(currentPlayerState.Velocity.X + GameMatch.GranadeForce, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.5f);
+                    else if (currentPlayerState.Input.Up) // ↑
+                        velocity = new(0, currentPlayerState.Velocity.Y - GameMatch.GranadeForce * 0.8f);
+
+                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
+                    gameState.DamageHitBoxes.Add(hitbox);
+
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.4f);
+                    break;
+                }
             }
             ws.ReloadTimer = 0;
 
@@ -257,7 +287,7 @@ public static class WeaponLogic
         }
     }
 
-    public static void ProcessHitBoxes(GameState currentGameState, GameState lastGameState, float deltaTime)
+    public static void ProcessHitBoxes(GameState currentGameState, GameState lastGameState, float deltaTime, float gravity)
     {
         foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
@@ -292,6 +322,12 @@ public static class WeaponLogic
                     hitbox.HitBox = new(p.X - 16, p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
                 }
             }
+            if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) // If is granade apply gravity
+            {
+                hitbox.Velocity = new(hitbox.Velocity.X, hitbox.Velocity.Y + gravity * 0.5f * deltaTime);
+
+            }
+
 
         }
         currentGameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
@@ -325,7 +361,7 @@ public static class WeaponLogic
         foreach (var weapon in currentPlayerState.WeaponStates)
         {
             if (weapon.CurrentAmmo <= 0)
-                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id) && weapon.Weapon.WeaponType != Enums.WeaponType.Granade && weapon.Weapon.WeaponType != Enums.WeaponType.Mine)
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
         }
         currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);

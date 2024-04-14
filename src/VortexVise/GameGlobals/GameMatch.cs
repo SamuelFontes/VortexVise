@@ -87,6 +87,10 @@ public static class GameMatch
     /// This is defines when the player hitbox starts. The top left of the player sprite starts with 0,0. So this helps to heep the hitbox at the center of the player.
     /// </summary>
     public static Vector2 PlayerCollisionOffset = new(10, 6);
+    /// <summary>
+    /// Define how fast a granade go
+    /// </summary>
+    public static readonly float GranadeForce = 500;
 
     public static List<Bot> Bots { get; set; } = new();
     /// <summary>

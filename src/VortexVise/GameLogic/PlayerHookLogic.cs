@@ -28,6 +28,7 @@ public static class PlayerHookLogic
         }
         else if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {
+            // FIXME TODO:::::::::::::::::::::::::::: hook pull force being used to throw
             // start Hook shoot
             currentPlayerState.HookState.IsHookReleased = true;
             currentPlayerState.HookState.IsHookAttached = false;

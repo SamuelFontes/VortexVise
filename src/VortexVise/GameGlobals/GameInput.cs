@@ -14,7 +14,7 @@ namespace VortexVise.GameGlobals;
 public static class GameInput
 {
     /// <summary>
-    /// Used for only buffering inputs and processing it on network/tick frames to keep game behaviour consistent between clients and server in network play.
+    /// Used for only buffering inputs and processing it on network/tick frames to keep game behavior consistent between clients and server in network play.
     /// </summary>
     private static readonly InputState[] InputBuffer = [new(), new(), new(), new()];
 
