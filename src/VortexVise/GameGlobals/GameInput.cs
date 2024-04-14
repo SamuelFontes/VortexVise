@@ -127,7 +127,7 @@ public static class GameInput
                 input.Up = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_UP) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) < -0.5f)
                 input.UIUp = true;
-            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.8f)
                 input.Down = true;
             if (Raylib.IsGamepadButtonPressed(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN) || Raylib.GetGamepadAxisMovement(gamepad, GamepadAxis.GAMEPAD_AXIS_LEFT_Y) > 0.5f)
                 input.UIDown = true;
