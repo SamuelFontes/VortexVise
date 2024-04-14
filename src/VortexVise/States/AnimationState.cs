@@ -116,7 +116,7 @@ public class AnimationState // This is only client side
         if (Animation == null) return;
 
         AnimationTimer += deltaTime;
-        if (AnimationTimer > 0.05f) // Animation frame
+        if (AnimationTimer > Animation.FrameTime) 
         {
             AnimationTimer = 0;
             if (State < Animation.StateAmount - 1)

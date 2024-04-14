@@ -36,6 +36,8 @@ public static class GameAssets
         Sounds.Death = Raylib.LoadSound("Resources/Audio/FX/death3.ogg");
         Sounds.Shotgun = Raylib.LoadSound("Resources/Audio/FX/shotgun.ogg");
         Sounds.Drop = Raylib.LoadSound("Resources/Audio/FX/Drop.ogg");
+        Sounds.HitMarker = Raylib.LoadSound("Resources/Audio/FX/hitmarker.ogg");
+        Sounds.Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -84,6 +86,8 @@ public static class GameAssets
         Raylib.UnloadSound(Sounds.Death);
         Raylib.UnloadSound(Sounds.Shotgun);
         Raylib.UnloadSound(Sounds.Drop);
+        Raylib.UnloadSound(Sounds.HitMarker);
+        Raylib.UnloadSound(Sounds.Explosion);
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -175,6 +179,8 @@ public static class GameAssets
         public static Sound Death;
         public static Sound Shotgun;
         public static Sound Drop;
+        public static Sound HitMarker;
+        public static Sound Explosion;
         public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
         {
             if (GameCore.IsServer) return; // Audio don't play on the server
@@ -189,14 +195,20 @@ public static class GameAssets
 
     public static class Animations
     {
+        public static Animation Blood;
         public static Animation Explosion;
+        public static Animation HitMarker;
         public static void LoadAnimations()
         {
-            Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5);
+            Blood = new Animation("Resources/Sprites/GFX/death.png", 32, 5, 1, Raylib.WHITE, 0.05f); ;
+            Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5, 4, Raylib.WHITE, 0.05f); ;
+            HitMarker = new Animation("Resources/Sprites/GFX/hitmarker.png", 32, 1, 1, Raylib.WHITE, 0.2f); ;
         }
         public static void UnloadAnimations()
         {
+            Raylib.UnloadTexture(Blood.Texture);
             Raylib.UnloadTexture(Explosion.Texture);
+            Raylib.UnloadTexture(HitMarker.Texture);
         }
     }
 }

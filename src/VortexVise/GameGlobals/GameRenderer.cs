@@ -48,9 +48,9 @@ public static class GameRenderer
             var frameStartX = animation.State * animation.Animation.Size;
             Rectangle sourceRec = new(frameStartX, 0.0f, animation.Animation.Size, animation.Animation.Texture.height);
 
-            Rectangle destRec = new(animation.Position.X, animation.Position.Y, animation.Animation.Size, animation.Animation.Texture.height);
+            Rectangle destRec = new(animation.Position.X, animation.Position.Y, animation.Animation.Size * animation.Animation.Scale, animation.Animation.Texture.height * animation.Animation.Scale);
 
-            Raylib.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, Raylib.WHITE);
+            Raylib.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, animation.Animation.Color);
 
         }
     }

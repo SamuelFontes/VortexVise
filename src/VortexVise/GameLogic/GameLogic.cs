@@ -22,7 +22,6 @@ public static class GameLogic
         WeaponLogic.ProcessHitBoxes(state, lastState, deltaTime, state.Gravity);
 
         // Update state animations
-        state.Animations = lastState.Animations; // This shouldn't be here
         state.Animations.RemoveAll(x => x.ShouldDisappear);
         foreach (var animation in state.Animations) animation.Animate(deltaTime);
 

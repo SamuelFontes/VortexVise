@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.GameGlobals;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
@@ -31,14 +32,16 @@ public class DamageHitBoxState
     public bool ShouldDisappear { get; set; } = false;
     public bool ShouldColide { get; set; } = false;
     public bool IsExplosion { get; set; } = false;
-    public void Explode()
+    public void Explode(GameState gameState)
     {
         if (IsExplosion) return;
-        HitBox = new(HitBox.X - 64, HitBox.Y - 64, HitBox.Width + 128, HitBox.Height + 128);
+        HitBox = new(HitBox.X - 48, HitBox.Y - 48, HitBox.Width + 96, HitBox.Height + 96);
         Velocity = new(0, 0);
         ShouldColide = false;
         HitBoxTimer = 0.2f;
         ShouldDisappear = false;
         IsExplosion = true;
+        gameState.Animations.Add(new() { Animation = GameAssets.Animations.Explosion, Position = new(HitBox.X, HitBox.Y) });
+        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Explosion);   
     }
 }

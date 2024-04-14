@@ -47,7 +47,7 @@ public static class PlayerLogic
             currentPlayerState.IsDead = true;
             currentPlayerState.WeaponStates.Clear();
             currentPlayerState.HookState.IsHookReleased = false;
-            currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Explosion, Position = currentPlayerState.Position });
+            currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Blood, Position = currentPlayerState.Position });
         }
 
         if (currentPlayerState.IsDead)
@@ -361,4 +361,5 @@ public static class PlayerLogic
         if (GameCore.PlayerFourProfile.Gamepad != -9 && GameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
         return isPlayerLocal;
     }
+
 }

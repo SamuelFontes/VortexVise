@@ -159,6 +159,7 @@ public static class WeaponLogic
         {
             currentGameState.WeaponDrops.Add(new WeaponDropState(dropState.WeaponState, dropState.DropTimer, dropState.Position, dropState.Velocity));
         }
+        currentGameState.Animations = lastGameState.Animations; // This shouldn't be here
     }
     public static void SpawnWeapons(GameState currentGameState, float deltaTime)
     {
@@ -307,7 +308,7 @@ public static class WeaponLogic
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 2f);
                         if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade)
                         {
-                            hitbox.Explode();
+                            hitbox.Explode(currentGameState);
                         }
                         break;
                     }
@@ -353,7 +354,16 @@ public static class WeaponLogic
                 currentPlayerState.DamagedTimer = 0.2f;
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
 
-                if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) hitbox.Explode();
+                // Show HitMaker if player is local 
+                if (PlayerLogic.IsPlayerLocal(hitbox.PlayerId))
+                {
+                    var player = gameState.PlayerStates.FirstOrDefault(x => x.Id == hitbox.PlayerId);
+                    if (player == null) break;
+                    gameState.Animations.Add(new() { Animation = GameAssets.Animations.HitMarker, Position = player.Position });
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.HitMarker);
+                }
+
+                if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) hitbox.Explode(gameState);
 
                 // If is melee weapon it should spend ammo when hitting someone
                 if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
