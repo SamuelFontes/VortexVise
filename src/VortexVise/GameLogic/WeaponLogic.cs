@@ -315,7 +315,7 @@ public static class WeaponLogic
                 }
             }
             // Check if projectile is outside the map
-            if ((hitbox.HitBox.X + hitbox.HitBox.Width <= 0) || (hitbox.HitBox.Y > MapLogic.GetMapSize().Y) || (hitbox.HitBox.Y + hitbox.HitBox.Height <= 0) || (hitbox.HitBox.X > MapLogic.GetMapSize().X))
+            if ((hitbox.HitBox.X + hitbox.HitBox.Width <= 0) || (hitbox.HitBox.Y > MapLogic.GetMapSize().Y) || /*(hitbox.HitBox.Y + hitbox.HitBox.Height <= 0) ||*/ (hitbox.HitBox.X > MapLogic.GetMapSize().X))
                 hitbox.ShouldDisappear = true;
 
             // Melee should follow the player that is using the weapon

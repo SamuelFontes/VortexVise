@@ -211,4 +211,8 @@ public static class GameAssets
             Raylib.UnloadTexture(HitMarker.Texture);
         }
     }
+    public static class HUD
+    {
+        public static Texture Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
+    }
 }

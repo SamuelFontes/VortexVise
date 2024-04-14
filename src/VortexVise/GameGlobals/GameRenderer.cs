@@ -37,6 +37,7 @@ public static class GameRenderer
         DrawPlayerState(mainPlayer);
         DrawProjectiles(state);
         DrawStateAnimations(state);
+        DrawHud(state, mainPlayer);
     }
 
     private static void DrawStateAnimations(GameState state)
@@ -178,5 +179,15 @@ public static class GameRenderer
         }
     }
 
+    private static void DrawHud(GameState state, PlayerState mainPlayer)
+    {
+        // Player Arrow
+        if (!mainPlayer.IsDead)
+        {
+            var p = mainPlayer.Position;
+            p += new Vector2(23, -16);
+            Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 250));
+        }
+    }
 
 }

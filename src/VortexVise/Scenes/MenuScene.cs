@@ -79,7 +79,6 @@ public static class MenuScene
 
     static public void UpdateMenuScene()
     {
-        //TODO: Create input boxes 300x200 4x4
         if (currentState == MenuState.PressStart)
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
@@ -202,6 +201,15 @@ public static class MenuScene
                     item.IsSelected = true; // Means the item is the first
                     selected = item.Item;
                 }
+            }
+            else if (input.Back)
+            {
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.5f);
+                currentState = MenuState.PressStart;
+                var m = menuItems.FirstOrDefault(x => x.IsSelected);
+                if (m != null) m.IsSelected = false;
+                menuItems[0].IsEnabled = true;
+                selected = menuItems[0].Item;
             }
 
 
