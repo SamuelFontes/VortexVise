@@ -37,6 +37,10 @@ public static class GameMatch
     /// Current gameplay cameras, used to render player view.
     /// </summary>
     public static List<PlayerCamera> PlayerCameras { get; set; } = [];
+    /// <summary>
+    /// How long a match takes
+    /// </summary>
+    public static int MatchLengthInSeconds { get; set; } = 5;//180;
 
     // Hook Options
     //----------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
+using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 
@@ -17,6 +18,8 @@ public class GameState
     public int Id { get; set; }
     public double CurrentTime { get; set; }
     public float Gravity { get; set; }
+    public float MatchTimer { get; set; }
+    public MatchStates MatchState { get; set; }
     public List<PlayerState> PlayerStates { get; set; } = new List<PlayerState>();
     public List<WeaponDropState> WeaponDrops { get; set; } = new();
     public List<DamageHitBoxState> DamageHitBoxes { get; set; } = new();
@@ -192,6 +195,8 @@ public class GameState
             var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawn);
             WeaponDrops.Add(weaponDrop);
         }
+        MatchState = MatchStates.Warmup;
+        MatchTimer = 5;
 
     }
 }

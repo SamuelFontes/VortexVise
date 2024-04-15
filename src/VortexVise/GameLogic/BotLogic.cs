@@ -100,7 +100,7 @@ public static class BotLogic
         }
 
         if (botState.WeaponStates.Count > 0)
-            input.GrabDrop = rand.NextDouble() >= 0.9;
+            input.GrabDrop = rand.NextDouble() >= 0.999;
         else
             input.GrabDrop = rand.NextDouble() >= 0.2;
         input.Jump = rand.NextDouble() >= 0.9;

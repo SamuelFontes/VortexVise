@@ -32,6 +32,7 @@ public static class PlayerLogic
         currentPlayerState.SpawnTimer = lastPlayerState.SpawnTimer;
         currentPlayerState.IsBot = lastPlayerState.IsBot;
         currentPlayerState.DamagedTimer = lastPlayerState.DamagedTimer;
+        currentPlayerState.Stats = lastPlayerState.Stats;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)

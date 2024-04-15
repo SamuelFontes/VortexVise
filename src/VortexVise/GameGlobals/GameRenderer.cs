@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using VortexVise.Enums;
 using VortexVise.Logic;
 using VortexVise.States;
 using VortexVise.Utilities;

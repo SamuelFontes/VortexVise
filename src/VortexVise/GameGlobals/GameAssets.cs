@@ -38,6 +38,7 @@ public static class GameAssets
         Sounds.Drop = Raylib.LoadSound("Resources/Audio/FX/Drop.ogg");
         Sounds.HitMarker = Raylib.LoadSound("Resources/Audio/FX/hitmarker.ogg");
         Sounds.Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
+        Sounds.VinylScratch = Raylib.LoadSound("Resources/Audio/FX/vinyl_scratch.ogg");
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -88,6 +89,7 @@ public static class GameAssets
         Raylib.UnloadSound(Sounds.Drop);
         Raylib.UnloadSound(Sounds.HitMarker);
         Raylib.UnloadSound(Sounds.Explosion);
+        Raylib.UnloadSound(Sounds.VinylScratch);
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -141,16 +143,26 @@ public static class GameAssets
 
         public static void PlayMusic(string music)
         {
-            if (IsMusicPlaying) Raylib.UnloadMusicStream(Music);
+            if (IsMusicPlaying) StopMusic();
             Music = Raylib.LoadMusicStream(music);
             Raylib.PlayMusicStream(Music);
+            IsMusicPlaying = true;
+        }
+
+        public static void StopMusic()
+        {
+            Sounds.PlaySound(Sounds.VinylScratch);
+            Raylib.StopMusicStream(Music);
+            Raylib.UnloadMusicStream(Music);
+            IsMusicPlaying = false;
         }
 
         public static void PlayCustomMusic(string musicName)
         {
-            if (IsMusicPlaying) Raylib.UnloadMusicStream(Music);
+            if (IsMusicPlaying) StopMusic();
             Music = Raylib.LoadMusicStream($"Resources/Audio/Music/{musicName}.mp3");
             Raylib.PlayMusicStream(Music);
+            IsMusicPlaying = true;
         }
 
         // Ambience Sounds
@@ -181,6 +193,7 @@ public static class GameAssets
         public static Sound Drop;
         public static Sound HitMarker;
         public static Sound Explosion;
+        public static Sound VinylScratch;
         public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
         {
             if (GameCore.IsServer) return; // Audio don't play on the server

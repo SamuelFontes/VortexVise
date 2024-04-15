@@ -56,7 +56,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 
     // Update music
     //----------------------------------------------------------------------------------
-    Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
+    if(GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
     //----------------------------------------------------------------------------------

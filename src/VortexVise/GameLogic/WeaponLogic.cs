@@ -159,7 +159,6 @@ public static class WeaponLogic
         {
             currentGameState.WeaponDrops.Add(new WeaponDropState(dropState.WeaponState, dropState.DropTimer, dropState.Position, dropState.Velocity));
         }
-        currentGameState.Animations = lastGameState.Animations; // This shouldn't be here
     }
     public static void SpawnWeapons(GameState currentGameState, float deltaTime)
     {

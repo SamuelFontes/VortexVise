@@ -1,4 +1,5 @@
-﻿using VortexVise.GameGlobals;
+﻿using VortexVise.Enums;
+using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Models;
 using VortexVise.Networking;
@@ -27,6 +28,7 @@ static internal class GameplayScene
         NumberOfLocalPlayers = Utils.GetNumberOfLocalPlayers();
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
+        GameAssets.MusicAndAmbience.StopMusic();
 
         MapLogic.LoadRandomMap();
 
@@ -144,6 +146,16 @@ static internal class GameplayScene
             CameraLogic.EndDrawingToCamera(i);
         }
 
+        // Global HUD
+        if (State.MatchState == MatchStates.Warmup)
+        {
+            Utils.DrawTextCentered($"Starting in {(int)State.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
+        }
+        else if (State.MatchState == MatchStates.Playing)
+        {
+            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
+            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+        }
 
 
         if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);

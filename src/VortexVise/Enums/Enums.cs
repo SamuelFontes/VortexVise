@@ -134,3 +134,12 @@ public enum StatusEffects
     /// </summary>
     Ivunerable,
 }; 
+
+
+public enum MatchStates
+{
+    Warmup,
+    Playing,
+    EndScreen,
+    Voting,
+};
