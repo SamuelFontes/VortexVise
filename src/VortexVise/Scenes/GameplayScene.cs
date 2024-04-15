@@ -161,6 +161,15 @@ static internal class GameplayScene
             Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
             var t = TimeSpan.FromSeconds((int)State.MatchTimer);
             Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+            var y = 64;
+            var players = State.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
+            Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+            y += 32;
+            foreach (var player in players)
+            {
+                Utils.DrawTextCentered($"Player {player.Id + 1} - {player.Stats.Kills}/{player.Stats.Deaths}", new(GameCore.GameScreenWidth * 0.5f, y), 16, Raylib.WHITE);
+                y += 16;
+            }
         }
         else if (State.MatchState == MatchStates.Voting)
         {

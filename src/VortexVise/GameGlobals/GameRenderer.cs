@@ -189,7 +189,16 @@ public static class GameRenderer
             p += new Vector2(23, -16);
             Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 250));
         }
-
+        var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
+        Utils.DebugText = $"HP:{mainPlayer.HeathPoints} | K:{mainPlayer.Stats.Kills} | D:{mainPlayer.Stats.Deaths}";
+        if (weapon == null)
+        {
+            Utils.DebugText += " | NO WEAPON";
+        }
+        else
+        {
+            Utils.DebugText += $" | {weapon.Weapon.Name} - Ammo:{weapon.CurrentAmmo} Timer:{(int)weapon.ReloadTimer}/{(int)weapon.Weapon.ReloadDelay}";
+        }
 
     }
 

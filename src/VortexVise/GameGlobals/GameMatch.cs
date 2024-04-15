@@ -40,7 +40,7 @@ public static class GameMatch
     /// <summary>
     /// How long a match takes
     /// </summary>
-    public static int MatchLengthInSeconds { get; set; } = 5;//180;
+    public static int MatchLengthInSeconds { get; set; } = 180;
 
     // Hook Options
     //----------------------------------------------------------------------------------

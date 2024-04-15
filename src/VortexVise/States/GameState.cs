@@ -190,6 +190,8 @@ public class GameState
             playerState.Animation.Rotation = 0;
             playerState.Animation.State = 0;
             playerState.LastPlayerHitId = -1;
+            playerState.Stats.Kills = 0;
+            playerState.Stats.Deaths = 0;
         }
         WeaponLogic.WeaponRotation = 0;
         WeaponDrops.Clear();
