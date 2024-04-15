@@ -33,6 +33,7 @@ public static class PlayerLogic
         currentPlayerState.IsBot = lastPlayerState.IsBot;
         currentPlayerState.DamagedTimer = lastPlayerState.DamagedTimer;
         currentPlayerState.Stats = lastPlayerState.Stats;
+        currentPlayerState.LastPlayerHitId = lastPlayerState.LastPlayerHitId;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
@@ -49,6 +50,15 @@ public static class PlayerLogic
             currentPlayerState.WeaponStates.Clear();
             currentPlayerState.HookState.IsHookReleased = false;
             currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Blood, Position = currentPlayerState.Position });
+
+            // Add stats
+            currentPlayerState.Stats.Deaths++;
+            if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1) currentPlayerState.Stats.Kills--;
+            else
+            {
+                var p = currentGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
+                if(p != null) p.Stats.Kills++;
+            }
         }
 
         if (currentPlayerState.IsDead)

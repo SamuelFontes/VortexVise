@@ -147,11 +147,13 @@ public static class GameAssets
             Music = Raylib.LoadMusicStream(music);
             Raylib.PlayMusicStream(Music);
             IsMusicPlaying = true;
+            Raylib.SetMusicVolume(Music, 0.8f);
         }
 
         public static void StopMusic()
         {
-            Sounds.PlaySound(Sounds.VinylScratch);
+            if (!IsMusicPlaying) return;
+            Sounds.PlaySound(Sounds.VinylScratch,pitch:1.2f);
             Raylib.StopMusicStream(Music);
             Raylib.UnloadMusicStream(Music);
             IsMusicPlaying = false;
@@ -163,6 +165,7 @@ public static class GameAssets
             Music = Raylib.LoadMusicStream($"Resources/Audio/Music/{musicName}.mp3");
             Raylib.PlayMusicStream(Music);
             IsMusicPlaying = true;
+            Raylib.SetMusicVolume(Music, 0.8f);
         }
 
         // Ambience Sounds

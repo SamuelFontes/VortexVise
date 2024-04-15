@@ -28,7 +28,6 @@ static internal class GameplayScene
         NumberOfLocalPlayers = Utils.GetNumberOfLocalPlayers();
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
-        GameAssets.MusicAndAmbience.StopMusic();
 
         MapLogic.LoadRandomMap();
 
@@ -149,12 +148,25 @@ static internal class GameplayScene
         // Global HUD
         if (State.MatchState == MatchStates.Warmup)
         {
-            Utils.DrawTextCentered($"Starting in {(int)State.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            Utils.DrawTextCentered($"STARTING IN {(int)State.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
         }
         else if (State.MatchState == MatchStates.Playing)
         {
             var t = TimeSpan.FromSeconds((int)State.MatchTimer);
             Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+        }
+        else if (State.MatchState == MatchStates.EndScreen)
+        {
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
+            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+        }
+        else if (State.MatchState == MatchStates.Voting)
+        {
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
+            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
         }
 
 

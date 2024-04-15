@@ -128,6 +128,7 @@ public static class MapLogic
     }
     public static void LoadMap(Map map)
     {
+        GameAssets.MusicAndAmbience.StopMusic();
         if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
         GameMatch.CurrentMap = map;
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);

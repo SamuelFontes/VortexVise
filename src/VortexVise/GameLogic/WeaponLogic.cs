@@ -353,6 +353,9 @@ public static class WeaponLogic
                 currentPlayerState.DamagedTimer = 0.2f;
                 currentPlayerState.Velocity = new(currentPlayerState.Velocity.X - hitbox.Direction * hitbox.Weapon.Knockback, currentPlayerState.Velocity.Y);
 
+                // Set player id for owner to get the kill
+                currentPlayerState.LastPlayerHitId = hitbox.PlayerId;
+
                 // Show HitMaker if player is local 
                 if (PlayerLogic.IsPlayerLocal(hitbox.PlayerId))
                 {

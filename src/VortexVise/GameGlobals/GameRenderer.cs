@@ -189,6 +189,8 @@ public static class GameRenderer
             p += new Vector2(23, -16);
             Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 250));
         }
+
+
     }
 
 }

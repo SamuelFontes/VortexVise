@@ -23,7 +23,7 @@ public static class GameLogic
             WeaponDrops = lastState.WeaponDrops,
         };
 
-        MatchLogic.HandleMatchTimer(state, deltaTime);
+        MatchLogic.HandleMatchState(state, deltaTime);
 
         if (state.MatchState == MatchStates.Warmup)
         {
@@ -84,8 +84,14 @@ public static class GameLogic
             // Handle Weapon Drops
             WeaponLogic.SpawnWeapons(state, deltaTime);
             WeaponLogic.UpdateWeaponDrops(state, deltaTime);
-
-
+        }
+        else if(state.MatchState == MatchStates.EndScreen)
+        {
+            state.PlayerStates = lastState.PlayerStates;
+        }
+        else if(state.MatchState == MatchStates.Voting)
+        {
+            state.PlayerStates = lastState.PlayerStates;
         }
 
         return state;

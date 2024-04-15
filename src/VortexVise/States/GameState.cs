@@ -187,7 +187,11 @@ public class GameState
             playerState.WeaponStates.Clear();
             playerState.HookState.IsHookReleased = false;   
             playerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
+            playerState.Animation.Rotation = 0;
+            playerState.Animation.State = 0;
+            playerState.LastPlayerHitId = -1;
         }
+        WeaponLogic.WeaponRotation = 0;
         WeaponDrops.Clear();
         foreach (var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
         {

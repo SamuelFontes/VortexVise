@@ -10,7 +10,7 @@ namespace VortexVise.Logic;
 
 public static class MatchLogic
 {
-    public static void HandleMatchTimer(GameState gameState, float deltaTime)
+    public static void HandleMatchState(GameState gameState, float deltaTime)
     {
         gameState.MatchTimer -= deltaTime;
 
@@ -32,13 +32,14 @@ public static class MatchLogic
             }
             else if (gameState.MatchState == Enums.MatchStates.EndScreen)
             {
-                gameState.MatchTimer = 20;
+                gameState.MatchTimer = 10;
                 gameState.MatchState = Enums.MatchStates.Voting;
             }
             else if (gameState.MatchState == Enums.MatchStates.Voting)
             {
                 gameState.MatchTimer = 5;
                 gameState.MatchState = Enums.MatchStates.Warmup;
+                MapLogic.LoadNextMap();
             }
         }
     }

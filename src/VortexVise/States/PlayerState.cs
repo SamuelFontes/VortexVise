@@ -23,6 +23,7 @@ public class PlayerState
     public float SpawnTimer { get; set; } = 0;
     public float DamagedTimer { get; set; } = 0;
     public bool IsBot { get; set; } = false;
+    public int LastPlayerHitId = -1;
     public Skin Skin { get; set; }
     public PlayerStats Stats { get; set; }
     public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
