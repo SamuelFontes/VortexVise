@@ -47,8 +47,8 @@ public static class WeaponLogic
                     if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTextureLocation = weaponLocation + "/" + weapon.ProjectileTextureLocation;
 
                     // Weapon Type
-                    string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA)(?=\s\s)").Value.Trim();
-                    if (string.IsNullOrEmpty(weaponType)) throw new Exception("Can't read map COLLISIONS");
+                    string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA|HEAL)(?=\s\s)").Value.Trim();
+                    if (string.IsNullOrEmpty(weaponType)) throw new Exception("Can't read Weapon Type");
                     switch (weaponType)
                     {
                         case ("PISTOL"): weapon.WeaponType = Enums.WeaponType.Pistol; break;
@@ -59,10 +59,12 @@ public static class WeaponLogic
                         case ("GRANADE"): weapon.WeaponType = Enums.WeaponType.Granade; break;
                         case ("MINE"): weapon.WeaponType = Enums.WeaponType.Mine; break;
                         case ("BAZOKA"): weapon.WeaponType = Enums.WeaponType.Bazoka; break;
+                        case ("HEAL"): weapon.WeaponType = Enums.WeaponType.Heal; break;
                     }
 
                     // Get reloadDelay
-                    weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(?=\s\s)").Value);
+                    if (weapon.WeaponType != Enums.WeaponType.Heal)
+                        weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(?=\s\s)").Value);
 
                     // Color
                     var color = Regex.Match(match.Value, @"(?<=COLOR=)\d+,\d+,\d+,\d+").Value;
@@ -196,7 +198,7 @@ public static class WeaponLogic
         if (currentPlayerState.WeaponStates.Count <= 0) return; // FIXME: change this when player can grab more weapons
 
         var ws = currentPlayerState.WeaponStates[0];
-        if(ws.ReloadTimer < ws.Weapon.ReloadDelay) ws.ReloadTimer += deltaTime;
+        if (ws.ReloadTimer < ws.Weapon.ReloadDelay) ws.ReloadTimer += deltaTime;
         if (ws.ReloadTimer > ws.Weapon.ReloadDelay) ws.ReloadTimer = ws.Weapon.ReloadDelay;
         if (currentPlayerState.Input.FireWeapon)
         {
@@ -341,7 +343,7 @@ public static class WeaponLogic
 
     public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)
     {
-        var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || x.IsExplosion);
+        var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || (x.IsExplosion && !currentPlayerState.IsBot));// Adding friendly fire for bots is not a good idea
         foreach (var hitbox in hitboxes)
         {
             if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))

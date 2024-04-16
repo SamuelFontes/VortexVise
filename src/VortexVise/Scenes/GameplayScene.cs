@@ -40,7 +40,6 @@ static internal class GameplayScene
         LastState.Gravity = Gravity;
         PlayerLogic.Init();
         CameraLogic.Init();
-        WeaponLogic.Init();
         if (GameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id, GameCore.PlayerOneProfile.Skin));
         if (GameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id, GameCore.PlayerTwoProfile.Skin));
         if (GameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id, GameCore.PlayerThreeProfile.Skin));
@@ -59,12 +58,13 @@ static internal class GameplayScene
             var b = new Bot();
             b.Id = bot.Id;
             GameMatch.Bots.Add(b);
-            LastState.PlayerStates.Add(bot); // Add testing dummy
+            LastState.PlayerStates.Add(bot); // add bot
         }
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_THUMB))
         {
             var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.Id = -99;
+            bot.Position = State.PlayerStates.Select(x => x.Position).First();
             LastState.PlayerStates.Add(bot); // Add testing dummy
         }
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_THUMB))

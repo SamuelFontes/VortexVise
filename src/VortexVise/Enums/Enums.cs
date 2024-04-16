@@ -65,7 +65,9 @@ public enum WeaponType
     MeleeCut,
     Granade,
     Mine,
-    Bazoka
+    Bazoka,
+    Heal,
+
 };
 
 /// <summary>

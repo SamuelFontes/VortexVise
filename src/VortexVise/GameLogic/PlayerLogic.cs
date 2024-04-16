@@ -57,7 +57,7 @@ public static class PlayerLogic
             else
             {
                 var p = currentGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
-                if(p != null) p.Stats.Kills++;
+                if (p != null) p.Stats.Kills++;
             }
         }
 
@@ -348,11 +348,22 @@ public static class PlayerLogic
             {
                 if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision)) // TODO: if holding max weapons trade with current
                 {
+                    idToRemove = drop.Id;
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;
+                    //Heal
+                    if (drop.WeaponState.Weapon.WeaponType == Enums.WeaponType.Heal)
+                    {
+                        currentPlayerState.HeathPoints += drop.WeaponState.Weapon.Damage;
+                        if (currentPlayerState.HeathPoints > GameMatch.DefaultPlayerHeathPoints) currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
+                        currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id);
+                        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop,pitch:0.5f);
+                        return;
+                    }
+
                     currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more weapons
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
-                    idToRemove = drop.Id;
                     if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
                     break;
