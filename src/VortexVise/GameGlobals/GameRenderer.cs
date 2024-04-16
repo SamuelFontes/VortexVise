@@ -182,6 +182,11 @@ public static class GameRenderer
         }
     }
 
+    /// <summary>
+    /// This draws hud in game world relative to players view
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="mainPlayer"></param>
     private static void DrawHud(GameState state, PlayerState mainPlayer)
     {
         var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
@@ -216,8 +221,6 @@ public static class GameRenderer
             //Utils.DrawTextCentered("12",p,4,Raylib.WHITE);
 
         }
-        GameUserInterface.PlayerOneState = mainPlayer;
-        // TODO: Move this to scoreboard, hp and weapon timer should be visible over player
 
     }
 

@@ -41,7 +41,7 @@ public static class PlayerLogic
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
         if (currentPlayerState.DamagedTimer > 0) currentPlayerState.DamagedTimer -= deltaTime;
     }
-    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime, GameState currentGameState)
+    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime, GameState currentGameState, GameState lastGameState)
     {
         if (currentPlayerState.HeathPoints <= 0 && !currentPlayerState.IsDead)
         {
@@ -53,12 +53,16 @@ public static class PlayerLogic
 
             // Add stats
             currentPlayerState.Stats.Deaths++;
-            if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1) currentPlayerState.Stats.Kills--;
+            if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1)
+            {
+                currentPlayerState.Stats.Kills--;
+            }
             else
             {
-                var p = currentGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
+                var p = lastGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
                 if (p != null) p.Stats.Kills++;
             }
+            currentPlayerState.LastPlayerHitId = -1;
         }
 
         if (currentPlayerState.IsDead)
@@ -160,7 +164,6 @@ public static class PlayerLogic
         }
         else if (endingCollision.Y > mapSize.Y)
         {
-            // TODO: Kill the player
             currentPlayerState.HeathPoints = -1;
             return;
         }
@@ -357,7 +360,7 @@ public static class PlayerLogic
                         if (currentPlayerState.HeathPoints > GameMatch.DefaultPlayerHeathPoints) currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
                         currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id);
                         if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop,pitch:0.5f);
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop, pitch: 0.5f);
                         return;
                     }
 

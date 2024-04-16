@@ -53,7 +53,7 @@ public static class GameLogic
 
                 // Handle Player Behavior
                 PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
-                PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime, state);
+                PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime, state,lastState);
                 if (currentPlayerState.IsDead)
                 {
                     // Just skip all calculations for this player
