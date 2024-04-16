@@ -196,7 +196,8 @@ public static class WeaponLogic
         if (currentPlayerState.WeaponStates.Count <= 0) return; // FIXME: change this when player can grab more weapons
 
         var ws = currentPlayerState.WeaponStates[0];
-        ws.ReloadTimer += deltaTime;
+        if(ws.ReloadTimer < ws.Weapon.ReloadDelay) ws.ReloadTimer += deltaTime;
+        if (ws.ReloadTimer > ws.Weapon.ReloadDelay) ws.ReloadTimer = ws.Weapon.ReloadDelay;
         if (currentPlayerState.Input.FireWeapon)
         {
 

@@ -192,10 +192,22 @@ public static class GameRenderer
             p += new Vector2(8, -16);
             if (weapon != null)
             {
-                if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay)
+                Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
+                var spriteHeight = GameAssets.HUD.WeaponOn.height;
+                var total = 100;
+                var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
+                if (percent == 100)
+                {
                     Raylib.DrawTextureEx(GameAssets.HUD.WeaponOn, p, 0, 1, new(255, 255, 255, 255));
+                }
                 else
-                    Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
+                {
+
+                    int overlayHeight = (int)((percent * spriteHeight) / total);
+                    if (overlayHeight % 2 != 0) overlayHeight++;
+
+                    Raylib.DrawTexturePro(GameAssets.HUD.WeaponOn, new(0, GameAssets.HUD.WeaponOn.height - overlayHeight, GameAssets.HUD.WeaponOn.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WeaponOn.height - overlayHeight, GameAssets.HUD.WeaponOn.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+                }
             }
             else
                 Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
