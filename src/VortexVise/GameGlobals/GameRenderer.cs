@@ -182,23 +182,28 @@ public static class GameRenderer
 
     private static void DrawHud(GameState state, PlayerState mainPlayer)
     {
+        var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         // Player Arrow
         if (!mainPlayer.IsDead)
         {
             var p = mainPlayer.Position;
-            p += new Vector2(23, -16);
-            Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 250));
+            //p += new Vector2(24, -16);
+            //Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 255));
+            p += new Vector2(8, -16);
+            if (weapon != null)
+            {
+                if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay)
+                    Raylib.DrawTextureEx(GameAssets.HUD.WeaponOn, p, 0, 1, new(255, 255, 255, 255));
+                else
+                    Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
+            }
+            else
+                Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
+            //Utils.DrawTextCentered("12",p,4,Raylib.WHITE);
+
         }
-        var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
-        Utils.DebugText = $"HP:{mainPlayer.HeathPoints} | K:{mainPlayer.Stats.Kills} | D:{mainPlayer.Stats.Deaths}";
-        if (weapon == null)
-        {
-            Utils.DebugText += " | NO WEAPON";
-        }
-        else
-        {
-            Utils.DebugText += $" | {weapon.Weapon.Name} - Ammo:{weapon.CurrentAmmo} Timer:{(int)weapon.ReloadTimer}/{(int)weapon.Weapon.ReloadDelay}";
-        }
+        GameUserInterface.PlayerOneState = mainPlayer;
+        // TODO: Move this to scoreboard, hp and weapon timer should be visible over player
 
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.States;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -15,6 +16,7 @@ static internal class GameUserInterface
     public static float CursorAlpha { get; private set; } = 0;
     public static bool IsCursorVisible { get; set; } = true;
     public static bool DisableCursor { get; set; } = false;
+    public static PlayerState PlayerOneState { get; set; }
     public static void InitUserInterface()
     {
         Cursor = Raylib.LoadTexture("Resources/Common/cursor.png");
@@ -54,6 +56,7 @@ static internal class GameUserInterface
     {
         DrawDebug();
         DrawCursor();
+        DrawHud();
     }
     public static void UnloadUserInterface()
     {
@@ -79,6 +82,47 @@ static internal class GameUserInterface
     {
         Raylib.DrawTextEx(GameAssets.Misc.Font, Utils.DebugText, new(8, 540 - 32), 32f, 0, Raylib.WHITE);
         //Raylib.DrawFPS(0, 0);
+    }
+
+    private static void DrawHud()
+    {
+        if (PlayerOneState != null)
+        {
+            var p = new Vector2(8, 8);
+
+            Raylib.DrawTexture(GameAssets.HUD.HudBorder, (int)p.X, (int)p.Y, Raylib.WHITE);
+            if (!PlayerOneState.IsDead)
+            {
+                Raylib.DrawTextureEx(PlayerOneState.Skin.Texture, p, 0, 2, Raylib.WHITE);
+                var skinHeight = PlayerOneState.Skin.Texture.height; // fixed skin height
+                var total = 100;
+                var hpPercent = (PlayerOneState.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
+                int redHeight = (hpPercent * skinHeight) / total;
+                if (redHeight % 2 != 0) redHeight++;
+
+                Raylib.DrawTexturePro(PlayerOneState.Skin.Texture, new(0, redHeight, 32, 32 - redHeight), new(p.X, p.Y + redHeight * 2, 64, 64 - (redHeight * 2)), new(0, 0), 0, Raylib.RED);
+            }
+            else
+            {
+                Raylib.DrawTextureEx(PlayerOneState.Skin.Texture, p, 0, 2, Raylib.DARKGRAY);
+            }
+            p += new Vector2(72, 0);
+            var weapon = PlayerOneState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
+            if (weapon != null)
+            {
+                Raylib.DrawTextureEx(weapon.Weapon.Texture, p, 0, 1, Raylib.WHITE);
+                p += new Vector2(-12, 32);
+                for (int i = 0; i < weapon.CurrentAmmo; i++)
+                {
+                    Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, p, 0, 1, new(255, 255, 255, 255));
+                    p += new Vector2(8, 0);
+                    if (i != 0 && i % 7 == 0) p += new Vector2(-64, 8);
+                }
+            }
+
+
+        }
+
     }
 
 }

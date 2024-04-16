@@ -22,6 +22,7 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         Misc.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
+        HUD.Load();
 
         // Sounds
         //---------------------------------------------------------
@@ -73,6 +74,7 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         Raylib.UnloadFont(Misc.Font);
+        HUD.Unload();
 
         // Sounds
         //---------------------------------------------------------
@@ -153,7 +155,7 @@ public static class GameAssets
         public static void StopMusic()
         {
             if (!IsMusicPlaying) return;
-            Sounds.PlaySound(Sounds.VinylScratch,pitch:1.2f);
+            Sounds.PlaySound(Sounds.VinylScratch, pitch: 0.7f);
             Raylib.StopMusicStream(Music);
             Raylib.UnloadMusicStream(Music);
             IsMusicPlaying = false;
@@ -227,8 +229,30 @@ public static class GameAssets
             Raylib.UnloadTexture(HitMarker.Texture);
         }
     }
+
     public static class HUD
     {
-        public static Texture Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
+        public static void Load()
+        {
+            WeaponOn = Raylib.LoadTexture("resources/Common/hud_weapon_on.png");
+            WeaponOff = Raylib.LoadTexture("resources/Common/hud_weapon_off.png");
+            Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
+            BulletCounter = Raylib.LoadTexture("Resources/Common/bullet_counter.png");
+            HudBorder = Raylib.LoadTexture("Resources/Common/hud_border.png");
+        }
+        public static void Unload()
+        {
+            Raylib.UnloadTexture(WeaponOn);
+            Raylib.UnloadTexture(WeaponOff);
+            Raylib.UnloadTexture(Arrow);
+            Raylib.UnloadTexture(BulletCounter);
+            Raylib.UnloadTexture(HudBorder);
+        }
+
+        public static Texture Arrow;
+        public static Texture WeaponOn;
+        public static Texture WeaponOff;
+        public static Texture BulletCounter;
+        public static Texture HudBorder;
     }
 }
