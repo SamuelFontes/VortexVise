@@ -61,9 +61,16 @@ static internal class GameplayScene
             GameMatch.Bots.Add(b);
             LastState.PlayerStates.Add(bot); // Add testing dummy
         }
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_THUMB))
+        {
+            var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            bot.Id = -99;
+            LastState.PlayerStates.Add(bot); // Add testing dummy
+        }
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_THUMB))
         {
             LastState.PlayerStates.RemoveAll(x => x.IsBot);
+            LastState.PlayerStates.RemoveAll(x => x.Id == -99);
         }
         bool isSlowerThanTickRate = false;
 

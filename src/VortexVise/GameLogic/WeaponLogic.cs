@@ -293,7 +293,6 @@ public static class WeaponLogic
         foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
-            if (hitbox.IsExplosion) hitbox.ShouldDisappear = false;
 
             hitbox.HitBox = new Rectangle(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime, hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime, hitbox.HitBox.Width, hitbox.HitBox.Height);
 
