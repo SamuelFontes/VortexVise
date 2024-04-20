@@ -87,38 +87,26 @@ static internal class GameUserInterface
     {
         if (GameMatch.GameState?.MatchState == Enums.MatchStates.Playing)
         {
-            var currentNumberOfPlayers = Utils.GetNumberOfLocalPlayers();
-            if (currentNumberOfPlayers == 1)
-            {
-                // Player 1
-                var p = new Vector2(8, 8);
-                var playerState = GameMatch.GameState.PlayerStates.First(x => x.Id == GameCore.PlayerOneProfile.Id);
-                DrawPlayerInfo(playerState, p);
-            }
-            else if (currentNumberOfPlayers == 2)
-            {
-                // Player 1
-                var p = new Vector2(8, 8);
-                var playerState = GameMatch.GameState.PlayerStates.First(x => x.Id == GameCore.PlayerOneProfile.Id);
-                DrawPlayerInfo(playerState, p);
+            //  Maybe this needs to be optimized who knows
+            // Player 1
+            var p = new Vector2(8, 8);
+            var playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerOneProfile.Id);
+            if (playerState != null) DrawPlayerInfo(playerState, p);
 
-            }
-            else if (currentNumberOfPlayers == 3)
-            {
-                // Player 1
-                var p = new Vector2(8, 8);
-                var playerState = GameMatch.GameState.PlayerStates.First(x => x.Id == GameCore.PlayerOneProfile.Id);
-                DrawPlayerInfo(playerState, p);
+            // Player 2
+            p = new Vector2(GameCore.GameScreenWidth - 128 - 8, 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerTwoProfile.Id);
+            if (playerState != null) DrawPlayerInfo(playerState, p);
 
-            }
-            else if (currentNumberOfPlayers == 4)
-            {
-                // Player 1
-                var p = new Vector2(8, 8);
-                var playerState = GameMatch.GameState.PlayerStates.First(x => x.Id == GameCore.PlayerOneProfile.Id);
-                DrawPlayerInfo(playerState, p);
+            // Player 3
+            p = new Vector2(8, GameCore.GameScreenHeight * 0.5f + 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerThreeProfile.Id);
+            if (playerState != null) DrawPlayerInfo(playerState, p);
 
-            }
+            // Player 4
+            p = new Vector2(GameCore.GameScreenWidth - 128 - 8, GameCore.GameScreenHeight * 0.5f + 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerFourProfile.Id);
+            if (playerState != null) DrawPlayerInfo(playerState, p);
         }
 
 
@@ -127,35 +115,34 @@ static internal class GameUserInterface
 
     private static void DrawPlayerInfo(PlayerState playerState, Vector2 position)
     {
-        var p = new Vector2(8, 8);
 
-        Raylib.DrawTexture(GameAssets.HUD.HudBorder, (int)p.X, (int)p.Y, Raylib.WHITE);
+        Raylib.DrawTexture(GameAssets.HUD.HudBorder, (int)position.X, (int)position.Y, Raylib.WHITE);
         if (!playerState.IsDead)
         {
-            Raylib.DrawTextureEx(playerState.Skin.Texture, p, 0, 2, Raylib.WHITE);
+            Raylib.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, Raylib.WHITE);
             var skinHeight = playerState.Skin.Texture.height; // fixed skin height
             var total = 100;
             var hpPercent = (playerState.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
             int redHeight = (hpPercent * skinHeight) / total;
             if (redHeight % 2 != 0) redHeight++;
 
-            Raylib.DrawTexturePro(playerState.Skin.Texture, new(0, redHeight, 32, 32 - redHeight), new(p.X, p.Y + redHeight * 2, 64, 64 - (redHeight * 2)), new(0, 0), 0, Raylib.RED);
+            Raylib.DrawTexturePro(playerState.Skin.Texture, new(0, redHeight, 32, 32 - redHeight), new(position.X, position.Y + redHeight * 2, 64, 64 - (redHeight * 2)), new(0, 0), 0, Raylib.RED);
         }
         else
         {
-            Raylib.DrawTextureEx(playerState.Skin.Texture, p, 0, 2, Raylib.DARKGRAY);
+            Raylib.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, Raylib.DARKGRAY);
         }
-        p += new Vector2(72, 0);
+        position += new Vector2(72, 0);
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)
         {
-            Raylib.DrawTextureEx(weapon.Weapon.Texture, p, 0, 1, Raylib.WHITE);
-            p += new Vector2(-12, 32);
+            Raylib.DrawTextureEx(weapon.Weapon.Texture, position, 0, 1, Raylib.WHITE);
+            position += new Vector2(-12, 32);
             for (int i = 0; i < weapon.CurrentAmmo; i++)
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, p, 0, 1, new(255, 255, 255, 255));
-                p += new Vector2(8, 0);
-                if (i != 0 && i % 7 == 0) p += new Vector2(-64, 8);
+                Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, position, 0, 1, new(255, 255, 255, 255));
+                position += new Vector2(8, 0);
+                if (i != 0 && i % 7 == 0) position += new Vector2(-64, 8);
             }
         }
 

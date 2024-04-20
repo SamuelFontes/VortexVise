@@ -26,20 +26,7 @@ public static class GameAssets
 
         // Sounds
         //---------------------------------------------------------
-        Sounds.HookShoot = Raylib.LoadSound("Resources/Audio/FX/hook_fire.wav");
-        Sounds.HookHit = Raylib.LoadSound("Resources/Audio/FX/hook_hit.wav");
-        Sounds.Jump = Raylib.LoadSound("Resources/Audio/FX/jump.wav");
-        Sounds.Dash = Raylib.LoadSound("Resources/Audio/FX/dash.wav");
-        Sounds.Click = Raylib.LoadSound("Resources/Audio/FX/click.wav");
-        Sounds.Selection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
-        Sounds.WeaponDrop = Raylib.LoadSound("Resources/Audio/FX/metal_drop.wav");
-        Sounds.WeaponClick = Raylib.LoadSound("Resources/Audio/FX/weapon_click.wav");
-        Sounds.Death = Raylib.LoadSound("Resources/Audio/FX/death3.ogg");
-        Sounds.Shotgun = Raylib.LoadSound("Resources/Audio/FX/shotgun.ogg");
-        Sounds.Drop = Raylib.LoadSound("Resources/Audio/FX/Drop.ogg");
-        Sounds.HitMarker = Raylib.LoadSound("Resources/Audio/FX/hitmarker.ogg");
-        Sounds.Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
-        Sounds.VinylScratch = Raylib.LoadSound("Resources/Audio/FX/vinyl_scratch.ogg");
+        Sounds.Init();
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -79,20 +66,7 @@ public static class GameAssets
 
         // Sounds
         //---------------------------------------------------------
-        Raylib.UnloadSound(Sounds.HookShoot);
-        Raylib.UnloadSound(Sounds.HookHit);
-        Raylib.UnloadSound(Sounds.Jump);
-        Raylib.UnloadSound(Sounds.Dash);
-        Raylib.UnloadSound(Sounds.Click);
-        Raylib.UnloadSound(Sounds.Selection);
-        Raylib.UnloadSound(Sounds.WeaponDrop);
-        Raylib.UnloadSound(Sounds.WeaponClick);
-        Raylib.UnloadSound(Sounds.Death);
-        Raylib.UnloadSound(Sounds.Shotgun);
-        Raylib.UnloadSound(Sounds.Drop);
-        Raylib.UnloadSound(Sounds.HitMarker);
-        Raylib.UnloadSound(Sounds.Explosion);
-        Raylib.UnloadSound(Sounds.VinylScratch);
+        Sounds.Unload();
 
         // Music And Ambience
         //---------------------------------------------------------
@@ -186,6 +160,42 @@ public static class GameAssets
     /// </summary>
     public static class Sounds
     {
+        public static void Init()
+        {
+            HookShoot = Raylib.LoadSound("Resources/Audio/FX/hook_fire.wav");
+            HookHit = Raylib.LoadSound("Resources/Audio/FX/hook_hit.wav");
+            Jump = Raylib.LoadSound("Resources/Audio/FX/jump.wav");
+            Dash = Raylib.LoadSound("Resources/Audio/FX/dash.wav");
+            Click = Raylib.LoadSound("Resources/Audio/FX/click.wav");
+            Selection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
+            WeaponDrop = Raylib.LoadSound("Resources/Audio/FX/metal_drop.wav");
+            WeaponClick = Raylib.LoadSound("Resources/Audio/FX/weapon_click.wav");
+            Death = Raylib.LoadSound("Resources/Audio/FX/death3.ogg");
+            Shotgun = Raylib.LoadSound("Resources/Audio/FX/shotgun.ogg");
+            Drop = Raylib.LoadSound("Resources/Audio/FX/Drop.ogg");
+            HitMarker = Raylib.LoadSound("Resources/Audio/FX/hitmarker.ogg");
+            Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
+            VinylScratch = Raylib.LoadSound("Resources/Audio/FX/vinyl_scratch.ogg");
+            Kill = Raylib.LoadSound("Resources/Audio/FX/kill.ogg");
+        }
+        public static void Unload()
+        {
+            Raylib.UnloadSound(HookShoot);
+            Raylib.UnloadSound(HookHit);
+            Raylib.UnloadSound(Jump);
+            Raylib.UnloadSound(Dash);
+            Raylib.UnloadSound(Click);
+            Raylib.UnloadSound(Selection);
+            Raylib.UnloadSound(WeaponDrop);
+            Raylib.UnloadSound(WeaponClick);
+            Raylib.UnloadSound(Death);
+            Raylib.UnloadSound(Shotgun);
+            Raylib.UnloadSound(Drop);
+            Raylib.UnloadSound(HitMarker);
+            Raylib.UnloadSound(Explosion);
+            Raylib.UnloadSound(VinylScratch);
+            Raylib.UnloadSound(Kill);
+        }
         public static Sound HookShoot;
         public static Sound HookHit;
         public static Sound Jump;
@@ -200,6 +210,7 @@ public static class GameAssets
         public static Sound HitMarker;
         public static Sound Explosion;
         public static Sound VinylScratch;
+        public static Sound Kill;
         public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
         {
             if (GameCore.IsServer) return; // Audio don't play on the server

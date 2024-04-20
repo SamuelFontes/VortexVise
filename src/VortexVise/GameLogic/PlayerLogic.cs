@@ -60,6 +60,7 @@ public static class PlayerLogic
             else
             {
                 var p = lastGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
+                if(IsPlayerLocal(p.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Kill);
                 if (p != null) p.Stats.Kills++;
             }
             currentPlayerState.LastPlayerHitId = -1;
