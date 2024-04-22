@@ -119,6 +119,8 @@ public static class GameRenderer
     static void DrawPlayerState(PlayerState playerState)
     {
         if (playerState.IsDead) return;
+        // Draw player 
+        // -------------------------------------------------
         Rectangle sourceRec = new(0.0f, 0.0f, playerState.Skin.Texture.width * playerState.Direction, playerState.Skin.Texture.height);
 
         Rectangle destRec = new(playerState.Position.X + playerState.Skin.Texture.width * 0.5f, playerState.Position.Y + playerState.Skin.Texture.height * 0.5f, playerState.Skin.Texture.width, playerState.Skin.Texture.height);
@@ -132,6 +134,9 @@ public static class GameRenderer
 
         Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, color); // Draw Player 
 
+
+        // Draw Weapon
+        // -------------------------------------------------
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)
         {

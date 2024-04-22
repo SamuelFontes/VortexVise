@@ -21,6 +21,7 @@ public static class GameLogic
             MatchState = lastState.MatchState,
             Animations = lastState.Animations,
             WeaponDrops = lastState.WeaponDrops,
+            Tick = isNetworkFrame ? lastState.Tick + 1 : lastState.Tick,
         };
 
         MatchLogic.HandleMatchState(state, deltaTime);
@@ -53,7 +54,7 @@ public static class GameLogic
 
                 // Handle Player Behavior
                 PlayerLogic.AddPlayerTimers(currentPlayerState, deltaTime);
-                PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime, state,lastState);
+                PlayerLogic.HandlePlayerDeath(currentPlayerState, deltaTime, state, lastState);
                 if (currentPlayerState.IsDead)
                 {
                     // Just skip all calculations for this player
@@ -85,11 +86,11 @@ public static class GameLogic
             WeaponLogic.SpawnWeapons(state, deltaTime);
             WeaponLogic.UpdateWeaponDrops(state, deltaTime);
         }
-        else if(state.MatchState == MatchStates.EndScreen)
+        else if (state.MatchState == MatchStates.EndScreen)
         {
             state.PlayerStates = lastState.PlayerStates;
         }
-        else if(state.MatchState == MatchStates.Voting)
+        else if (state.MatchState == MatchStates.Voting)
         {
             state.PlayerStates = lastState.PlayerStates;
         }

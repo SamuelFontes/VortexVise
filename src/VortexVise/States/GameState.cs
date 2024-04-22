@@ -16,6 +16,7 @@ namespace VortexVise.States;
 public class GameState
 {
     public int Id { get; set; }
+    public ulong Tick { get; set; }
     public double CurrentTime { get; set; }
     public float Gravity { get; set; }
     public float MatchTimer { get; set; }
@@ -203,6 +204,6 @@ public class GameState
         }
         MatchState = MatchStates.Warmup;
         MatchTimer = 5;
-
+        Tick = 0;
     }
 }
