@@ -53,7 +53,7 @@ static internal class GameplayScene
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_LEFT)) MapLogic.LoadNextMap();
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
         {
-            var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            var bot = new PlayerState(State.PlayerStates.Count+5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
             var b = new Bot();
             b.Id = bot.Id;
