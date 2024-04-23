@@ -55,7 +55,8 @@ public static class PlayerLogic
             currentPlayerState.Stats.Deaths++;
             if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1)
             {
-                currentPlayerState.Stats.Kills--;
+                //currentPlayerState.Stats.Kills--;
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death,pitch:0.8f);
             }
             else
             {
