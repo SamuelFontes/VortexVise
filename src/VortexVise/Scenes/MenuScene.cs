@@ -2,12 +2,13 @@
 using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
+using VortexVise.Models;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
-enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart };
+enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart, StartGame };
 enum MenuItemType { Button, TextInput };
 enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby };
 /// <summary>
@@ -15,7 +16,7 @@ enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Load
 /// </summary>
 public static class MenuScene
 {
-    static readonly List<MenuItem> menuItems = [];
+    static readonly List<UIMenuItem> menuItems = [];
     static int finishScreen = 0;
     static Texture logo;
     static Texture background;
@@ -64,19 +65,20 @@ public static class MenuScene
         // Initialize items
         //----------------------------------------------------------------------------------
         var state = MenuState.PressStart;
-        menuItems.Add(new MenuItem("PRESS START", Scenes.MenuItem.PressStart, state, true)); // TODO: Change how this one workd
+        menuItems.Add(new UIMenuItem("PRESS START", Scenes.MenuItem.PressStart, state, true)); // TODO: Change how this one workd
         menuItems[0].IsEnabled = true;
         selected = menuItems[0].Item;
         currentState = state;
         state = MenuState.MainMenu;
-        menuItems.Add(new MenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false));
-        menuItems.Add(new MenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true));
-        menuItems.Add(new MenuItem("ONLINE", Scenes.MenuItem.Online, state, false));
-        menuItems.Add(new MenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false));
-        menuItems.Add(new MenuItem("EXIT", Scenes.MenuItem.Exit, state, true));
+        menuItems.Add(new UIMenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false));
+        menuItems.Add(new UIMenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true));
+        menuItems.Add(new UIMenuItem("ONLINE", Scenes.MenuItem.Online, state, false));
+        menuItems.Add(new UIMenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false));
+        menuItems.Add(new UIMenuItem("EXIT", Scenes.MenuItem.Exit, state, true));
         state = MenuState.Lobby;
         //menuItems.Add(new MenuItem("127.0.0.1", MainMenuItens.IP, state, true, MainMenuTypes.TextInput));
-        menuItems.Add(new MenuItem("GO BACK", Scenes.MenuItem.Return, state, true));
+        menuItems.Add(new UIMenuItem("START", Scenes.MenuItem.StartGame, state, true));
+        menuItems.Add(new UIMenuItem("GO BACK", Scenes.MenuItem.Return, state, true));
 
 
 
@@ -113,7 +115,18 @@ public static class MenuScene
             {
                 if (currentState == MenuState.InputSelection)
                 {
+                    currentState = MenuState.Lobby;
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                    menuItems.First(x => x.IsSelected).IsSelected = false;
+                    menuItems.First(x => x.Item == Scenes.MenuItem.StartGame).IsSelected = true;
+                    selected = MenuItem.StartGame;
+                    return;
+                }
+                else
+                if (currentState == MenuState.Lobby && selected == MenuItem.StartGame)
+                {
                     finishScreen = 2;
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.5f);
                     return;
                 }
                 GameUserInterface.IsCursorVisible = false;
@@ -386,9 +399,9 @@ public static class MenuScene
         if (lastSelected != selected && selected != Scenes.MenuItem.None) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
         lastSelected = selected;
     }
-    class MenuItem
+    class UIMenuItem
     {
-        public MenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled)
+        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled)
         {
             Text = text;
             Item = item;
@@ -398,7 +411,7 @@ public static class MenuScene
             IsSelected = false;
             Type = MenuItemType.Button;
         }
-        public MenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type)
+        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type)
         {
             Text = text;
             Item = item;
