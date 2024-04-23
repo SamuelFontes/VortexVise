@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.Design;
+using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Utilities;
@@ -28,6 +29,8 @@ public static class MenuScene
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
     static MenuState currentState;
+    static float arrowAnimationTimer = 0;
+    static bool arrowExpanding = true;
     //static bool IsOnline = false;
 
 
@@ -542,11 +545,17 @@ public static class MenuScene
             if (playerGamepadNumber != -9)
             {
                 Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
-                if ((Raylib.GetTime() % 1) > 0.25)
-                {
-                    Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 64, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                    Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 64 - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                }
+
+                if (arrowAnimationTimer > 10) arrowExpanding = false;
+                else if (arrowAnimationTimer < 0) arrowExpanding = true;
+
+                if (arrowExpanding)
+                    arrowAnimationTimer += Raylib.GetFrameTime() * 8;
+                else
+                    arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
+
+                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Utils.DrawTextCentered(profileName, profileNamePosition, 32, Raylib.WHITE);
             }
         }
