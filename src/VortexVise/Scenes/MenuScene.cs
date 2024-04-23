@@ -24,6 +24,7 @@ public static class MenuScene
     static Texture gamepadSlotOn;
     static Texture gamepadSlotOff;
     static Texture disconnected;
+    static Texture arrow;
     static Scenes.MenuItem selected;
     static Scenes.MenuItem lastSelected;
     static MenuState currentState;
@@ -48,6 +49,7 @@ public static class MenuScene
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
         gamepadSlotOn = Raylib.LoadTexture("resources/Common/gamepad_slot_on.png");
         gamepadSlotOff = Raylib.LoadTexture("resources/Common/gamepad_slot_off.png");
+        arrow = Raylib.LoadTexture("resources/Common/arrow.png");
 
         // Load player skins
         //----------------------------------------------------------------------------------
@@ -359,6 +361,15 @@ public static class MenuScene
 
     static public void UnloadMenuScene()
     {
+        Raylib.UnloadTexture(logo);
+        Raylib.UnloadTexture(background);
+        Raylib.UnloadTexture(box);
+        Raylib.UnloadTexture(keyboard);
+        Raylib.UnloadTexture(gamepad);
+        Raylib.UnloadTexture(disconnected);
+        Raylib.UnloadTexture(gamepadSlotOn);
+        Raylib.UnloadTexture(gamepadSlotOff);
+        Raylib.UnloadTexture(arrow);
     }
     static public int FinishMenuScene()
     {
@@ -526,9 +537,16 @@ public static class MenuScene
                 Vector2 disconnectedPosition = new(cardPosition.X + cardWidth * 0.5f, cardPosition.Y + cardHeight * 0.5f);
                 Raylib.DrawTextureEx(disconnected, new(disconnectedPosition.X - disconnected.width * 2f, disconnectedPosition.Y - disconnected.height * 2f), 0, 4, Raylib.WHITE);
             }
+
+            // Draw player skin
             if (playerGamepadNumber != -9)
             {
                 Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
+                if ((Raylib.GetTime() % 1) > 0.25)
+                {
+                    Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 64, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                    Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 64 - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                }
                 Utils.DrawTextCentered(profileName, profileNamePosition, 32, Raylib.WHITE);
             }
         }

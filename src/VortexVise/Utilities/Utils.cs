@@ -120,4 +120,5 @@ public static class Utils
             newVelocity += new Vector2(0, velocityToAdd.Y * multiplier);
         return newVelocity;
     }
+
 }
