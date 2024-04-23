@@ -50,10 +50,10 @@ static internal class GameplayScene
 
     static public void UpdateGameplayScene()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_LEFT)) MapLogic.LoadNextMap();
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
         {
-            var bot = new PlayerState(State.PlayerStates.Count+5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            var bot = new PlayerState(State.PlayerStates.Count + 5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
             var b = new Bot();
             b.Id = bot.Id;
@@ -170,13 +170,15 @@ static internal class GameplayScene
             Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
             var y = 64;
             var players = State.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-            Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
-            y += 32;
-            foreach (var player in players)
+            if (players.Count > 2 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
-                Utils.DrawTextCentered($"Player {player.Id + 1} - {player.Stats.Kills}/{player.Stats.Deaths}", new(GameCore.GameScreenWidth * 0.5f, y), 16, Raylib.WHITE);
-                y += 16;
+                Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
             }
+            else
+            {
+                Utils.DrawTextCentered($"DRAW", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+            }
+            GameUserInterface.DrawScoreboard(players);
         }
         else if (State.MatchState == MatchStates.Voting)
         {

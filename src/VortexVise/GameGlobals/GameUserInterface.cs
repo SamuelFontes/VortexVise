@@ -16,6 +16,7 @@ static internal class GameUserInterface
     public static float CursorAlpha { get; private set; } = 0;
     public static bool IsCursorVisible { get; set; } = true;
     public static bool DisableCursor { get; set; } = false;
+    public static bool IsShowingScoreboard { get; set; } = false;
     public static void InitUserInterface()
     {
         Cursor = Raylib.LoadTexture("Resources/Common/cursor.png");
@@ -107,6 +108,13 @@ static internal class GameUserInterface
             p = new Vector2(GameCore.GameScreenWidth - 128 - 8, GameCore.GameScreenHeight * 0.5f + 8);
             playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerFourProfile.Id);
             if (playerState != null) DrawPlayerInfo(playerState, p);
+
+            if (IsShowingScoreboard)
+            {
+                var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
+                Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+                DrawScoreboard(players);
+            }
         }
 
 
@@ -132,18 +140,56 @@ static internal class GameUserInterface
         {
             Raylib.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, Raylib.DARKGRAY);
         }
-        position += new Vector2(72, 0);
+
+        // Draw bullets
+        var weaponPosition = position + new Vector2(72, 0);
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)
         {
-            Raylib.DrawTextureEx(weapon.Weapon.Texture, position, 0, 1, Raylib.WHITE);
-            position += new Vector2(-12, 32);
+            Raylib.DrawTextureEx(weapon.Weapon.Texture, weaponPosition, 0, 1, Raylib.WHITE);
+            weaponPosition += new Vector2(-12, 32);
             for (int i = 0; i < weapon.CurrentAmmo; i++)
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, position, 0, 1, new(255, 255, 255, 255));
-                position += new Vector2(8, 0);
-                if (i != 0 && i % 7 == 0) position += new Vector2(-64, 8);
+                Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, weaponPosition, 0, 1, new(255, 255, 255, 255));
+                weaponPosition += new Vector2(8, 0);
+                if (i != 0 && i % 7 == 0) weaponPosition += new Vector2(-64, 8);
             }
+        }
+
+        var scorePosition = position + new Vector2(8, 72);
+
+        Raylib.DrawTexture(GameAssets.HUD.Kill, (int)scorePosition.X, (int)scorePosition.Y, Raylib.WHITE);
+        scorePosition += new Vector2(32, 8);
+        Utils.DrawTextCentered($"{playerState.Stats.Kills}", scorePosition, 16, Raylib.WHITE);
+        scorePosition += new Vector2(32, -8);
+        Raylib.DrawTexture(GameAssets.HUD.Death, (int)scorePosition.X, (int)scorePosition.Y, Raylib.WHITE);
+        scorePosition += new Vector2(32, 8);
+        Utils.DrawTextCentered($"{playerState.Stats.Deaths}", scorePosition, 16, Raylib.WHITE);
+
+
+    }
+
+    public static void DrawScoreboard(List<PlayerState> players)
+    {
+        var y = 96;
+        foreach (var player in players)
+        {
+            int x = (int)(GameCore.GameScreenWidth * 0.5f);
+            x -= 128;
+            Utils.DrawTextCentered($"Player {player.Id + 1}", new(x, y), 16, Raylib.WHITE);
+            x += 128;
+            y -= 8;
+            Raylib.DrawTexture(GameAssets.HUD.Kill, x, y, Raylib.WHITE);
+            x += 32;
+            y += 8;
+            Utils.DrawTextCentered($"{player.Stats.Kills}", new(x, y), 16, Raylib.WHITE);
+            x += 32;
+            y -= 8;
+            Raylib.DrawTexture(GameAssets.HUD.Death, x, y, Raylib.WHITE);
+            x += 32;
+            y += 8;
+            Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE);
+            y += 16;
         }
 
     }

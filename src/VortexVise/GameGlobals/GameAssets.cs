@@ -254,6 +254,8 @@ public static class GameAssets
             Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
             BulletCounter = Raylib.LoadTexture("Resources/Common/bullet_counter.png");
             HudBorder = Raylib.LoadTexture("Resources/Common/hud_border.png");
+            Kill = Raylib.LoadTexture("Resources/Common/kill.png");
+            Death = Raylib.LoadTexture("Resources/Common/death.png");
         }
         public static void Unload()
         {
@@ -262,6 +264,8 @@ public static class GameAssets
             Raylib.UnloadTexture(Arrow);
             Raylib.UnloadTexture(BulletCounter);
             Raylib.UnloadTexture(HudBorder);
+            Raylib.UnloadTexture(Kill);
+            Raylib.UnloadTexture(Death);
         }
 
         public static Texture Arrow;
@@ -269,5 +273,7 @@ public static class GameAssets
         public static Texture WeaponOff;
         public static Texture BulletCounter;
         public static Texture HudBorder;
+        public static Texture Kill;
+        public static Texture Death;
     }
 }

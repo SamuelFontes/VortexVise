@@ -111,6 +111,8 @@ public static class GameInput
                 input.Back = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_I) || Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
                 input.FireWeapon = true;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
+                input.Select = true;
         }
         else
         {
@@ -145,6 +147,8 @@ public static class GameInput
                 input.GrabDrop = true;
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_RIGHT_TRIGGER_2))
                 input.FireWeapon = true;
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_MIDDLE_LEFT))
+                input.Select = true;
 
         }
         return input;

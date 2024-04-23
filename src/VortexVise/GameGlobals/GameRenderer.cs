@@ -23,6 +23,9 @@ public static class GameRenderer
     /// <param name="state">Current game state.</param>
     public static void DrawGameState(GameState state, PlayerState mainPlayer)
     {
+        // Clears menu states
+        GameUserInterface.IsShowingScoreboard = false;
+
         // All rendering logic should go here
         DrawMap();
         DrawWeaponDrops(state);
@@ -225,6 +228,12 @@ public static class GameRenderer
                 Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
             //Utils.DrawTextCentered("12",p,4,Raylib.WHITE);
 
+        }
+
+        //Scoreboard
+        if (mainPlayer.Input.Select && !GameUserInterface.IsShowingScoreboard)
+        {
+            GameUserInterface.IsShowingScoreboard = true;
         }
 
     }
