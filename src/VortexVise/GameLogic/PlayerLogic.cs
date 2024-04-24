@@ -82,6 +82,7 @@ public static class PlayerLogic
                 currentPlayerState.Position = GameMatch.PlayerSpawnPoint;
                 currentPlayerState.Velocity = new(0, 0);
                 currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
+                currentPlayerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
             }
         }
     }
@@ -120,7 +121,7 @@ public static class PlayerLogic
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
             if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f, overrideIfPlaying: false); ;
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-GameMatch.PlayerJumpForce);
             currentPlayerState.CanDash = true;
@@ -137,9 +138,8 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
         {
-            /*            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
-            */
+            if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 3f, volume: 0.8f, overrideIfPlaying: false);
+
             if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
             currentPlayerState.AddVelocity(new(0, -(GameMatch.PlayerJumpForce * 4 * deltaTime)));
             currentPlayerState.JetPackFuel -= deltaTime * 2;
@@ -147,8 +147,8 @@ public static class PlayerLogic
         }
         else
         {
-            if(currentPlayerState.IsTouchingTheGround) currentPlayerState.JetPackFuel += deltaTime * 5;
-            else currentPlayerState.JetPackFuel += deltaTime;
+            if (currentPlayerState.IsTouchingTheGround) currentPlayerState.JetPackFuel += deltaTime * 5;
+            else currentPlayerState.JetPackFuel += deltaTime * 0.5f;
             if (currentPlayerState.JetPackFuel > GameMatch.DefaultJetPackFuel) currentPlayerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
         }
 

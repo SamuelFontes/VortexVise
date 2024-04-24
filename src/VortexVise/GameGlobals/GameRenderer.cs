@@ -201,6 +201,8 @@ public static class GameRenderer
         // Player Arrow
         if (!mainPlayer.IsDead)
         {
+            // Draw weapon ready icon
+
             var p = mainPlayer.Position;
             //p += new Vector2(24, -16);
             //Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 255));
@@ -228,6 +230,20 @@ public static class GameRenderer
                 Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
             //Utils.DrawTextCentered("12",p,4,Raylib.WHITE);
 
+            // Draw jetpack fuel
+            {
+                p = mainPlayer.Position;
+                p += new Vector2(0, -16);
+                Raylib.DrawTextureEx(GameAssets.HUD.JetPackFuelOff, p, 0, 1, new(255, 255, 255, 255));
+                var spriteHeight = GameAssets.HUD.JetPackFuelOn.height;
+                var total = 100;
+                var percent = (mainPlayer.JetPackFuel * 100) / GameMatch.DefaultJetPackFuel;
+
+                int overlayHeight = (int)((percent * spriteHeight) / total);
+                if (overlayHeight % 2 != 0) overlayHeight++;
+
+                Raylib.DrawTexturePro(GameAssets.HUD.JetPackFuelOn, new(0, GameAssets.HUD.JetPackFuelOn.height - overlayHeight, GameAssets.HUD.JetPackFuelOn.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.JetPackFuelOn.height - overlayHeight, GameAssets.HUD.JetPackFuelOn.width, overlayHeight), new(0, 0), 0, Raylib.WHITE);
+            }
         }
 
         //Scoreboard

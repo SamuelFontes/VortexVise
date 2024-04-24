@@ -160,6 +160,22 @@ public static class GameAssets
     /// </summary>
     public static class Sounds
     {
+        public static Sound HookShoot;
+        public static Sound HookHit;
+        public static Sound Jump;
+        public static Sound Dash;
+        public static Sound Click;
+        public static Sound Selection;
+        public static Sound WeaponDrop;
+        public static Sound WeaponClick;
+        public static Sound Death;
+        public static Sound Shotgun;
+        public static Sound Drop;
+        public static Sound HitMarker;
+        public static Sound Explosion;
+        public static Sound VinylScratch;
+        public static Sound Kill;
+        public static Sound JetPack;
         public static void Init()
         {
             HookShoot = Raylib.LoadSound("Resources/Audio/FX/hook_fire.wav");
@@ -177,6 +193,7 @@ public static class GameAssets
             Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
             VinylScratch = Raylib.LoadSound("Resources/Audio/FX/vinyl_scratch.ogg");
             Kill = Raylib.LoadSound("Resources/Audio/FX/kill.ogg");
+            JetPack = Raylib.LoadSound("Resources/Audio/FX/jetpack.ogg");
         }
         public static void Unload()
         {
@@ -195,25 +212,12 @@ public static class GameAssets
             Raylib.UnloadSound(Explosion);
             Raylib.UnloadSound(VinylScratch);
             Raylib.UnloadSound(Kill);
+            Raylib.UnloadSound(JetPack);
         }
-        public static Sound HookShoot;
-        public static Sound HookHit;
-        public static Sound Jump;
-        public static Sound Dash;
-        public static Sound Click;
-        public static Sound Selection;
-        public static Sound WeaponDrop;
-        public static Sound WeaponClick;
-        public static Sound Death;
-        public static Sound Shotgun;
-        public static Sound Drop;
-        public static Sound HitMarker;
-        public static Sound Explosion;
-        public static Sound VinylScratch;
-        public static Sound Kill;
-        public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f)
+        public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f, bool overrideIfPlaying = true)
         {
             if (GameCore.IsServer) return; // Audio don't play on the server
+            if (!overrideIfPlaying && Raylib.IsSoundPlaying(sound)) return;
 
             volume *= GameSettings.VolumeSounds;
             Raylib.SetSoundPan(sound, pan);
@@ -247,6 +251,16 @@ public static class GameAssets
 
     public static class HUD
     {
+
+        public static Texture Arrow;
+        public static Texture WeaponOn;
+        public static Texture WeaponOff;
+        public static Texture BulletCounter;
+        public static Texture HudBorder;
+        public static Texture Kill;
+        public static Texture Death;
+        public static Texture JetPackFuelOn;
+        public static Texture JetPackFuelOff;
         public static void Load()
         {
             WeaponOn = Raylib.LoadTexture("resources/Common/hud_weapon_on.png");
@@ -256,6 +270,8 @@ public static class GameAssets
             HudBorder = Raylib.LoadTexture("Resources/Common/hud_border.png");
             Kill = Raylib.LoadTexture("Resources/Common/kill.png");
             Death = Raylib.LoadTexture("Resources/Common/death.png");
+            JetPackFuelOn = Raylib.LoadTexture("Resources/Common/jetpack_fuel_on.png");
+            JetPackFuelOff = Raylib.LoadTexture("Resources/Common/jetpack_fuel_off.png");
         }
         public static void Unload()
         {
@@ -266,14 +282,8 @@ public static class GameAssets
             Raylib.UnloadTexture(HudBorder);
             Raylib.UnloadTexture(Kill);
             Raylib.UnloadTexture(Death);
+            Raylib.UnloadTexture(JetPackFuelOn);
+            Raylib.UnloadTexture(JetPackFuelOff);
         }
-
-        public static Texture Arrow;
-        public static Texture WeaponOn;
-        public static Texture WeaponOff;
-        public static Texture BulletCounter;
-        public static Texture HudBorder;
-        public static Texture Kill;
-        public static Texture Death;
     }
 }
