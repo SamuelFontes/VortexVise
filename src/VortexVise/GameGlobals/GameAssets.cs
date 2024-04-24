@@ -253,37 +253,40 @@ public static class GameAssets
     {
 
         public static Texture Arrow;
-        public static Texture WeaponOn;
-        public static Texture WeaponOff;
+        public static Texture WideBarGreen;
+        public static Texture WideBarEmpty;
         public static Texture BulletCounter;
         public static Texture HudBorder;
         public static Texture Kill;
         public static Texture Death;
-        public static Texture JetPackFuelOn;
-        public static Texture JetPackFuelOff;
+        public static Texture ThinBarOrange;
+        public static Texture ThinBarBlue;
+        public static Texture ThinBarEmpty;
         public static void Load()
         {
-            WeaponOn = Raylib.LoadTexture("resources/Common/hud_weapon_on.png");
-            WeaponOff = Raylib.LoadTexture("resources/Common/hud_weapon_off.png");
+            WideBarGreen = Raylib.LoadTexture("resources/Common/wide_bar_green.png");
+            WideBarEmpty = Raylib.LoadTexture("resources/Common/wide_bar_empty.png");
             Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
-            BulletCounter = Raylib.LoadTexture("Resources/Common/bullet_counter.png");
+            BulletCounter = Raylib.LoadTexture("Resources/Common/bullet.png");
             HudBorder = Raylib.LoadTexture("Resources/Common/hud_border.png");
             Kill = Raylib.LoadTexture("Resources/Common/kill.png");
             Death = Raylib.LoadTexture("Resources/Common/death.png");
-            JetPackFuelOn = Raylib.LoadTexture("Resources/Common/jetpack_fuel_on.png");
-            JetPackFuelOff = Raylib.LoadTexture("Resources/Common/jetpack_fuel_off.png");
+            ThinBarOrange = Raylib.LoadTexture("Resources/Common/thin_bar_orange.png");
+            ThinBarBlue = Raylib.LoadTexture("Resources/Common/thin_bar_blue.png");
+            ThinBarEmpty = Raylib.LoadTexture("Resources/Common/thin_bar_empty.png");
         }
         public static void Unload()
         {
-            Raylib.UnloadTexture(WeaponOn);
-            Raylib.UnloadTexture(WeaponOff);
+            Raylib.UnloadTexture(WideBarGreen);
+            Raylib.UnloadTexture(WideBarEmpty);
             Raylib.UnloadTexture(Arrow);
             Raylib.UnloadTexture(BulletCounter);
             Raylib.UnloadTexture(HudBorder);
             Raylib.UnloadTexture(Kill);
             Raylib.UnloadTexture(Death);
-            Raylib.UnloadTexture(JetPackFuelOn);
-            Raylib.UnloadTexture(JetPackFuelOff);
+            Raylib.UnloadTexture(ThinBarOrange);
+            Raylib.UnloadTexture(ThinBarBlue);
+            Raylib.UnloadTexture(ThinBarEmpty);
         }
     }
 }

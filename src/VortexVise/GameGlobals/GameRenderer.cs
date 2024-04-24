@@ -198,24 +198,54 @@ public static class GameRenderer
     private static void DrawHud(GameState state, PlayerState mainPlayer)
     {
         var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
-        // Player Arrow
         if (!mainPlayer.IsDead)
         {
-            // Draw weapon ready icon
+            // Draw player health
+            // --------------------------------------------------------
 
             var p = mainPlayer.Position;
-            //p += new Vector2(24, -16);
-            //Raylib.DrawTextureEx(GameAssets.HUD.Arrow, p, 90, 2, new(255, 255, 255, 255));
             p += new Vector2(8, -16);
+            {
+                Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));
+                var spriteHeight = GameAssets.HUD.WideBarGreen.height;
+                var total = 100;
+                //var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
+                var percent = (mainPlayer.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
+                int overlayHeight = (int)((percent * spriteHeight) / total);
+                if (overlayHeight % 2 != 0) overlayHeight++;
+
+                Raylib.DrawTexturePro(GameAssets.HUD.WideBarGreen, new(0, GameAssets.HUD.WideBarGreen.height - overlayHeight, GameAssets.HUD.WideBarGreen.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WideBarGreen.height - overlayHeight, GameAssets.HUD.WideBarGreen.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+            }
+
+            // Draw jetpack fuel
+            // --------------------------------------------------------
+            {
+                p = mainPlayer.Position;
+                p += new Vector2(2, -16);
+                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
+                var spriteHeight = GameAssets.HUD.ThinBarOrange.height;
+                var total = 100;
+                var percent = (mainPlayer.JetPackFuel * 100) / GameMatch.DefaultJetPackFuel;
+
+                int overlayHeight = (int)((percent * spriteHeight) / total);
+                if (overlayHeight % 2 != 0) overlayHeight++;
+
+                Raylib.DrawTexturePro(GameAssets.HUD.ThinBarOrange, new(0, GameAssets.HUD.ThinBarOrange.height - overlayHeight, GameAssets.HUD.ThinBarOrange.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarOrange.height - overlayHeight, GameAssets.HUD.ThinBarOrange.width, overlayHeight), new(0, 0), 0, Raylib.WHITE);
+            }
+
+            // Draw weapon bar
+            // --------------------------------------------------------
+            p = mainPlayer.Position;
+            p += new Vector2(22, -16);
             if (weapon != null)
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
-                var spriteHeight = GameAssets.HUD.WeaponOn.height;
+                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
+                var spriteHeight = GameAssets.HUD.ThinBarBlue.height;
                 var total = 100;
                 var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
                 if (percent == 100)
                 {
-                    Raylib.DrawTextureEx(GameAssets.HUD.WeaponOn, p, 0, 1, new(255, 255, 255, 255));
+                    Raylib.DrawTextureEx(GameAssets.HUD.ThinBarBlue, p, 0, 1, new(255, 255, 255, 255));
                 }
                 else
                 {
@@ -223,27 +253,11 @@ public static class GameRenderer
                     int overlayHeight = (int)((percent * spriteHeight) / total);
                     if (overlayHeight % 2 != 0) overlayHeight++;
 
-                    Raylib.DrawTexturePro(GameAssets.HUD.WeaponOn, new(0, GameAssets.HUD.WeaponOn.height - overlayHeight, GameAssets.HUD.WeaponOn.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WeaponOn.height - overlayHeight, GameAssets.HUD.WeaponOn.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+                    Raylib.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
                 }
             }
             else
-                Raylib.DrawTextureEx(GameAssets.HUD.WeaponOff, p, 0, 1, new(255, 255, 255, 255));
-            //Utils.DrawTextCentered("12",p,4,Raylib.WHITE);
-
-            // Draw jetpack fuel
-            {
-                p = mainPlayer.Position;
-                p += new Vector2(0, -16);
-                Raylib.DrawTextureEx(GameAssets.HUD.JetPackFuelOff, p, 0, 1, new(255, 255, 255, 255));
-                var spriteHeight = GameAssets.HUD.JetPackFuelOn.height;
-                var total = 100;
-                var percent = (mainPlayer.JetPackFuel * 100) / GameMatch.DefaultJetPackFuel;
-
-                int overlayHeight = (int)((percent * spriteHeight) / total);
-                if (overlayHeight % 2 != 0) overlayHeight++;
-
-                Raylib.DrawTexturePro(GameAssets.HUD.JetPackFuelOn, new(0, GameAssets.HUD.JetPackFuelOn.height - overlayHeight, GameAssets.HUD.JetPackFuelOn.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.JetPackFuelOn.height - overlayHeight, GameAssets.HUD.JetPackFuelOn.width, overlayHeight), new(0, 0), 0, Raylib.WHITE);
-            }
+                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
         }
 
         //Scoreboard
