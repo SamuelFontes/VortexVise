@@ -34,6 +34,7 @@ public static class PlayerLogic
         currentPlayerState.DamagedTimer = lastPlayerState.DamagedTimer;
         currentPlayerState.Stats = lastPlayerState.Stats;
         currentPlayerState.LastPlayerHitId = lastPlayerState.LastPlayerHitId;
+        currentPlayerState.JetPackFuel = lastPlayerState.JetPackFuel;
     }
 
     public static void AddPlayerTimers(PlayerState currentPlayerState, float deltaTime)
@@ -56,7 +57,7 @@ public static class PlayerLogic
             if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1)
             {
                 //currentPlayerState.Stats.Kills--;
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death,pitch:0.8f);
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death, pitch: 0.8f);
             }
             else
             {
@@ -131,6 +132,28 @@ public static class PlayerLogic
         }
 
     }
+
+    public static void ProcessPlayerJetPack(PlayerState currentPlayerState, float deltaTime)
+    {
+        if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
+        {
+            /*            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f);
+            */
+            if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
+            currentPlayerState.AddVelocity(new(0, -(GameMatch.PlayerJumpForce * 4 * deltaTime)));
+            currentPlayerState.JetPackFuel -= deltaTime * 2;
+            if (currentPlayerState.JetPackFuel <= 0) currentPlayerState.JetPackFuel = GameMatch.DefaultJetPackFuel * -1;
+        }
+        else
+        {
+            if(currentPlayerState.IsTouchingTheGround) currentPlayerState.JetPackFuel += deltaTime * 5;
+            else currentPlayerState.JetPackFuel += deltaTime;
+            if (currentPlayerState.JetPackFuel > GameMatch.DefaultJetPackFuel) currentPlayerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
+        }
+
+    }
+
 
     public static void ApplyPlayerGravity(PlayerState currentPlayerState, float deltaTime, float gravity)
     {

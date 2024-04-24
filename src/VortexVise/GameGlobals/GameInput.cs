@@ -113,6 +113,8 @@ public static class GameInput
                 input.FireWeapon = true;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_TAB))
                 input.Select = true;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_SHIFT))
+                input.JetPack = true;
         }
         else
         {
@@ -149,6 +151,8 @@ public static class GameInput
                 input.FireWeapon = true;
             if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_MIDDLE_LEFT))
                 input.Select = true;
+            if (Raylib.IsGamepadButtonDown(gamepad, GamepadButton.GAMEPAD_BUTTON_LEFT_TRIGGER_2))
+                input.JetPack = true;
 
         }
         return input;

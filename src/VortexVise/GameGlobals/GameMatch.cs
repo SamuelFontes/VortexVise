@@ -79,6 +79,7 @@ public static class GameMatch
     /// Define how high the player can jump.
     /// </summary>
     public static readonly float PlayerJumpForce = 450;
+    public static float DefaultJetPackFuel = 2f;
     /// <summary>
     /// Define how fast can the player fall.
     /// </summary>

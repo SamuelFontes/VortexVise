@@ -12,6 +12,7 @@ public class InputState
     public bool Up { get; set; } = false;
     public bool Down { get; set; } = false;
     public bool Jump { get; set; } = false;
+    public bool JetPack { get; set; } = false;
     public bool Hook { get; set; } = false;
     public bool CancelHook { get; set; } = false;
     public bool Confirm { get; set; } = false;
@@ -36,6 +37,7 @@ public class InputState
         CancelHook = buffer.CancelHook || CancelHook;
         GrabDrop = buffer.GrabDrop || GrabDrop;
         FireWeapon = buffer.FireWeapon || FireWeapon;
+        JetPack = buffer.JetPack || JetPack;
     }
 
     public void ClearInputBuffer()
@@ -49,6 +51,7 @@ public class InputState
         CancelHook = false;
         GrabDrop = false;
         FireWeapon = false;
+        JetPack = false;
     }
 
 }

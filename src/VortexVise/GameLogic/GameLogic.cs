@@ -65,6 +65,7 @@ public static class GameLogic
                 PlayerLogic.ProcessPlayerMovement(currentPlayerState, deltaTime);
                 PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);
                 PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
+                PlayerLogic.ProcessPlayerJetPack(currentPlayerState, deltaTime);
                 PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
                 if (isNetworkFrame) WeaponLogic.ApplyHitBoxesDamage(state, currentPlayerState); // Only apply damage on tick frames
                 PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
