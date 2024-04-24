@@ -254,6 +254,7 @@ public static class GameAssets
 
         public static Texture Arrow;
         public static Texture WideBarGreen;
+        public static Texture WideBarRed;
         public static Texture WideBarEmpty;
         public static Texture BulletCounter;
         public static Texture HudBorder;
@@ -265,6 +266,7 @@ public static class GameAssets
         public static void Load()
         {
             WideBarGreen = Raylib.LoadTexture("resources/Common/wide_bar_green.png");
+            WideBarRed = Raylib.LoadTexture("resources/Common/wide_bar_red.png");
             WideBarEmpty = Raylib.LoadTexture("resources/Common/wide_bar_empty.png");
             Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
             BulletCounter = Raylib.LoadTexture("Resources/Common/bullet.png");
@@ -278,6 +280,7 @@ public static class GameAssets
         public static void Unload()
         {
             Raylib.UnloadTexture(WideBarGreen);
+            Raylib.UnloadTexture(WideBarRed);
             Raylib.UnloadTexture(WideBarEmpty);
             Raylib.UnloadTexture(Arrow);
             Raylib.UnloadTexture(BulletCounter);

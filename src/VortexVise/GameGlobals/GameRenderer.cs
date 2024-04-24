@@ -35,6 +35,7 @@ public static class GameRenderer
 
             DrawHookState(playerState);
             DrawPlayerState(playerState);
+            DrawEnemyHealthBar(playerState);
         }
         // Draw main player on top for this screen
         DrawHookState(mainPlayer);
@@ -202,7 +203,6 @@ public static class GameRenderer
         {
             // Draw player health
             // --------------------------------------------------------
-
             var p = mainPlayer.Position;
             p += new Vector2(8, -16);
             {
@@ -264,6 +264,26 @@ public static class GameRenderer
         if (mainPlayer.Input.Select && !GameUserInterface.IsShowingScoreboard)
         {
             GameUserInterface.IsShowingScoreboard = true;
+        }
+
+    }
+
+    public static void DrawEnemyHealthBar(PlayerState playerState)
+    {
+        // Draw player health
+        // --------------------------------------------------------
+        var p = playerState.Position;
+        p += new Vector2(8, -16);
+        {
+            Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));
+            var spriteHeight = GameAssets.HUD.WideBarRed.height;
+            var total = 100;
+            //var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
+            var percent = (playerState.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
+            int overlayHeight = (int)((percent * spriteHeight) / total);
+            if (overlayHeight % 2 != 0) overlayHeight++;
+
+            Raylib.DrawTexturePro(GameAssets.HUD.WideBarRed, new(0, GameAssets.HUD.WideBarRed.height - overlayHeight, GameAssets.HUD.WideBarRed.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WideBarRed.height - overlayHeight, GameAssets.HUD.WideBarRed.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
         }
 
     }
