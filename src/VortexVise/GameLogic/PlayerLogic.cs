@@ -138,7 +138,7 @@ public static class PlayerLogic
     {
         if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
         {
-            if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 3f, volume: 0.8f, overrideIfPlaying: false);
+            if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 1f, volume: 0.5f, overrideIfPlaying: false);
 
             if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
             currentPlayerState.AddVelocity(new(0, -(GameMatch.PlayerJumpForce * 4 * deltaTime)));
@@ -147,7 +147,7 @@ public static class PlayerLogic
         }
         else
         {
-            if (currentPlayerState.IsTouchingTheGround) currentPlayerState.JetPackFuel += deltaTime * 5;
+            if (currentPlayerState.IsTouchingTheGround || currentPlayerState.HookState.IsHookAttached) currentPlayerState.JetPackFuel += deltaTime * 5;
             else currentPlayerState.JetPackFuel += deltaTime * 0.5f;
             if (currentPlayerState.JetPackFuel > GameMatch.DefaultJetPackFuel) currentPlayerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
         }

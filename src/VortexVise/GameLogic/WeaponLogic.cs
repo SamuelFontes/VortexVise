@@ -252,7 +252,7 @@ public static class WeaponLogic
 
                     Vector2 velocity = new(GameMatch.GranadeForce * currentPlayerState.Direction * -1, -GameMatch.GranadeForce);
                     if (currentPlayerState.Input.Left && currentPlayerState.Input.Down) // ↙ 
-                        velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
+                        velocity = new(-GameMatch.GranadeForce, GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down) // ↘
                         velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
                     else if (currentPlayerState.Input.Down) // ↓

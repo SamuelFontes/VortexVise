@@ -90,6 +90,7 @@ public static class BotLogic
         {
             input.Down = false;
             input.Up = true;
+            input.JetPack = true;
         }
 
         if (bot.EnemyTarget != null && ((int)bot.EnemyTarget.Position.Y == (int)botState.Position.Y || (bot.EnemyTarget.Position.Y > botState.Position.Y - 8 && bot.EnemyTarget.Position.Y < botState.Position.Y + 32)))

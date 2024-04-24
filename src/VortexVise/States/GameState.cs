@@ -193,6 +193,7 @@ public class GameState
             playerState.LastPlayerHitId = -1;
             playerState.Stats.Kills = 0;
             playerState.Stats.Deaths = 0;
+            playerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
         }
         WeaponLogic.WeaponRotation = 0;
         WeaponDrops.Clear();

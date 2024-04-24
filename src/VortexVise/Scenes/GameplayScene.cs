@@ -51,7 +51,7 @@ static internal class GameplayScene
     static public void UpdateGameplayScene()
     {
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
         {
             var bot = new PlayerState(State.PlayerStates.Count + 5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
@@ -60,14 +60,14 @@ static internal class GameplayScene
             GameMatch.Bots.Add(b);
             LastState.PlayerStates.Add(bot); // add bot
         }
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_THUMB))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5))
         {
             var bot = new PlayerState(State.PlayerStates.Count, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.Id = -99;
             bot.Position = State.PlayerStates.Select(x => x.Position).First();
             LastState.PlayerStates.Add(bot); // Add testing dummy
         }
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_RIGHT_THUMB))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4))
         {
             LastState.PlayerStates.RemoveAll(x => x.IsBot);
             LastState.PlayerStates.RemoveAll(x => x.Id == -99);
@@ -149,7 +149,7 @@ static internal class GameplayScene
             CameraLogic.BeginDrawingToCamera(i, player.Position);
             GameRenderer.DrawGameState(State, player);
             // TODO: draw hud here
-            CameraLogic.EndDrawingToCamera(i);
+            CameraLogic.EndDrawingToCamera(i, player.IsDead);
         }
 
         // Global HUD
@@ -170,7 +170,7 @@ static internal class GameplayScene
             Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
             var y = 64;
             var players = State.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-            if (players.Count > 2 && players[0].Stats.Kills > players[1].Stats.Kills)
+            if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
                 Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
             }

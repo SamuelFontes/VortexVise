@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.Design;
+using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.Utilities;
@@ -148,12 +149,15 @@ public static class CameraLogic
     /// End drawing to a specific camera.
     /// </summary>
     /// <param name="index">Defines what camera it will stop drawing to. 0 to 3.</param>
-    public static void EndDrawingToCamera(int index)
+    public static void EndDrawingToCamera(int index, bool isPlayerDead)
     {
         Raylib.EndMode2D();
         Raylib.EndTextureMode();
         Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
-        Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.WHITE);
+        if (isPlayerDead)
+            Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.GRAY);
+        else
+            Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.WHITE);
     }
 
     /// <summary>

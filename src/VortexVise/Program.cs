@@ -26,6 +26,9 @@ Raylib.SetTargetFPS(GameSettings.TargetFPS);                                    
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 GameAssets.InitializeAssets();                                                                          // Load global data 
 GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
+Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");
+Raylib.SetWindowIcon(icon);
+Raylib.UnloadImage(icon);
 
 
 // Initiate music
