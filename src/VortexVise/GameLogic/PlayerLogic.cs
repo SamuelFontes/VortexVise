@@ -62,12 +62,15 @@ public static class PlayerLogic
             else
             {
                 var p = lastGameState.PlayerStates.FirstOrDefault(x => x.Id == currentPlayerState.LastPlayerHitId);
-                if (IsPlayerLocal(p.Id))
+                if (p != null)
                 {
-                    currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.KillConfirmation, Position = new(p.Position.X - 16, p.Position.Y - 64) });
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Kill);
+                    p.Stats.Kills++;
+                    if (IsPlayerLocal(p.Id))
+                    {
+                        currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.KillConfirmation, Position = new(p.Position.X - 16, p.Position.Y - 64) });
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Kill);
+                    }
                 }
-                if (p != null) p.Stats.Kills++;
             }
             currentPlayerState.LastPlayerHitId = -1;
         }
