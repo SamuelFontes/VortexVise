@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Design;
+using System.Net.Security;
 using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
@@ -46,8 +47,7 @@ public static class MenuScene
         // Load textures
         //----------------------------------------------------------------------------------
         logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
-        background = Raylib.LoadTexture("resources/Common/MenuBackground.png");
-        box = Raylib.LoadTexture("resources/Common/rounded_box.png");
+        background = Raylib.LoadTexture("resources/Common/MenuBackground.png"); box = Raylib.LoadTexture("resources/Common/rounded_box.png");
         keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
@@ -86,7 +86,7 @@ public static class MenuScene
 
     static public void UpdateMenuScene()
     {
-        if (currentState == MenuState.PressStart)
+        if (currentState == MenuState.PressStart) // MAIN MENU PRESS START 
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
                 GameCore.PlayerOneProfile.Gamepad = -1; // Mouse and keyboard
@@ -104,11 +104,9 @@ public static class MenuScene
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
                 selected = Scenes.MenuItem.Arcade;
-                menuItems.First(x => x.Item == selected).IsSelected = true;
-                menuItems[0].IsSelected = false;
             }
         }
-        else
+        else // MAIN MENU
         {
             var input = GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad);
             if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
@@ -117,8 +115,6 @@ public static class MenuScene
                 {
                     currentState = MenuState.Lobby;
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                    menuItems.First(x => x.IsSelected).IsSelected = false;
-                    menuItems.First(x => x.Item == Scenes.MenuItem.StartGame).IsSelected = true;
                     selected = MenuItem.StartGame;
                     return;
                 }
@@ -156,9 +152,9 @@ public static class MenuScene
                     }
                     case Scenes.MenuItem.Return:
                     {
-                        foreach (var item in menuItems) item.IsSelected = false;
                         currentState = MenuState.MainMenu;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                        selected = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
                         break;
                     }
                     default: break;
@@ -174,13 +170,11 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        item.IsSelected = false;
                         selected = Scenes.MenuItem.None;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
                         shouldSelectNext = false;
-                        item.IsSelected = true;
                         selected = item.Item;
 
                     }
@@ -188,7 +182,6 @@ public static class MenuScene
                 if (shouldSelectNext || selected == Scenes.MenuItem.None)
                 {
                     var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).Last();
-                    item.IsSelected = true; // Means the item is the last
                     selected = item.Item;
                 }
             }
@@ -203,31 +196,37 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        item.IsSelected = false;
                         selected = Scenes.MenuItem.None;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
                         shouldSelectNext = false;
-                        item.IsSelected = true;
                         selected = item.Item;
                     }
                 }
                 if (shouldSelectNext || selected == Scenes.MenuItem.None)
                 {
-                    var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).First();
-                    item.IsSelected = true; // Means the item is the first
-                    selected = item.Item;
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
                 }
             }
             else if (input.Back)
             {
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.5f);
-                currentState = MenuState.PressStart;
-                var m = menuItems.FirstOrDefault(x => x.IsSelected);
-                if (m != null) m.IsSelected = false;
-                menuItems[0].IsEnabled = true;
-                selected = menuItems[0].Item;
+                if (currentState == MenuState.MainMenu)
+                {
+                    currentState = MenuState.PressStart;
+                    menuItems[0].IsEnabled = true;
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
+                    GameCore.PlayerOneProfile.Gamepad = -9;
+                }
+                if (currentState == MenuState.InputSelection || currentState == MenuState.Lobby)
+                {
+                    currentState = MenuState.MainMenu;
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
+                    GameCore.PlayerTwoProfile.Gamepad = -9;
+                    GameCore.PlayerThreeProfile.Gamepad = -9;
+                    GameCore.PlayerFourProfile.Gamepad = -9;
+                }
             }
 
 
@@ -408,7 +407,6 @@ public static class MenuScene
             State = state;
             IsEnabled = isEnabled;
             Size = 32;
-            IsSelected = false;
             Type = MenuItemType.Button;
         }
         public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type)
@@ -418,14 +416,13 @@ public static class MenuScene
             State = state;
             IsEnabled = isEnabled;
             Size = 32;
-            IsSelected = false;
             Type = type;
         }
         public string Text;
         public Scenes.MenuItem Item { get; set; }
         public MenuState State { get; set; }
         public bool IsEnabled { get; set; }
-        public bool IsSelected { get; set; }
+        public bool IsSelected { get { return selected == Item; } }
         public Vector2 Position { get; set; }
         public int Size { get; set; }
         Color Color { get; set; }
@@ -446,17 +443,13 @@ public static class MenuScene
             // Check if mouse is selecting the menu
             if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, TextSize.X, TextSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
             {
-                IsSelected = true;
-            }
-            else if (GameUserInterface.IsCursorVisible || selected != Item)
-            {
-                IsSelected = false;
+                selected = Item;
             }
 
             // Make press start always selected
             if (currentState == MenuState.PressStart && Item == Scenes.MenuItem.PressStart)
             {
-                IsSelected = true;
+                selected = Item;
             }
 
             // Paint the text
