@@ -29,6 +29,8 @@ GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, Game
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");
 Raylib.SetWindowIcon(icon);
 Raylib.UnloadImage(icon);
+MapLogic.Init();
+MapLogic.LoadRandomMap();
 
 
 // Initiate music

@@ -9,8 +9,8 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
-enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart, StartGame };
-enum MenuItemType { Button, TextInput };
+enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart, StartGame, ChangeMap, ChangeGameMode, ChangeNumberOfBots };
+enum MenuItemType { Button, TextInput, Selection };
 enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby };
 /// <summary>
 /// Main Menu Scene
@@ -28,8 +28,8 @@ public static class MenuScene
     static Texture gamepadSlotOff;
     static Texture disconnected;
     static Texture arrow;
-    static Scenes.MenuItem selected;
-    static Scenes.MenuItem lastSelected;
+    static MenuItem selected;
+    static MenuItem lastSelected;
     static MenuState currentState;
     static float arrowAnimationTimer = 0;
     static bool arrowExpanding = true;
@@ -47,7 +47,8 @@ public static class MenuScene
         // Load textures
         //----------------------------------------------------------------------------------
         logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
-        background = Raylib.LoadTexture("resources/Common/MenuBackground.png"); box = Raylib.LoadTexture("resources/Common/rounded_box.png");
+        background = Raylib.LoadTexture("resources/Common/MenuBackground.png");
+        box = Raylib.LoadTexture("resources/Common/rounded_box.png");
         keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
         gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
         disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
@@ -67,7 +68,7 @@ public static class MenuScene
         Vector2 mainMenuTextPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
         // PRESS START
         var state = MenuState.PressStart;
-        menuItems.Add(new UIMenuItem("PRESS START", Scenes.MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
         selected = menuItems[0].Item;
         currentState = state;
@@ -75,21 +76,28 @@ public static class MenuScene
 
         // MAIN MENU
         var yOffset = 32;
-        menuItems.Add(new UIMenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false, MenuItemType.Button, mainMenuTextPosition));
-        menuItems.Add(new UIMenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.None, state, false, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("ARCADE", MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += 32;
-        menuItems.Add(new UIMenuItem("ONLINE", Scenes.MenuItem.Online, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += 32;
-        menuItems.Add(new UIMenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("SETTINGS", MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += 32;
-        menuItems.Add(new UIMenuItem("EXIT", Scenes.MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += 32;
         state = MenuState.Lobby;
 
         // LOBBY
+        Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = 32;
-        menuItems.Add(new UIMenuItem("START", Scenes.MenuItem.StartGame, state, true, MenuItemType.Button, mainMenuTextPosition));
-        menuItems.Add(new UIMenuItem("GO BACK", Scenes.MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem($"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
+        menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += 32;
+        menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += 64;
+        menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += 32;
+        menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += 32;
 
 
@@ -115,7 +123,7 @@ public static class MenuScene
                 GameUserInterface.IsCursorVisible = false;
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
-                selected = Scenes.MenuItem.Arcade;
+                selected = MenuItem.Arcade;
             }
         }
         else // MAIN MENU
@@ -140,20 +148,20 @@ public static class MenuScene
                 GameUserInterface.IsCursorVisible = false;
                 switch (selected)
                 {
-                    case Scenes.MenuItem.Exit:
+                    case MenuItem.Exit:
                     {
                         finishScreen = -1;   // EXIT
                         GameCore.GameShouldClose = true;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                         break;
                     }
-                    case Scenes.MenuItem.Settings:
+                    case MenuItem.Settings:
                     {
                         finishScreen = 1;   // OPTIONS
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                         break;
                     }
-                    case Scenes.MenuItem.Arcade:
+                    case MenuItem.Arcade:
                     {
 
                         //finishScreen = 2;   // GAMEPLAY
@@ -162,7 +170,7 @@ public static class MenuScene
                         currentState = MenuState.InputSelection;
                         break;
                     }
-                    case Scenes.MenuItem.Return:
+                    case MenuItem.Return:
                     {
                         currentState = MenuState.MainMenu;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
@@ -182,7 +190,7 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        selected = Scenes.MenuItem.None;
+                        selected = MenuItem.None;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
@@ -191,7 +199,7 @@ public static class MenuScene
 
                     }
                 }
-                if (shouldSelectNext || selected == Scenes.MenuItem.None)
+                if (shouldSelectNext || selected == MenuItem.None)
                 {
                     var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).Last();
                     selected = item.Item;
@@ -208,7 +216,7 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        selected = Scenes.MenuItem.None;
+                        selected = MenuItem.None;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
@@ -216,10 +224,27 @@ public static class MenuScene
                         selected = item.Item;
                     }
                 }
-                if (shouldSelectNext || selected == Scenes.MenuItem.None)
+                if (shouldSelectNext || selected == MenuItem.None)
                 {
                     selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
                 }
+            }
+            else if (input.UILeft)
+            {
+                if (selected == MenuItem.ChangeMap)
+                {
+                    MapLogic.LoadNextMap();
+                    menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
+                }
+            }
+            else if (input.UIRight)
+            {
+                if (selected == MenuItem.ChangeMap)
+                {
+                    MapLogic.LoadPreviousMap();
+                    menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
+                }
+
             }
             else if (input.Back)
             {
@@ -353,18 +378,41 @@ public static class MenuScene
         //----------------------------------------------------------------------------------
         foreach (var item in menuItems) if (item.State == currentState) item.Update();
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
-        if (s == null) selected = Scenes.MenuItem.None;
+        if (s == null) selected = MenuItem.None;
         else selected = s.Item;
+
+        // Update visual things
+        //----------------------------------------------------------------------------------
+        if (arrowAnimationTimer > 10) arrowExpanding = false;
+        else if (arrowAnimationTimer < 0) arrowExpanding = true;
+
+        if (arrowExpanding)
+            arrowAnimationTimer += Raylib.GetFrameTime() * 8;
+        else
+            arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
     }
 
     static public void DrawMenuScene()
     {
-        // Draw Background and Logo
+        // Draw Background, Logo and Misc
         //----------------------------------------------------------------------------------
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
         Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
             Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
+        else if (currentState == MenuState.Lobby)
+        {
+            if (!GameCore.IsNetworkGame)// TODO: draw room id if online
+            {
+                Utils.DrawTextCentered("ARCADE", new(GameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
+            }
+            // Draw map
+            var mapCenterPostion = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.37f);
+            var size = 176;
+            var rec = new Rectangle(mapCenterPostion.X - size / 2, mapCenterPostion.Y - size / 2, size, size);
+            Raylib.DrawRectangle((int)rec.x - 8, (int)rec.y - 8, (int)rec.width + 16, (int)rec.height + 16, Raylib.BLACK);
+            Raylib.DrawTexturePro(GameAssets.Gameplay.CurrentMapTexture, new(0, 0, GameAssets.Gameplay.CurrentMapTexture.width, GameAssets.Gameplay.CurrentMapTexture.height), rec, new(0, 0), 0, Raylib.WHITE);
+        }
 
         // Draw menu
         //----------------------------------------------------------------------------------
@@ -406,12 +454,12 @@ public static class MenuScene
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
-        if (lastSelected != selected && selected != Scenes.MenuItem.None) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
+        if (lastSelected != selected && selected != MenuItem.None) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
         lastSelected = selected;
     }
     class UIMenuItem
     {
-        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition)
+        public UIMenuItem(string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition)
         {
             Text = text;
             Item = item;
@@ -422,7 +470,7 @@ public static class MenuScene
             CenterPosition = centerPosition;
         }
         public string Text;
-        public Scenes.MenuItem Item { get; set; }
+        public MenuItem Item { get; set; }
         public MenuState State { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsSelected { get { return selected == Item; } }
@@ -438,6 +486,9 @@ public static class MenuScene
             {
                 Utils.UpdateTextUsingKeyboard(ref Text);
             }
+            else if (Type == MenuItemType.TextInput && IsSelected)
+            {
+            }
 
             // Center the text
             TextSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
@@ -450,7 +501,7 @@ public static class MenuScene
             }
 
             // Make press start always selected
-            if (currentState == MenuState.PressStart && Item == Scenes.MenuItem.PressStart)
+            if (currentState == MenuState.PressStart && Item == MenuItem.PressStart)
             {
                 selected = Item;
             }
@@ -470,6 +521,14 @@ public static class MenuScene
                 Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
             // Draw the text
             Raylib.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color);
+
+            if (Type == MenuItemType.Selection && IsSelected)
+            {
+                var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
+                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(Position.X + textBoxSize.X + 8 + (int)arrowAnimationTimer, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(Position.X - 16 - (int)arrowAnimationTimer - arrow.width, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+            }
+
         }
     }
 
@@ -552,14 +611,6 @@ public static class MenuScene
             if (playerGamepadNumber != -9)
             {
                 Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
-
-                if (arrowAnimationTimer > 10) arrowExpanding = false;
-                else if (arrowAnimationTimer < 0) arrowExpanding = true;
-
-                if (arrowExpanding)
-                    arrowAnimationTimer += Raylib.GetFrameTime() * 8;
-                else
-                    arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
 
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);

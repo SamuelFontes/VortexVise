@@ -41,6 +41,10 @@ public static class GameMatch
     /// How long a match takes
     /// </summary>
     public static int MatchLengthInSeconds { get; set; } = 180;
+    /// <summary>
+    /// Define the number of bots in the match, so the host will add when the game start.
+    /// </summary>
+    public static int NumberOfBots { get; set; } = 0;
 
     // Hook Options
     //----------------------------------------------------------------------------------

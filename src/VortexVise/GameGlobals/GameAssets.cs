@@ -33,7 +33,6 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        MapLogic.Init();
         WeaponLogic.Init();
         // Load skins
         string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);

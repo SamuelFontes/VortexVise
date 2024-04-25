@@ -153,8 +153,8 @@ public static class MapLogic
             //FIXME: this shouldn't replace the map collisions
             //GameMatch.CurrentMap.Collisions = mirroredCollisions;
         }
-        if(GameMatch.GameState != null)
-            GameMatch.GameState.ResetGameState();
+
+        GameMatch.GameState?.ResetGameState();
     }
 
     public static void LoadRandomMap()
@@ -166,6 +166,11 @@ public static class MapLogic
     public static void LoadNextMap()
     {
         var map = GameAssets.Gameplay.Maps.SkipWhile(x => x.Id != GameMatch.CurrentMap.Id).Skip(1).DefaultIfEmpty(GameAssets.Gameplay.Maps.First()).First();
+        LoadMap(map);
+    }
+    public static void LoadPreviousMap()
+    {
+        var map = GameAssets.Gameplay.Maps.TakeWhile(x => x.Id != GameMatch.CurrentMap.Id).DefaultIfEmpty(GameAssets.Gameplay.Maps.Last()).Last();
         LoadMap(map);
     }
 
