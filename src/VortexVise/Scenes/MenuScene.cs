@@ -28,9 +28,9 @@ public static class MenuScene
     static Texture gamepadSlotOff;
     static Texture disconnected;
     static Texture arrow;
-    static MenuItem selected;
+    static MenuItem selected = MenuItem.None;
     static MenuItem lastSelected;
-    static MenuState currentState;
+    static MenuState currentState = MenuState.PressStart;
     static float arrowAnimationTimer = 0;
     static bool arrowExpanding = true;
     //static bool IsOnline = false;
@@ -42,7 +42,6 @@ public static class MenuScene
         // Initialize menu
         //----------------------------------------------------------------------------------
         finishScreen = 0;
-        //ResetMenu();
 
         // Load textures
         //----------------------------------------------------------------------------------
@@ -58,20 +57,20 @@ public static class MenuScene
 
         // Load player skins
         //----------------------------------------------------------------------------------
-        GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
-        GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
-        GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
-        GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if(GameCore.PlayerOneProfile.Skin == null) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if(GameCore.PlayerTwoProfile.Skin == null) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if(GameCore.PlayerThreeProfile.Skin == null) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if(GameCore.PlayerFourProfile.Skin == null) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------
         Vector2 mainMenuTextPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
+
         // PRESS START
         var state = MenuState.PressStart;
         menuItems.Add(new UIMenuItem("PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
-        selected = menuItems[0].Item;
-        currentState = state;
+        if(selected == MenuItem.None) selected = menuItems[0].Item;
         state = MenuState.MainMenu;
 
         // MAIN MENU
@@ -413,7 +412,7 @@ public static class MenuScene
         Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
             Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
-        else if (currentState == MenuState.Lobby)
+        else if (currentState == MenuState.Lobby && !SceneManager.OnTransition)
         {
             if (!GameCore.IsNetworkGame)// TODO: draw room id if online
             {
@@ -457,6 +456,8 @@ public static class MenuScene
         Raylib.UnloadTexture(gamepadSlotOn);
         Raylib.UnloadTexture(gamepadSlotOff);
         Raylib.UnloadTexture(arrow);
+        menuItems.Clear();
+
     }
     static public int FinishMenuScene()
     {

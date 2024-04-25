@@ -99,7 +99,7 @@ static internal class SceneManager
                 case GameScene.GAMEPLAY:
                 {
                     GameplayScene.UpdateGameplayScene();
-                    //if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                    if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
                     //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
                 }

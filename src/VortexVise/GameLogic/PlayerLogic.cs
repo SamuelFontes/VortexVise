@@ -15,6 +15,10 @@ public static class PlayerLogic
     {
         GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
     }
+    static public void Unload()
+    {
+        Raylib.UnloadTexture(GameAssets.Gameplay.HookTexture);
+    }
     public static void CopyLastPlayerState(PlayerState currentPlayerState, PlayerState lastPlayerState)
     {
         currentPlayerState.Position = lastPlayerState.Position;

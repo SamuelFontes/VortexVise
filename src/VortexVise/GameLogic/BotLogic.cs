@@ -11,7 +11,7 @@ namespace VortexVise.Logic;
 
 public static class BotLogic
 {
-    public static void AddBots(GameState state)
+    public static void Init(GameState state)
     {
         for(int i = 0; i< GameMatch.NumberOfBots; i++)
         {
@@ -23,6 +23,10 @@ public static class BotLogic
             state.PlayerStates.Add(bot); // add bot
 
         }
+    }
+    public static void Unload()
+    {
+        GameMatch.Bots.Clear();
     }
     public static InputState GenerateBotInput(GameState state, PlayerState botState)
     {

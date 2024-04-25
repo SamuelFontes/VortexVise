@@ -27,13 +27,14 @@ public static class MatchLogic
             else if (gameState.MatchState == Enums.MatchStates.Playing)
             {
                 GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
-                gameState.MatchTimer = 20;
+                gameState.MatchTimer = 10;
                 gameState.MatchState = Enums.MatchStates.EndScreen;
             }
             else if (gameState.MatchState == Enums.MatchStates.EndScreen)
             {
-                gameState.MatchTimer = 10;
-                gameState.MatchState = Enums.MatchStates.Voting;
+                gameState.IsRunning = false;
+                //gameState.MatchTimer = 10;
+                //gameState.MatchState = Enums.MatchStates.Voting;
             }
             else if (gameState.MatchState == Enums.MatchStates.Voting)
             {

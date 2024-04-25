@@ -75,6 +75,7 @@ public static class GameAssets
         //---------------------------------------------------------
         MapLogic.Unload();
         foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
+        WeaponLogic.Unload();
 
         // Animation
         //---------------------------------------------------------

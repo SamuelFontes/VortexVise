@@ -14,6 +14,7 @@ namespace VortexVise.Scenes;
 /// </summary>
 static internal class GameplayScene
 {
+    static int finishScreen = 0;
     public static double LastTimeAccumulator { get; set; }
     public static double CurrentTime { get; set; } = 0;
     public static float Gravity { get; set; } = 1000;
@@ -23,13 +24,12 @@ static internal class GameplayScene
     public static double Accumulator = 0;
     public static GameState State = new();
     public static int NumberOfLocalPlayers = 0;
+
     static public void InitGameplayScene()
     {
         NumberOfLocalPlayers = Utils.GetNumberOfLocalPlayers();
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
-
-        MapLogic.LoadRandomMap();
 
         LastTimeAccumulator = CurrentTime;
         DeltaTime = 1d / GameCore.GameTickRate;
@@ -40,13 +40,15 @@ static internal class GameplayScene
         LastState.Gravity = Gravity;
         PlayerLogic.Init();
         CameraLogic.Init();
-        BotLogic.AddBots(LastState);
         if (GameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id, GameCore.PlayerOneProfile.Skin));
         if (GameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id, GameCore.PlayerTwoProfile.Skin));
         if (GameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id, GameCore.PlayerThreeProfile.Skin));
         if (GameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id, GameCore.PlayerFourProfile.Skin));
 
+        BotLogic.Init(LastState);
+
         LastState.ResetGameState();
+        finishScreen = 0;
     }
 
     static public void UpdateGameplayScene()
@@ -131,6 +133,7 @@ static internal class GameplayScene
         //gameStates.Add(state);
         GameMatch.GameState = State;
 
+        if (!State.IsRunning) finishScreen = 1;
     }
 
     static public void DrawGameplayScene()
@@ -195,12 +198,13 @@ static internal class GameplayScene
     static public void UnloadGameplayScene()
     {
         CameraLogic.Unload();
-        //PlayerLogic.Unload();
-        WeaponLogic.Unload();
+        PlayerLogic.Unload();
+        LastState = new();
+        BotLogic.Unload();
     }
     static public int FinishGameplayScene()
     {
-        return 0;
+        return finishScreen;
     }
 
 }
