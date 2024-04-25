@@ -64,21 +64,33 @@ public static class MenuScene
 
         // Initialize items
         //----------------------------------------------------------------------------------
+        Vector2 mainMenuTextPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
+        // PRESS START
         var state = MenuState.PressStart;
-        menuItems.Add(new UIMenuItem("PRESS START", Scenes.MenuItem.PressStart, state, true)); // TODO: Change how this one workd
+        menuItems.Add(new UIMenuItem("PRESS START", Scenes.MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
         selected = menuItems[0].Item;
         currentState = state;
         state = MenuState.MainMenu;
-        menuItems.Add(new UIMenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false));
-        menuItems.Add(new UIMenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true));
-        menuItems.Add(new UIMenuItem("ONLINE", Scenes.MenuItem.Online, state, false));
-        menuItems.Add(new UIMenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false));
-        menuItems.Add(new UIMenuItem("EXIT", Scenes.MenuItem.Exit, state, true));
+
+        // MAIN MENU
+        var yOffset = 32;
+        menuItems.Add(new UIMenuItem("CAMPAIGN", Scenes.MenuItem.None, state, false, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("ARCADE", Scenes.MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += 32;
+        menuItems.Add(new UIMenuItem("ONLINE", Scenes.MenuItem.Online, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += 32;
+        menuItems.Add(new UIMenuItem("SETTINGS", Scenes.MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += 32;
+        menuItems.Add(new UIMenuItem("EXIT", Scenes.MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += 32;
         state = MenuState.Lobby;
-        //menuItems.Add(new MenuItem("127.0.0.1", MainMenuItens.IP, state, true, MainMenuTypes.TextInput));
-        menuItems.Add(new UIMenuItem("START", Scenes.MenuItem.StartGame, state, true));
-        menuItems.Add(new UIMenuItem("GO BACK", Scenes.MenuItem.Return, state, true));
+
+        // LOBBY
+        yOffset = 32;
+        menuItems.Add(new UIMenuItem("START", Scenes.MenuItem.StartGame, state, true, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("GO BACK", Scenes.MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += 32;
 
 
 
@@ -339,8 +351,7 @@ public static class MenuScene
 
         // Update menu
         //----------------------------------------------------------------------------------
-        Vector2 textPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
-        foreach (var item in menuItems) if (item.State == currentState) item.Update(ref textPosition.X, ref textPosition.Y);
+        foreach (var item in menuItems) if (item.State == currentState) item.Update();
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
         if (s == null) selected = Scenes.MenuItem.None;
         else selected = s.Item;
@@ -400,16 +411,7 @@ public static class MenuScene
     }
     class UIMenuItem
     {
-        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled)
-        {
-            Text = text;
-            Item = item;
-            State = state;
-            IsEnabled = isEnabled;
-            Size = 32;
-            Type = MenuItemType.Button;
-        }
-        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type)
+        public UIMenuItem(string text, Scenes.MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition)
         {
             Text = text;
             Item = item;
@@ -417,6 +419,7 @@ public static class MenuScene
             IsEnabled = isEnabled;
             Size = 32;
             Type = type;
+            CenterPosition = centerPosition;
         }
         public string Text;
         public Scenes.MenuItem Item { get; set; }
@@ -424,21 +427,21 @@ public static class MenuScene
         public bool IsEnabled { get; set; }
         public bool IsSelected { get { return selected == Item; } }
         public Vector2 Position { get; set; }
+        public Vector2 CenterPosition { get; set; }
         public int Size { get; set; }
         Color Color { get; set; }
         public MenuItemType Type { get; set; }
         Vector2 TextSize;
-        public void Update(ref float x, ref float y)
+        public void Update()
         {
             if (Type == MenuItemType.TextInput && IsSelected)
             {
                 Utils.UpdateTextUsingKeyboard(ref Text);
             }
 
-
             // Center the text
             TextSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
-            var pos = new Vector2(x - TextSize.X * 0.5f, y - TextSize.Y * 0.5f); // Centers text
+            var pos = new Vector2(CenterPosition.X - TextSize.X * 0.5f, CenterPosition.Y - TextSize.Y * 0.5f); // Centers text
 
             // Check if mouse is selecting the menu
             if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, TextSize.X, TextSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
@@ -458,8 +461,6 @@ public static class MenuScene
             else Color = Raylib.RAYWHITE;
 
             Position = pos;
-
-            y += Size;
         }
 
         public void Draw()
