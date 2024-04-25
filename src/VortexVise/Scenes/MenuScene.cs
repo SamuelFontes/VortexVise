@@ -91,9 +91,9 @@ public static class MenuScene
         Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = 32;
         menuItems.Add(new UIMenuItem($"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
-        menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += 32;
-        menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += 64;
         menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += 32;
@@ -142,6 +142,7 @@ public static class MenuScene
                 if (currentState == MenuState.Lobby && selected == MenuItem.StartGame)
                 {
                     finishScreen = 2;
+                    GameAssets.MusicAndAmbience.StopMusic();
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.5f);
                     return;
                 }
@@ -236,6 +237,12 @@ public static class MenuScene
                     MapLogic.LoadNextMap();
                     menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
+                else if (selected == MenuItem.ChangeNumberOfBots)
+                {
+                    GameMatch.NumberOfBots--;
+                    if (GameMatch.NumberOfBots < 0) GameMatch.NumberOfBots = 0;
+                    menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
+                }
             }
             else if (input.UIRight)
             {
@@ -243,6 +250,12 @@ public static class MenuScene
                 {
                     MapLogic.LoadPreviousMap();
                     menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
+                }
+                else if (selected == MenuItem.ChangeNumberOfBots)
+                {
+                    GameMatch.NumberOfBots++;
+                    if (GameMatch.NumberOfBots > 10) GameMatch.NumberOfBots = 10;
+                    menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
                 }
 
             }

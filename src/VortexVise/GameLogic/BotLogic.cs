@@ -11,6 +11,19 @@ namespace VortexVise.Logic;
 
 public static class BotLogic
 {
+    public static void AddBots(GameState state)
+    {
+        for(int i = 0; i< GameMatch.NumberOfBots; i++)
+        {
+            var bot = new PlayerState(state.PlayerStates.Count + 5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            bot.IsBot = true;
+            var b = new Bot();
+            b.Id = bot.Id;
+            GameMatch.Bots.Add(b);
+            state.PlayerStates.Add(bot); // add bot
+
+        }
+    }
     public static InputState GenerateBotInput(GameState state, PlayerState botState)
     {
         var rand = new Random();

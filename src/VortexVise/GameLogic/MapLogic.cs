@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
+using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -128,7 +129,7 @@ public static class MapLogic
     }
     public static void LoadMap(Map map)
     {
-        GameAssets.MusicAndAmbience.StopMusic();
+        if (SceneManager.CurrentScene == Enums.GameScene.GAMEPLAY) GameAssets.MusicAndAmbience.StopMusic(); // HACK: this is to stop the music not playing in the main menu
         if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
         GameMatch.CurrentMap = map;
         GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
