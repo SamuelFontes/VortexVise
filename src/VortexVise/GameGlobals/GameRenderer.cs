@@ -270,6 +270,7 @@ public static class GameRenderer
 
     public static void DrawEnemyHealthBar(PlayerState playerState)
     {
+        if (playerState.IsDead) return;
         // Draw player health
         // --------------------------------------------------------
         var p = playerState.Position;
