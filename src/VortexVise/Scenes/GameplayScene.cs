@@ -200,6 +200,7 @@ static internal class GameplayScene
         CameraLogic.Unload();
         PlayerLogic.Unload();
         LastState = new();
+        State = new();
         BotLogic.Unload();
     }
     static public int FinishGameplayScene()

@@ -57,10 +57,10 @@ public static class MenuScene
 
         // Load player skins
         //----------------------------------------------------------------------------------
-        if(GameCore.PlayerOneProfile.Skin == null) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if(GameCore.PlayerTwoProfile.Skin == null) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if(GameCore.PlayerThreeProfile.Skin == null) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if(GameCore.PlayerFourProfile.Skin == null) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerOneProfile.Skin == null) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerTwoProfile.Skin == null) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerThreeProfile.Skin == null) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerFourProfile.Skin == null) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public static class MenuScene
         var state = MenuState.PressStart;
         menuItems.Add(new UIMenuItem("PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
-        if(selected == MenuItem.None) selected = menuItems[0].Item;
+        if (selected == MenuItem.None) selected = menuItems[0].Item;
         state = MenuState.MainMenu;
 
         // MAIN MENU
@@ -233,11 +233,13 @@ public static class MenuScene
             {
                 if (selected == MenuItem.ChangeMap)
                 {
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadNextMap();
                     menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == MenuItem.ChangeNumberOfBots)
                 {
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots--;
                     if (GameMatch.NumberOfBots < 0) GameMatch.NumberOfBots = 0;
                     menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -247,11 +249,13 @@ public static class MenuScene
             {
                 if (selected == MenuItem.ChangeMap)
                 {
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadPreviousMap();
                     menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == MenuItem.ChangeNumberOfBots)
                 {
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots++;
                     if (GameMatch.NumberOfBots > 10) GameMatch.NumberOfBots = 10;
                     menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -313,24 +317,28 @@ public static class MenuScene
                 {
                     if (i == GameCore.PlayerOneProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         GameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerTwoProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         GameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerThreeProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         GameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerFourProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         GameCore.PlayerFourProfile.Skin = skin;
@@ -340,24 +348,28 @@ public static class MenuScene
                 {
                     if (i == GameCore.PlayerOneProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         GameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerTwoProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         GameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerThreeProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         GameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == GameCore.PlayerFourProfile.Gamepad)
                     {
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         GameCore.PlayerFourProfile.Skin = skin;

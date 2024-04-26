@@ -198,6 +198,16 @@ public static class GameRenderer
     /// <param name="mainPlayer"></param>
     private static void DrawHud(GameState state, PlayerState mainPlayer)
     {
+        // Draw weapon grab indicator
+        // --------------------------------------------------------
+        foreach (var drop in state.WeaponDrops)
+        {
+            if (Raylib.CheckCollisionRecs(drop.Collision, mainPlayer.Collision))
+            {
+                Raylib.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, Raylib.WHITE);
+            }
+        }
+
         var weapon = mainPlayer.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (!mainPlayer.IsDead)
         {
@@ -253,7 +263,7 @@ public static class GameRenderer
                     int overlayHeight = (int)((percent * spriteHeight) / total);
                     if (overlayHeight % 2 != 0) overlayHeight++;
 
-                    Raylib.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+                    Raylib.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(0, 0), 0, new(100, 100, 100, 255));
                 }
             }
             else
