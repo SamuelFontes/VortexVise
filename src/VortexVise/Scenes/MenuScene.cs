@@ -100,6 +100,7 @@ public static class MenuScene
         yOffset += 32;
 
 
+        UpdateMenuScene();
 
     }
 
@@ -424,7 +425,7 @@ public static class MenuScene
         Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
             Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
-        else if (currentState == MenuState.Lobby && !SceneManager.OnTransition)
+        else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {
             if (!GameCore.IsNetworkGame)// TODO: draw room id if online
             {
