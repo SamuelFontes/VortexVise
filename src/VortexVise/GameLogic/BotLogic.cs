@@ -13,7 +13,7 @@ public static class BotLogic
 {
     public static void Init(GameState state)
     {
-        for(int i = 0; i< GameMatch.NumberOfBots; i++)
+        for (int i = 0; i < GameMatch.NumberOfBots; i++)
         {
             var bot = new PlayerState(state.PlayerStates.Count + 5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
@@ -34,12 +34,12 @@ public static class BotLogic
         var input = new InputState();
         Bot bot = GameMatch.Bots.First(x => x.Id == botState.Id);
         bot.TickCounter++;
-        if (bot.TickCounter > GameCore.GameTickRate * 3)
+        if (bot.TickCounter > GameCore.GameTickRate * 2)
         {
             bot.DropTarget = null;
             bot.EnemyTarget = null;
         }
-        if (bot.EnemyTarget == null)
+        if (bot.EnemyTarget == null || bot.EnemyTarget.IsDead)
         {
             bot.EnemyTarget = state.PlayerStates.Where(x => x.Id != botState.Id && !x.IsDead).OrderBy(x => Math.Abs(x.Position.Y - botState.Position.Y)).FirstOrDefault();
         }
@@ -47,11 +47,15 @@ public static class BotLogic
         {
             bot.DropTarget = state.WeaponDrops.OrderBy(x => Math.Abs(x.Position.Y - botState.Position.Y)).FirstOrDefault();
         }
+        else if (botState.HeathPoints < GameMatch.DefaultPlayerHeathPoints * 0.4f)
+        {
+            bot.DropTarget = state.WeaponDrops.OrderBy(x => Math.Abs(x.Position.Y - botState.Position.Y)).FirstOrDefault(x => x.WeaponState.Weapon.WeaponType == Enums.WeaponType.Heal);
+        }
         else if (botState.WeaponStates.Count > 0 && bot.DropTarget != null)
         {
             bot.DropTarget = null;
         }
-        if (bot.DropTarget != null && botState.WeaponStates.Count == 0)
+        if (bot.DropTarget != null && (botState.WeaponStates.Count == 0 || botState.HeathPoints < GameMatch.DefaultPlayerHeathPoints * 0.4f))
         {
             if (bot.DropTarget.Position.X < botState.Position.X)
             {
@@ -65,6 +69,7 @@ public static class BotLogic
             {
                 input.Up = rand.NextDouble() >= 0.3;
                 if (!input.Up) input.Down = rand.NextDouble() >= 0.3;
+                input.JetPack = rand.NextDouble() >= 0.5;
             }
             else
             {
@@ -76,16 +81,17 @@ public static class BotLogic
         {
             if (bot.EnemyTarget.Position.X < botState.Position.X)
             {
-                input.Left = true;
+                input.Left = rand.NextDouble() >= 0.2;
             }
             else
             {
-                input.Right = true;
+                input.Right = rand.NextDouble() >= 0.2;
             }
             if (bot.EnemyTarget.Position.Y < botState.Position.Y)
             {
                 input.Up = rand.NextDouble() >= 0.3;
                 if (!input.Up) input.Down = rand.NextDouble() >= 0.3;
+                input.JetPack = rand.NextDouble() >= 0.2;
             }
             else
             {
@@ -107,7 +113,7 @@ public static class BotLogic
         {
             input.Down = false;
             input.Up = true;
-            input.JetPack = true;
+            input.JetPack = rand.NextDouble() >= 0.8;
         }
 
         if (bot.EnemyTarget != null && ((int)bot.EnemyTarget.Position.Y == (int)botState.Position.Y || (bot.EnemyTarget.Position.Y > botState.Position.Y - 8 && bot.EnemyTarget.Position.Y < botState.Position.Y + 32)))
