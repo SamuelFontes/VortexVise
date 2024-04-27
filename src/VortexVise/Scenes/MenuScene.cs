@@ -74,30 +74,30 @@ public static class MenuScene
         state = MenuState.MainMenu;
 
         // MAIN MENU
-        var yOffset = 32;
+        var yOffset = GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.None, state, false, MenuItemType.Button, mainMenuTextPosition));
         menuItems.Add(new UIMenuItem("ARCADE", MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("SETTINGS", MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         state = MenuState.Lobby;
 
         // LOBBY
         Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
-        yOffset = 32;
+        yOffset = GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem($"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
         menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += 64;
+        yOffset += GameCore.MenuFontSize*2;
         menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += 32;
+        yOffset += GameCore.MenuFontSize;
 
 
         UpdateMenuScene();
@@ -427,16 +427,17 @@ public static class MenuScene
             Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
         else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {
-            if (!GameCore.IsNetworkGame)// TODO: draw room id if online
-            {
-                Utils.DrawTextCentered("ARCADE", new(GameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
-            }
             // Draw map
             var mapCenterPostion = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.37f);
             var size = 176;
             var rec = new Rectangle(mapCenterPostion.X - size / 2, mapCenterPostion.Y - size / 2, size, size);
             Raylib.DrawRectangle((int)rec.x - 8, (int)rec.y - 8, (int)rec.width + 16, (int)rec.height + 16, Raylib.BLACK);
             Raylib.DrawTexturePro(GameAssets.Gameplay.CurrentMapTexture, new(0, 0, GameAssets.Gameplay.CurrentMapTexture.width, GameAssets.Gameplay.CurrentMapTexture.height), rec, new(0, 0), 0, Raylib.WHITE);
+
+            if (!GameCore.IsNetworkGame)// TODO: draw room id if online
+            {
+                Utils.DrawTextCentered("ARCADE", new(GameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
+            }
         }
 
         // Draw menu
@@ -492,7 +493,7 @@ public static class MenuScene
             Item = item;
             State = state;
             IsEnabled = isEnabled;
-            Size = 32;
+            Size = GameCore.MenuFontSize;
             Type = type;
             CenterPosition = centerPosition;
         }
@@ -552,6 +553,8 @@ public static class MenuScene
             if (Type == MenuItemType.Selection && IsSelected)
             {
                 var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
+                if (textBoxSize.X % 2 != 0) textBoxSize.X++;
+                if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(Position.X + textBoxSize.X + 8 + (int)arrowAnimationTimer, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(Position.X - 16 - (int)arrowAnimationTimer - arrow.width, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
             }
@@ -641,7 +644,7 @@ public static class MenuScene
 
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Utils.DrawTextCentered(profileName, profileNamePosition, 32, Raylib.WHITE);
+                Utils.DrawTextCentered(profileName, profileNamePosition, GameCore.MenuFontSize, Raylib.WHITE);
             }
         }
 

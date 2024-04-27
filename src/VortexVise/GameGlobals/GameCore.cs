@@ -20,11 +20,12 @@ public static class GameCore
     /// <summary>
     /// Defines internal game rendering resolution.
     /// </summary>
-    public static int GameScreenWidth { get; private set; } = 960;
+    public static int GameScreenWidth { get; set; } = 960;
     /// <summary>
     /// Defines internal game rendering resolution.
     /// </summary>
-    public static int GameScreenHeight { get; private set; } = 540;
+    public static int GameScreenHeight { get; set; } = 540;
+    public static int MenuFontSize { get; set; } = 32;
     /// <summary>
     /// Indicates how much the game is being scaled based on the game resolution and screen resolution.
     /// </summary>
