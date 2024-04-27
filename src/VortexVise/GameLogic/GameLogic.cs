@@ -21,10 +21,12 @@ public static class GameLogic
             MatchState = lastState.MatchState,
             Animations = lastState.Animations,
             WeaponDrops = lastState.WeaponDrops,
+            KillFeedStates = lastState.KillFeedStates,
             Tick = isNetworkFrame ? lastState.Tick + 1 : lastState.Tick,
         };
 
         MatchLogic.HandleMatchState(state, deltaTime);
+        MatchLogic.ProcessKillFeed(state, deltaTime);
 
         if (state.MatchState == MatchStates.Warmup)
         {

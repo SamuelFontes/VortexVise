@@ -264,6 +264,7 @@ public static class GameAssets
         public static Texture ThinBarBlue;
         public static Texture ThinBarEmpty;
         public static Texture SelectionSquare;
+        public static Texture KillFeedBackground;
         public static void Load()
         {
             WideBarGreen = Raylib.LoadTexture("resources/Common/wide_bar_green.png");
@@ -278,6 +279,7 @@ public static class GameAssets
             ThinBarBlue = Raylib.LoadTexture("Resources/Common/thin_bar_blue.png");
             ThinBarEmpty = Raylib.LoadTexture("Resources/Common/thin_bar_empty.png");
             SelectionSquare = Raylib.LoadTexture("Resources/Common/selection_square.png");
+            KillFeedBackground = Raylib.LoadTexture("Resources/Common/kill_feed_background.png");
         }
         public static void Unload()
         {
@@ -293,6 +295,7 @@ public static class GameAssets
             Raylib.UnloadTexture(ThinBarBlue);
             Raylib.UnloadTexture(ThinBarEmpty);
             Raylib.UnloadTexture(SelectionSquare);
+            Raylib.UnloadTexture(KillFeedBackground);
         }
     }
 }

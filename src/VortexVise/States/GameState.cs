@@ -22,13 +22,14 @@ public class GameState
     public float MatchTimer { get; set; }
     public bool IsRunning { get; set; } = true;
     public MatchStates MatchState { get; set; }
-    public List<PlayerState> PlayerStates { get; set; } = new List<PlayerState>();
-    public List<WeaponDropState> WeaponDrops { get; set; } = new();
-    public List<DamageHitBoxState> DamageHitBoxes { get; set; } = new();
+    public List<PlayerState> PlayerStates { get; set; } = [];
+    public List<WeaponDropState> WeaponDrops { get; set; } = [];
+    public List<DamageHitBoxState> DamageHitBoxes { get; set; } = [];
     /// <summary>
     /// List of animations like player deaths and explosions
     /// </summary>
-    public List<AnimationState> Animations { get; set; } = new() { };
+    public List<AnimationState> Animations { get; set; } = [];
+    public List<KillFeedState> KillFeedStates { get; set; } = [];
 
     // TODO: Add compression
     public string SerializeState()

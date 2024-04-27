@@ -44,4 +44,13 @@ public static class MatchLogic
             }
         }
     }
+
+    public static void ProcessKillFeed(GameState state, float deltaTime)
+    {
+        foreach (var kill in state.KillFeedStates)
+        {
+            kill.Timer -= deltaTime;
+        }
+        state.KillFeedStates.RemoveAll(x => x.Timer <= 0);
+    }
 }

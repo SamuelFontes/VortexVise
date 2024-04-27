@@ -115,6 +115,41 @@ static internal class GameUserInterface
                 Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
                 DrawScoreboard(players);
             }
+
+            // Draw kill feed 
+            // ----------------------------------
+            var y = 48;
+            foreach (var kill in GameMatch.GameState.KillFeedStates)
+            {
+                var color = Raylib.WHITE;
+                if(kill.Timer < 3) color.a = (byte)(kill.Timer * 255 / 3);
+                int x = (int)(GameCore.GameScreenWidth * 0.5f);
+                x -= (int)(GameAssets.HUD.KillFeedBackground.width * 0.5f);
+                Raylib.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color);
+                
+                var killed = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KilledId);
+                if (killed == null) continue;
+
+                if (kill.KilledId != kill.KillerId && kill.KillerId != -1)
+                {
+                    var killer = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KillerId);
+                    if (killer == null) continue;
+
+                    Raylib.DrawTexture(killer.Skin.Texture, x, y, color);
+                    x += 40;
+                    Raylib.DrawTexture(GameAssets.HUD.Kill, x, y + 8, color);
+                    x += 20;
+                    Raylib.DrawTexture(killed.Skin.Texture, x, y, color);
+                }
+                else
+                {
+                    x += 20;
+                    Raylib.DrawTexture(GameAssets.HUD.Death, x, y + 8, color);
+                    x += 20;
+                    Raylib.DrawTexture(killed.Skin.Texture, x, y, color);
+                }
+                y += 40;
+            }
         }
 
 

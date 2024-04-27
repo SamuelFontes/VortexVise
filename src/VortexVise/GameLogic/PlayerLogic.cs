@@ -55,6 +55,7 @@ public static class PlayerLogic
             currentPlayerState.WeaponStates.Clear();
             currentPlayerState.HookState.IsHookReleased = false;
             currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Blood, Position = currentPlayerState.Position });
+            currentGameState.KillFeedStates.Add(new KillFeedState(currentPlayerState.LastPlayerHitId, currentPlayerState.Id));
 
             // Add stats
             currentPlayerState.Stats.Deaths++;
