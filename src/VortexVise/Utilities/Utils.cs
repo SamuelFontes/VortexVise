@@ -55,7 +55,6 @@ public static class Utils
 
     public static void UpdateTextUsingKeyboard(ref string text)
     {
-        // TODO: add other input features
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && text.Length > 0)
         {
             GameUserInterface.IsCursorVisible = false;

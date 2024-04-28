@@ -133,18 +133,6 @@ public static class PlayerHookLogic
 
             float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
-            // TODO: implement this crap here
-            //if((GameMatch.HookPullOffset > _originalPullOffset && _offsetChanger < 0) || (GameMatch.HookPullOffset < _originalPullOffset * 6 && _offsetChanger > 0))
-            //{
-            //GameMatch.HookPullOffset += _offsetChanger * Time.deltaTime * 10;
-
-            //if(_soundTimer == 0)  // This is to not spam the audio 
-            //{
-            //GameObject.FindWithTag("AudioSystem").GetComponent<AudioSystem>().PlayElastic();
-            //_soundTimer += Time.deltaTime;
-            //}
-
-
             if (distance > GameMatch.HookPullOffset)
             {
                 Vector2 velocity = RayMath.Vector2Scale(direction, GameMatch.HookPullForce);

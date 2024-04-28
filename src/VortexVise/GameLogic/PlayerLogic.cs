@@ -212,55 +212,60 @@ public static class PlayerLogic
 
         List<Rectangle> playerCollisions = [];
 
+        playerCollisions.Add(currentPlayerState.Collision);
         // Apply map collisions
         // -----------------------------------------
-        foreach (var collision in MapLogic.GetCollisions())
+        foreach (var playerCollision in playerCollisions)
         {
-            if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, collision))
+
+            foreach (var collision in MapLogic.GetCollisions())
             {
-
-                // This means the player is inside the thing 
-                var collisionOverlap = Raylib.GetCollisionRec(currentPlayerState.Collision, collision);
-
-                if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + 8)
-                    currentPlayerState.IsTouchingTheGround = true;
-
-                Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
-
-                if (collisionOverlap.Height < collisionOverlap.Width)
+                if (Raylib.CheckCollisionRecs(playerCollision, collision))
                 {
-                    if (collisionOverlap.Y == collision.Y)
-                    {
-                        // Feet collision
-                        currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + 8);
-                        currentPlayerState.SetVelocityY(0);
+
+                    // This means the player is inside the thing 
+                    var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
+
+                    if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + 8)
                         currentPlayerState.IsTouchingTheGround = true;
-                        currentPlayerState.TimeSinceJump = 0;
+
+                    Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
+
+                    if (collisionOverlap.Height < collisionOverlap.Width)
+                    {
+                        if (collisionOverlap.Y == collision.Y)
+                        {
+                            // Feet collision
+                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + 8);
+                            currentPlayerState.SetVelocityY(0);
+                            currentPlayerState.IsTouchingTheGround = true;
+                            currentPlayerState.TimeSinceJump = 0;
+                        }
+                        else
+                        {
+                            // Head collision
+                            currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
+                            currentPlayerState.SetVelocityY(0.01f);
+                        }
                     }
                     else
                     {
-                        // Head collision
-                        currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
-                        currentPlayerState.SetVelocityY(0.01f);
-                    }
-                }
-                else
-                {
 
-                    if (collisionOverlap.X > colliderCenter.X)
-                    {
-                        currentPlayerState.SetVelocityX(0);
-                        // Right side of collision block on map
-                        currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
+                        if (collisionOverlap.X > colliderCenter.X)
+                        {
+                            currentPlayerState.SetVelocityX(0);
+                            // Right side of collision block on map
+                            currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
+                        }
+                        else
+                        {
+                            currentPlayerState.SetVelocityX(0);
+                            // Left collision
+                            currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
+                        }
                     }
-                    else
-                    {
-                        currentPlayerState.SetVelocityX(0);
-                        // Left collision
-                        currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
-                    }
-                }
 
+                }
             }
         }
 
@@ -324,7 +329,7 @@ public static class PlayerLogic
             Guid? idToRemove = null;
             foreach (var drop in currentState.WeaponDrops)
             {
-                if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision)) // TODO: if holding max weapons trade with current
+                if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
                 {
                     idToRemove = drop.Id;
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;
