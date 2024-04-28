@@ -192,14 +192,14 @@ public static class PlayerLogic
 
         Vector2 mapSize = MapLogic.GetMapSize();
         // Apply ouside map collisions
-        if (endingCollision.Y <= 0)
+        if (currentPlayerState.Position.Y <= 0)
         {
             // TODO: if there is the invert world effect, this should be lethal
-            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X, 0);
+            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X,0);
             currentPlayerState.Velocity = new Vector2(currentPlayerState.Velocity.X, 0);
 
         }
-        else if (endingCollision.Y > mapSize.Y)
+        else if (currentPlayerState.Position.Y > mapSize.Y)
         {
             currentPlayerState.HeathPoints = -1;
             return;
@@ -324,6 +324,7 @@ public static class PlayerLogic
 
             if (colided)
             {
+                Utils.DebugText = wasTouchingTheGround.ToString();
                 return;
             }
         }
@@ -333,6 +334,7 @@ public static class PlayerLogic
             currentPlayerState.CanDash = true;
         }
         currentPlayerState.Collision = endingCollision;
+        Utils.DebugText = wasTouchingTheGround.ToString();
         return;
     }
 

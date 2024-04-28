@@ -12,7 +12,7 @@ public static class GameCore
     /// <summary>
     /// Defines tickrate the game and server runs at. This tick defines the minimal amount of game simulations per second that need to occur even if the performs badly and cause low FPS. This will ensure a consistent game behavior independently of low performance.
     /// </summary>
-    public static int GameTickRate { get; private set; } = 120;
+    public static int GameTickRate { get; private set; } = 60;
     /// <summary>
     /// Render texture that the game will be rendered at before scaling it to the display's resolution.
     /// </summary>

@@ -36,5 +36,5 @@ public static class GameSettings
     /// <summary>
     /// Set target FPS for the game. If set to 0 it's unlimited.
     /// </summary>
-    public static int TargetFPS { get; private set; } = 0;
+    public static int TargetFPS { get; private set; } = 60;
 }
