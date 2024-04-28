@@ -23,7 +23,6 @@ public static class PlayerLogic
     {
         currentPlayerState.Position = lastPlayerState.Position;
         currentPlayerState.Direction = lastPlayerState.Direction;
-        currentPlayerState.Collision = lastPlayerState.Collision;
         currentPlayerState.Velocity = lastPlayerState.Velocity;
         currentPlayerState.IsTouchingTheGround = lastPlayerState.IsTouchingTheGround;
         currentPlayerState.HookState = lastPlayerState.HookState;
@@ -179,23 +178,19 @@ public static class PlayerLogic
         currentPlayerState.Position += new Vector2(currentPlayerState.Velocity.X * deltaTime, currentPlayerState.Velocity.Y * deltaTime);
     }
 
-    public static Rectangle GetPlayerCollision(Vector2 position)
-    {
-        return new(position.X + GameMatch.PlayerCollisionOffset.X, position.Y + GameMatch.PlayerCollisionOffset.Y, 12, 20);
-    }
-
-    public static void ApplyCollisions(PlayerState currentPlayerState, float deltaTime)
+    public static void ApplyCollisions(PlayerState currentPlayerState, PlayerState lastPlayerState, float deltaTime)
     {
         var wasTouchingTheGround = currentPlayerState.IsTouchingTheGround;
         currentPlayerState.IsTouchingTheGround = false;
-        Rectangle endingCollision = GetPlayerCollision(currentPlayerState.Position);
 
         Vector2 mapSize = MapLogic.GetMapSize();
-        // Apply ouside map collisions
+
+        // Apply map border collisions
+        // ------------------------------------------------------------------------------
         if (currentPlayerState.Position.Y <= 0)
         {
             // TODO: if there is the invert world effect, this should be lethal
-            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X,0);
+            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X, 0);
             currentPlayerState.Velocity = new Vector2(currentPlayerState.Velocity.X, 0);
 
         }
@@ -204,136 +199,77 @@ public static class PlayerLogic
             currentPlayerState.HeathPoints = -1;
             return;
         }
-        else if (endingCollision.X <= 0)
+        else if (currentPlayerState.Collision.X <= 0)
         {
-            currentPlayerState.Position = new(0 - (endingCollision.X - currentPlayerState.Position.X), currentPlayerState.Position.Y);
+            currentPlayerState.Position = new(0 - (currentPlayerState.Collision.X - currentPlayerState.Position.X), currentPlayerState.Position.Y);
             currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
-        else if (endingCollision.X + endingCollision.Width >= mapSize.X)
+        else if (currentPlayerState.Collision.X + currentPlayerState.Collision.Width >= mapSize.X)
         {
-            currentPlayerState.Position = new(mapSize.X - endingCollision.Width - GameMatch.PlayerCollisionOffset.X, currentPlayerState.Position.Y);
+            currentPlayerState.Position = new(mapSize.X - currentPlayerState.Collision.Width - 8, currentPlayerState.Position.Y);
             currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
 
-        // This will interpolate the collisions when the player is fast, otherwise he will go through stuff easily
-        var playerCollisions = new List<Rectangle>();
-        float interpolationAmount = 2f;
-        for (float i = interpolationAmount; i > 0; i -= 0.2f)
-        {
-            Rectangle interpolatedCollision = endingCollision;
-            if (currentPlayerState.Collision.X < endingCollision.X && endingCollision.X - currentPlayerState.Collision.X >= currentPlayerState.Collision.Width * i)
-            {
-                interpolatedCollision.X += currentPlayerState.Collision.Width * i;
-            }
-            else if (currentPlayerState.Collision.X > endingCollision.X && currentPlayerState.Collision.X - endingCollision.X >= currentPlayerState.Collision.Width * i)
-            {
-                interpolatedCollision.X -= currentPlayerState.Collision.Width * i;
-            }
-
-            if (currentPlayerState.Collision.Y < endingCollision.Y && endingCollision.Y - currentPlayerState.Collision.Y >= currentPlayerState.Collision.Height * i)
-            {
-                interpolatedCollision.Y += currentPlayerState.Collision.Height * i;
-            }
-            else if (currentPlayerState.Collision.Y > endingCollision.Y && currentPlayerState.Collision.Y - endingCollision.Y >= currentPlayerState.Collision.Height * i)
-            {
-                interpolatedCollision.Y -= currentPlayerState.Collision.Height * i;
-            }
-            if (interpolatedCollision.X != endingCollision.X || interpolatedCollision.Y != endingCollision.Y)
-                playerCollisions.Add(interpolatedCollision);
-        }
-
-
-        playerCollisions.Add(endingCollision);
+        List<Rectangle> playerCollisions = [];
 
         // Apply map collisions
-        foreach (var playerCollision in playerCollisions)
+        // -----------------------------------------
+        foreach (var collision in MapLogic.GetCollisions())
         {
-            bool colided = false;
-            foreach (var collision in MapLogic.GetCollisions())
+            if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, collision))
             {
-                if (Raylib.CheckCollisionRecs(playerCollision, collision))
+
+                // This means the player is inside the thing 
+                var collisionOverlap = Raylib.GetCollisionRec(currentPlayerState.Collision, collision);
+
+                if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + 8)
+                    currentPlayerState.IsTouchingTheGround = true;
+
+                Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
+
+                if (collisionOverlap.Height < collisionOverlap.Width)
                 {
-
-                    // This means the player is inside the thing 
-                    var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
-
-                    if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + GameMatch.PlayerCollisionOffset.Y)
-                        currentPlayerState.IsTouchingTheGround = true;
-
-                    Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
-
-                    if (collisionOverlap.Height < collisionOverlap.Width)
+                    if (collisionOverlap.Y == collision.Y)
                     {
-                        if (collisionOverlap.Y == collision.Y)
-                        {
-                            // Feet collision
-                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + GameMatch.PlayerCollisionOffset.Y);
-                            currentPlayerState.Collision = playerCollision;
-                            currentPlayerState.Collision = new(currentPlayerState.Collision.X, collision.Y - playerCollision.Height, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
-                            currentPlayerState.SetVelocityY(0);
-                            currentPlayerState.IsTouchingTheGround = true;
-                            currentPlayerState.TimeSinceJump = 0;
-                            colided = true;
-                            continue;
-                        }
-                        else
-                        {
-                            // Head collision
-                            currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
-                            currentPlayerState.Collision = playerCollision;
-                            currentPlayerState.Collision = new Rectangle(currentPlayerState.Collision.X, currentPlayerState.Collision.Y + collisionOverlap.Height, currentPlayerState.Collision.Width, collisionOverlap.Height);
-                            currentPlayerState.SetVelocityY(0.01f);
-                            colided = true;
-                            continue;
-                        }
+                        // Feet collision
+                        currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + 8);
+                        currentPlayerState.SetVelocityY(0);
+                        currentPlayerState.IsTouchingTheGround = true;
+                        currentPlayerState.TimeSinceJump = 0;
                     }
                     else
                     {
-
-                        if (collisionOverlap.X > colliderCenter.X)
-                        {
-                            currentPlayerState.SetVelocityX(0);
-                            // Right side of collision block on map
-                            currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
-                            currentPlayerState.Collision = playerCollision;
-                            currentPlayerState.Collision = new Rectangle(currentPlayerState.Collision.X + collisionOverlap.Width, currentPlayerState.Collision.Y, currentPlayerState.Collision.Width, currentPlayerState.Collision.height);
-                            colided = true;
-                            continue;
-                        }
-                        else
-                        {
-                            currentPlayerState.SetVelocityX(0);
-                            // Left collision
-                            currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
-                            currentPlayerState.Collision = playerCollision;
-                            currentPlayerState.Collision = new(currentPlayerState.Collision.X - collisionOverlap.Width, currentPlayerState.Collision.Y, currentPlayerState.Collision.Width, currentPlayerState.Collision.Height);
-                            colided = true;
-                            continue;
-                        }
+                        // Head collision
+                        currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
+                        currentPlayerState.SetVelocityY(0.01f);
                     }
-
-
                 }
-            }
+                else
+                {
 
-            if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
-            {
-                currentPlayerState.TimeSinceJump += deltaTime;
-                currentPlayerState.CanDash = true;
-            }
+                    if (collisionOverlap.X > colliderCenter.X)
+                    {
+                        currentPlayerState.SetVelocityX(0);
+                        // Right side of collision block on map
+                        currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
+                    }
+                    else
+                    {
+                        currentPlayerState.SetVelocityX(0);
+                        // Left collision
+                        currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
+                    }
+                }
 
-            if (colided)
-            {
-                Utils.DebugText = wasTouchingTheGround.ToString();
-                return;
             }
         }
+
         if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
         {
             currentPlayerState.TimeSinceJump += deltaTime;
             currentPlayerState.CanDash = true;
         }
-        currentPlayerState.Collision = endingCollision;
+
         Utils.DebugText = wasTouchingTheGround.ToString();
         return;
     }
@@ -341,8 +277,8 @@ public static class PlayerLogic
     public static Vector2 GetPlayerCenterPosition(Vector2 playerPosition)
     {
         Vector2 position = new(playerPosition.X, playerPosition.Y);
-        position.X += 32 * 0.5f;
-        position.Y += 32 * 0.5f;
+        position.X += 16;
+        position.Y += 16;
         return position;
     }
     public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)

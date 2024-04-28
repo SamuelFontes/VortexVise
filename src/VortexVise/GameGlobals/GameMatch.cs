@@ -49,10 +49,6 @@ public static class GameMatch
     // Hook Options
     //----------------------------------------------------------------------------------
     /// <summary>
-    /// Size of hook head collision.
-    /// </summary>
-    public static int HookSize = 8;
-    /// <summary>
     /// Defines how much the grappling hook pulls.
     /// </summary>
     public static readonly float HookPullForce = 3000;
@@ -92,10 +88,6 @@ public static class GameMatch
     /// Define how fast player can get to max speed.
     /// </summary>
     public static readonly float PlayerAcceleration = 750;
-    /// <summary>
-    /// This is defines when the player hitbox starts. The top left of the player sprite starts with 0,0. So this helps to heep the hitbox at the center of the player.
-    /// </summary>
-    public static Vector2 PlayerCollisionOffset = new(10, 6);
     /// <summary>
     /// Define how fast a granade go
     /// </summary>

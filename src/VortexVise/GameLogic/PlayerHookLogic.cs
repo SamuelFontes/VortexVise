@@ -32,8 +32,7 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.IsHookReleased = true;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Position = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - GameAssets.Gameplay.HookTexture.width * 0.5f, currentPlayerState.HookState.Position.Y);
-            currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, GameMatch.HookSize, GameMatch.HookSize);
+            currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - 4, currentPlayerState.HookState.Position.Y);
 
             // Play hook shoot sound
             if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
@@ -125,7 +124,6 @@ public static class PlayerHookLogic
             }
 
             currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X + currentPlayerState.HookState.Velocity.X * deltaTime * 0.5f, currentPlayerState.HookState.Position.Y + currentPlayerState.HookState.Velocity.Y * deltaTime * 0.5f);
-            currentPlayerState.HookState.Collision = new Rectangle(currentPlayerState.HookState.Position.X, currentPlayerState.HookState.Position.Y, currentPlayerState.HookState.Collision.Width, currentPlayerState.HookState.Collision.Height);
 
         }
         else if (currentPlayerState.HookState.IsHookAttached)
@@ -168,10 +166,5 @@ public static class PlayerHookLogic
                 }
             }
         }
-    }
-
-    public static Rectangle GetHookCollision(Vector2 position)
-    {
-        return new(position.X, position.Y, GameMatch.HookSize, GameMatch.HookSize);
     }
 }

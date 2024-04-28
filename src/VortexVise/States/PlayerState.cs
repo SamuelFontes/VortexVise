@@ -17,7 +17,7 @@ public class PlayerState
     public int Direction { get; set; } = 1;
     public bool IsTouchingTheGround { get; set; } = false;
     public bool CanDash { get; set; } = true;
-    public float TimeSinceJump  { get; set; }= 0;
+    public float TimeSinceJump { get; set; } = 0;
     public int HeathPoints = 100;
     public bool IsDead { get; set; } = false;
     public float SpawnTimer { get; set; } = 0;
@@ -27,7 +27,7 @@ public class PlayerState
     public float JetPackFuel { get; set; } = GameMatch.DefaultJetPackFuel;
     public Skin Skin { get; set; }
     public PlayerStats Stats { get; set; }
-    public Rectangle Collision { get; set; } = new Rectangle(20, 12, 25, 45);
+    public Rectangle Collision { get { return new Rectangle(Position.X + 8, Position.Y + 8, 16, 16); } }
 
     public InputState Input { get; set; } = new InputState();
     public HookState HookState { get; set; } = new HookState();

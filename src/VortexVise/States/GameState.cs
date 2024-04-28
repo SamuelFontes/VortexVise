@@ -74,7 +74,6 @@ public class GameState
                 var player = new PlayerState(playerId, new Models.Skin());
                 player.Position = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|PX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|PY))[\s\S]*?(?=\|)").Value));
                 player.Velocity = new Vector2(float.Parse(Regex.Match(match.Value, @"(?<=(\|VX))[\s\S]*?(?=\|)").Value), float.Parse(Regex.Match(match.Value, @"(?<=(\|VY))[\s\S]*?(?=\|)").Value));
-                player.Collision = PlayerLogic.GetPlayerCollision(player.Position);
                 player.Direction = Convert.ToInt32(Regex.Match(match.Value, @"(?<=(\|D))[\s\S]*?(?=\|)").Value);
                 player.IsTouchingTheGround = Regex.Match(match.Value, @"(?<=(\|TG))[\s\S]*?(?=\|)").Value == "1";
                 player.Input = new InputState()
@@ -96,7 +95,6 @@ public class GameState
                     IsPressingHookKey = Regex.Match(match.Value, @"(?<=(\|HPR))[\s\S]*?(?=\|)").Value == "1",
 
                 };
-                player.HookState.Collision = PlayerHookLogic.GetHookCollision(player.HookState.Position);
                 state.PlayerStates.Add(player);
             }
 
@@ -188,7 +186,7 @@ public class GameState
             playerState.Position = GameMatch.PlayerSpawnPoint;
             playerState.Velocity = new(0, 0);
             playerState.WeaponStates.Clear();
-            playerState.HookState.IsHookReleased = false;   
+            playerState.HookState.IsHookReleased = false;
             playerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
             playerState.Animation.Rotation = 0;
             playerState.Animation.State = 0;

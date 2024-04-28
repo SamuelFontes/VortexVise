@@ -71,7 +71,7 @@ public static class GameLogic
                 PlayerHookLogic.SimulateHookState(currentPlayerState, state.Gravity, deltaTime);
                 if (isNetworkFrame) WeaponLogic.ApplyHitBoxesDamage(state, currentPlayerState); // Only apply damage on tick frames
                 PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
-                PlayerLogic.ApplyCollisions(currentPlayerState, deltaTime);
+                PlayerLogic.ApplyCollisions(currentPlayerState, lastPlayerState, deltaTime);
 
                 WeaponLogic.BreakPlayerWeapon(currentPlayerState);
                 PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState);
