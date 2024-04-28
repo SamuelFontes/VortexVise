@@ -122,11 +122,16 @@ static internal class GameUserInterface
             foreach (var kill in GameMatch.GameState.KillFeedStates)
             {
                 var color = Raylib.WHITE;
-                if(kill.Timer < 3) color.a = (byte)(kill.Timer * 255 / 3);
+                if (kill.Timer < 3) color.a = (byte)(kill.Timer * 255 / 3);
                 int x = (int)(GameCore.GameScreenWidth * 0.5f);
+                if (Utils.GetNumberOfLocalPlayers() == 1)
+                {
+                    x = (int)(GameCore.GameScreenWidth - 64);
+                    y = 8;
+                }
                 x -= (int)(GameAssets.HUD.KillFeedBackground.width * 0.5f);
                 Raylib.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color);
-                
+
                 var killed = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KilledId);
                 if (killed == null) continue;
 
@@ -143,7 +148,7 @@ static internal class GameUserInterface
                 }
                 else
                 {
-                    x += 20;
+                    x += 40;
                     Raylib.DrawTexture(GameAssets.HUD.Death, x, y + 8, color);
                     x += 20;
                     Raylib.DrawTexture(killed.Skin.Texture, x, y, color);
