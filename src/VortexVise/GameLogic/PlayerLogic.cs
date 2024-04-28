@@ -238,9 +238,6 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    /*                    if (currentPlayerState.Position.Y == collision.Y - 32 + 8)
-                                            currentPlayerState.IsTouchingTheGround = true;
-                    */
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
 
                     if (collisionOverlap.Height < collisionOverlap.Width)
@@ -285,10 +282,21 @@ public static class PlayerLogic
             }
         }
 
+        // Check if player is still on the ground
         if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
         {
-            currentPlayerState.TimeSinceJump += deltaTime;
-            currentPlayerState.CanDash = true;
+            var feetColided = false;
+            Rectangle playerFeet = new Rectangle(currentPlayerState.Collision.X,currentPlayerState.Collision.Y + currentPlayerState.Collision.Height,currentPlayerState.Collision.Width,1);
+            foreach(var collision in MapLogic.GetCollisions()) if(Raylib.CheckCollisionRecs(collision,playerFeet)) feetColided = true;
+            if (feetColided)
+            {
+                currentPlayerState.IsTouchingTheGround = true;
+            }
+            else
+            {
+                currentPlayerState.TimeSinceJump += deltaTime;
+                currentPlayerState.CanDash = true;
+            }
         }
 
         return;
