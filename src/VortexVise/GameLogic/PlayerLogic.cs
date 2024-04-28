@@ -211,13 +211,25 @@ public static class PlayerLogic
         }
 
         List<Rectangle> playerCollisions = [];
+        var differenceX = currentPlayerState.Collision.X - lastPlayerState.Collision.X;
+        var differenceY = currentPlayerState.Collision.Y - lastPlayerState.Collision.Y;
+        Utils.DebugText = differenceY.ToString();
+        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.2f, lastPlayerState.Collision.Y + differenceY * 0.2f, 16, 16));
+        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.4f, lastPlayerState.Collision.Y + differenceY * 0.4f, 16, 16));
+        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16));
+        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.8f, lastPlayerState.Collision.Y + differenceY * 0.8f, 16, 16));
 
         playerCollisions.Add(currentPlayerState.Collision);
+
+        bool colided = false;
         // Apply map collisions
         // -----------------------------------------
         foreach (var playerCollision in playerCollisions)
         {
-
+            if (colided)
+            {
+                break;
+            }
             foreach (var collision in MapLogic.GetCollisions())
             {
                 if (Raylib.CheckCollisionRecs(playerCollision, collision))
@@ -226,9 +238,9 @@ public static class PlayerLogic
                     // This means the player is inside the thing 
                     var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
 
-                    if (currentPlayerState.Position.Y == collision.Y - currentPlayerState.Skin.Texture.height + 8)
-                        currentPlayerState.IsTouchingTheGround = true;
-
+                    /*                    if (currentPlayerState.Position.Y == collision.Y - 32 + 8)
+                                            currentPlayerState.IsTouchingTheGround = true;
+                    */
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
 
                     if (collisionOverlap.Height < collisionOverlap.Width)
@@ -236,16 +248,18 @@ public static class PlayerLogic
                         if (collisionOverlap.Y == collision.Y)
                         {
                             // Feet collision
-                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - currentPlayerState.Skin.Texture.height + 8);
+                            currentPlayerState.Position = new(currentPlayerState.Position.X, collision.Y - 32 + 8);
                             currentPlayerState.SetVelocityY(0);
                             currentPlayerState.IsTouchingTheGround = true;
                             currentPlayerState.TimeSinceJump = 0;
+                            colided = true;
                         }
                         else
                         {
                             // Head collision
-                            currentPlayerState.Position += new Vector2(0, collisionOverlap.Height);
+                            currentPlayerState.Position = new Vector2(currentPlayerState.Position.X, playerCollision.Y - 8 + collisionOverlap.Height);
                             currentPlayerState.SetVelocityY(0.01f);
+                            colided = true;
                         }
                     }
                     else
@@ -256,12 +270,14 @@ public static class PlayerLogic
                             currentPlayerState.SetVelocityX(0);
                             // Right side of collision block on map
                             currentPlayerState.Position += new Vector2(collisionOverlap.Width, 0);
+                            colided = true;
                         }
                         else
                         {
                             currentPlayerState.SetVelocityX(0);
                             // Left collision
                             currentPlayerState.Position -= new Vector2(collisionOverlap.Width, 0);
+                            colided = true;
                         }
                     }
 
@@ -275,7 +291,6 @@ public static class PlayerLogic
             currentPlayerState.CanDash = true;
         }
 
-        Utils.DebugText = wasTouchingTheGround.ToString();
         return;
     }
 
