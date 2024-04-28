@@ -570,19 +570,19 @@ public static class MenuScene
         Vector2 screenCenter = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
         // Render BoxPlayerOne
-        Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 216);
+        Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 200);
         Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerOne, box.width, box.height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
 
-        Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 216);
+        Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 200);
         Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
 
-        Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 16);
+        Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 00);
         Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerThree, box.width, box.height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
 
-        Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 16);
+        Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 00);
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
