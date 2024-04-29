@@ -57,10 +57,10 @@ public static class MenuScene
 
         // Load player skins
         //----------------------------------------------------------------------------------
-        if (GameCore.PlayerOneProfile.Skin == null) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerTwoProfile.Skin == null) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerThreeProfile.Skin == null) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerFourProfile.Skin == null) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerOneProfile.Skin.Id == -1) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerTwoProfile.Skin.Id == -1) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerThreeProfile.Skin.Id == -1) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerFourProfile.Skin.Id == -1) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------

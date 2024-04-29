@@ -20,12 +20,13 @@ using ZeroElectric.Vinculum;
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
 //var monitorHeight = Raylib.GetMonitorHeight(0);
 //var monitorWidth = Raylib.GetMonitorWidth(0);
-if (false)// Turn on to compile to steam deck
+/*if (false)// Turn on to compile to steam deck
 {
     GameCore.GameScreenHeight = 400;
     GameCore.GameScreenWidth = 640;
     GameCore.MenuFontSize = 20;
 }
+*/
 Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);                           // Set minimal window size
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
