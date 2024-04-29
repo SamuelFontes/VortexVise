@@ -555,8 +555,8 @@ public static class MenuScene
                 var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
                 if (textBoxSize.X % 2 != 0) textBoxSize.X++;
                 if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
-                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(Position.X + textBoxSize.X + 8 + (int)arrowAnimationTimer, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(Position.X - 16 - (int)arrowAnimationTimer - arrow.width, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new((int)Position.X + textBoxSize.X + 8 + (int)arrowAnimationTimer, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new((int)Position.X - 16 - (int)arrowAnimationTimer - arrow.width, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
             }
 
         }
