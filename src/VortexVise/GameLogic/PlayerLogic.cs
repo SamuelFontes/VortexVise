@@ -213,7 +213,6 @@ public static class PlayerLogic
         List<Rectangle> playerCollisions = [];
         var differenceX = currentPlayerState.Collision.X - lastPlayerState.Collision.X;
         var differenceY = currentPlayerState.Collision.Y - lastPlayerState.Collision.Y;
-        Utils.DebugText = differenceY.ToString();
         playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.2f, lastPlayerState.Collision.Y + differenceY * 0.2f, 16, 16));
         playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.4f, lastPlayerState.Collision.Y + differenceY * 0.4f, 16, 16));
         playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16));
@@ -304,7 +303,7 @@ public static class PlayerLogic
 
     public static Vector2 GetPlayerCenterPosition(Vector2 playerPosition)
     {
-        Vector2 position = new(playerPosition.X, playerPosition.Y);
+        Vector2 position = new((int)playerPosition.X, (int)playerPosition.Y);
         position.X += 16;
         position.Y += 16;
         return position;

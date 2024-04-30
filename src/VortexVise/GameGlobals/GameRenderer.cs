@@ -49,7 +49,7 @@ public static class GameRenderer
             var frameStartX = animation.State * animation.Animation.Size;
             Rectangle sourceRec = new(frameStartX, 0.0f, animation.Animation.Size, animation.Animation.Texture.height);
 
-            Rectangle destRec = new(animation.Position.X, animation.Position.Y, animation.Animation.Size * animation.Animation.Scale, animation.Animation.Texture.height * animation.Animation.Scale);
+            Rectangle destRec = new((int)animation.Position.X, (int)animation.Position.Y, animation.Animation.Size * animation.Animation.Scale, animation.Animation.Texture.height * animation.Animation.Scale);
 
             Raylib.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, animation.Animation.Color);
 
@@ -63,9 +63,9 @@ public static class GameRenderer
             if (hitbox.Weapon.ProjectileTextureLocation == string.Empty) continue;
             Rectangle sourceRec = new(0.0f, 0.0f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
 
-            Rectangle destRec = new(hitbox.HitBox.X + hitbox.HitBox.width * 0.5f, hitbox.HitBox.Y + hitbox.HitBox.height * 0.5f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+            Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.height * 0.5f), hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
 
-            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new(hitbox.Weapon.ProjectileTexture.width * 0.5f, hitbox.Weapon.ProjectileTexture.height * 0.5f), (int)WeaponLogic.WeaponRotation * 23, Raylib.WHITE);
+            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.height * 0.5f)), (int)WeaponLogic.WeaponRotation * 23, Raylib.WHITE);
         }
 
     }
@@ -91,7 +91,7 @@ public static class GameRenderer
             if (drop.WeaponState.Weapon.WeaponType == WeaponType.Heal) rotation = 0;
             Rectangle sourceRec = new(0.0f, 0.0f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
 
-            Rectangle destRec = new(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f, drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
+            Rectangle destRec = new((int)(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f), (int)(drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f), drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
 
             Raylib.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.width * 0.5f, drop.WeaponState.Weapon.Texture.height * 0.5f), rotation, Raylib.WHITE);
 
@@ -105,7 +105,7 @@ public static class GameRenderer
         if (playerState.IsDead) return;
         if (playerState.HookState.IsHookReleased)
         {
-            Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2(playerState.HookState.Position.X + 3, playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
+            Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2((int)playerState.HookState.Position.X + 3, (int)playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
             Raylib.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
 
             if (Utils.Debug())
@@ -122,7 +122,7 @@ public static class GameRenderer
         // -------------------------------------------------
         Rectangle sourceRec = new(0.0f, 0.0f, playerState.Skin.Texture.width * playerState.Direction, playerState.Skin.Texture.height);
 
-        Rectangle destRec = new(playerState.Position.X + playerState.Skin.Texture.width * 0.5f, playerState.Position.Y + playerState.Skin.Texture.height * 0.5f, playerState.Skin.Texture.width, playerState.Skin.Texture.height);
+        Rectangle destRec = new((int)(playerState.Position.X + playerState.Skin.Texture.width * 0.5f), (int)(playerState.Position.Y + playerState.Skin.Texture.height * 0.5f), playerState.Skin.Texture.width, playerState.Skin.Texture.height);
 
         var rotation = playerState.Animation.GetAnimationRotation();
         if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
@@ -131,7 +131,7 @@ public static class GameRenderer
         var color = Raylib.WHITE;
         if (playerState.DamagedTimer > 0) color = Raylib.RED;
 
-        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, color); // Draw Player 
+        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2((int)(playerState.Skin.Texture.width * 0.5f), (int)(playerState.Skin.Texture.height * 0.5f)), rotation, color); // Draw Player 
 
 
         // Draw Weapon
@@ -208,7 +208,7 @@ public static class GameRenderer
         {
             // Draw player health
             // --------------------------------------------------------
-            var p = mainPlayer.Position;
+            Vector2 p = new((int)mainPlayer.Position.X, (int)mainPlayer.Position.Y);
             p += new Vector2(8, -16);
             {
                 Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));
@@ -225,7 +225,7 @@ public static class GameRenderer
             // Draw jetpack fuel
             // --------------------------------------------------------
             {
-                p = mainPlayer.Position;
+                p = new((int)mainPlayer.Position.X, (int)mainPlayer.Position.Y);
                 p += new Vector2(2, -16);
                 Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
                 var spriteHeight = GameAssets.HUD.ThinBarOrange.height;
@@ -240,7 +240,7 @@ public static class GameRenderer
 
             // Draw weapon bar
             // --------------------------------------------------------
-            p = mainPlayer.Position;
+            p = new((int)mainPlayer.Position.X, (int)mainPlayer.Position.Y);
             p += new Vector2(22, -16);
             if (weapon != null)
             {
@@ -278,7 +278,7 @@ public static class GameRenderer
         if (playerState.IsDead) return;
         // Draw player health
         // --------------------------------------------------------
-        var p = playerState.Position;
+        Vector2 p = new((int)playerState.Position.X, (int)playerState.Position.Y);
         p += new Vector2(8, -16);
         {
             Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));

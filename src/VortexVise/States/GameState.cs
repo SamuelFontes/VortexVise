@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using System.Text.RegularExpressions;
-using VortexVise.Enums;
+﻿using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 
