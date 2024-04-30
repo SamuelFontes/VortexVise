@@ -26,6 +26,10 @@ public class InputState
     public bool GrabDrop { get; set; } = false;
     public bool FireWeapon { get; set; } = false;
 
+    /// <summary>
+    /// Used to apply all inputs made when it wasn't on network frames
+    /// </summary>
+    /// <param name="buffer"></param>
     public void ApplyInputBuffer(InputState buffer)
     {
         Left = buffer.Left || Left;
@@ -40,6 +44,9 @@ public class InputState
         JetPack = buffer.JetPack || JetPack;
     }
 
+    /// <summary>
+    /// Just clean the input
+    /// </summary>
     public void ClearInputBuffer()
     {
         Left = false;

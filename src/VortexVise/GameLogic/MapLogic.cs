@@ -119,6 +119,7 @@ public static class MapLogic
             }
         }
         if (GameAssets.Gameplay.Maps.Count == 0) throw new Exception("Can't find any map");
+        LoadRandomMap();
     }
 
     public static void Unload()

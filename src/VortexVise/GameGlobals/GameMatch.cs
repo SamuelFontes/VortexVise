@@ -91,7 +91,7 @@ public static class GameMatch
     /// </summary>
     public static readonly float GranadeForce = 250;
 
-    public static List<Bot> Bots { get; set; } = new();
+    public static List<Bot> Bots { get; set; } = [];
     /// <summary>
     /// Current game state. Please don't mess with this outside the GameLogic. It's here to reset things when changing maps.
     /// </summary>

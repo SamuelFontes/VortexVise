@@ -97,10 +97,10 @@ static internal class GameplayScene
                 GameState receivedState = GameClient.LastServerState;
                 if (receivedState.CurrentTime != GameClient.LastSimulatedTime)
                 {
-                    if (GameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
-                    if (GameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
-                    if (GameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
-                    if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
+                    //if (GameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
+                    //if (GameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
+                    //if (GameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
+                    //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
 
                     State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
                     GameClient.LastSimulatedTime = receivedState.CurrentTime;
@@ -121,6 +121,7 @@ static internal class GameplayScene
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
+
         if (!isSlowerThanTickRate)
         {
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction

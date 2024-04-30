@@ -58,7 +58,7 @@ public static class GameClient
         try
         {
             // Sends a message to the host to which you have connected.
-            string json = state.SerializeState();
+            string json = GameStateSerializer.SerializeState(state);
             byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
             _udpClient.Send(sendBytes, sendBytes.Length);
@@ -79,7 +79,7 @@ public static class GameClient
         try
         {
             // Sends a message to the host to which you have connected.
-            string json = GameState.SerializeInput(input, playerId, time);
+            string json = GameStateSerializer.SerializeInput(input, playerId, time);
             byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
             _udpClient.Send(sendBytes, sendBytes.Length);
@@ -109,7 +109,7 @@ public static class GameClient
                 Console.WriteLine(returnData);
 
                 // Uses the IPEndPoint object to determine which of these two hosts responded.
-                var state = GameState.DeserializeState(returnData);
+                var state = GameStateSerializer.DeserializeState(returnData);
                 if (state.CurrentTime > LastSimulatedTime)
                     LastServerState = state;
             }

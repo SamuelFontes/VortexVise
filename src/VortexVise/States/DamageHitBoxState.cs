@@ -32,6 +32,11 @@ public class DamageHitBoxState
     public bool ShouldDisappear { get; set; } = false;
     public bool ShouldColide { get; set; } = false;
     public bool IsExplosion { get; set; } = false;
+
+    /// <summary>
+    /// Make the thing explode
+    /// </summary>
+    /// <param name="gameState">Current Game State</param>
     public void Explode(GameState gameState)
     {
         if (IsExplosion) return;

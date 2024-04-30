@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System.Numerics;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
-using VortexVise.Logic;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
@@ -31,15 +30,13 @@ Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex V
 Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);                           // Set minimal window size
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
 Raylib.HideCursor();                                                                                    // Hide windows cursor
-Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                                // Set game target FPS
+Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                            // Set game target FPS
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 GameAssets.InitializeAssets();                                                                          // Load global data 
 GameCore.GameRendering = Raylib.LoadRenderTexture(GameCore.GameScreenWidth, GameCore.GameScreenHeight); // Game will be rendered to this texture
-Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");
-Raylib.SetWindowIcon(icon);
-Raylib.UnloadImage(icon);
-MapLogic.Init();
-MapLogic.LoadRandomMap();
+Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
+Raylib.SetWindowIcon(icon);                                                                             // Set icon
+Raylib.UnloadImage(icon);                                                                               // Unload icon from memory
 
 
 // Initiate music
@@ -48,7 +45,6 @@ GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixe
 // Setup and init first screen
 SceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
-GameUserInterface.InitUserInterface();
 
 // Start multiplayer
 GameCore.HubConnection = new HubConnectionBuilder().WithUrl(new Uri("https://localhost:7094/GameHub")).WithAutomaticReconnect().Build();
@@ -143,9 +139,6 @@ while (!SceneManager.TransitionFadeOut)
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
-GameUserInterface.UnloadUserInterface();
-
-// Unload global data loaded
 GameAssets.UnloadAssets();
 
 Raylib.CloseAudioDevice();     // Close audio context

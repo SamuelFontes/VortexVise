@@ -1,4 +1,5 @@
 ﻿
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 using VortexVise.Logic;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
@@ -34,23 +35,16 @@ public static class GameAssets
         // Gameplay
         //---------------------------------------------------------
         WeaponLogic.Init();
-        // Load skins
-        string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
-        var counter = 0;
-        foreach (string skin in skins)
-        {
-            var s = new Skin();
-            s.Id = counter++;
-            s.TextureLocation = skin;
-            s.Texture = Raylib.LoadTexture(skin);
-            Gameplay.Skins.Add(s);
-        }
-        if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
+        MapLogic.Init();
+        LoadSkins();
 
         // Animation
         //---------------------------------------------------------
         Animations.LoadAnimations();
 
+        // Misc
+        //---------------------------------------------------------
+        GameUserInterface.InitUserInterface();
     }
 
     /// <summary>
@@ -80,6 +74,10 @@ public static class GameAssets
         // Animation
         //---------------------------------------------------------
         Animations.UnloadAnimations();
+
+        // Misc
+        //---------------------------------------------------------
+        GameUserInterface.UnloadUserInterface();
     }
 
     /// <summary>
@@ -99,7 +97,7 @@ public static class GameAssets
         public static Texture CurrentMapTexture; // This is the whole map baked into an image
         public static Texture HookTexture;
         public static List<Weapon> Weapons { get; set; } = [];
-        public static List<Skin> Skins { get; set; } = new List<Skin>();
+        public static List<Skin> Skins { get; set; } = [];
     }
 
     /// <summary>
@@ -298,4 +296,22 @@ public static class GameAssets
             Raylib.UnloadTexture(KillFeedBackground);
         }
     }
+
+    private static void LoadSkins()
+    {
+        string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
+        var counter = 0;
+        foreach (string skin in skins)
+        {
+            var s = new Skin
+            {
+                Id = counter++,
+                TextureLocation = skin,
+                Texture = Raylib.LoadTexture(skin)
+            };
+            Gameplay.Skins.Add(s);
+        }
+        if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
+    }
 }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

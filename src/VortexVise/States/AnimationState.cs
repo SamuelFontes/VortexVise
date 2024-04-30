@@ -111,6 +111,10 @@ public class AnimationState // This is only client side
         return (int)Rotation;
     }
 
+    /// <summary>
+    /// Used to animate using frame based animations
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void Animate(float deltaTime)
     {
         if (Animation == null) return;
