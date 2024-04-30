@@ -20,4 +20,5 @@ public class Map
     public string MapLocation { get; set; } = "";
     public string BGM { get; set; } = "";
     public string BGS { get; set; } = "";
+    public Texture Texture { get; set; }
 }

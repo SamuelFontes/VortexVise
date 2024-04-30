@@ -94,7 +94,6 @@ public static class GameAssets
     public static class Gameplay
     {
         public static List<Map> Maps { get; set; } = [];
-        public static Texture CurrentMapTexture; // This is the whole map baked into an image
         public static Texture HookTexture;
         public static List<Weapon> Weapons { get; set; } = [];
         public static List<Skin> Skins { get; set; } = [];

@@ -111,6 +111,7 @@ public static class MapLogic
                 map.MapLocation = file;
 
                 map.Id = counter++;
+                map.Texture = Raylib.LoadTexture(map.TextureLocation);
                 GameAssets.Gameplay.Maps.Add(map);
             }
             catch (Exception ex)
@@ -124,15 +125,13 @@ public static class MapLogic
 
     public static void Unload()
     {
-        Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
+        foreach(var map in GameAssets.Gameplay.Maps) Raylib.UnloadTexture(map.Texture);
 
     }
     public static void LoadMap(Map map)
     {
         if (SceneManager.CurrentScene == Enums.GameScene.GAMEPLAY) GameAssets.MusicAndAmbience.StopMusic(); // HACK: this is to stop the music not playing in the main menu
-        if (GameMatch.CurrentMap != null) Raylib.UnloadTexture(GameAssets.Gameplay.CurrentMapTexture);
         GameMatch.CurrentMap = map;
-        GameAssets.Gameplay.CurrentMapTexture = Raylib.LoadTexture(GameMatch.CurrentMap.TextureLocation);
 
         // Mirror map
         if (GameMatch.MapMirrored == -1)
@@ -144,7 +143,7 @@ public static class MapLogic
             {
                 var mirroredCollision = new Rectangle
                 {
-                    X = GameAssets.Gameplay.CurrentMapTexture.width - collision.x - collision.width,
+                    X = GameMatch.CurrentMap.Texture.width - collision.x - collision.width,
                     Y = collision.Y,
                     width = collision.width,
                     height = collision.height
@@ -183,7 +182,7 @@ public static class MapLogic
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(GameAssets.Gameplay.CurrentMapTexture.width, GameAssets.Gameplay.CurrentMapTexture.height);
+        return new Vector2(GameMatch.CurrentMap.Texture.width, GameMatch.CurrentMap.Texture.height);
     }
 
 }

@@ -72,7 +72,7 @@ public static class GameRenderer
 
     static void DrawMap()
     {
-        Raylib.DrawTextureRec(GameAssets.Gameplay.CurrentMapTexture, new(0, 0, GameAssets.Gameplay.CurrentMapTexture.width * GameMatch.MapMirrored, GameAssets.Gameplay.CurrentMapTexture.height), new Vector2(0, 0), Raylib.WHITE);
+        Raylib.DrawTextureRec(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.width * GameMatch.MapMirrored, GameMatch.CurrentMap.Texture.height), new Vector2(0, 0), Raylib.WHITE);
         if (Utils.Debug())
         {
             foreach (var collision in GameMatch.CurrentMap.Collisions) // DEBUG

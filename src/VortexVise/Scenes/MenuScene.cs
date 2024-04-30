@@ -429,7 +429,7 @@ public static class MenuScene
             var size = 176;
             var rec = new Rectangle(mapCenterPostion.X - size / 2, mapCenterPostion.Y - size / 2, size, size);
             Raylib.DrawRectangle((int)rec.x - 8, (int)rec.y - 8, (int)rec.width + 16, (int)rec.height + 16, Raylib.BLACK);
-            Raylib.DrawTexturePro(GameAssets.Gameplay.CurrentMapTexture, new(0, 0, GameAssets.Gameplay.CurrentMapTexture.width, GameAssets.Gameplay.CurrentMapTexture.height), rec, new(0, 0), 0, Raylib.WHITE);
+            Raylib.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.width, GameMatch.CurrentMap.Texture.height), rec, new(0, 0), 0, Raylib.WHITE);
 
             if (!GameCore.IsNetworkGame)// TODO: draw room id if online
             {

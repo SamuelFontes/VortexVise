@@ -104,7 +104,7 @@ public static class BotLogic
 
 
         // Try to avoid bot falling from map
-        if (input.Down && botState.Position.Y > GameAssets.Gameplay.CurrentMapTexture.height * 0.7)
+        if (input.Down && botState.Position.Y > GameMatch.CurrentMap.Texture.height * 0.7)
         {
             input.Down = false;
             input.Up = true;
