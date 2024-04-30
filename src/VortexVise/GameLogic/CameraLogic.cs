@@ -173,7 +173,7 @@ public static class CameraLogic
 
     static void ProcessCamera(ref Vector2 targetPosition, PlayerCamera playerCamera, ref Camera2D camera)
     {
-        Vector2 target = new(targetPosition.X, targetPosition.Y);
+        Vector2 target = new((int)targetPosition.X, (int)targetPosition.Y);
 
         // Make it stay inside the map
         if (target.X - GameCore.GameScreenWidth * playerCamera.CameraOffset.X <= 0)
@@ -188,8 +188,8 @@ public static class CameraLogic
 
         // Make camera smooth
         // FIXME: fix camera jerkness when almost hitting the target
-        camera.target.X = RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
-        camera.target.Y = RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
+        camera.target.X = (int)RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
+        camera.target.Y = (int)RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
 
     }
 
