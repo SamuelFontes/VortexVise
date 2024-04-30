@@ -1,5 +1,7 @@
 ﻿
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+using System.Numerics;
+using System.Text.RegularExpressions;
 using VortexVise.Logic;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
@@ -23,7 +25,7 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         Misc.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
-        HUD.Load();
+        HUD.LoadHud();
 
         // Sounds
         //---------------------------------------------------------
@@ -34,9 +36,9 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        WeaponLogic.Init();
-        MapLogic.Init();
-        LoadSkins();
+        Gameplay.LoadWeapons();
+        Gameplay.LoadMaps();
+        Gameplay.LoadSkins();
 
         // Animation
         //---------------------------------------------------------
@@ -67,9 +69,13 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        MapLogic.Unload();
+        foreach (var map in GameAssets.Gameplay.Maps) Raylib.UnloadTexture(map.Texture);
         foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
-        WeaponLogic.Unload();
+        foreach (var w in GameAssets.Gameplay.Weapons)
+        {
+            Raylib.UnloadTexture(w.Texture);
+            Raylib.UnloadTexture(w.ProjectileTexture);
+        }
 
         // Animation
         //---------------------------------------------------------
@@ -93,10 +99,276 @@ public static class GameAssets
     /// </summary>
     public static class Gameplay
     {
-        public static List<Map> Maps { get; set; } = [];
         public static Texture HookTexture;
+        public static List<Map> Maps { get; set; } = [];
         public static List<Weapon> Weapons { get; set; } = [];
         public static List<Skin> Skins { get; set; } = [];
+
+        public static void LoadSkins()
+        {
+            string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
+            var counter = 0;
+            foreach (string skin in skins)
+            {
+                var s = new Skin
+                {
+                    Id = counter++,
+                    TextureLocation = skin,
+                    Texture = Raylib.LoadTexture(skin)
+                };
+                Gameplay.Skins.Add(s);
+            }
+            if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
+        }
+
+        public static void LoadMaps()
+        {
+            var counter = 0;
+            string mapLocation = "Resources/Maps";
+            // Get all files from the Resources/Maps folder to read list of avaliable game levels aka maps
+            string[] mapFiles = Directory.GetFiles(mapLocation, "*.ini", SearchOption.TopDirectoryOnly);
+            string[] pngFiles = Directory.GetFiles(mapLocation, "*.png", SearchOption.TopDirectoryOnly);
+            foreach (var file in mapFiles)
+            {
+                string fileContent = File.ReadAllText(file);
+                try
+                {
+                    var map = new Map
+                    {
+                        // Read map name
+                        Name = Regex.Match(fileContent, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim(),
+                        BGM = Regex.Match(fileContent, @"(?<=BGM\s*=\s*?)[\s\S]+?(?=\s\s)").Value,
+                        BGS = Regex.Match(fileContent, @"(?<=BGS\s*=\s*?)[\s\S]+?(?=\s\s)").Value,
+                    };
+                    if (map.Name == null || map.Name.Length == 0) throw new Exception("Can't read map NAME");
+
+                    // Read map collisions
+                    var txtCollisions = Regex.Match(fileContent, @"(?<=COLLISIONS\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
+                    var matchesCollisions = Regex.Matches(txtCollisions, @"[\s\S]*?;");
+                    foreach (Match match in matchesCollisions.Cast<Match>())
+                    {
+                        var collision = new Rectangle
+                        {
+                            x = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+,[\d\.]+,[\d\.]+;)").Value),
+                            y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=,[\d\.]+,[\d\.]+;)").Value),
+                            width = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,)[\d\.]+(?=,[\d\.]+;)").Value),
+                            height = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,[\d\.]+,[\d\.]+,)[\d\.]+(?=;)").Value)
+                        };
+                        map.Collisions.Add(collision);
+                    }
+                    if (map.Collisions.Count == 0) throw new Exception("Can't read map COLLISIONS");
+
+                    // Read map player spawn
+                    var txtPlayerSpawn = Regex.Match(fileContent, @"(?<=PLAYER_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
+                    var matchesPlayerSpawn = Regex.Matches(txtPlayerSpawn, @"[\s\S]*?;");
+                    foreach (Match match in matchesPlayerSpawn.Cast<Match>())
+                    {
+                        var spawn = new Vector2
+                        {
+                            X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                            Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.],)[\d\.]+(?=;)").Value)
+                        };
+                        map.PlayerSpawnPoints.Add(spawn);
+                    }
+                    if (map.PlayerSpawnPoints.Count == 0) throw new Exception("Can't read map PlayerSpawnPoints");
+
+                    // Read map enemy spawn
+                    var txtEnemySpawn = Regex.Match(fileContent, @"(?<=ENEMY_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
+                    var matchesEnemySpawn = Regex.Matches(txtEnemySpawn, @"[\s\S]*?;");
+                    foreach (Match match in matchesEnemySpawn.Cast<Match>())
+                    {
+                        var spawn = new Vector2
+                        {
+                            X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                            Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
+                        };
+                        map.EnemySpawnPoints.Add(spawn);
+                    }
+                    if (map.EnemySpawnPoints.Count == 0) throw new Exception("Can't read map EnemySpawnPoints");
+
+                    // Read map item spawn
+                    var txtItemSpawn = Regex.Match(fileContent, @"(?<=ITEM_SPAWN\s*=\s*?)[\s\S]+?;(?=\s\s)").Value;
+                    var matchesItemSpawn = Regex.Matches(txtItemSpawn, @"[\s\S]*?;");
+                    foreach (Match match in matchesItemSpawn.Cast<Match>())
+                    {
+                        var spawn = new Vector2
+                        {
+                            X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
+                            Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
+                        };
+                        map.ItemSpawnPoints.Add(spawn);
+                    }
+                    if (map.ItemSpawnPoints.Count == 0) throw new Exception("Can't read map ItemSpawnPoints");
+
+                    // Read map gamemodes
+                    var txtGameModes = Regex.Match(fileContent, @"(?<=GAME_MODES\s*=[\S,\s]*?).*").Value;
+                    if (txtGameModes.Contains("DM"))
+                    {
+                        map.GameModes.Add(Enums.GameMode.DeathMatch);
+                        map.GameModes.Add(Enums.GameMode.TeamDeathMatch);
+                    }
+                    if (txtGameModes.Contains("SURVIVAL"))
+                        map.GameModes.Add(Enums.GameMode.Survival);
+                    if (map.GameModes.Count == 0) throw new Exception("Can't read map GAME_MODES");
+
+                    // Check for image file
+                    var mapFileName = Regex.Match(file, @"[\s\S]+(?=\.ini)").Value;
+                    mapFileName += ".png";
+                    if (!pngFiles.Contains(mapFileName)) throw new Exception($"Can't find image file {mapFileName}");
+                    map.TextureLocation = mapFileName;
+                    map.MapLocation = file;
+
+                    map.Id = counter++;
+                    map.Texture = Raylib.LoadTexture(map.TextureLocation);
+                    GameAssets.Gameplay.Maps.Add(map);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error reading map {file}: {ex.Message}");
+                }
+            }
+            if (GameAssets.Gameplay.Maps.Count == 0) throw new Exception("Can't find any map");
+            MapLogic.LoadRandomMap();
+        }
+
+        public static void LoadWeapons()
+        {
+            string weaponLocation = "Resources/Weapons";
+            // Read weapons from Resources/Weapons
+            string[] weaponFiles = Directory.GetFiles(weaponLocation, "*.ini", SearchOption.TopDirectoryOnly);
+            //string[] pngFiles = Directory.GetFiles(weaponLocation, "*.png", SearchOption.TopDirectoryOnly);
+            var id = 0;
+            foreach (var file in weaponFiles)
+            {
+                string fileContent = File.ReadAllText(file);
+                try
+                {
+
+                    var matchesWeapons = Regex.Matches(fileContent, @"\[WEAPON\][\s\S]*?(?=(\[WEAPON\]|$))");
+                    foreach (Match match in matchesWeapons.Cast<Match>())
+                    {
+                        var weapon = new Weapon
+                        {
+                            // Name
+                            Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\s\s)").Value.Trim(),
+
+                            // Texture
+                            TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value.Trim(),
+                            ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(?=\s\s)").Value
+                        };
+                        if (string.IsNullOrEmpty(weapon.TextureLocation)) throw new Exception("Can't find the texture location");
+                        weapon.TextureLocation = weaponLocation + "/" + weapon.TextureLocation;
+                        if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTextureLocation = weaponLocation + "/" + weapon.ProjectileTextureLocation;
+
+                        // Weapon Type
+                        string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA|HEAL)(?=\s\s)").Value.Trim();
+                        if (string.IsNullOrEmpty(weaponType)) throw new Exception("Can't read Weapon Type");
+                        switch (weaponType)
+                        {
+                            case ("PISTOL"): weapon.WeaponType = Enums.WeaponType.Pistol; break;
+                            case ("SMG"): weapon.WeaponType = Enums.WeaponType.SMG; break;
+                            case ("SHOTGUN"): weapon.WeaponType = Enums.WeaponType.Shotgun; break;
+                            case ("MELEE_BLUNT"): weapon.WeaponType = Enums.WeaponType.MeleeBlunt; break;
+                            case ("MELEE_CUT"): weapon.WeaponType = Enums.WeaponType.MeleeCut; break;
+                            case ("GRANADE"): weapon.WeaponType = Enums.WeaponType.Granade; break;
+                            case ("MINE"): weapon.WeaponType = Enums.WeaponType.Mine; break;
+                            case ("BAZOKA"): weapon.WeaponType = Enums.WeaponType.Bazoka; break;
+                            case ("HEAL"): weapon.WeaponType = Enums.WeaponType.Heal; break;
+                        }
+
+                        // Get reloadDelay
+                        if (weapon.WeaponType != Enums.WeaponType.Heal)
+                            weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(?=\s\s)").Value);
+
+                        // Color
+                        var color = Regex.Match(match.Value, @"(?<=COLOR=)\d+,\d+,\d+,\d+").Value;
+                        if (string.IsNullOrEmpty(color)) weapon.Color = Raylib.WHITE;
+                        else
+                        {
+                            string[] rgba = color.Split(',');
+                            weapon.Color = new Color(Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]), Convert.ToInt32(rgba[3]));
+                        }
+
+                        // Damage
+                        weapon.Damage = Convert.ToInt32(Regex.Match(match.Value, @"(?<=DAMAGE=)\d+").Value);
+
+                        // Target Knockback
+                        if (match.Value.Contains("TARGET_KNOCKBACK")) weapon.Knockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_KNOCKBACK=)\d+").Value);
+
+                        // Target Effect
+                        string effect = Regex.Match(match.Value, @"(?<=TARGET_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\s\s)").Value.Trim();
+                        if (!string.IsNullOrEmpty(effect))
+                        {
+                            switch (effect)
+                            {
+                                case ("COLD"): weapon.Effect = Enums.StatusEffects.Cold; break;
+                                case ("WET"): weapon.Effect = Enums.StatusEffects.Wet; break;
+                                case ("FIRE"): weapon.Effect = Enums.StatusEffects.Fire; break;
+                                case ("ELETRICITY"): weapon.Effect = Enums.StatusEffects.Eletricity; break;
+                                case ("FREEZED"): weapon.Effect = Enums.StatusEffects.Freezed; break;
+                                case ("CONFUSION"): weapon.Effect = Enums.StatusEffects.Confusion; break;
+                                case ("DIZZY"): weapon.Effect = Enums.StatusEffects.Dizzy; break;
+                                case ("GET_ROTATED"): weapon.Effect = Enums.StatusEffects.GetRotatedIdiot; break;
+                                case ("BLEEDING"): weapon.Effect = Enums.StatusEffects.Bleeding; break;
+                                case ("POISON"): weapon.Effect = Enums.StatusEffects.Poison; break;
+                                case ("HEAL"): weapon.Effect = Enums.StatusEffects.Heal; break;
+                            }
+                            weapon.EffectAmount = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_EFFECT_AMOUNT=)\d+").Value);
+                        }
+
+                        // Self Knockback
+                        if (match.Value.Contains("SELF_KNOCKBACK")) weapon.SelfKnockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_KNOCKBACK=)\d+").Value);
+
+                        // Self Effect
+                        effect = Regex.Match(match.Value, @"(?<=SELF_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\s\s)").Value.Trim();
+                        if (!string.IsNullOrEmpty(effect))
+                        {
+                            switch (effect)
+                            {
+                                case ("COLD"): weapon.SelfEffect = Enums.StatusEffects.Cold; break;
+                                case ("WET"): weapon.SelfEffect = Enums.StatusEffects.Wet; break;
+                                case ("FIRE"): weapon.SelfEffect = Enums.StatusEffects.Fire; break;
+                                case ("ELETRICITY"): weapon.SelfEffect = Enums.StatusEffects.Eletricity; break;
+                                case ("FREEZED"): weapon.SelfEffect = Enums.StatusEffects.Freezed; break;
+                                case ("CONFUSION"): weapon.SelfEffect = Enums.StatusEffects.Confusion; break;
+                                case ("DIZZY"): weapon.SelfEffect = Enums.StatusEffects.Dizzy; break;
+                                case ("GET_ROTATED"): weapon.SelfEffect = Enums.StatusEffects.GetRotatedIdiot; break;
+                                case ("BLEEDING"): weapon.SelfEffect = Enums.StatusEffects.Bleeding; break;
+                                case ("POISON"): weapon.SelfEffect = Enums.StatusEffects.Poison; break;
+                                case ("HEAL"): weapon.SelfEffect = Enums.StatusEffects.Heal; break;
+                            }
+                            weapon.SelfEffectAmount = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_EFFECT_AMOUNT=)\d+").Value);
+                            weapon.SelfEffectPercentageChance = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_EFFECT_CHANCE=)\d+").Value);
+                        }
+
+                        // Ammo
+                        if (match.Value.Contains("AMMO"))
+                            weapon.Ammo = Convert.ToInt32(Regex.Match(match.Value, @"(?<=AMMO=)\d+").Value);
+                        else
+                            weapon.Ammo = 1; // Defaults to 1 use if there is no ammo info
+
+
+
+                        // Load the texture
+                        weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loading replicated textures
+                        if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTexture = Raylib.LoadTexture(weapon.ProjectileTextureLocation);
+
+                        // Define Id and add to list
+                        weapon.Id = id;
+                        GameAssets.Gameplay.Weapons.Add(weapon);
+                        id++;
+                        Console.WriteLine($"WEAPON \"{weapon.Name}\" ADDED");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Error reading weapon {file}: {ex.Message}");
+                }
+            }
+            if (GameAssets.Gameplay.Weapons.Count == 0) throw new Exception("Can't find any weapon");
+        }
+
     }
 
     /// <summary>
@@ -262,7 +534,7 @@ public static class GameAssets
         public static Texture ThinBarEmpty;
         public static Texture SelectionSquare;
         public static Texture KillFeedBackground;
-        public static void Load()
+        public static void LoadHud()
         {
             WideBarGreen = Raylib.LoadTexture("resources/Common/wide_bar_green.png");
             WideBarRed = Raylib.LoadTexture("resources/Common/wide_bar_red.png");
@@ -296,21 +568,5 @@ public static class GameAssets
         }
     }
 
-    private static void LoadSkins()
-    {
-        string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
-        var counter = 0;
-        foreach (string skin in skins)
-        {
-            var s = new Skin
-            {
-                Id = counter++,
-                TextureLocation = skin,
-                Texture = Raylib.LoadTexture(skin)
-            };
-            Gameplay.Skins.Add(s);
-        }
-        if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
-    }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
