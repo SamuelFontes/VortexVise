@@ -1,4 +1,6 @@
 ﻿using System.Numerics;
+using VortexVise.Enums;
+using VortexVise.Networking;
 using VortexVise.States;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
@@ -159,6 +161,43 @@ static internal class GameUserInterface
 
 
 
+        // Global HUD
+        if (GameMatch.GameState?.MatchState == MatchStates.Warmup)
+        {
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            Utils.DrawTextCentered($"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
+        }
+        else if (GameMatch.GameState?.MatchState == MatchStates.Playing)
+        {
+            var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
+            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+        }
+        else if (GameMatch.GameState?.MatchState == MatchStates.EndScreen)
+        {
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
+            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+            var y = 64;
+            var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
+            if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
+            {
+                Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+            }
+            else
+            {
+                Utils.DrawTextCentered($"DRAW", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+            }
+            GameUserInterface.DrawScoreboard(players);
+        }
+        else if (GameMatch.GameState?.MatchState == MatchStates.Voting)
+        {
+            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
+            var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
+            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+        }
+
+
+        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
     }
 
     private static void DrawPlayerInfo(PlayerState playerState, Vector2 position)

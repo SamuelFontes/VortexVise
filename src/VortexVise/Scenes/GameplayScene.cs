@@ -23,11 +23,9 @@ static internal class GameplayScene
     public static GameState LastState = new();
     public static double Accumulator = 0;
     public static GameState State = new();
-    public static int NumberOfLocalPlayers = 0;
 
     static public void InitGameplayScene()
     {
-        NumberOfLocalPlayers = Utils.GetNumberOfLocalPlayers();
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
 
@@ -142,7 +140,7 @@ static internal class GameplayScene
         Raylib.ClearBackground(Raylib.BLACK);
         if (State.PlayerStates.Count == 0) return;
 
-        for (int i = 0; i < NumberOfLocalPlayers; i++)
+        for (int i = 0; i < Utils.GetNumberOfLocalPlayers(); i++)
         {
             PlayerState player;
             if (i == 0) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerOneProfile.Id);
@@ -156,43 +154,6 @@ static internal class GameplayScene
             CameraLogic.EndDrawingToCamera(i, player.IsDead);
         }
 
-        // Global HUD
-        if (State.MatchState == MatchStates.Warmup)
-        {
-            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
-            Utils.DrawTextCentered($"STARTING IN {(int)State.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
-        }
-        else if (State.MatchState == MatchStates.Playing)
-        {
-            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
-            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
-        }
-        else if (State.MatchState == MatchStates.EndScreen)
-        {
-            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
-            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
-            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
-            var y = 64;
-            var players = State.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-            if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
-            {
-                Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
-            }
-            else
-            {
-                Utils.DrawTextCentered($"DRAW", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
-            }
-            GameUserInterface.DrawScoreboard(players);
-        }
-        else if (State.MatchState == MatchStates.Voting)
-        {
-            Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
-            var t = TimeSpan.FromSeconds((int)State.MatchTimer);
-            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
-        }
-
-
-        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
     }
 
     static public void UnloadGameplayScene()
@@ -203,6 +164,7 @@ static internal class GameplayScene
         State = new();
         BotLogic.Unload();
     }
+
     static public int FinishGameplayScene()
     {
         return finishScreen;
