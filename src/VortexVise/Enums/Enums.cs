@@ -86,43 +86,43 @@ public enum StatusEffects
     /// <summary>
     /// If it is wet, it can get stunned longer with eleticity, can remove fire, fire removes this but don't burn, increase cold effect 
     /// </summary>
-    Wet,                        
+    Wet,
     /// <summary>
     /// Cause constant damage, removes with water, cold or freeze, can spread to others if stay too close 
     /// </summary>
-    Fire,                       
+    Fire,
     /// <summary>
     /// Stuns, if target was wet it doubles stun time
     /// </summary>
-    Eletricity,                 
+    Eletricity,
     /// <summary>
     /// Covered in ice, is stunned, any hit causes double damage but remove this effect, this is only caused by stacking a certain amout of cold
     /// </summary>
-    Freezed,                    
+    Freezed,
     /// <summary>
     /// Invert player controls
     /// </summary>
-    Confusion,                  
+    Confusion,
     /// <summary>
     /// Simple stun, any damage should remove this effect
     /// </summary>
-    Dizzy,                      
+    Dizzy,
     /// <summary>
     /// Inverts map horizontally and invert gravity for this entity, dude will fall upwards
     /// </summary>
-    GetRotatedIdiot,            
+    GetRotatedIdiot,
     /// <summary>
     /// Deals damage over time, fast
     /// </summary>
-    Bleeding,                   
+    Bleeding,
     /// <summary>
     /// Deals damage over time, slow
     /// </summary>
-    Poison,                     
+    Poison,
     /// <summary>
     /// Heal target
     /// </summary>
-    Heal,                       
+    Heal,
     /// <summary>
     /// Shrink entity making it and hitbox smaller
     /// </summary>
@@ -135,7 +135,7 @@ public enum StatusEffects
     /// Special. Make thing invulnerable to any damage, knockback or status effect changes.
     /// </summary>
     Ivunerable,
-}; 
+};
 
 
 public enum MatchStates

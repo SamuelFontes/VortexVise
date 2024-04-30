@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.Design;
-using System.Net.Security;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
-using VortexVise.Models;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -93,7 +90,7 @@ public static class MenuScene
         menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += GameCore.MenuFontSize*2;
+        yOffset += GameCore.MenuFontSize * 2;
         menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));

@@ -42,6 +42,6 @@ public class DamageHitBoxState
         ShouldDisappear = false;
         IsExplosion = true;
         gameState.Animations.Add(new() { Animation = GameAssets.Animations.Explosion, Position = new(HitBox.X, HitBox.Y) });
-        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Explosion);   
+        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Explosion);
     }
 }

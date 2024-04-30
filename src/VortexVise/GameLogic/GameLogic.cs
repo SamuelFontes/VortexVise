@@ -1,7 +1,6 @@
 ﻿using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.States;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;
 

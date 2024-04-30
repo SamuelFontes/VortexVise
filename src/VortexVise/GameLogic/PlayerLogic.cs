@@ -286,8 +286,8 @@ public static class PlayerLogic
         if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
         {
             var feetColided = false;
-            Rectangle playerFeet = new Rectangle(currentPlayerState.Collision.X,currentPlayerState.Collision.Y + currentPlayerState.Collision.Height,currentPlayerState.Collision.Width,1);
-            foreach(var collision in MapLogic.GetCollisions()) if(Raylib.CheckCollisionRecs(collision,playerFeet)) feetColided = true;
+            Rectangle playerFeet = new Rectangle(currentPlayerState.Collision.X, currentPlayerState.Collision.Y + currentPlayerState.Collision.Height, currentPlayerState.Collision.Width, 1);
+            foreach (var collision in MapLogic.GetCollisions()) if (Raylib.CheckCollisionRecs(collision, playerFeet)) feetColided = true;
             if (feetColided)
             {
                 currentPlayerState.IsTouchingTheGround = true;

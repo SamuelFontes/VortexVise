@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.Scenes;
-using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Logic;

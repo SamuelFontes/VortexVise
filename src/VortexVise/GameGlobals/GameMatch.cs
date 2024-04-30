@@ -1,8 +1,6 @@
-﻿using System.Net.NetworkInformation;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.Models;
 using VortexVise.States;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
 
@@ -32,7 +30,7 @@ public static class GameMatch
     /// <summary>
     /// Starting player health.
     /// </summary>
-    public static int DefaultPlayerHeathPoints = 100; 
+    public static int DefaultPlayerHeathPoints = 100;
     /// <summary>
     /// Current gameplay cameras, used to render player view.
     /// </summary>

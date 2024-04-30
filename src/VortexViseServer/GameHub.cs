@@ -11,7 +11,7 @@ public class GameHub : Hub
     public async Task JoinGame(Guid id)
     {
         var match = matches.FirstOrDefault(match => match.Id == id);
-        if (match == null) 
+        if (match == null)
         {
             await Clients.Caller.SendAsync("JoinGame", false);
             return;
