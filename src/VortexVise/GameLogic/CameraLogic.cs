@@ -186,11 +186,11 @@ public static class CameraLogic
         else if (target.Y + GameCore.GameScreenHeight * playerCamera.CameraOffset.Y >= MapLogic.GetMapSize().Y)
             target.Y = MapLogic.GetMapSize().Y - GameCore.GameScreenHeight * playerCamera.CameraOffset.Y;
 
+        target.X = (int)target.X;
+        target.Y = (int)target.Y;
         // Make camera smooth
-        // FIXME: fix camera jerkness when almost hitting the target
-        camera.target.X = (int)RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
-        camera.target.Y = (int)RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-6 * Raylib.GetFrameTime()));
-
+        camera.target.X = RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
+        camera.target.Y = RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
     }
 
 }
