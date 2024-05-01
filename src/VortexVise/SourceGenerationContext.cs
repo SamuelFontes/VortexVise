@@ -5,7 +5,8 @@ using VortexVise.States;
 
 namespace VortexVise;
 [JsonSourceGenerationOptions(WriteIndented = true)]
-[JsonSerializable(typeof(SerializableReplay))]
+[JsonSerializable(typeof(List<GameState>))]
+[JsonSerializable(typeof(List<MasterServer>))]
 internal partial class SourceGenerationContext : JsonSerializerContext
 {
 }

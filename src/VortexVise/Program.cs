@@ -8,8 +8,11 @@
 
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Numerics;
+using System.Text.Json;
+using VortexVise;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
+using VortexVise.Models;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
@@ -39,6 +42,7 @@ Raylib.SetWindowIcon(icon);                                                     
 Raylib.UnloadImage(icon);                                                                               // Unload icon from memory
 
 
+
 // Initiate music
 GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
 
@@ -46,8 +50,6 @@ GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixe
 SceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 
-// Start multiplayer
-GameCore.HubConnection = new HubConnectionBuilder().WithUrl(new Uri("https://localhost:7094/GameHub")).WithAutomaticReconnect().Build();
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------

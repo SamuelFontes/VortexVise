@@ -135,12 +135,10 @@ static internal class GameplayScene
         }
         GameStates.Add(State);
         GameMatch.GameState = State;
-        Utils.DebugText = State.Tick.ToString();
 
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F8))
         {
-            var replay = new SerializableReplay(GameStates);
-            var json = JsonSerializer.Serialize(replay, SourceGenerationContext.Default.SerializableReplay);
+            var json = JsonSerializer.Serialize(GameStates, SourceGenerationContext.Default.ListGameState);
             System.IO.File.WriteAllText(@"replay.json", json);  
         }
 

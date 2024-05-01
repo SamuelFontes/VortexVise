@@ -1,6 +1,7 @@
 ﻿
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 using System.Numerics;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Logic;
 using VortexVise.Models;
@@ -47,6 +48,9 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         GameUserInterface.InitUserInterface();
+#pragma warning disable CS8601 // Possible null reference assignment.
+        GameCore.MasterServers = JsonSerializer.Deserialize(File.ReadAllText("Resources/MasterServers.json"), SourceGenerationContext.Default.ListMasterServer);
+#pragma warning restore CS8601 // Possible null reference assignment.
     }
 
     /// <summary>

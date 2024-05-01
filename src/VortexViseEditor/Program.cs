@@ -6,7 +6,7 @@ using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 
-MapLogic.Init();
+GameAssets.InitializeAssets();
 IOrderedEnumerable<Map> maps = GameAssets.Gameplay.Maps.OrderBy(x => x.Name);
 start:
 var mapId = 0;
