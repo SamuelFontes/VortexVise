@@ -1,4 +1,6 @@
-﻿using VortexVise.Enums;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Models;
@@ -8,6 +10,7 @@ using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
+
 /// <summary>
 /// GameplayScene
 /// All gameplay related logic should start here.
@@ -23,6 +26,7 @@ static internal class GameplayScene
     public static GameState LastState = new();
     public static double Accumulator = 0;
     public static GameState State = new();
+    public static List<GameState> GameStates = new();
 
     static public void InitGameplayScene()
     {
@@ -129,8 +133,16 @@ static internal class GameplayScene
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
-        //gameStates.Add(state);
+        GameStates.Add(State);
         GameMatch.GameState = State;
+        Utils.DebugText = State.Tick.ToString();
+
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F8))
+        {
+            var replay = new SerializableReplay(GameStates);
+            var json = JsonSerializer.Serialize(replay, SourceGenerationContext.Default.SerializableReplay);
+            System.IO.File.WriteAllText(@"replay.json", json);  
+        }
 
         if (!State.IsRunning) finishScreen = 1;
     }

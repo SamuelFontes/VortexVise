@@ -13,7 +13,6 @@ namespace VortexVise.States;
 /// </summary>
 public class GameState
 {
-    public int Id { get; set; }
     public ulong Tick { get; set; }
     public double CurrentTime { get; set; }
     public float Gravity { get; set; }
