@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="8.0.3" />
     <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
   </ItemGroup>
 

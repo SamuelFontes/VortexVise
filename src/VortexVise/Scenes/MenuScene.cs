@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Utilities;
@@ -454,7 +453,6 @@ public static class MenuScene
                 var selectedServer = menuItems.Find(x => x.Item == selected);
                 var server = GameCore.MasterServers.First(x => x.ServerName == selectedServer.Text);
                 // Start multiplayer
-                GameCore.HubConnection = new HubConnectionBuilder().WithUrl(new Uri(server.ServerURL)).WithAutomaticReconnect().Build();
             }
             catch (Exception ex)
             {

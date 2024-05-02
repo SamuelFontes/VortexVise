@@ -1,0 +1,12 @@
+[
+  {
+    "ServerName": "Local Server",
+    "ServerURL":"https://localhost:7094",
+	"ServerUDP":"https://localhost:7094"
+  },
+  {
+    "ServerName": "Brazil Testing Server",
+    "ServerURL":"https://pelican-stirred-partly.ngrok-free.app",
+	"ServerUDP":"https://localhost:7094"
+  }
+]

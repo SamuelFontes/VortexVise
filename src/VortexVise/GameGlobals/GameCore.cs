@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
-using VortexVise.Models;
+﻿using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
@@ -47,10 +46,6 @@ public static class GameCore
     /// </summary>
     public static bool IsNetworkGame { get; set; } = false;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    /// <summary>
-    /// Global Network SignalR Hub Connection.
-    /// </summary>
-    public static HubConnection HubConnection { get; set; }
     /// <summary>
     /// Player profile
     /// </summary>
