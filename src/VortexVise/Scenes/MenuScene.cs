@@ -103,7 +103,7 @@ public static class MenuScene
         int counter = 1;
         foreach (var server in GameCore.MasterServers)
         {
-            menuItems.Add(new UIMenuItem(server.ServerName, MenuItem.MasterServer, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+            menuItems.Add(new UIMenuItem(server.ServerName, MenuItem.MasterServer, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), value: server.Id.ToString()));
             yOffset += GameCore.MenuFontSize;
             counter++;
         }
@@ -446,7 +446,7 @@ public static class MenuScene
             try
             {
                 var selectedServer = menuItems.Find(x => x.Id == selected);
-                var server = GameCore.MasterServers.First(x => x.ServerName == selectedServer.Text);
+                var server = GameCore.MasterServers.First(x => x.Id == Guid.Parse(selectedServer.Value));
                 // Start multiplayer
             }
             catch (Exception ex)

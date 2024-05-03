@@ -8,6 +8,7 @@ namespace VortexVise.Models;
 
 public class MasterServer
 {
+    public Guid Id { get; set; } = Guid.NewGuid();
     public string ServerName { get; set; } = "";
     public string ServerURL { get; set; } = "";
     public string ServerUDP { get; set; } = "";
