@@ -6,7 +6,7 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
-enum MenuItem { None, Online, Arcade, Settings, Exit, Return, PressStart, StartGame, ChangeMap, ChangeGameMode, ChangeNumberOfBots, MasterServer1, MasterServer2 };
+enum MenuItem { Campaign, Online, Arcade, Settings, Exit, Return, PressStart, StartGame, ChangeMap, ChangeGameMode, ChangeNumberOfBots, MasterServer };
 enum MenuItemType { Button, TextInput, Selection };
 enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby, MasterServer, Connecting };
 /// <summary>
@@ -25,8 +25,8 @@ public static class MenuScene
     static Texture gamepadSlotOff;
     static Texture disconnected;
     static Texture arrow;
-    static MenuItem selected = MenuItem.None;
-    static MenuItem lastSelected;
+    static Guid selected = Guid.Empty;
+    static Guid lastSelected;
     static MenuState currentState = MenuState.PressStart;
     static float arrowAnimationTimer = 0;
     static bool arrowExpanding = true;
@@ -67,12 +67,12 @@ public static class MenuScene
         var state = MenuState.PressStart;
         menuItems.Add(new UIMenuItem("PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
-        if (selected == MenuItem.None) selected = menuItems[0].Item;
+        if (selected == Guid.Empty) selected = menuItems[0].Id;
         state = MenuState.MainMenu;
 
         // MAIN MENU
         var yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.None, state, false, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.Campaign, state, false, MenuItemType.Button, mainMenuTextPosition));
         menuItems.Add(new UIMenuItem("ARCADE", MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
@@ -103,8 +103,7 @@ public static class MenuScene
         int counter = 1;
         foreach (var server in GameCore.MasterServers)
         {
-            MenuItem item = counter == 1 ? MenuItem.MasterServer1 : MenuItem.MasterServer2; // HACK: This stincks
-            menuItems.Add(new UIMenuItem(server.ServerName, item, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+            menuItems.Add(new UIMenuItem(server.ServerName, MenuItem.MasterServer, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
             yOffset += GameCore.MenuFontSize;
             counter++;
         }
@@ -135,7 +134,7 @@ public static class MenuScene
                 GameUserInterface.IsCursorVisible = false;
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, pitch: 0.8f);
                 currentState = MenuState.MainMenu;
-                selected = MenuItem.Arcade;
+                selected = menuItems.First(x => x.Item == MenuItem.Arcade && x.State == currentState).Id;
             }
         }
         else // MAIN MENU
@@ -149,16 +148,16 @@ public static class MenuScene
                     if (GameCore.IsNetworkGame)
                     {
                         currentState = MenuState.MasterServer;
-                        selected = MenuItem.Return;
+                        selected = menuItems.First(x => x.Item == MenuItem.Return && x.State == currentState).Id;
                     }
                     else
                     {
                         currentState = MenuState.Lobby;
-                        selected = MenuItem.StartGame;
+                        selected = menuItems.First(x => x.Item == MenuItem.StartGame && x.State == currentState).Id;
                     }
                     return;
                 }
-                else if (currentState == MenuState.Lobby && selected == MenuItem.StartGame)
+                else if (currentState == MenuState.Lobby && selected == menuItems.First(x => x.Item == MenuItem.StartGame && x.State == currentState).Id)
                 {
                     finishScreen = 2;
                     GameAssets.MusicAndAmbience.StopMusic();
@@ -170,62 +169,58 @@ public static class MenuScene
 
                 }
                 GameUserInterface.IsCursorVisible = false;
-                switch (selected)
+                var itemSelected = menuItems.FirstOrDefault(x => x.Id == selected);
+                if (itemSelected != null)
                 {
-                    case MenuItem.Exit:
+                    switch (itemSelected.Item)
                     {
-                        finishScreen = -1;   // EXIT
-                        GameCore.GameShouldClose = true;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        break;
-                    }
-                    case MenuItem.Settings:
-                    {
-                        finishScreen = 1;   // OPTIONS
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        break;
-                    }
-                    case MenuItem.Arcade:
-                    {
+                        case MenuItem.Exit:
+                        {
+                            finishScreen = -1;   // EXIT
+                            GameCore.GameShouldClose = true;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            break;
+                        }
+                        case MenuItem.Settings:
+                        {
+                            finishScreen = 1;   // OPTIONS
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            break;
+                        }
+                        case MenuItem.Arcade:
+                        {
 
-                        //finishScreen = 2;   // GAMEPLAY
-                        GameCore.IsNetworkGame = false;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        currentState = MenuState.InputSelection;
-                        break;
-                    }
-                    case MenuItem.Online:
-                    {
+                            //finishScreen = 2;   // GAMEPLAY
+                            GameCore.IsNetworkGame = false;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            currentState = MenuState.InputSelection;
+                            break;
+                        }
+                        case MenuItem.Online:
+                        {
 
-                        //finishScreen = 2;   // GAMEPLAY
-                        GameCore.IsNetworkGame = true;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        currentState = MenuState.InputSelection;
-                        break;
-                    }
-                    case MenuItem.Return:
-                    {
-                        currentState = MenuState.MainMenu;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        selected = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
-                        break;
-                    }
-                    case MenuItem.MasterServer1:
-                    {
-                        currentState = MenuState.Connecting;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        break;
-                    }
-                    case MenuItem.MasterServer2:
-                    {
-                        currentState = MenuState.Connecting;
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
-                        break;
+                            //finishScreen = 2;   // GAMEPLAY
+                            GameCore.IsNetworkGame = true;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            currentState = MenuState.InputSelection;
+                            break;
+                        }
+                        case MenuItem.Return:
+                        {
+                            currentState = MenuState.MainMenu;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            selected = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
+                            break;
+                        }
+                        case MenuItem.MasterServer:
+                        {
+                            currentState = MenuState.Connecting;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            break;
+                        }
+                        default: break;
                     }
 
-
-
-                    default: break;
                 }
             }
             else if (input.UIDown)
@@ -238,19 +233,19 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        selected = MenuItem.None;
+                        selected = Guid.Empty;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
                         shouldSelectNext = false;
-                        selected = item.Item;
+                        selected = item.Id;
 
                     }
                 }
-                if (shouldSelectNext || selected == MenuItem.None)
+                if (shouldSelectNext || selected == Guid.Empty)
                 {
                     var item = menuItems.Where(x => x.IsEnabled && x.State == currentState).Last();
-                    selected = item.Item;
+                    selected = item.Id;
                 }
             }
             else if (input.UIUp)
@@ -264,49 +259,49 @@ public static class MenuScene
                     if (item.IsSelected)
                     {
                         shouldSelectNext = true;
-                        selected = MenuItem.None;
+                        selected = Guid.Empty;
                     }
                     else if (shouldSelectNext && item.IsEnabled)
                     {
                         shouldSelectNext = false;
-                        selected = item.Item;
+                        selected = item.Id;
                     }
                 }
-                if (shouldSelectNext || selected == MenuItem.None)
+                if (shouldSelectNext || selected == Guid.Empty)
                 {
-                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                 }
             }
             else if (input.UILeft)
             {
-                if (selected == MenuItem.ChangeMap)
+                if (selected == menuItems.First(x => x.Item == MenuItem.ChangeMap && x.State == currentState).Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadNextMap();
-                    menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
+                    menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
-                else if (selected == MenuItem.ChangeNumberOfBots)
+                else if (selected == menuItems.First(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState).Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots--;
                     if (GameMatch.NumberOfBots < 0) GameMatch.NumberOfBots = 0;
-                    menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
+                    menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
                 }
             }
             else if (input.UIRight)
             {
-                if (selected == MenuItem.ChangeMap)
+                if (selected == menuItems.First(x => x.Item == MenuItem.ChangeMap && x.State == currentState).Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadPreviousMap();
-                    menuItems.First(x => selected == x.Item).Text = $"MAP: {GameMatch.CurrentMap.Name}";
+                    menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
-                else if (selected == MenuItem.ChangeNumberOfBots)
+                else if (selected == menuItems.First(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState).Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots++;
                     if (GameMatch.NumberOfBots > 10) GameMatch.NumberOfBots = 10;
-                    menuItems.First(x => selected == x.Item).Text = $"BOTS: {GameMatch.NumberOfBots}";
+                    menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
                 }
 
             }
@@ -317,13 +312,13 @@ public static class MenuScene
                 {
                     currentState = MenuState.PressStart;
                     menuItems[0].IsEnabled = true;
-                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                     GameCore.PlayerOneProfile.Gamepad = -9;
                 }
                 if (currentState == MenuState.InputSelection || currentState == MenuState.Lobby)
                 {
                     currentState = MenuState.MainMenu;
-                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Item).DefaultIfEmpty(MenuItem.None).FirstOrDefault();
+                    selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                     GameCore.PlayerTwoProfile.Gamepad = -9;
                     GameCore.PlayerThreeProfile.Gamepad = -9;
                     GameCore.PlayerFourProfile.Gamepad = -9;
@@ -446,11 +441,11 @@ public static class MenuScene
         //----------------------------------------------------------------------------------
         PlaySelectionSound();
 
-        if(currentState == MenuState.Connecting)
+        if (currentState == MenuState.Connecting)
         {
             try
             {
-                var selectedServer = menuItems.Find(x => x.Item == selected);
+                var selectedServer = menuItems.Find(x => x.Id == selected);
                 var server = GameCore.MasterServers.First(x => x.ServerName == selectedServer.Text);
                 // Start multiplayer
             }
@@ -464,8 +459,8 @@ public static class MenuScene
         //----------------------------------------------------------------------------------
         foreach (var item in menuItems) if (item.State == currentState) item.Update();
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
-        if (s == null) selected = MenuItem.None;
-        else selected = s.Item;
+        if (s == null) selected = Guid.Empty;
+        else selected = s.Id;
 
         // Update visual things
         //----------------------------------------------------------------------------------
@@ -551,13 +546,14 @@ public static class MenuScene
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
-        if (lastSelected != selected && selected != MenuItem.None) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
+        if (lastSelected != selected && selected != Guid.Empty) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection);
         lastSelected = selected;
     }
     class UIMenuItem
     {
-        public UIMenuItem(string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition)
+        public UIMenuItem(string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition, string value = "")
         {
+            Id = Guid.NewGuid();
             Text = text;
             Item = item;
             State = state;
@@ -565,12 +561,15 @@ public static class MenuScene
             Size = GameCore.MenuFontSize;
             Type = type;
             CenterPosition = centerPosition;
+            Value = value;
         }
+        public Guid Id { get; }
+        public string Value { get; set; }
         public string Text;
         public MenuItem Item { get; set; }
         public MenuState State { get; set; }
         public bool IsEnabled { get; set; }
-        public bool IsSelected { get { return selected == Item; } }
+        public bool IsSelected { get { return selected == Id; } }
         public Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
         public int Size { get; set; }
@@ -594,13 +593,13 @@ public static class MenuScene
             // Check if mouse is selecting the menu
             if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, TextSize.X, TextSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
             {
-                selected = Item;
+                selected = Id;
             }
 
             // Make press start always selected
             if (currentState == MenuState.PressStart && Item == MenuItem.PressStart)
             {
-                selected = Item;
+                selected = Id;
             }
 
             // Paint the text
