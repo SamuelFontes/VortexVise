@@ -173,6 +173,7 @@ static internal class GameplayScene
         LastState = new();
         State = new();
         BotLogic.Unload();
+        GameMatch.GameState = null;
     }
 
     static public int FinishGameplayScene()
