@@ -1,4 +1,6 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
 using VortexVise.GameGlobals;
 using ZeroElectric.Vinculum;
 
@@ -154,6 +156,18 @@ public static class Utils
         if ((velocity.Y <= 0 && velocityToAdd.Y <= 0) || (velocity.Y >= 0 && velocityToAdd.Y >= 0))
             newVelocity += new Vector2(0, velocityToAdd.Y * multiplier);
         return newVelocity;
+    }
+
+    public static string GetFileChecksum(string filename)
+    {
+        using (var md5 = MD5.Create())
+        {
+            using (var stream = File.OpenRead(filename))
+            {
+                var hash = md5.ComputeHash(stream);
+                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
+        }
     }
 
 }

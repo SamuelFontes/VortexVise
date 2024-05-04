@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Logic;
 using VortexVise.Models;
+using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.GameGlobals;
@@ -167,7 +168,7 @@ public static class GameAssets
                     var matchesPlayerSpawn = Regex.Matches(txtPlayerSpawn, @"[\s\S]*?;");
                     foreach (Match match in matchesPlayerSpawn.Cast<Match>())
                     {
-                        var spawn = new Vector2
+                        var spawn = new SerializableVector2
                         {
                             X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
                             Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.],)[\d\.]+(?=;)").Value)
@@ -181,7 +182,7 @@ public static class GameAssets
                     var matchesEnemySpawn = Regex.Matches(txtEnemySpawn, @"[\s\S]*?;");
                     foreach (Match match in matchesEnemySpawn.Cast<Match>())
                     {
-                        var spawn = new Vector2
+                        var spawn = new SerializableVector2
                         {
                             X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
                             Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
@@ -195,7 +196,7 @@ public static class GameAssets
                     var matchesItemSpawn = Regex.Matches(txtItemSpawn, @"[\s\S]*?;");
                     foreach (Match match in matchesItemSpawn.Cast<Match>())
                     {
-                        var spawn = new Vector2
+                        var spawn = new SerializableVector2
                         {
                             X = float.Parse(Regex.Match(match.Value, @"[\d\.]+(?=,[\d\.]+;)").Value),
                             Y = float.Parse(Regex.Match(match.Value, @"(?<=[\d\.]+,)[\d\.]+(?=;)").Value)
@@ -222,7 +223,7 @@ public static class GameAssets
                     map.TextureLocation = mapFileName;
                     map.MapLocation = file;
 
-                    map.Id = counter++;
+                    map.Id = Utils.GetFileChecksum(file);
                     map.Texture = Raylib.LoadTexture(map.TextureLocation);
                     GameAssets.Gameplay.Maps.Add(map);
                 }

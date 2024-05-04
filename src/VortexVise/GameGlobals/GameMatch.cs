@@ -68,7 +68,7 @@ public static class GameMatch
     /// <summary>
     /// Returns random player spawn point.
     /// </summary>
-    static public Vector2 PlayerSpawnPoint { get { return CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First(); } }
+    static public Vector2 PlayerSpawnPoint { get { return CurrentMap.PlayerSpawnPoints.OrderBy(x => Guid.NewGuid()).First().Deserialize(); } }
     /// <summary>
     /// Max player move speed.
     /// </summary>

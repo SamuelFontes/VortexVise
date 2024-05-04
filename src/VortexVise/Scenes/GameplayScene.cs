@@ -138,7 +138,16 @@ static internal class GameplayScene
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_F8))
         {
             var json = JsonSerializer.Serialize(GameStates, SourceGenerationContext.Default.ListGameState);
-            System.IO.File.WriteAllText(@"replay.json", json);  
+            System.IO.File.WriteAllText(@"replay.json", json);
+        }
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F9))
+        {
+            foreach (var map in GameAssets.Gameplay.Maps)
+            {
+                var json = JsonSerializer.Serialize(map, SourceGenerationContext.Default.Map);
+                System.IO.File.WriteAllText($"Resources/Maps/{map.Name.Replace(" ","")}.json", json);
+
+            }
         }
 
         if (!State.IsRunning) finishScreen = 1;

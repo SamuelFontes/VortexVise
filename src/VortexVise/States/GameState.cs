@@ -55,7 +55,7 @@ public class GameState
         foreach (var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
         {
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
-            var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawn);
+            var weaponDrop = new WeaponDropState(new WeaponState(weapon, weapon.Ammo, weapon.Ammo, false, weapon.ReloadDelay, 0), spawn.Deserialize());
             WeaponDrops.Add(weaponDrop);
         }
         MatchState = MatchStates.Warmup;

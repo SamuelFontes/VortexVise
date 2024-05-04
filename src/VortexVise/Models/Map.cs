@@ -9,12 +9,15 @@ namespace VortexVise.Models;
 /// </summary>
 public class Map
 {
-    public int Id { get; set; } = 0;
+    /// <summary>
+    /// Data file checksum
+    /// </summary>
+    public string Id { get; set; } = ""; 
     public string Name { get; set; } = "";
     public List<Rectangle> Collisions { get; set; } = new List<Rectangle>();
-    public List<Vector2> PlayerSpawnPoints { get; set; } = new List<Vector2>();
-    public List<Vector2> EnemySpawnPoints { get; set; } = new List<Vector2>();
-    public List<Vector2> ItemSpawnPoints { get; set; } = new List<Vector2>();
+    public List<SerializableVector2> PlayerSpawnPoints { get; set; } = new List<SerializableVector2>();
+    public List<SerializableVector2> EnemySpawnPoints { get; set; } = new List<SerializableVector2>();
+    public List<SerializableVector2> ItemSpawnPoints { get; set; } = new List<SerializableVector2>();
     public List<GameMode> GameModes { get; set; } = new List<GameMode> { };
     public string TextureLocation { get; set; } = "";
     public string MapLocation { get; set; } = "";
