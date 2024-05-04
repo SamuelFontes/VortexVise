@@ -7,7 +7,10 @@ namespace VortexVise.Models;
 /// </summary>
 public class Skin
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// File checksum
+    /// </summary>
+    public string Id { get; set; } = "";
     public Texture Texture { get; set; }
     public string TextureLocation { get; set; } = string.Empty;
 }

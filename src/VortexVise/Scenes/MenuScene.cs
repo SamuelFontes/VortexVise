@@ -54,10 +54,10 @@ public static class MenuScene
 
         // Load player skins
         //----------------------------------------------------------------------------------
-        if (GameCore.PlayerOneProfile.Skin.Id == -1) GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerTwoProfile.Skin.Id == -1) GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerThreeProfile.Skin.Id == -1) GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (GameCore.PlayerFourProfile.Skin.Id == -1) GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerOneProfile.Skin.Id == "") GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerTwoProfile.Skin.Id == "") GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerThreeProfile.Skin.Id == "") GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerFourProfile.Skin.Id == "") GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ public static class MenuScene
                     }
                     return;
                 }
-                else if (currentState == MenuState.Lobby && selected == menuItems.First(x => x.Item == MenuItem.StartGame && x.State == currentState).Id)
+                else if (currentState == MenuState.Lobby && selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.StartGame && x.State == currentState)?.Id)
                 {
                     finishScreen = 2;
                     GameAssets.MusicAndAmbience.StopMusic();
@@ -274,13 +274,13 @@ public static class MenuScene
             }
             else if (input.UILeft)
             {
-                if (selected == menuItems.First(x => x.Item == MenuItem.ChangeMap && x.State == currentState).Id)
+                if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadNextMap();
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
-                else if (selected == menuItems.First(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState).Id)
+                else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots--;
@@ -290,13 +290,13 @@ public static class MenuScene
             }
             else if (input.UIRight)
             {
-                if (selected == menuItems.First(x => x.Item == MenuItem.ChangeMap && x.State == currentState).Id)
+                if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     MapLogic.LoadPreviousMap();
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
-                else if (selected == menuItems.First(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState).Id)
+                else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
                     GameMatch.NumberOfBots++;
@@ -440,20 +440,6 @@ public static class MenuScene
         // Play selection sound
         //----------------------------------------------------------------------------------
         PlaySelectionSound();
-
-        if (currentState == MenuState.Connecting)
-        {
-            try
-            {
-                var selectedServer = menuItems.Find(x => x.Id == selected);
-                var server = GameCore.MasterServers.First(x => x.Id == Guid.Parse(selectedServer.Value));
-                // Start multiplayer
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-            }
-        }
 
         // Update menu
         //----------------------------------------------------------------------------------

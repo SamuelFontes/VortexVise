@@ -112,18 +112,17 @@ public static class GameAssets
         public static void LoadSkins()
         {
             string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
-            var counter = 0;
             foreach (string skin in skins)
             {
                 var s = new Skin
                 {
-                    Id = counter++,
+                    Id = Utils.GetFileChecksum(skin),
                     TextureLocation = skin,
                     Texture = Raylib.LoadTexture(skin)
                 };
-                Gameplay.Skins.Add(s);
+                Skins.Add(s);
             }
-            if (Gameplay.Skins.Count == 0) throw new Exception("Couldn't load any player skin");
+            if (Skins.Count == 0) throw new Exception("Couldn't load any player skin");
         }
 
         public static void LoadMaps()
