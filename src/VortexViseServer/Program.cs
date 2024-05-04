@@ -33,17 +33,26 @@ internal class Program
             return json;
         });
 
-        app.MapGet("/host", () =>
+        app.MapPost("/host", (PlayerProfile profile) =>
         {
-            var lobby = new GameLobby(Guid.NewGuid());
+            var lobby = new GameLobby(profile);
             lobbies.Add(lobby);
-            return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby);;
+            return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
         });
 
-        app.MapGet("/join", (string lobbyId) =>
+        app.MapPut("/join", (Guid lobbyId, PlayerProfile profile) =>
         {
-            var id = Guid.Parse(lobbyId);
-            return "VortexViseServer";
+            var lobby = lobbies.FirstOrDefault(x => x.Id == lobbyId);
+            if (lobby == null) return "Lobby not found";
+            lobby.Players.Add(profile);
+            return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
+        });
+
+        app.MapGet("/GetLobby", (Guid lobbyId) =>
+        {
+            var lobby = lobbies.FirstOrDefault(x => x.Id == lobbyId);
+            if (lobby == null) return "Lobby not found";
+            return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
         });
 
         app.UseResponseCompression();
