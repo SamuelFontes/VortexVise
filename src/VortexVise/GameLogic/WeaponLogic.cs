@@ -32,7 +32,7 @@ public static class WeaponLogic
             WeaponSpawnTimer = 0;
             var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
 
-            Vector2 spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.Where(x => !currentGameState.WeaponDrops.Select(d => d.Position).Contains(x.Deserialize())).OrderBy(x => Guid.NewGuid()).FirstOrDefault().Deserialize();
+            Vector2 spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First().Deserialize();
             if (spawnPoint.X == 0 && spawnPoint.Y == 0) return;
             // Remove old weapons if there is another in same place
             var existingWeapon = currentGameState.WeaponDrops.FirstOrDefault(x => x.Position == spawnPoint);
