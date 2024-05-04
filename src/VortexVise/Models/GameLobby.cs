@@ -6,9 +6,13 @@ namespace VortexVise.Models;
 /// </summary>
 public class GameLobby
 {
-    public Guid Id { get; set; }
-    public string MatchOwner { get; set; } = string.Empty;
+    public GameLobby(Guid ownerId)
+    {
+
+    }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid OwnerId { get; set; } 
     public int MaxPlayers { get; set; } = 8;
-    public List<string> Players { get; set; } = [];
+    public List<PlayerProfile> Players { get; set; } = [];
     public double LastGameUpdate { get; set; }
 }

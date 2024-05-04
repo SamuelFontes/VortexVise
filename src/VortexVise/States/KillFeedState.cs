@@ -5,13 +5,13 @@
 /// </summary>
 public class KillFeedState
 {
-    public KillFeedState(int killerId, int killedId)
+    public KillFeedState(Guid killerId, Guid killedId)
     {
         KillerId = killerId;
         KilledId = killedId;
         Timer = 5;
     }
-    public int KillerId { get; set; }
-    public int KilledId { get; set; }
+    public Guid KillerId { get; set; }
+    public Guid KilledId { get; set; }
     public float Timer { get; set; }
 }

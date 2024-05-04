@@ -45,7 +45,7 @@ public class GameState
             playerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
             playerState.Animation.Rotation = 0;
             playerState.Animation.State = 0;
-            playerState.LastPlayerHitId = -1;
+            playerState.LastPlayerHitId = Guid.Empty;
             playerState.Stats.Kills = 0;
             playerState.Stats.Deaths = 0;
             playerState.JetPackFuel = GameMatch.DefaultJetPackFuel;

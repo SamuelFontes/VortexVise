@@ -137,7 +137,7 @@ static internal class GameUserInterface
                 var killed = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KilledId);
                 if (killed == null) continue;
 
-                if (kill.KilledId != kill.KillerId && kill.KillerId != -1)
+                if (kill.KilledId != kill.KillerId && kill.KillerId != Guid.Empty)
                 {
                     var killer = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KillerId);
                     if (killer == null) continue;
@@ -181,7 +181,7 @@ static internal class GameUserInterface
             var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
             if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
-                Utils.DrawTextCentered($"PLAYER {players[0].Id + 1} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+                Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
             }
             else
             {
@@ -255,7 +255,7 @@ static internal class GameUserInterface
         {
             int x = (int)(GameCore.GameScreenWidth * 0.5f);
             x -= 128;
-            Utils.DrawTextCentered($"Player {player.Id + 1}", new(x, y), 16, Raylib.WHITE);
+            Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
             x += 128;
             y -= 8;
             Raylib.DrawTexture(GameAssets.HUD.Kill, x, y, Raylib.WHITE);

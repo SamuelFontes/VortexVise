@@ -73,7 +73,7 @@ public static class GameClient
 
         return wasSent;
     }
-    static public bool SendInput(InputState input, int playerId, double time)
+    static public bool SendInput(InputState input, Guid playerId, double time)
     {
         bool wasSent = false;
         try

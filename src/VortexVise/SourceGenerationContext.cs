@@ -7,6 +7,7 @@ namespace VortexVise;
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(List<GameState>))]
 [JsonSerializable(typeof(List<MasterServer>))]
-internal partial class SourceGenerationContext : JsonSerializerContext
+[JsonSerializable(typeof(List<GameLobby>))]
+public partial class SourceGenerationContext : JsonSerializerContext
 {
 }

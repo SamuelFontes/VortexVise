@@ -58,7 +58,7 @@ public static class PlayerLogic
 
             // Add stats
             currentPlayerState.Stats.Deaths++;
-            if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == -1)
+            if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == Guid.Empty)
             {
                 //currentPlayerState.Stats.Kills--;
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death, pitch: 0.8f);
@@ -76,7 +76,7 @@ public static class PlayerLogic
                     }
                 }
             }
-            currentPlayerState.LastPlayerHitId = -1;
+            currentPlayerState.LastPlayerHitId = Guid.Empty;
         }
 
         if (currentPlayerState.IsDead)
@@ -379,7 +379,7 @@ public static class PlayerLogic
         }
     }
 
-    public static bool IsPlayerLocal(int playerId)
+    public static bool IsPlayerLocal(Guid playerId)
     {
         bool isPlayerLocal = false;
         if (GameCore.PlayerOneProfile.Gamepad != -9 && GameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;

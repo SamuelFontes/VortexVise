@@ -10,7 +10,7 @@ namespace VortexVise.States;
 /// </summary>
 public class PlayerState
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public Vector2 Position { get; set; } = new Vector2(0, 0);
     public Vector2 Velocity { get; set; } = new Vector2(0, 0);
     public int Direction { get; set; } = 1;
@@ -22,7 +22,7 @@ public class PlayerState
     public float SpawnTimer { get; set; } = 0;
     public float DamagedTimer { get; set; } = 0;
     public bool IsBot { get; set; } = false;
-    public int LastPlayerHitId = -1;
+    public Guid LastPlayerHitId = Guid.Empty;
     public float JetPackFuel { get; set; } = GameMatch.DefaultJetPackFuel;
     public Skin Skin { get; set; }
     public PlayerStats Stats { get; set; }
@@ -33,7 +33,7 @@ public class PlayerState
     public AnimationState Animation { get; set; } = new AnimationState();
     public List<WeaponState> WeaponStates { get; set; } = new List<WeaponState>();
 
-    public PlayerState(int id, Skin skin)
+    public PlayerState(Guid id, Skin skin)
     {
         Id = id;
         Position = GameMatch.PlayerSpawnPoint;

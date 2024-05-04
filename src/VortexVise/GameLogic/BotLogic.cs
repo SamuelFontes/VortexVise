@@ -10,7 +10,7 @@ public static class BotLogic
     {
         for (int i = 0; i < GameMatch.NumberOfBots; i++)
         {
-            var bot = new PlayerState(state.PlayerStates.Count + 5, GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+            var bot = new PlayerState(Guid.NewGuid(), GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
             bot.IsBot = true;
             var b = new Bot();
             b.Id = bot.Id;
