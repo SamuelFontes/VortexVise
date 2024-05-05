@@ -12,4 +12,5 @@ public class MasterServer
     public string ServerName { get; set; } = "";
     public string ServerURL { get; set; } = "";
     public string ServerUDP { get; set; } = "";
+    public int ServerUDPPort { get; set; }
 }

@@ -9,6 +9,7 @@ namespace VortexVise;
 [JsonSerializable(typeof(List<MasterServer>))]
 [JsonSerializable(typeof(List<GameLobby>))]
 [JsonSerializable(typeof(List<Map>))]
+[JsonSerializable(typeof(List<PlayerProfile>))]
 public partial class SourceGenerationContext : JsonSerializerContext
 {
 }

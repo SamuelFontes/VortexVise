@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using VortexVise.GameGlobals;
+using VortexVise.Models;
 using VortexVise.States;
 
 namespace VortexVise.Networking;
@@ -11,36 +12,47 @@ namespace VortexVise.Networking;
 public static class GameClient
 {
     static public bool IsConnected = false;
-    private static readonly UdpClient _udpClient = new(11000);
+    public static bool IsConnecting = false;
+    private static UdpClient _udpClient = new(11000);
     static public GameState LastServerState = new();
     static public double LastSimulatedTime = 0;
-    static public long Ping = 0;
-    static public bool Connect()
+    static public long Ping = -1;
+    public static HttpClient httpClient = new();
+    public static MasterServer Server = new();
+    static public async Task Connect(MasterServer server)
     {
 
-        // This constructor arbitrarily assigns the local port number.
         try
         {
-            _udpClient.Connect(GameCore.ServerIPAddress, 0);
+            IsConnecting = true;
+            Server = server;
+            var serverResponse = await httpClient.GetAsync(server.ServerURL);
+            string serverMessage = await serverResponse.Content.ReadAsStringAsync();
+            if (serverMessage != "VortexViseServer") throw new Exception("Can't connect to server");
+
+            _udpClient.Dispose();
+            _udpClient = new(11000);
+            _udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
             IsConnected = true;
             UpdatePing();
-            Thread getPingThread = new(new ThreadStart(GetServerLatency));
-            getPingThread.Start();
+            //Thread getPingThread = new(new ThreadStart(GetServerLatency));
+            //getPingThread.Start();
 
         }
         catch (Exception e)
         {
+            IsConnecting = false;
             Console.WriteLine(e.ToString());
             _udpClient.Close();
             IsConnected = false;
         }
-        return IsConnected;
     }
 
     static public void Disconnect()
     {
         try
         {
+            IsConnecting = false;
             _udpClient.Close();
             IsConnected = false;
         }
@@ -132,8 +144,16 @@ public static class GameClient
     }
     static void UpdatePing()
     {
-        Ping ping = new();
-        PingReply reply = ping.Send(GameCore.ServerIPAddress, 1000);
-        Ping = reply.RoundtripTime;
+        if (IsConnected)
+            try
+            {
+                Ping ping = new();
+                PingReply reply = ping.Send(Server.ServerUDP, 1000);
+                Ping = reply.RoundtripTime;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
     }
 }

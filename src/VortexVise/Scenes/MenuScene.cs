@@ -1,14 +1,16 @@
-﻿using System.Numerics;
+﻿using System.ComponentModel.Design;
+using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
+using VortexVise.Networking;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Scenes;
 
-enum MenuItem { Campaign, Online, Arcade, Settings, Exit, Return, PressStart, StartGame, ChangeMap, ChangeGameMode, ChangeNumberOfBots, MasterServer };
+enum MenuItem { Campaign, Online, Arcade, Settings, Exit, Return, PressStart, StartGame, ChangeMap, ChangeGameMode, ChangeNumberOfBots, MasterServer, CreateLobby };
 enum MenuItemType { Button, TextInput, Selection };
-enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby, MasterServer, Connecting };
+enum MenuState { MainMenu, Settings, PressStart, ChooseProfile, NewProfile, Loading, InputSelection, OnlineMain, Lobby, MasterServer, Connecting, LobbyBrowser };
 /// <summary>
 /// Main Menu Scene
 /// </summary>
@@ -100,16 +102,30 @@ public static class MenuScene
         state = MenuState.MasterServer;
         lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = GameCore.MenuFontSize;
-        int counter = 1;
         foreach (var server in GameCore.MasterServers)
         {
             menuItems.Add(new UIMenuItem(server.ServerName, MenuItem.MasterServer, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), value: server.Id.ToString()));
             yOffset += GameCore.MenuFontSize;
-            counter++;
         }
         yOffset += GameCore.MenuFontSize * 2;
         menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
+
+        // LOBBY BROWSER   
+        state = MenuState.LobbyBrowser;
+        lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.3f);
+        yOffset = GameCore.MenuFontSize;
+        foreach (var server in GameCore.MasterServers)
+        {
+            menuItems.Add(new UIMenuItem(server.ServerName, MenuItem.MasterServer, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), value: server.Id.ToString()));
+            yOffset += GameCore.MenuFontSize;
+        }
+        yOffset += GameCore.MenuFontSize * 2;
+        menuItems.Add(new UIMenuItem("CREATE LOBBY", MenuItem.CreateLobby, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+
 
         UpdateMenuScene();
 
@@ -207,8 +223,14 @@ public static class MenuScene
                         }
                         case MenuItem.Return:
                         {
-                            currentState = MenuState.MainMenu;
                             GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            if (currentState == MenuState.LobbyBrowser)
+                            {
+                                GameClient.Disconnect();
+                                currentState = MenuState.MasterServer;
+                                break;
+                            }
+                            currentState = MenuState.MainMenu;
                             selected = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                             break;
                         }
@@ -216,6 +238,8 @@ public static class MenuScene
                         {
                             currentState = MenuState.Connecting;
                             GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            var server = GameCore.MasterServers.First(x => x.Id == Guid.Parse(itemSelected.Value));
+                            _ = GameClient.Connect(server);
                             break;
                         }
                         default: break;
@@ -322,6 +346,15 @@ public static class MenuScene
                     GameCore.PlayerTwoProfile.Gamepad = -9;
                     GameCore.PlayerThreeProfile.Gamepad = -9;
                     GameCore.PlayerFourProfile.Gamepad = -9;
+                }
+                else if (currentState == MenuState.Connecting)
+                {
+                    currentState = MenuState.MasterServer;
+                }
+                else if (currentState == MenuState.LobbyBrowser)
+                {
+                    GameClient.Disconnect();
+                    currentState = MenuState.MasterServer;
                 }
             }
 
@@ -435,6 +468,17 @@ public static class MenuScene
 
         }
 
+
+        if (currentState == MenuState.Connecting && !GameClient.IsConnecting && !GameClient.IsConnected)
+        {
+            currentState = MenuState.MasterServer;
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.VinylScratch);
+        }
+        else if (currentState == MenuState.Connecting && GameClient.IsConnected)
+        {
+            currentState = MenuState.LobbyBrowser;
+        }
+
         // Handle inputs
         //----------------------------------------------------------------------------------
         // Play selection sound
@@ -474,6 +518,10 @@ public static class MenuScene
         else if (currentState == MenuState.Connecting)
         {
             Utils.DrawTextCentered("CONNECTING", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 64, Raylib.WHITE);
+        }
+        else if (currentState == MenuState.LobbyBrowser)
+        {
+            Utils.DrawTextCentered(GameClient.Server.ServerName, new(GameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
         }
         else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {

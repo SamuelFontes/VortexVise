@@ -144,4 +144,5 @@ public enum MatchStates
     Playing,
     EndScreen,
     Voting,
+    Lobby,
 };

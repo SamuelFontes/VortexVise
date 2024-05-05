@@ -1,4 +1,6 @@
 ﻿
+using VortexVise.Enums;
+
 namespace VortexVise.Models;
 
 /// <summary>
@@ -13,8 +15,10 @@ public class GameLobby
     }
     public Guid Id { get; set; } = Guid.NewGuid();
     public PlayerProfile Owner { get; set; }
-    public int MaxPlayers { get; set; } = 8;
     public List<PlayerProfile> Players { get; set; } = [];
+    public MatchStates MatchState { get; set; } = MatchStates.Lobby;
+    public Map CurrentMap { get; set; }
+    public GameMode CurrentGameMode { get; set; } = GameMode.DeathMatch;
+    public int MaxPlayers { get; set; } = 8;
     public double LastGameUpdate { get; set; }
-    public string SelectedMapId { get; set; } = "";
 }

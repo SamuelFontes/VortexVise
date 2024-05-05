@@ -2,7 +2,8 @@
   {
     "ServerName": "Local Server",
     "ServerURL":"https://localhost:7094",
-	"ServerUDP":"https://localhost:7094"
+	"ServerUDP":"127.0.0.1",
+	"ServerUDPPort":5044
   },
   {
     "ServerName": "Brazil Testing Server",

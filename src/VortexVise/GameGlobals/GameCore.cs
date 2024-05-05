@@ -38,10 +38,6 @@ public static class GameCore
     /// </summary>
     public static bool IsServer { get; set; } = false;
     /// <summary>
-    /// Current connected server IP. Maybe deprecated.
-    /// </summary>
-    public static string ServerIPAddress { get; set; } = "";
-    /// <summary>
     /// Define if its a network game.
     /// </summary>
     public static bool IsNetworkGame { get; set; } = false;
