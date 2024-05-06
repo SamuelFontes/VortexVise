@@ -34,22 +34,38 @@ app.MapGet("/list", () =>
     return json;
 });
 
-app.MapPost("/host", (string serializedProfile) =>
+app.MapPost("/host", (string serializedProfiles) =>
 {
-    var profile = JsonSerializer.Deserialize(serializedProfile, SourceGenerationContext.Default.PlayerProfile); ;
-    if (profile == null) return "Can't deserialize profile";
-    var lobby = new GameLobby(profile);
+    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile); 
+    if (profiles == null || profiles.Count == 0) throw new Exception("Can't deserialize profile");
+    var lobby = new GameLobby(profiles[0]);
+    var counter = 0;
+    foreach (var profile in profiles)
+    {
+        if (counter == 0)
+        {
+            counter++;
+            continue;
+        }
+        lobby.Players.Add(profile);
+        counter++;
+    }
+
     lobbies.Add(lobby);
-    return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
+    return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby);
 });
 
-app.MapPut("/join", (Guid lobbyId, string serializedProfile) =>
+app.MapPost("/join", (Guid lobbyId, string serializedProfiles) =>
 {
-    var profile = JsonSerializer.Deserialize(serializedProfile, SourceGenerationContext.Default.PlayerProfile); ;
-    if (profile == null) return "Can't deserialize profile";
+    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile); ;
+    if (profiles == null || profiles.Count == 0) throw new Exception("Can't deserialize profile");
+
     var lobby = lobbies.FirstOrDefault(x => x.Id == lobbyId);
     if (lobby == null) return "Lobby not found";
-    lobby.Players.Add(profile);
+    foreach (var profile in profiles)
+    {
+        lobby.Players.Add(profile);
+    }
     return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
 });
 

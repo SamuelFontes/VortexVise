@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using VortexVise.GameGlobals;
+using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Utilities;
@@ -168,6 +169,16 @@ public static class Utils
                 return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             }
         }
+    }
+
+    public static List<PlayerProfile> GetAllLocalPlayerProfiles()
+    {
+        List<PlayerProfile> list = new List<PlayerProfile>();
+        if (GameCore.PlayerOneProfile.Gamepad != -9) list.Add(GameCore.PlayerOneProfile);
+        if (GameCore.PlayerTwoProfile.Gamepad != -9) list.Add(GameCore.PlayerTwoProfile);
+        if (GameCore.PlayerThreeProfile.Gamepad != -9) list.Add(GameCore.PlayerThreeProfile);
+        if (GameCore.PlayerFourProfile.Gamepad != -9) list.Add(GameCore.PlayerFourProfile);
+        return list;
     }
 
 }

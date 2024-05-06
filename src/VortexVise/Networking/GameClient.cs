@@ -2,9 +2,11 @@
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;
+using VortexVise.Utilities;
 
 namespace VortexVise.Networking;
 
@@ -19,6 +21,8 @@ public static class GameClient
     static public long Ping = -1;
     public static HttpClient httpClient = new();
     public static MasterServer Server = new();
+    public static GameLobby? CurrentLobby;
+    public static List<GameLobby>? AvailableLobbies = [];
     static public async Task Connect(MasterServer server)
     {
 
@@ -35,8 +39,8 @@ public static class GameClient
             _udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
             IsConnected = true;
             UpdatePing();
-            //Thread getPingThread = new(new ThreadStart(GetServerLatency));
-            //getPingThread.Start();
+            Thread getPingThread = new(new ThreadStart(GetServerInfo));
+            getPingThread.Start();
 
         }
         catch (Exception e)
@@ -62,6 +66,49 @@ public static class GameClient
             IsConnected = false;
         }
 
+    }
+
+    static public void CreateLobby()
+    {
+        if (!IsConnected) return;
+
+        List<PlayerProfile> list = Utils.GetAllLocalPlayerProfiles();
+
+        string serializedProfiles = JsonSerializer.Serialize(list, SourceGenerationContext.Default.ListPlayerProfile);
+
+        var response = httpClient.PostAsync(Server.ServerURL + $"/host?serializedProfiles={serializedProfiles}", null).Result;
+        var serializedLobby = response.Content.ReadAsStream();
+        CurrentLobby = JsonSerializer.Deserialize(serializedLobby, SourceGenerationContext.Default.GameLobby);
+    }
+
+    public static void ListLobbies()
+    {
+        if (!IsConnected) return;
+
+        var serverResponse = httpClient.GetAsync(Server.ServerURL + "/list").Result.Content.ReadAsStream();
+        AvailableLobbies = JsonSerializer.Deserialize(serverResponse, SourceGenerationContext.Default.ListGameLobby);
+    }
+
+    public static void JoinLobby(Guid lobbyId)
+    {
+        if (!IsConnected) return;
+        List<PlayerProfile> list = Utils.GetAllLocalPlayerProfiles();
+
+        string serializedProfiles = JsonSerializer.Serialize(list, SourceGenerationContext.Default.ListPlayerProfile); ;
+
+        var response = httpClient.PostAsync(Server.ServerURL + $"/join?serializedProfiles={serializedProfiles}&lobbyId={lobbyId}", null).Result;
+        var serializedLobby = response.Content.ReadAsStream();
+        CurrentLobby = JsonSerializer.Deserialize(serializedLobby, SourceGenerationContext.Default.GameLobby);
+
+    }
+
+    public static void GetLobbyInfo()
+    {
+        if (!IsConnected) return;
+        if (CurrentLobby == null) return;
+
+        var serverResponse = httpClient.GetAsync(Server.ServerURL + $"/GetLobby?lobbyId={CurrentLobby.Id}").Result.Content.ReadAsStream();
+        CurrentLobby = JsonSerializer.Deserialize(serverResponse, SourceGenerationContext.Default.GameLobby);
     }
 
     static public bool SendState(GameState state)
@@ -132,28 +179,31 @@ public static class GameClient
 
         }
     }
-    static public async void GetServerLatency()
+    static public async void GetServerInfo()
     {
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
 
         while (await timer.WaitForNextTickAsync())
         {
-            //Business logic
+            if (!IsConnected) break;
             UpdatePing();
+            ListLobbies();// TODO:DELET
+            if (CurrentLobby == null) ListLobbies();
+            else GetLobbyInfo();
         }
     }
     static void UpdatePing()
     {
-        if (IsConnected)
-            try
-            {
-                Ping ping = new();
-                PingReply reply = ping.Send(Server.ServerUDP, 1000);
-                Ping = reply.RoundtripTime;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+
+        try
+        {
+            Ping ping = new();
+            PingReply reply = ping.Send(Server.ServerUDP, 1000);
+            Ping = reply.RoundtripTime;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 }
