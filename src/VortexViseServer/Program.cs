@@ -22,6 +22,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 List<GameLobby> lobbies = [];
+GameAssets.Gameplay.LoadMapsHash();
 
 app.MapGet("/", () =>
 {
@@ -36,19 +37,17 @@ app.MapGet("/list", () =>
 
 app.MapPost("/host", (string serializedProfiles) =>
 {
-    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile); 
+    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile);
     if (profiles == null || profiles.Count == 0) throw new Exception("Can't deserialize profile");
-    var lobby = new GameLobby(profiles[0]);
-    var counter = 0;
+    var lobby = lobbies.FirstOrDefault(x => x.Players.Count + profiles.Count <= x.MaxPlayers);
+    if (lobby == null)
+    {
+        lobby = new GameLobby(profiles[0]);
+        lobby.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
+    }
     foreach (var profile in profiles)
     {
-        if (counter == 0)
-        {
-            counter++;
-            continue;
-        }
-        lobby.Players.Add(profile);
-        counter++;
+        if (!lobby.Players.Any(x => x.Id == profile.Id)) lobby.Players.Add(profile);
     }
 
     lobbies.Add(lobby);

@@ -125,6 +125,29 @@ public static class GameAssets
             if (Skins.Count == 0) throw new Exception("Couldn't load any player skin");
         }
 
+        /// <summary>
+        /// Loads only map hash to memory
+        /// </summary>
+        public static void LoadMapsHash()
+        {
+            string mapLocation = "Resources/Maps";
+            string[] mapFiles = Directory.GetFiles(mapLocation, "*.json", SearchOption.TopDirectoryOnly);
+            foreach (var file in mapFiles)
+            {
+                try
+                {
+                    var map = JsonSerializer.Deserialize(File.ReadAllText(file), SourceGenerationContext.Default.Map);
+                    if (map == null) throw new Exception("Can't read map file");
+                    map.Id = Utils.GetFileChecksum(file);
+                    Maps.Add(map);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+        }
         public static void LoadMaps()
         {
             string mapLocation = "Resources/Maps";

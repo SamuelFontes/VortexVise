@@ -11,6 +11,7 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "workingDirectory": "../..",
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5044",
@@ -20,6 +21,7 @@
     },
     "https": {
       "commandName": "Project",
+      "workingDirectory": "../..",
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "applicationUrl": "https://localhost:7094;http://localhost:5044",
@@ -29,6 +31,7 @@
     },
     "IIS Express": {
       "commandName": "IISExpress",
+      "workingDirectory": "../..",
       "launchBrowser": false,
       "launchUrl": "weatherforecast",
       "environmentVariables": {
