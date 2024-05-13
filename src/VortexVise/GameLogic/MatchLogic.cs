@@ -27,9 +27,12 @@ public static class MatchLogic
             }
             else if (gameState.MatchState == Enums.MatchStates.EndScreen)
             {
-                gameState.IsRunning = false;
-                //gameState.MatchTimer = 10;
-                //gameState.MatchState = Enums.MatchStates.Voting;
+                if (!GameCore.IsNetworkGame) gameState.IsRunning = false;
+                else
+                {
+                    gameState.MatchTimer = 10;
+                    gameState.MatchState = Enums.MatchStates.Voting;
+                }
             }
             else if (gameState.MatchState == Enums.MatchStates.Voting)
             {

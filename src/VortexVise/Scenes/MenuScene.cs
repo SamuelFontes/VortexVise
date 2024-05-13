@@ -157,8 +157,19 @@ public static class MenuScene
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                     if (GameCore.IsNetworkGame)
                     {
-                        currentState = MenuState.ServerBrowser;
-                        selected = menuItems.First(x => x.Item == MenuItem.Return && x.State == currentState).Id;
+                        if (GameCore.MasterServers.Count == 1)
+                        {
+                            currentState = MenuState.Connecting;
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                            var server = GameCore.MasterServers.First();
+                            _ = GameClient.Connect(server);
+                        }
+                        else
+                        {
+                            // TODO: try to connect to lowest ping server
+                            currentState = MenuState.ServerBrowser;
+                            selected = menuItems.First(x => x.Item == MenuItem.Return && x.State == currentState).Id;
+                        }
                     }
                     else
                     {

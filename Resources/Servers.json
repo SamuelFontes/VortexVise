@@ -4,10 +4,5 @@
     "ServerURL":"https://localhost:7094",
 	"ServerUDP":"127.0.0.1",
 	"ServerUDPPort":5044
-  },
-  {
-    "ServerName": "Brazil Testing Server",
-    "ServerURL":"https://pelican-stirred-partly.ngrok-free.app",
-	"ServerUDP":"https://localhost:7094"
   }
 ]

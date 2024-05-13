@@ -16,6 +16,7 @@ using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
+
 // Initialization
 //---------------------------------------------------------
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
