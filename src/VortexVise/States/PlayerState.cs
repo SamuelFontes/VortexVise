@@ -13,16 +13,18 @@ public class PlayerState
     public Guid Id { get; set; }
     public Vector2 Position { get; set; } = new Vector2(0, 0);
     public Vector2 Velocity { get; set; } = new Vector2(0, 0);
+    public SerializableVector2 SerializablePosition { get; set; } = new SerializableVector2(0, 0);
+    public SerializableVector2 SerializableVelocity { get; set; } = new SerializableVector2(0, 0);
     public int Direction { get; set; } = 1;
     public bool IsTouchingTheGround { get; set; } = false;
     public bool CanDash { get; set; } = true;
     public float TimeSinceJump { get; set; } = 0;
-    public int HeathPoints = 100;
+    public int HeathPoints { get; set; } = 100;
     public bool IsDead { get; set; } = false;
     public float SpawnTimer { get; set; } = 0;
     public float DamagedTimer { get; set; } = 0;
     public bool IsBot { get; set; } = false;
-    public Guid LastPlayerHitId = Guid.Empty;
+    public Guid LastPlayerHitId { get; set; } = Guid.Empty;
     public float JetPackFuel { get; set; } = GameMatch.DefaultJetPackFuel;
     public Skin Skin { get; set; }
     public PlayerStats Stats { get; set; }

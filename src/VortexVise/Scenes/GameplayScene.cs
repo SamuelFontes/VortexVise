@@ -89,10 +89,11 @@ static internal class GameplayScene
             if (GameClient.IsConnected)
             {
                 // Do all the network magic
-                if (GameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad), GameCore.PlayerOneProfile.Id, CurrentTime);
-                if (GameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerTwoProfile.Gamepad), GameCore.PlayerTwoProfile.Id, CurrentTime);
-                if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, CurrentTime);
-                if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, CurrentTime);
+                // TODO: The input should be send together instead of one for each player
+                if (GameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad), GameCore.PlayerOneProfile.Id, State.Tick);
+                if (GameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerTwoProfile.Gamepad), GameCore.PlayerTwoProfile.Id, State.Tick);
+                if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, State.Tick);
+                if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, State.Tick);
 
                 // This should not stop the game, so make it run in another task
                 GameState receivedState = GameClient.LastServerState;
@@ -145,7 +146,7 @@ static internal class GameplayScene
             foreach (var map in GameAssets.Gameplay.Maps)
             {
                 var json = JsonSerializer.Serialize(map, SourceGenerationContext.Default.Map);
-                System.IO.File.WriteAllText($"Resources/Maps/{map.Name.Replace(" ","")}.json", json);
+                System.IO.File.WriteAllText($"Resources/Maps/{map.Name.Replace(" ", "")}.json", json);
 
             }
         }

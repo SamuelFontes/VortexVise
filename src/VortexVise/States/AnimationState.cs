@@ -17,6 +17,7 @@ public class AnimationState // This is only client side
     public bool Loop = false;
     public bool ShouldDisappear = false;
     public Vector2 Position = new(0, 0);
+    public SerializableVector2 SerializablePosition = new(0, 0);
     public Animation? Animation { get; set; }
 
     /// <summary>

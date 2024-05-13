@@ -132,13 +132,13 @@ public static class GameClient
 
         return wasSent;
     }
-    static public bool SendInput(InputState input, Guid playerId, double time)
+    static public bool SendInput(InputState input, Guid playerId, ulong tick)
     {
         bool wasSent = false;
         try
         {
             // Sends a message to the host to which you have connected.
-            string json = GameStateSerializer.SerializeInput(input, playerId, time);
+            string json = GameStateSerializer.SerializeInput(input, playerId, tick);
             byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
             _udpClient.Send(sendBytes, sendBytes.Length);
@@ -153,10 +153,12 @@ public static class GameClient
 
         return wasSent;
     }
+
     static public void GetState()
     {
         while (true)
         {
+            if (!IsConnected) break;
             try
             {
                 //IPEndPoint object will allow us to read datagrams sent from any source.
@@ -187,14 +189,13 @@ public static class GameClient
         {
             if (!IsConnected) break;
             UpdatePing();
-            ListLobbies();// TODO:DELET
             if (CurrentLobby == null) ListLobbies();
             else GetLobbyInfo();
         }
     }
+
     static void UpdatePing()
     {
-
         try
         {
             Ping ping = new();

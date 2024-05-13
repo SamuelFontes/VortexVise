@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.States;
@@ -26,5 +27,7 @@ public class WeaponDropState
     public float DropTimer { get; set; } = 0;
     public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
+    public SerializableVector2 SerializablePosition { get; set; }
+    public SerializableVector2 SerializableVelocity { get; set; }
     public Rectangle Collision { get { return new Rectangle((int)Position.X - 8, (int)Position.Y - 8, 48, 48); } }
 }

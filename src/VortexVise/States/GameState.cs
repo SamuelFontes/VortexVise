@@ -28,8 +28,6 @@ public class GameState
     public List<AnimationState> Animations { get; set; } = [];
     public List<KillFeedState> KillFeedStates { get; set; } = [];
 
-    // TODO: Add compression
-
     /// <summary>
     /// Reset the game state
     /// </summary>

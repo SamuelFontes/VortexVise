@@ -6,7 +6,8 @@
 /// </summary>
 public class InputState
 {
-    public string Owner { get; set; } = string.Empty;
+    public Guid PlayerId { get; set; } = Guid.Empty;
+    public ulong Tick { get; set; } = 0;
     public bool Left { get; set; } = false;
     public bool Right { get; set; } = false;
     public bool Up { get; set; } = false;

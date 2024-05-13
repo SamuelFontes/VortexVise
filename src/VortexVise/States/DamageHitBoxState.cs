@@ -25,6 +25,7 @@ public class DamageHitBoxState
     public Guid PlayerId { get; set; }
     public Rectangle HitBox { get; set; }
     public Vector2 Velocity { get; set; }
+    public SerializableVector2 SerializableVelocity { get; set; }
     public Weapon Weapon { get; set; }
     public WeaponState WeaponState { get; set; }
     public float HitBoxTimer { get; set; }
