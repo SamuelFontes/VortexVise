@@ -14,6 +14,7 @@ namespace VortexVise.States;
 public class GameState
 {
     public ulong Tick { get; set; }
+    public Guid OwnerId { get; set; }
     public double CurrentTime { get; set; }
     public float Gravity { get; set; }
     public float MatchTimer { get; set; }

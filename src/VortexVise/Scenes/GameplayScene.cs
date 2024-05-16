@@ -95,22 +95,32 @@ static internal class GameplayScene
                 if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, State.Tick);
                 if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, State.Tick);
 
-                // This should not stop the game, so make it run in another task
-                GameState receivedState = GameClient.LastServerState;
-                if (receivedState.CurrentTime != GameClient.LastSimulatedTime)
+                if (GameClient.IsHost)
                 {
-                    //if (GameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
-                    //if (GameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
-                    //if (GameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
-                    //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
-
-                    State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
-                    GameClient.LastSimulatedTime = receivedState.CurrentTime;
+                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                    State.OwnerId = GameCore.PlayerOneProfile.Id;
+                    GameClient.SendState(State);
                 }
                 else
                 {
-                    // Client-Side Prediction
-                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                    // This should not stop the game, so make it run in another task
+                    GameState receivedState = GameClient.LastServerState;
+                    if (receivedState.Tick != GameClient.LastTickSimluated)
+                    {
+                        //if (GameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
+                        //if (GameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
+                        //if (GameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
+                        //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
+                        // TODO: Simulate all ticks in the past up to current one, apply approximations on the state that matches the tick received 
+
+                        State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                        GameClient.LastTickSimluated = receivedState.Tick;
+                    }
+                    else
+                    {
+                        // Client-Side Prediction
+                        State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                    }
                 }
             }
             else

@@ -17,12 +17,13 @@ public static class GameClient
     public static bool IsConnecting = false;
     private static UdpClient _udpClient = new(11000);
     static public GameState LastServerState = new();
-    static public double LastSimulatedTime = 0;
+    static public ulong LastTickSimluated = 0;
     static public long Ping = -1;
     public static HttpClient httpClient = new();
     public static MasterServer Server = new();
     public static GameLobby? CurrentLobby;
     public static List<GameLobby>? AvailableLobbies = [];
+    public static bool IsHost { get { return CurrentLobby?.Owner.Id == GameCore.PlayerOneProfile.Id; } }
     static public async Task Connect(MasterServer server)
     {
 
@@ -34,6 +35,7 @@ public static class GameClient
             string serverMessage = await serverResponse.Content.ReadAsStringAsync();
             if (serverMessage != "VortexViseServer") throw new Exception("Can't connect to server");
 
+            LastTickSimluated = 0;
             _udpClient.Dispose();
             _udpClient = new(11000);
             _udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
@@ -41,6 +43,8 @@ public static class GameClient
             UpdatePing();
             Thread getPingThread = new(new ThreadStart(GetServerInfo));
             getPingThread.Start();
+            Thread getState = new(new ThreadStart(GetState));
+            getState.Start();
 
         }
         catch (Exception e)
@@ -156,9 +160,8 @@ public static class GameClient
 
     static public void GetState()
     {
-        while (true)
+        while (IsConnected)
         {
-            if (!IsConnected) break;
             try
             {
                 //IPEndPoint object will allow us to read datagrams sent from any source.
@@ -171,8 +174,10 @@ public static class GameClient
 
                 // Uses the IPEndPoint object to determine which of these two hosts responded.
                 var state = GameStateSerializer.DeserializeState(returnData);
-                if (state.CurrentTime > LastSimulatedTime)
+                if (state.Tick > LastTickSimluated)
+                {
                     LastServerState = state;
+                }
             }
             catch (Exception e)
             {
@@ -181,6 +186,7 @@ public static class GameClient
 
         }
     }
+
     static public async void GetServerInfo()
     {
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
