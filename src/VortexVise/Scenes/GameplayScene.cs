@@ -193,6 +193,7 @@ static internal class GameplayScene
         State = new();
         BotLogic.Unload();
         GameMatch.GameState = null;
+        GC.Collect();
     }
 
     static public int FinishGameplayScene()

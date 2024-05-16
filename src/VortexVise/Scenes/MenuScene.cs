@@ -593,6 +593,7 @@ public static class MenuScene
         Raylib.UnloadTexture(gamepadSlotOff);
         Raylib.UnloadTexture(arrow);
         menuItems.Clear();
+        GC.Collect();
 
     }
     static public int FinishMenuScene()
