@@ -316,8 +316,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\CyberneticArena.png",
-  "MapLocation": "Resources/Maps\\CyberneticArena.ini",
+  "TextureLocation": "Resources/Maps/CyberneticArena.png",
+  "MapLocation": "Resources/Maps/CyberneticArena.ini",
   "BGM": "",
   "BGS": "",
   "Texture": {

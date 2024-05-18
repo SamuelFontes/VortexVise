@@ -376,8 +376,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\WindowsXP.png",
-  "MapLocation": "Resources/Maps\\WindowsXP.ini",
+  "TextureLocation": "Resources/Maps/WindowsXP.png",
+  "MapLocation": "Resources/Maps/WindowsXP.ini",
   "BGM": "sd",
   "BGS": "",
   "Texture": {

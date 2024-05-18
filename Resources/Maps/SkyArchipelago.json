@@ -288,8 +288,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\SkyArchipelago.png",
-  "MapLocation": "Resources/Maps\\SkyArchipelago.ini",
+  "TextureLocation": "Resources/Maps/SkyArchipelago.png",
+  "MapLocation": "Resources/Maps/SkyArchipelago.ini",
   "BGM": "beach",
   "BGS": "",
   "Texture": {

@@ -514,8 +514,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\CogsworthCitadel.png",
-  "MapLocation": "Resources/Maps\\CogsworthCitadel.ini",
+  "TextureLocation": "Resources/Maps/CogsworthCitadel.png",
+  "MapLocation": "Resources/Maps/CogsworthCitadel.ini",
   "BGM": "",
   "BGS": "",
   "Texture": {

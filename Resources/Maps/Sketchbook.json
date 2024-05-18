@@ -258,8 +258,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\Sketchbook.png",
-  "MapLocation": "Resources/Maps\\Sketchbook.ini",
+  "TextureLocation": "Resources/Maps/Sketchbook.png",
+  "MapLocation": "Resources/Maps/Sketchbook.ini",
   "BGM": "aqua",
   "BGS": "",
   "Texture": {

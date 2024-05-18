@@ -486,8 +486,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\CookhouseShootout.png",
-  "MapLocation": "Resources/Maps\\CookhouseShootout.ini",
+  "TextureLocation": "Resources/Maps/CookhouseShootout.png",
+  "MapLocation": "Resources/Maps/CookhouseShootout.ini",
   "BGM": "mn5",
   "BGS": "",
   "Texture": {
