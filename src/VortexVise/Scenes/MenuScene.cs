@@ -45,14 +45,14 @@ public static class MenuScene
         // Load textures
         //----------------------------------------------------------------------------------
         logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
-        background = Raylib.LoadTexture("resources/Common/MenuBackground.png");
-        box = Raylib.LoadTexture("resources/Common/rounded_box.png");
-        keyboard = Raylib.LoadTexture("resources/Common/keyboard.png");
-        gamepad = Raylib.LoadTexture("resources/Common/xbox_gamepad.png");
-        disconnected = Raylib.LoadTexture("resources/Common/xbox_gamepad_disconnected.png");
-        gamepadSlotOn = Raylib.LoadTexture("resources/Common/gamepad_slot_on.png");
-        gamepadSlotOff = Raylib.LoadTexture("resources/Common/gamepad_slot_off.png");
-        arrow = Raylib.LoadTexture("resources/Common/arrow.png");
+        background = Raylib.LoadTexture("Resources/Common/MenuBackground.png");
+        box = Raylib.LoadTexture("Resources/Common/rounded_box.png");
+        keyboard = Raylib.LoadTexture("Resources/Common/keyboard.png");
+        gamepad = Raylib.LoadTexture("Resources/Common/xbox_gamepad.png");
+        disconnected = Raylib.LoadTexture("Resources/Common/xbox_gamepad_disconnected.png");
+        gamepadSlotOn = Raylib.LoadTexture("Resources/Common/gamepad_slot_on.png");
+        gamepadSlotOff = Raylib.LoadTexture("Resources/Common/gamepad_slot_off.png");
+        arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
 
         // Load player skins
         //----------------------------------------------------------------------------------

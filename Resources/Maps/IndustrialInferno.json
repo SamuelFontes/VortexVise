@@ -286,8 +286,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\IndustrialInferno.png",
-  "MapLocation": "Resources/Maps\\IndustrialInferno.ini",
+  "TextureLocation": "Resources/Maps/IndustrialInferno.png",
+  "MapLocation": "Resources/Maps/IndustrialInferno.ini",
   "BGM": "",
   "BGS": "",
   "Texture": {

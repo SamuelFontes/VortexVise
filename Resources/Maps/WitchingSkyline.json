@@ -288,8 +288,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\WitchingSkyline.png",
-  "MapLocation": "Resources/Maps\\WitchingSkyline.ini",
+  "TextureLocation": "Resources/Maps/WitchingSkyline.png",
+  "MapLocation": "Resources/Maps/WitchingSkyline.ini",
   "BGM": "bol",
   "BGS": "",
   "Texture": {

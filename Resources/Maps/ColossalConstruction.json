@@ -1058,8 +1058,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\ColossalConstruction.png",
-  "MapLocation": "Resources/Maps\\ColossalConstruction.ini",
+  "TextureLocation": "Resources/Maps/ColossalConstruction.png",
+  "MapLocation": "Resources/Maps/ColossalConstruction.ini",
   "BGM": "",
   "BGS": "",
   "Texture": {

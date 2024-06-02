@@ -304,8 +304,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\SunkenSerenity.png",
-  "MapLocation": "Resources/Maps\\SunkenSerenity.ini",
+  "TextureLocation": "Resources/Maps/SunkenSerenity.png",
+  "MapLocation": "Resources/Maps/SunkenSerenity.ini",
   "BGM": "underwater",
   "BGS": "",
   "Texture": {
