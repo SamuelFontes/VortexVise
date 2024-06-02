@@ -201,18 +201,18 @@ public static class GameAssets
                         var weapon = new Weapon
                         {
                             // Name
-                            Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(?=\n)").Value.Trim(),
+                            Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(\n|\s\s)").Value.Trim(),
 
                             // Texture
-                            TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(?=\n)").Value.Trim(),
-                            ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(?=\n)").Value
+                            TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(\n|\s\s)").Value.Trim(),
+                            ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(\n|\s\s)").Value
                         };
                         if (string.IsNullOrEmpty(weapon.TextureLocation)) throw new Exception("Can't find the texture location");
                         weapon.TextureLocation = weaponLocation + "/" + weapon.TextureLocation;
                         if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTextureLocation = weaponLocation + "/" + weapon.ProjectileTextureLocation;
 
                         // Weapon Type
-                        string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA|HEAL)(?=\n)").Value.Trim();
+                        string weaponType = Regex.Match(match.Value, @"(?<=TYPE\s*=)(PISTOL|SMG|SHOTGUN|MELEE_BLUNT|MELEE_CUT|GRANADE|MINE|BAZOKA|HEAL)(\n|\s\s)").Value.Trim();
                         if (string.IsNullOrEmpty(weaponType)) throw new Exception("Can't read Weapon Type");
                         switch (weaponType)
                         {
@@ -229,7 +229,7 @@ public static class GameAssets
 
                         // Get reloadDelay
                         if (weapon.WeaponType != Enums.WeaponType.Heal)
-                            weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(?=\n)").Value);
+                            weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(\n|\s\s)").Value);
 
                         // Color
                         var color = Regex.Match(match.Value, @"(?<=COLOR=)\d+,\d+,\d+,\d+").Value;
@@ -247,7 +247,7 @@ public static class GameAssets
                         if (match.Value.Contains("TARGET_KNOCKBACK")) weapon.Knockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_KNOCKBACK=)\d+").Value);
 
                         // Target Effect
-                        string effect = Regex.Match(match.Value, @"(?<=TARGET_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\n)").Value.Trim();
+                        string effect = Regex.Match(match.Value, @"(?<=TARGET_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(\n|\s\s)").Value.Trim();
                         if (!string.IsNullOrEmpty(effect))
                         {
                             switch (effect)
@@ -271,7 +271,7 @@ public static class GameAssets
                         if (match.Value.Contains("SELF_KNOCKBACK")) weapon.SelfKnockback = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_KNOCKBACK=)\d+").Value);
 
                         // Self Effect
-                        effect = Regex.Match(match.Value, @"(?<=SELF_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(?=\n)").Value.Trim();
+                        effect = Regex.Match(match.Value, @"(?<=SELF_EFFECT\s*=)(COLD|WET|FIRE|ELETRICITY|FREZED|CONFUSION|DIZZY|GET_ROTATED|BLEEDING|POISON|HEAL)(\n|\s\s)").Value.Trim();
                         if (!string.IsNullOrEmpty(effect))
                         {
                             switch (effect)
