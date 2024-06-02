@@ -1,10 +1,10 @@
 set(SDL_TEST OFF)
 set(DBUILD_SHARED_LIBS OFF)
 set(BUILD_SHARED_LIBS OFF)
-add_subdirectory(SDL)
+#add_subdirectory(SDL)
 add_subdirectory(Raylib)
 
 add_library(Vendor INTERFACE)
 
 target_link_libraries(Vendor INTERFACE raylib)
-target_link_libraries(Vendor INTERFACE SDL3::SDL3)
+#target_link_libraries(Vendor INTERFACE SDL3::SDL3)

@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (VortexVise "VortexVise.cpp" "VortexVise.h")
+add_executable (VortexVise "VortexVise.cpp" "VortexVise.h" "Game/GameCore.h" "Models/PlayerProfile.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET VortexVise PROPERTY CXX_STANDARD 20)
