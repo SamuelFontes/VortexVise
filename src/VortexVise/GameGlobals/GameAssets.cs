@@ -167,7 +167,7 @@ public static class GameAssets
                     if (map.EnemySpawnPoints.Count == 0) throw new Exception("Can't read map EnemySpawnPoints");
                     if (map.ItemSpawnPoints.Count == 0) throw new Exception("Can't read map ItemSpawnPoints");
                     if (map.GameModes.Count == 0) throw new Exception("Can't read map GAME_MODES");
-                    if (!pngFiles.Contains(map.TextureLocation)) throw new Exception($"Can't find image file {map.TextureLocation}");
+                    //if (!pngFiles.Contains(map.TextureLocation)) throw new Exception($"Can't find image file {map.TextureLocation}");
                     map.MapLocation = file;
                     map.Id = Utils.GetFileChecksum(file);
                     map.Texture = Raylib.LoadTexture(map.TextureLocation);

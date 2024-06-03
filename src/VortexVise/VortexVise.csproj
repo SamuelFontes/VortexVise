@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lidgren.Network" Version="1.0.2" />
     <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
   </ItemGroup>
 

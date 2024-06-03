@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
+using VortexVise.States;
 
 namespace VortexViseServer;
 
@@ -33,11 +35,10 @@ public static class GameServer
 
 
         // Start receiving networking packets
-/*        Thread myThread = new Thread(new ThreadStart(ReceivePlayerPackets));
+        Thread myThread = new Thread(new ThreadStart(ReceivePlayerPackets));
         myThread.Start();
-*/
-        /*
-        while (true)
+
+/*        while (true)
         {
             currentTime = watch.Elapsed.TotalSeconds;
             var time = currentTime - lastTime;
@@ -81,55 +82,56 @@ public static class GameServer
             Task.WaitAll(tasks.ToArray());
 
         }
-
+*/
         void ReceivePlayerPackets()
         {
             while (true)
             {
                 try
                 {
-                    // receive players input
+                    // receive players input/
                     byte[] data = newsock.Receive(ref sender);
 
                     string receivedData = Encoding.ASCII.GetString(data, 0, data.Length);
-                    //Console.WriteLine(receivedData);
+                    Console.WriteLine(receivedData);
 
                     // Should read the input, simulate the state, return the simulated state
-                    (Guid playerId, InputState input, double receivedTime) = GameState.DeserializeInput(receivedData);
+                    /*                    (Guid playerId, InputState input, double receivedTime) = GameState.DeserializeInput(receivedData);
 
-                    var p = players.FirstOrDefault(_ => _.Id == playerId);
-                    if (p == null)
-                    {
-                        var existingPlayer = players
-                            .FirstOrDefault(x => x.Sender.Address.ToString() == sender.Address.ToString());
+                                        var p = players.FirstOrDefault(_ => _.Id == playerId);
+                                        if (p == null)
+                                        {
+                                            var existingPlayer = players
+                                                .FirstOrDefault(x => x.Sender.Address.ToString() == sender.Address.ToString());
 
-                        if (existingPlayer != null)
-                        {
-                            players.Remove(existingPlayer);
-                            // I suppose this is never going to be null, since the player actually entered the server that might be already a state
-                            // so let's just remove it.
-                            var playerLastState = lastState.PlayerStates
-                                .FirstOrDefault(x => x.Id == existingPlayer.Id);
-                            lastState.PlayerStates.Remove(playerLastState);
-                        }
+                                            if (existingPlayer != null)
+                                            {
+                                                players.Remove(existingPlayer);
+                                                // I suppose this is never going to be null, since the player actually entered the server that might be already a state
+                                                // so let's just remove it.
+                                                var playerLastState = lastState.PlayerStates
+                                                    .FirstOrDefault(x => x.Id == existingPlayer.Id);
+                                                lastState.PlayerStates.Remove(playerLastState);
+                                            }
 
-                        p = new Player()
-                        {
-                            Id = playerId,
-                            Input = input,
-                            Time = receivedTime,
-                            Sender = sender,
-                        };
-                        players.Add(p);
-                        Console.WriteLine("Player Connected");
-                        lastState.PlayerStates.Add(new(playerId));
-                    }
-                    if (p.Time < receivedTime)
-                    {
-                        p.Input = input;
-                        p.Time = receivedTime;
-                    }
+                                            p = new Player()
+                                            {
+                                                Id = playerId,
+                                                Input = input,
+                                                Time = receivedTime,
+                                                Sender = sender,
+                                            };
+                                            players.Add(p);
+                                            Console.WriteLine("Player Connected");
+                                            lastState.PlayerStates.Add(new(playerId));
+                                        }
+                                        if (p.Time < receivedTime)
+                                        {
+                                            p.Input = input;
+                                            p.Time = receivedTime;
+                                        }
 
+                    */
                 }
                 catch
                 {
@@ -138,7 +140,6 @@ public static class GameServer
 
             }
         }
-        */
 
     }
 

@@ -160,7 +160,7 @@ public static class GameClient
 
     static public void GetState()
     {
-        while (IsConnected)
+        while (IsConnected && false)
         {
             try
             {
