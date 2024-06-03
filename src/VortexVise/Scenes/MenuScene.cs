@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.GameGlobals;
 using VortexVise.Logic;
 using VortexVise.Networking;

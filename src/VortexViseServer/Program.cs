@@ -1,13 +1,8 @@
 using Microsoft.AspNetCore.ResponseCompression;
-using VortexVise.Models;
-using VortexVise;
 using System.Text.Json;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+using VortexVise;
 using VortexVise.GameGlobals;
-using VortexVise.Logic;
-using VortexVise.States;
+using VortexVise.Models;
 using VortexViseServer;
 
 var builder = WebApplication.CreateBuilder(args);

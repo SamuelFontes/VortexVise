@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using VortexVise.Enums;
+﻿using VortexVise.Enums;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Models;
@@ -12,7 +11,7 @@ public class Map
     /// <summary>
     /// Data file checksum
     /// </summary>
-    public string Id { get; set; } = ""; 
+    public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public List<Rectangle> Collisions { get; set; } = new List<Rectangle>();
     public List<SerializableVector2> PlayerSpawnPoints { get; set; } = new List<SerializableVector2>();

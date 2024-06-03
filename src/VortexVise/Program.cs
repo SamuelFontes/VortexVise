@@ -7,11 +7,8 @@
 ********************************************************************************************/
 
 using System.Numerics;
-using System.Text.Json;
-using VortexVise;
 using VortexVise.Enums;
 using VortexVise.GameGlobals;
-using VortexVise.Models;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
