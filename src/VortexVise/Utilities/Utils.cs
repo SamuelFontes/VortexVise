@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using System.Security.Cryptography;
-using System.Text;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;

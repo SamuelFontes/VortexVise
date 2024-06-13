@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
+﻿using System.Numerics;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using VortexVise.States;
 
 namespace VortexVise.Networking;
@@ -34,12 +28,12 @@ public static class GameStateSerializer
             w.SerializableVelocity = new(w.Velocity);
         }
 
-        foreach(var d in state.DamageHitBoxes)
+        foreach (var d in state.DamageHitBoxes)
         {
             d.SerializableVelocity = new(d.Velocity);
         }
 
-        foreach(var a in state.Animations)
+        foreach (var a in state.Animations)
         {
             a.SerializablePosition = new(a.Position);
         }
@@ -55,8 +49,8 @@ public static class GameStateSerializer
         {
             p.Position = new(p.SerializablePosition.X, p.SerializablePosition.Y);
             p.Velocity = new(p.SerializableVelocity.X, p.SerializableVelocity.Y);
-            p.HookState.Position = new(p.HookState.SerializablePosition.X,p.HookState.SerializablePosition.Y);
-            p.HookState.Velocity = new(p.HookState.SerializableVelocity.X,p.HookState.SerializableVelocity.Y);
+            p.HookState.Position = new(p.HookState.SerializablePosition.X, p.HookState.SerializablePosition.Y);
+            p.HookState.Velocity = new(p.HookState.SerializableVelocity.X, p.HookState.SerializableVelocity.Y);
             p.Animation.Position = new(p.Animation.SerializablePosition.X, p.Animation.SerializablePosition.Y);
         }
 
@@ -66,12 +60,12 @@ public static class GameStateSerializer
             w.Velocity = new(w.SerializableVelocity.X, w.SerializableVelocity.Y);
         }
 
-        foreach(var d in state.DamageHitBoxes)
+        foreach (var d in state.DamageHitBoxes)
         {
             d.Velocity = new(d.SerializableVelocity.X, d.SerializableVelocity.Y);
         }
 
-        foreach(var a in state.Animations)
+        foreach (var a in state.Animations)
         {
             a.Position = new(a.SerializablePosition.X, a.SerializablePosition.Y);
         }
@@ -90,7 +84,7 @@ public static class GameStateSerializer
         return s;
     }
 
-    public static void ApproximateState(GameState localState,GameState receivedState, Guid playerId)
+    public static void ApproximateState(GameState localState, GameState receivedState, Guid playerId)
     {
         // When receive the packet do Clients Approximate Physics Locally
         var receivedPlayerState = receivedState.PlayerStates.FirstOrDefault(p => p.Id == playerId);
