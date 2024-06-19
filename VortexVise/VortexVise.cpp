@@ -2,6 +2,7 @@
 //
 
 #include "VortexVise.h"
+#include "Game/GameCore.h"
 
 int main(int argc, char* argv[])
 {
