@@ -1,4 +1,5 @@
-﻿enum GameMode
+﻿#pragma once
+enum GameMode
 {
     DeathMatch = 0, /// Free for all
     TeamDeathMatch, /// Team based death match
