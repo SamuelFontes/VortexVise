@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "VortexViseEditor": {
-      "commandName": "Project",
-      "workingDirectory": "../.."
-    }
-  }
-}

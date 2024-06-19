@@ -1,4 +1,0 @@
-﻿[*.cs]
-
-# CA2211: Non-constant fields should not be visible. This is a game, having a global changing state is not a bad thing. Fight me!
-dotnet_diagnostic.CA2211.severity = none
