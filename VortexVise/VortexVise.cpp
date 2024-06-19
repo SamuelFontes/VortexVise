@@ -1,7 +1,4 @@
-﻿// Dramscape.cpp : Defines the entry point for the application.
-//
-
-#include "VortexVise.h"
+﻿#include "VortexVise.h"
 #include "Game/GameCore.h"
 
 int main(int argc, char* argv[])
