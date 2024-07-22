@@ -9,14 +9,23 @@ Can be played with bots or up to 4 players over local split screen multiplayer, 
 
 <h2>Controls - MouseAndKeyboard/Gamepad  </h2>
 [Menu]  
+
 Confirm - Enter/A  
+
 Back - Esc/B  
+
 [Gameplay]  
+
 Jump - SpaceBar/A   
+
 HookShot - RightMouseClick/X  
+
 PickUpItem - E/B  
+
 UseWeapon - LeftMouseClick/RightTrigger  
+
 UseJetPack - LeftShift/LeftTrigger  
+
 <h2>Screenshots</h2>
 <img src="/Screenshots/screenshot000.png" />
 <img src="/Screenshots/screenshot0001.png" />
