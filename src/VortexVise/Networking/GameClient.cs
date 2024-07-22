@@ -15,7 +15,7 @@ public static class GameClient
 {
     static public bool IsConnected = false;
     public static bool IsConnecting = false;
-    private static UdpClient _udpClient = new(11000);
+    //private static UdpClient? _udpClient = new(11000);
     static public GameState LastServerState = new();
     static public ulong LastTickSimluated = 0;
     static public long Ping = -1;
@@ -36,9 +36,9 @@ public static class GameClient
             if (serverMessage != "VortexViseServer") throw new Exception("Can't connect to server");
 
             LastTickSimluated = 0;
-            _udpClient.Dispose();
-            _udpClient = new(11000);
-            _udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
+            //_udpClient.Dispose();
+            //_udpClient = new(11000);
+            //_udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
             IsConnected = true;
             UpdatePing();
             Thread getPingThread = new(new ThreadStart(GetServerInfo));
@@ -51,7 +51,7 @@ public static class GameClient
         {
             IsConnecting = false;
             Console.WriteLine(e.ToString());
-            _udpClient.Close();
+            //_udpClient.Close();
             IsConnected = false;
         }
     }
@@ -61,7 +61,7 @@ public static class GameClient
         try
         {
             IsConnecting = false;
-            _udpClient.Close();
+            //_udpClient.Close();
             IsConnected = false;
         }
         catch (Exception e)
@@ -124,7 +124,7 @@ public static class GameClient
             string json = GameStateSerializer.SerializeState(state);
             byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
-            _udpClient.Send(sendBytes, sendBytes.Length);
+            //_udpClient.Send(sendBytes, sendBytes.Length);
 
 
             wasSent = true;
@@ -145,7 +145,7 @@ public static class GameClient
             string json = GameStateSerializer.SerializeInput(input, playerId, tick);
             byte[] sendBytes = Encoding.ASCII.GetBytes(json);
 
-            _udpClient.Send(sendBytes, sendBytes.Length);
+            //_udpClient.Send(sendBytes, sendBytes.Length);
 
 
             wasSent = true;
@@ -168,16 +168,16 @@ public static class GameClient
                 IPEndPoint RemoteIpEndPoint = new(IPAddress.Any, 0);
 
                 // Blocks until a message returns on this socket from a remote host.
-                byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
-                Console.WriteLine(returnData);
+                //byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
+                //string returnData = Encoding.ASCII.GetString(receiveBytes);
+                //Console.WriteLine(returnData);
 
                 // Uses the IPEndPoint object to determine which of these two hosts responded.
-                var state = GameStateSerializer.DeserializeState(returnData);
-                if (state.Tick > LastTickSimluated)
-                {
-                    LastServerState = state;
-                }
+                //var state = GameStateSerializer.DeserializeState(returnData);
+                //if (state.Tick > LastTickSimluated)
+                //{
+                    //LastServerState = state;
+                //}
             }
             catch (Exception e)
             {
