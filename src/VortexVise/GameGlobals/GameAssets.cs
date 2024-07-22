@@ -458,7 +458,7 @@ public static class GameAssets
             Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5, 4, Raylib.WHITE, 0.05f); ;
             HitMarker = new Animation("Resources/Sprites/GFX/hitmarker.png", 32, 1, 1, Raylib.WHITE, 0.2f); ;
             KillConfirmation = new Animation("Resources/Common/kill_confirmed.png", 64, 5, 1, Raylib.WHITE, 0.1f); ;
-            Fire = new Animation("Resources/Common/fire.png", 8, 4, 1, Raylib.WHITE, 0.05f);
+            Fire = new Animation("Resources/Common/fire.png", 8, 4, 1, Raylib.WHITE, 0.02f);
         }
         public static void UnloadAnimations()
         {

@@ -254,9 +254,10 @@ static internal class GameUserInterface
         foreach (var player in players)
         {
             int x = (int)(GameCore.GameScreenWidth * 0.5f);
-            x -= 128;
-            Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
-            x += 128;
+            x -= 64;
+            //Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
+            Raylib.DrawTexture(player.Skin.Texture, x-16, y-16, Raylib.WHITE);
+            x += 32;
             y -= 8;
             Raylib.DrawTexture(GameAssets.HUD.Kill, x, y, Raylib.WHITE);
             x += 32;
@@ -268,7 +269,7 @@ static internal class GameUserInterface
             x += 32;
             y += 8;
             Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE);
-            y += 16;
+            y += 32;
         }
 
     }

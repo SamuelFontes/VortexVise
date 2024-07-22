@@ -73,12 +73,12 @@ public static class MenuScene
 
         // MAIN MENU
         var yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.Campaign, state, false, MenuItemType.Button, mainMenuTextPosition));
-        menuItems.Add(new UIMenuItem("ARCADE", MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
-        yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("SETTINGS", MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        //menuItems.Add(new UIMenuItem("CAMPAIGN", MenuItem.Campaign, state, false, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem("PLAY", MenuItem.Arcade, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        //yOffset += GameCore.MenuFontSize;
+        //menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        //yOffset += GameCore.MenuFontSize;
+        //menuItems.Add(new UIMenuItem("SETTINGS", MenuItem.Settings, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;

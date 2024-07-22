@@ -14,7 +14,7 @@ public static class Utils
     /// <summary>
     /// Set this string to anything to easilly show text on the screen
     /// </summary>
-    public static string DebugText { get; set; } = "Vortex Vise Alpha";
+    public static string DebugText { get; set; } = "Vortex Vise";
     private static bool _debug = false;
 
     /// <summary>
