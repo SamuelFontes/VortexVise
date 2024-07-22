@@ -42,7 +42,7 @@ public static class GameMatch
     /// <summary>
     /// Define the number of bots in the match, so the host will add when the game start.
     /// </summary>
-    public static int NumberOfBots { get; set; } = 0;
+    public static int NumberOfBots { get; set; } = 2;
 
     // Hook Options
     //----------------------------------------------------------------------------------

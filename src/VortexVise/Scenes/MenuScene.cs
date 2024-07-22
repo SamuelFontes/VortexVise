@@ -88,8 +88,8 @@ public static class MenuScene
         Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem($"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
-        menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        yOffset += GameCore.MenuFontSize;
+        //menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        //yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize * 2;
         menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));

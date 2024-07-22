@@ -53,27 +53,27 @@ static internal class GameplayScene
 
     static public void UpdateGameplayScene()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
-        {
-            var bot = new PlayerState(Guid.NewGuid(), GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
-            bot.IsBot = true;
-            var b = new Bot();
-            b.Id = bot.Id;
-            GameMatch.Bots.Add(b);
-            LastState.PlayerStates.Add(bot); // add bot
-        }
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5))
-        {
-            var bot = new PlayerState(Guid.NewGuid(), GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
-            bot.Id = Guid.NewGuid();
-            bot.Position = State.PlayerStates.Select(x => x.Position).First();
-            LastState.PlayerStates.Add(bot); // Add testing dummy
-        }
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4))
-        {
-            LastState.PlayerStates.RemoveAll(x => x.IsBot);
-        }
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
+        //{
+        //    var bot = new PlayerState(Guid.NewGuid(), GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+        //    bot.IsBot = true;
+        //    var b = new Bot();
+        //    b.Id = bot.Id;
+        //    GameMatch.Bots.Add(b);
+        //    LastState.PlayerStates.Add(bot); // add bot
+        //}
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F5))
+        //{
+        //    var bot = new PlayerState(Guid.NewGuid(), GameAssets.Gameplay.Skins.OrderBy(x => Guid.NewGuid()).First());
+        //    bot.Id = Guid.NewGuid();
+        //    bot.Position = State.PlayerStates.Select(x => x.Position).First();
+        //    LastState.PlayerStates.Add(bot); // Add testing dummy
+        //}
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F4))
+        //{
+        //    LastState.PlayerStates.RemoveAll(x => x.IsBot);
+        //}
         bool isSlowerThanTickRate = false;
 
         CurrentTime = Raylib.GetTime();
@@ -144,20 +144,20 @@ static internal class GameplayScene
         GameStates.Add(State);
         GameMatch.GameState = State;
 
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F8))
-        {
-            var json = JsonSerializer.Serialize(GameStates, SourceGenerationContext.Default.ListGameState);
-            System.IO.File.WriteAllText(@"replay.json", json);
-        }
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F9))
-        {
-            foreach (var map in GameAssets.Gameplay.Maps)
-            {
-                var json = JsonSerializer.Serialize(map, SourceGenerationContext.Default.Map);
-                System.IO.File.WriteAllText($"Resources/Maps/{map.Name.Replace(" ", "")}.json", json);
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F8))
+        //{
+        //    var json = JsonSerializer.Serialize(GameStates, SourceGenerationContext.Default.ListGameState);
+        //    System.IO.File.WriteAllText(@"replay.json", json);
+        //}
+        //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F9))
+        //{
+        //    foreach (var map in GameAssets.Gameplay.Maps)
+        //    {
+        //        var json = JsonSerializer.Serialize(map, SourceGenerationContext.Default.Map);
+        //        System.IO.File.WriteAllText($"Resources/Maps/{map.Name.Replace(" ", "")}.json", json);
 
-            }
-        }
+        //    }
+        //}
 
         if (!State.IsRunning) finishScreen = 1;
     }
