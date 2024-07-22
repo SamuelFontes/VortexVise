@@ -6,7 +6,7 @@ VortexVise is an old school deathmatch game made with Raylib.
 
 Can be played with bots or up to 4 players over local split screen multiplayer, to join press either A or Enter on the skin selection screen.  
 
-
+[Download](https://github.com/SamuelFontes/VortexVise/releases/download/release/VortexVise.zip)  
 <h2>Controls - MouseAndKeyboard/Gamepad  </h2>
 [Menu]  
 
