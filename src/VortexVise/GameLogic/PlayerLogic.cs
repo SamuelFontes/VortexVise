@@ -140,11 +140,13 @@ public static class PlayerLogic
 
     }
 
-    public static void ProcessPlayerJetPack(PlayerState currentPlayerState, float deltaTime)
+    public static void ProcessPlayerJetPack(PlayerState currentPlayerState, GameState currentGameState, float deltaTime)
     {
         if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
         {
             if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 1f, volume: 0.5f, overrideIfPlaying: false);
+            // TODO: Add particle
+            currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Fire, Position = new(currentPlayerState.Position.X + (new Random().Next(8, 16)),currentPlayerState.Position.Y + 24) });
 
             if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
             currentPlayerState.AddVelocity(new(0, -(GameMatch.PlayerJumpForce * 4 * deltaTime)));

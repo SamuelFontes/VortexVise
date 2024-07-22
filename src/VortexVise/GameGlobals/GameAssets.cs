@@ -451,12 +451,14 @@ public static class GameAssets
         public static Animation Explosion;
         public static Animation HitMarker;
         public static Animation KillConfirmation;
+        public static Animation Fire;
         public static void LoadAnimations()
         {
             Blood = new Animation("Resources/Sprites/GFX/death.png", 32, 5, 1, Raylib.WHITE, 0.05f); ;
             Explosion = new Animation("Resources/Sprites/GFX/explosion.png", 32, 5, 4, Raylib.WHITE, 0.05f); ;
             HitMarker = new Animation("Resources/Sprites/GFX/hitmarker.png", 32, 1, 1, Raylib.WHITE, 0.2f); ;
             KillConfirmation = new Animation("Resources/Common/kill_confirmed.png", 64, 5, 1, Raylib.WHITE, 0.1f); ;
+            Fire = new Animation("Resources/Common/fire.png", 8, 4, 1, Raylib.WHITE, 0.05f);
         }
         public static void UnloadAnimations()
         {
@@ -464,6 +466,7 @@ public static class GameAssets
             Raylib.UnloadTexture(Explosion.Texture);
             Raylib.UnloadTexture(HitMarker.Texture);
             Raylib.UnloadTexture(KillConfirmation.Texture);
+            Raylib.UnloadTexture(Fire.Texture);
         }
     }
 
