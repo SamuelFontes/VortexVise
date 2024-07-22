@@ -181,7 +181,7 @@ static internal class GameUserInterface
             var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
             if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
-                Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+                //Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
             }
             else
             {

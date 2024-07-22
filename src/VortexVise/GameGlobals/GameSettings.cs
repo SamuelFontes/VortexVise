@@ -16,15 +16,15 @@ public static class GameSettings
     /// <summary>
     /// Control the volume of game sounds.
     /// </summary>
-    public static float VolumeSounds { get; set; } = 0;
+    public static float VolumeSounds { get; set; } = 1;
     /// <summary>
     /// Control the volume of game music.
     /// </summary>
-    public static float VolumeBGM { get; set; } = 0;
+    public static float VolumeBGM { get; set; } = 1;
     /// <summary>
     /// Control the volume of game ambience sounds.
     /// </summary>
-    public static float VolumeBGS { get; set; } = 0;
+    public static float VolumeBGS { get; set; } = 1;
     /// <summary>
     /// Define to use borderless full screen, if false it will use true full screen.
     /// </summary>
