@@ -1,6 +1,6 @@
-<center>
+<p align="center">
 	<img src="/Resources/Common/vortex-vise-logo.png" alt="VortexViseLogo" />
-</center>
+</p>
 # Vortex Vise
 VortexVise is an old school deathmatch game made with Raylib.  
 
