@@ -197,15 +197,14 @@ public static class GameAssets
                     var matchesWeapons = Regex.Matches(fileContent, @"\[WEAPON\][\s\S]*?(?=(\[WEAPON\]|$))");
                     foreach (Match match in matchesWeapons.Cast<Match>())
                     {
-                        var weapon = new Weapon
-                        {
-                            // Name
-                            Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(\n|\s\s)").Value.Trim(),
+                        var weapon = new Weapon();
+                        // Name
+                        weapon.Name = Regex.Match(match.Value, @"(?<=NAME\s*=\s*?)[\s\S]+?(\n|\s\s)").Value.Trim();
 
-                            // Texture
-                            TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(\n|\s\s)").Value.Trim(),
-                            ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(\n|\s\s)").Value
-                        };
+                        // Texture
+                        weapon.TextureLocation = Regex.Match(match.Value, @"(?<=TEXTURE_LOCATION\s*=)[\S]+?(\s\s|\r\n|\n)").Value.Trim();
+                        weapon.ProjectileTextureLocation = Regex.Match(match.Value, @"(?<=PROJECTILE_TEXTURE_LOCATION\s*=)[\S]+?(\s\s|\r\n|\n)").Value.Trim();
+
                         if (string.IsNullOrEmpty(weapon.TextureLocation)) throw new Exception("Can't find the texture location");
                         weapon.TextureLocation = weaponLocation + "/" + weapon.TextureLocation;
                         if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTextureLocation = weaponLocation + "/" + weapon.ProjectileTextureLocation;
