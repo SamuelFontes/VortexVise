@@ -145,7 +145,6 @@ public static class PlayerLogic
         if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
         {
             if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 1f, volume: 0.5f, overrideIfPlaying: false);
-            // TODO: Add particle
             currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Fire, Position = new(currentPlayerState.Position.X + (new Random().Next(8, 16)),currentPlayerState.Position.Y + 24) });
 
             if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
