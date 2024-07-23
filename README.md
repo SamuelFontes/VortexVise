@@ -37,3 +37,7 @@ UseJetPack - LeftShift/LeftTrigger
 <img src="/Screenshots/screenshot003.png" />
 <img src="/Screenshots/screenshot004.png" />
 <img src="/Screenshots/screenshot005.png" />
+
+<h2>License</h2>
+The game is licensed under GPL 2, so you can do wathever you want with the code as long as you give the credits and publish the source code if you made any changes.  
+If you want to get this code with a more permissive license just message me.  
