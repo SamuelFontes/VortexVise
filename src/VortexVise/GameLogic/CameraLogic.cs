@@ -141,6 +141,7 @@ public static class CameraLogic
     {
         Raylib.EndTextureMode();
         Raylib.BeginTextureMode(GameMatch.PlayerCameras[index].RenderTexture);
+        Raylib.ClearBackground(Raylib.BLACK); // Make area outside the map be black on the camera view
         ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera);
         Raylib.BeginMode2D(GameMatch.PlayerCameras[index].Camera);
     }
@@ -152,7 +153,6 @@ public static class CameraLogic
     {
         Raylib.EndMode2D();
         Raylib.EndTextureMode();
-        Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
         if (isPlayerDead)
             Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.GRAY);
         else
@@ -186,11 +186,15 @@ public static class CameraLogic
         else if (target.Y + GameCore.GameScreenHeight * playerCamera.CameraOffset.Y >= MapLogic.GetMapSize().Y)
             target.Y = MapLogic.GetMapSize().Y - GameCore.GameScreenHeight * playerCamera.CameraOffset.Y;
 
+        if (GameCore.GameScreenWidth / Utils.GetNumberOfLocalPlayers() >= MapLogic.GetMapSize().X) // Only if map is bigger than screen
+            target.X = MapLogic.GetMapSize().X * 0.5f;
+        if (GameCore.GameScreenHeight  /Utils.GetNumberOfLocalPlayers() >= MapLogic.GetMapSize().Y) // Only if map is bigger than screen
+            target.Y = MapLogic.GetMapSize().Y * 0.5f;
+
         target.X = (int)target.X;
         target.Y = (int)target.Y;
         // Make camera smooth
         camera.target.X = RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
-        camera.target.Y = RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
+        camera.target.Y = RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
     }
-
 }
