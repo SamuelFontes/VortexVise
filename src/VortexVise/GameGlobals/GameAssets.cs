@@ -1,5 +1,6 @@
 ﻿
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Logic;
@@ -227,7 +228,7 @@ public static class GameAssets
 
                         // Get reloadDelay
                         if (weapon.WeaponType != Enums.WeaponType.Heal)
-                            weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(\n|\s\s)").Value);
+                            weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(\n|\s\s)").Value, CultureInfo.InvariantCulture);
 
                         // Color
                         var color = Regex.Match(match.Value, @"(?<=COLOR=)\d+,\d+,\d+,\d+").Value;
