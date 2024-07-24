@@ -153,7 +153,7 @@ public static class CameraLogic
     {
         Raylib.EndMode2D();
         Raylib.EndTextureMode();
-        Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
+        //Raylib.BeginTextureMode(GameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
         if (isPlayerDead)
             Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.GRAY);
         else

@@ -31,8 +31,8 @@ static internal class GameUserInterface
         //---------------------------------------------------------
         Vector2 newCursorPosition = Raylib.GetMousePosition();
         Vector2 virtualMouse = new();
-        virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - GameCore.GameScreenWidth * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
-        virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - GameCore.GameScreenHeight * GameCore.GameScreenScale) * 0.5f) / GameCore.GameScreenScale;
+        virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - GameCore.GameScreenWidth) * 0.5f);
+        virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - GameCore.GameScreenHeight) * 0.5f);
         virtualMouse = RayMath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
@@ -256,7 +256,7 @@ static internal class GameUserInterface
             int x = (int)(GameCore.GameScreenWidth * 0.5f);
             x -= 64;
             //Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
-            Raylib.DrawTexture(player.Skin.Texture, x-16, y-16, Raylib.WHITE);
+            Raylib.DrawTexture(player.Skin.Texture, x - 16, y - 16, Raylib.WHITE);
             x += 32;
             y -= 8;
             Raylib.DrawTexture(GameAssets.HUD.Kill, x, y, Raylib.WHITE);

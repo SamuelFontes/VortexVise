@@ -15,20 +15,15 @@ public static class GameCore
     /// <summary>
     /// Render texture that the game will be rendered at before scaling it to the display's resolution.
     /// </summary>
-    public static RenderTexture GameRendering { get; set; }
     /// <summary>
     /// Defines internal game rendering resolution.
     /// </summary>
-    public static int GameScreenWidth { get; set; } = 960;
+    public static int GameScreenWidth { get { return Raylib.GetScreenWidth(); }  }
     /// <summary>
     /// Defines internal game rendering resolution.
     /// </summary>
-    public static int GameScreenHeight { get; set; } = 540;
+    public static int GameScreenHeight { get { return Raylib.GetScreenHeight(); }  }
     public static int MenuFontSize { get; set; } = 32;
-    /// <summary>
-    /// Indicates how much the game is being scaled based on the game resolution and screen resolution.
-    /// </summary>
-    public static float GameScreenScale { get; set; }
     /// <summary>
     /// If true the game will exit.
     /// </summary>

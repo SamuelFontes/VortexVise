@@ -526,7 +526,7 @@ public static class MenuScene
         // Draw Background, Logo and Misc
         //----------------------------------------------------------------------------------
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
-        Raylib.DrawTextureEx(background, backgroundPos, 0, 1, Raylib.DARKGRAY);
+        Raylib.DrawTextureEx(background, backgroundPos, 0, 2, Raylib.DARKGRAY);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
             Raylib.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
         else if (currentState == MenuState.ServerBrowser)
