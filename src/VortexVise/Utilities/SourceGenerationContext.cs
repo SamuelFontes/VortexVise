@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿// This is needed to be able to serialize using AOT compilation
+using System.Text.Json.Serialization;
 using VortexVise.Models;
 using VortexVise.States;
 

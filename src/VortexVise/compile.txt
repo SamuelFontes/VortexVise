@@ -1,2 +1,2 @@
 dotnet publish -r win-x64 -c Release
-
+TODO: make this a script, copy all executables and resources to publish folder. Or create a pipeline

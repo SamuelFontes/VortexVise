@@ -1,31 +1,23 @@
-﻿/*******************************************************************************************
-*
-*   Vortex Vise
-*
-*   A nice game about killing things
-*
-********************************************************************************************/
-
-using System.Numerics;
-using VortexVise.Enums;
+﻿using VortexVise.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
 
-
 // Initialization
 //---------------------------------------------------------
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
-
-Raylib.InitWindow(Raylib.GetScreenWidth(), Raylib.GetScreenHeight(), "Vortex Vise");                  // Create game window
-Raylib.ToggleBorderlessWindowed();
-//Raylib.SetWindowMinSize(GameCore.GameScreenWidth, GameCore.GameScreenHeight);                           // Set minimal window size
+Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
+Raylib.ToggleBorderlessWindowed();                                                                      // Make game fullscreen
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
 Raylib.HideCursor();                                                                                    // Hide windows cursor
 Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                            // Set game target FPS
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
+
+// Load Assets
 GameAssets.InitializeAssets();                                                                          // Load global data 
+
+// Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
 Raylib.SetWindowIcon(icon);                                                                             // Set icon
 Raylib.UnloadImage(icon);                                                                               // Unload icon from memory
@@ -37,13 +29,14 @@ GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixe
 SceneManager.CurrentScene = GameScene.MENU;
 MenuScene.InitMenuScene();
 
-
 // Main Game Loop
 //--------------------------------------------------------------------------------------
 while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 {
-    // Read PC Keys
+    // UPDATE
     //----------------------------------------------------------------------------------
+
+    // Read PC Keys
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_F11))
     {
         if (GameSettings.BorderlessFullScreen)
@@ -54,11 +47,9 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_F7)) Utils.SwitchDebug();
 
     // Update music
-    //----------------------------------------------------------------------------------
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    //----------------------------------------------------------------------------------
     SceneManager.UpdateScene();
 
 
@@ -67,31 +58,25 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     GameUserInterface.UpdateUserInterface();
 
 
-    // Deal with resolution
+    // DRAW
     //----------------------------------------------------------------------------------
+
     Raylib.BeginDrawing();
-
-
     Raylib.ClearBackground(Raylib.BLACK);
 
-    // Draw Game
-    //----------------------------------------------------------------------------------
+    // Draw scene (gameplay or menu)
     SceneManager.DrawScene();
 
-    // Draw full screen rectangle in front of everything
+    // Draw full screen rectangle in front of everything when changing screens
     if (SceneManager.OnTransition) SceneManager.DrawTransition();
 
+    // Draw UI on top
     GameUserInterface.DrawUserInterface();
 
-
-    // Draw render texture to screen, properly scaled
-
     Raylib.EndDrawing();
-    //----------------------------------------------------------------------------------
 }
 
 // Fade screen to black when exit
-//--------------------------------------------------------------------------------------
 SceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 while (!SceneManager.TransitionFadeOut)
 {
@@ -101,7 +86,5 @@ while (!SceneManager.TransitionFadeOut)
 // De-Initialization
 //--------------------------------------------------------------------------------------
 GameAssets.UnloadAssets();
-
 Raylib.CloseAudioDevice();     // Close audio context
 Raylib.CloseWindow();          // Close window and OpenGL context
-

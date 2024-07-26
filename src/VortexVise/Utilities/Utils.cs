@@ -7,7 +7,7 @@ using ZeroElectric.Vinculum;
 namespace VortexVise.Utilities;
 
 /// <summary>
-/// Lazy ass global functions to help create this damn game.
+/// Useful global functions.
 /// </summary>
 public static class Utils
 {
@@ -15,6 +15,7 @@ public static class Utils
     /// Set this string to anything to easilly show text on the screen
     /// </summary>
     public static string DebugText { get; set; } = "Vortex Vise";
+
     private static bool _debug = false;
 
     /// <summary>
@@ -68,10 +69,14 @@ public static class Utils
     /// <param name="text">Reference of string that needs to change</param>
     public static void UpdateTextUsingKeyboard(ref string text)
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) && text.Length > 0)
+        if ((Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) || Raylib.IsKeyPressedRepeat(KeyboardKey.KEY_BACKSPACE)) && text.Length > 0)
         {
             GameUserInterface.IsCursorVisible = false;
             text = text.Remove(text.Length - 1);
+        }
+        else if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && Raylib.IsKeyPressed(KeyboardKey.KEY_V))
+        {
+            text += Raylib.GetClipboardTextAsString();
         }
         else
         {
