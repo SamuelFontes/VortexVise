@@ -6,7 +6,6 @@ using VortexVise.States;
 namespace VortexVise;
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(List<GameState>))]
-[JsonSerializable(typeof(List<MasterServer>))]
 [JsonSerializable(typeof(List<GameLobby>))]
 [JsonSerializable(typeof(List<Map>))]
 [JsonSerializable(typeof(List<PlayerProfile>))]

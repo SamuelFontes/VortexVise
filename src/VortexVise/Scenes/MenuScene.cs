@@ -201,6 +201,10 @@ public static class MenuScene
                             {
                                 currentState = MenuState.Connecting;
                                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
+                                var config = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
+                                GameClient.IP = "";
+                                GameClient.Port = 0;
+                                //var _ = GameClient.Connect();
                                 break;
                             }
                         default: break;
@@ -310,7 +314,9 @@ public static class MenuScene
                 }
                 else if (currentState == MenuState.Connecting)
                 {
-                    // TODO: Connect to server here
+                    currentState = MenuState.Online;
+                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.VinylScratch);
+                    selected = menuItems.First(x => x.Item == MenuItem.Connect && x.State == currentState).Id;
                 }
             }
         }
@@ -474,7 +480,7 @@ public static class MenuScene
             Raylib.DrawRectangle((int)rec.x - 8, (int)rec.y - 8, (int)rec.width + 16, (int)rec.height + 16, Raylib.BLACK);
             Raylib.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.width, GameMatch.CurrentMap.Texture.height), rec, new(0, 0), 0, Raylib.WHITE);
 
-            if (!GameCore.IsNetworkGame)// TODO: draw room id if online
+            if (!GameCore.IsNetworkGame)
             {
                 Utils.DrawTextCentered("ARCADE", new(GameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
             }

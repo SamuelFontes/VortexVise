@@ -49,9 +49,6 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         GameUserInterface.InitUserInterface();
-#pragma warning disable CS8601 // Possible null reference assignment.
-        GameCore.MasterServers = JsonSerializer.Deserialize(File.ReadAllText("Resources/Servers.json"), SourceGenerationContext.Default.ListMasterServer);
-#pragma warning restore CS8601 // Possible null reference assignment.
     }
 
     /// <summary>

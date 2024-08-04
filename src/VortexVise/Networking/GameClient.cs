@@ -10,49 +10,37 @@ using VortexVise.Utilities;
 
 namespace VortexVise.Networking;
 
-// TODO: Rebuild this using SignalR
 public static class GameClient
 {
     static public bool IsConnected = false;
     public static bool IsConnecting = false;
-    //private static UdpClient? _udpClient = new(11000);
+    public static string IP = "127.0.0.1";
+    public static int Port = 8080;
+    private static TcpClient? _client; 
     static public GameState LastServerState = new();
     static public ulong LastTickSimluated = 0;
     static public long Ping = -1;
     public static HttpClient httpClient = new();
-    public static MasterServer Server = new();
     public static GameLobby? CurrentLobby;
     public static List<GameLobby>? AvailableLobbies = [];
     public static bool IsHost { get { return CurrentLobby?.Owner.Id == GameCore.PlayerOneProfile.Id; } }
-    static public async Task Connect(MasterServer server)
+    static public void Connect(string ip)
     {
-
         try
         {
             IsConnecting = true;
-            Server = server;
-            var serverResponse = await httpClient.GetAsync(server.ServerURL);
-            string serverMessage = await serverResponse.Content.ReadAsStringAsync();
-            if (serverMessage != "VortexViseServer") throw new Exception("Can't connect to server");
-
+            _client = new TcpClient();
+            _client.Connect(IP,Port);
             LastTickSimluated = 0;
-            //_udpClient.Dispose();
-            //_udpClient = new(11000);
-            //_udpClient.Connect(server.ServerUDP, server.ServerUDPPort);
             IsConnected = true;
-            UpdatePing();
-            Thread getPingThread = new(new ThreadStart(GetServerInfo));
-            getPingThread.Start();
             Thread getState = new(new ThreadStart(GetState));
             getState.Start();
 
         }
         catch (Exception e)
         {
-            IsConnecting = false;
             Console.WriteLine(e.ToString());
-            //_udpClient.Close();
-            IsConnected = false;
+            Disconnect();
         }
     }
 
@@ -61,8 +49,8 @@ public static class GameClient
         try
         {
             IsConnecting = false;
-            //_udpClient.Close();
             IsConnected = false;
+            _client?.Dispose();
         }
         catch (Exception e)
         {
@@ -70,49 +58,6 @@ public static class GameClient
             IsConnected = false;
         }
 
-    }
-
-    static public void CreateLobby()
-    {
-        if (!IsConnected) return;
-
-        List<PlayerProfile> list = Utils.GetAllLocalPlayerProfiles();
-
-        string serializedProfiles = JsonSerializer.Serialize(list, SourceGenerationContext.Default.ListPlayerProfile);
-
-        var response = httpClient.PostAsync(Server.ServerURL + $"/host?serializedProfiles={serializedProfiles}", null).Result;
-        var serializedLobby = response.Content.ReadAsStream();
-        CurrentLobby = JsonSerializer.Deserialize(serializedLobby, SourceGenerationContext.Default.GameLobby);
-    }
-
-    public static void ListLobbies()
-    {
-        if (!IsConnected) return;
-
-        var serverResponse = httpClient.GetAsync(Server.ServerURL + "/list").Result.Content.ReadAsStream();
-        AvailableLobbies = JsonSerializer.Deserialize(serverResponse, SourceGenerationContext.Default.ListGameLobby);
-    }
-
-    public static void JoinLobby(Guid lobbyId)
-    {
-        if (!IsConnected) return;
-        List<PlayerProfile> list = Utils.GetAllLocalPlayerProfiles();
-
-        string serializedProfiles = JsonSerializer.Serialize(list, SourceGenerationContext.Default.ListPlayerProfile); ;
-
-        var response = httpClient.PostAsync(Server.ServerURL + $"/join?serializedProfiles={serializedProfiles}&lobbyId={lobbyId}", null).Result;
-        var serializedLobby = response.Content.ReadAsStream();
-        CurrentLobby = JsonSerializer.Deserialize(serializedLobby, SourceGenerationContext.Default.GameLobby);
-
-    }
-
-    public static void GetLobbyInfo()
-    {
-        if (!IsConnected) return;
-        if (CurrentLobby == null) return;
-
-        var serverResponse = httpClient.GetAsync(Server.ServerURL + $"/GetLobby?lobbyId={CurrentLobby.Id}").Result.Content.ReadAsStream();
-        CurrentLobby = JsonSerializer.Deserialize(serverResponse, SourceGenerationContext.Default.GameLobby);
     }
 
     static public bool SendState(GameState state)
@@ -160,7 +105,7 @@ public static class GameClient
 
     static public void GetState()
     {
-        while (IsConnected && false)
+        while (IsConnected)
         {
             try
             {
@@ -184,33 +129,6 @@ public static class GameClient
                 Console.WriteLine(e.ToString());
             }
 
-        }
-    }
-
-    static public async void GetServerInfo()
-    {
-        var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
-
-        while (await timer.WaitForNextTickAsync())
-        {
-            if (!IsConnected) break;
-            UpdatePing();
-            if (CurrentLobby == null) ListLobbies();
-            else GetLobbyInfo();
-        }
-    }
-
-    static void UpdatePing()
-    {
-        try
-        {
-            Ping ping = new();
-            PingReply reply = ping.Send(Server.ServerUDP, 1000);
-            Ping = reply.RoundtripTime;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
         }
     }
 }

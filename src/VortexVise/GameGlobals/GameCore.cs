@@ -58,8 +58,4 @@ public static class GameCore
     /// Max amount of weapons a player can carry
     /// </summary>
     public static int MaxWeapons { get; set; } = 4;
-    /// <summary>
-    /// Master servers.
-    /// </summary>
-    public static List<MasterServer> MasterServers { get; set; } = [];
 }
