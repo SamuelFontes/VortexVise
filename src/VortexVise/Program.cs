@@ -7,8 +7,9 @@ using ZeroElectric.Vinculum;
 // Initialization
 //---------------------------------------------------------
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
-Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
-Raylib.ToggleBorderlessWindowed();                                                                      // Make game fullscreen
+//Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
+Raylib.InitWindow(960, 540, "Vortex Vise");                  // Create game window
+//Raylib.ToggleBorderlessWindowed();                                                                      // Make game fullscreen
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
 Raylib.HideCursor();                                                                                    // Hide windows cursor
 Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                            // Set game target FPS

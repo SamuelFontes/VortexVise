@@ -36,6 +36,7 @@ public static class GameClient
             _client.Connect(IP, Port);
             LastTickSimluated = 0;
             IsConnected = true;
+            SendMessage(JsonSerializer.Serialize(GameCore.PlayerOneProfile));
             Thread getState = new(new ThreadStart(GetState));
             getState.Start();
 
@@ -61,6 +62,25 @@ public static class GameClient
             IsConnected = false;
         }
 
+    }
+
+    static public void SendMessage(string message)
+    {
+        try
+        {
+            // Sends a message to the host to which you have connected.
+            byte[] sendBytes = Encoding.ASCII.GetBytes(message);
+
+            // Get a client stream for reading and writing.
+            NetworkStream stream = _client.GetStream();
+
+            // Send the message to the connected TcpServer.
+            stream.Write(sendBytes, 0, sendBytes.Length);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
     }
 
     static public bool SendState(GameState state)

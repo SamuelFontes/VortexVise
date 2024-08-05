@@ -95,7 +95,7 @@ public static class MenuScene
         // ONLINE
         state = MenuState.Online;
         yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("192.168.0.1:3030", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem("192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
         menuItems.Add(new UIMenuItem("Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
@@ -202,7 +202,7 @@ public static class MenuScene
                                 currentState = MenuState.Connecting;
                                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                                 var config = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
-                                string ip = menuItems.First(_ => _.Item == MenuItem.IP).Value;
+                                string ip = menuItems.First(_ => _.Item == MenuItem.IP).Text;
                                 GameClient.Connect(ip);
                                 break;
                             }

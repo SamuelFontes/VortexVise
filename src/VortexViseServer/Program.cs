@@ -1,78 +1,36 @@
-using Microsoft.AspNetCore.ResponseCompression;
-using System.Text.Json;
-using VortexVise;
-using VortexVise.GameGlobals;
-using VortexVise.Models;
-using VortexViseServer;
+﻿// See https://aka.ms/new-console-template for more information
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddResponseCompression(opts =>
+TcpListener server = new TcpListener(IPAddress.Any, 9999);
+// we set our IP address as server's address, and we also set the port: 9999
+Console.WriteLine("Starting server");
+
+server.Start();  // this will start the server
+
+while (true)   //we wait for a connection
 {
-    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-          new[] { "application/octet-stream" });
-});
+    TcpClient client = server.AcceptTcpClient();  //if a connection exists, the server will accept it
 
-// Add services to the container.
-var app = builder.Build();
+    NetworkStream ns = client.GetStream(); //networkstream is used to send/receive messages
 
-// Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
-GameAssets.Gameplay.LoadMapsHash();
+    byte[] hello = new byte[100];   //any message must be serialized (converted to byte array)
+    hello = Encoding.Default.GetBytes("hello world");  //conversion string => byte array
 
-app.MapGet("/", () =>
-{
-    return "VortexViseServer";
-});
+    ns.Write(hello, 0, hello.Length);     //sending the message
 
-app.MapGet("/list", () =>
-{
-    var json = JsonSerializer.Serialize(GameServer.Lobbies, SourceGenerationContext.Default.ListGameLobby);
-    return json;
-});
-
-app.MapPost("/host", (string serializedProfiles) =>
-{
-    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile);
-    if (profiles == null || profiles.Count == 0) throw new Exception("Can't deserialize profile");
-    var lobby = GameServer.Lobbies.FirstOrDefault(x => x.Players.Count + profiles.Count <= x.MaxPlayers);
-    if (lobby == null)
+    while (client.Connected)  //while the client is connected, we look for incoming messages
     {
-        lobby = new GameLobby(profiles[0]);
-        lobby.CurrentMap = GameAssets.Gameplay.Maps.OrderBy(x => Guid.NewGuid()).First();
+        byte[] msg = new byte[1024];     //the messages arrive as byte array
+        ns.Read(msg, 0, msg.Length);   //the same networkstream reads the message sent by the client
+
+
+        var responseData = System.Text.Encoding.ASCII.GetString(msg, 0, msg.Length); 
+        Console.WriteLine("Received: {0}", responseData);
+        if (responseData == "Join")
+        {
+            Console.WriteLine("JOINNNNNNNNNNNNNNNNNNNNNNN"); //now , we write the message as string
+        }
     }
-    foreach (var profile in profiles)
-    {
-        if (!lobby.Players.Any(x => x.Id == profile.Id)) lobby.Players.Add(profile);
-    }
-
-    GameServer.Lobbies.Add(lobby);
-    return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby);
-});
-
-app.MapPost("/join", (Guid lobbyId, string serializedProfiles) =>
-{
-    List<PlayerProfile>? profiles = JsonSerializer.Deserialize(serializedProfiles, SourceGenerationContext.Default.ListPlayerProfile); ;
-    if (profiles == null || profiles.Count == 0) throw new Exception("Can't deserialize profile");
-
-    var lobby = GameServer.Lobbies.FirstOrDefault(x => x.Id == lobbyId);
-    if (lobby == null) return "Lobby not found";
-    foreach (var profile in profiles)
-    {
-        lobby.Players.Add(profile);
-    }
-    return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
-});
-
-app.MapGet("/GetLobby", (Guid lobbyId) =>
-{
-    var lobby = GameServer.Lobbies.FirstOrDefault(x => x.Id == lobbyId);
-    if (lobby == null) return "Lobby not found";
-    return JsonSerializer.Serialize(lobby, SourceGenerationContext.Default.GameLobby); ;
-});
-
-app.UseResponseCompression();
-
-
-new Thread(new ThreadStart(GameServer.Run)).Start();
-app.Run();
-
+}
