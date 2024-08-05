@@ -202,9 +202,8 @@ public static class MenuScene
                                 currentState = MenuState.Connecting;
                                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click);
                                 var config = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
-                                GameClient.IP = "";
-                                GameClient.Port = 0;
-                                //var _ = GameClient.Connect();
+                                string ip = menuItems.First(_ => _.Item == MenuItem.IP).Value;
+                                GameClient.Connect(ip);
                                 break;
                             }
                         default: break;

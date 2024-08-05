@@ -16,7 +16,7 @@ public static class GameClient
     public static bool IsConnecting = false;
     public static string IP = "127.0.0.1";
     public static int Port = 8080;
-    private static TcpClient? _client; 
+    private static TcpClient? _client;
     static public GameState LastServerState = new();
     static public ulong LastTickSimluated = 0;
     static public long Ping = -1;
@@ -28,9 +28,12 @@ public static class GameClient
     {
         try
         {
+            var ipAndPort = ip.Split(":");
+            IP = ipAndPort[0];
+            Port = Convert.ToInt32(ipAndPort[1]);
             IsConnecting = true;
             _client = new TcpClient();
-            _client.Connect(IP,Port);
+            _client.Connect(IP, Port);
             LastTickSimluated = 0;
             IsConnected = true;
             Thread getState = new(new ThreadStart(GetState));
@@ -121,7 +124,7 @@ public static class GameClient
                 //var state = GameStateSerializer.DeserializeState(returnData);
                 //if (state.Tick > LastTickSimluated)
                 //{
-                    //LastServerState = state;
+                //LastServerState = state;
                 //}
             }
             catch (Exception e)
