@@ -146,3 +146,12 @@ public enum MatchStates
     Voting,
     Lobby,
 };
+
+public enum NetworkMessageType
+{
+    Join,
+    Disconnect,
+    SendInput,
+    SendGameState,
+    SendTextMessage
+};

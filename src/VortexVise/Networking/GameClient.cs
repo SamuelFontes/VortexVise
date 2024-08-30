@@ -36,8 +36,8 @@ public static class GameClient
             _client.Connect(IP, Port);
             LastTickSimluated = 0;
             IsConnected = true;
-            SendMessage(JsonSerializer.Serialize(GameCore.PlayerOneProfile));
             Thread getState = new(new ThreadStart(GetState));
+            SendMessage(JsonSerializer.Serialize(GameAssets.Gameplay.Maps, SourceGenerationContext.Default.ListMap));
             getState.Start();
 
         }
@@ -69,7 +69,7 @@ public static class GameClient
         try
         {
             // Sends a message to the host to which you have connected.
-            byte[] sendBytes = Encoding.ASCII.GetBytes(message);
+            byte[] sendBytes = Encoding.Unicode.GetBytes(message);
 
             // Get a client stream for reading and writing.
             NetworkStream stream = _client.GetStream();
@@ -128,6 +128,7 @@ public static class GameClient
 
     static public void GetState()
     {
+        string currentMessage = "";
         while (IsConnected)
         {
             try
@@ -136,9 +137,32 @@ public static class GameClient
                 IPEndPoint RemoteIpEndPoint = new(IPAddress.Any, 0);
 
                 // Blocks until a message returns on this socket from a remote host.
-                //byte[] receiveBytes = _udpClient.Receive(ref RemoteIpEndPoint);
+                var data = new List<byte>();
+                var buffer = new byte[512]; //size can be different, just an example
+                var terminatorReceived = false;
+                while (!terminatorReceived)
+                {
+                    var bytesReceived = _client.Client.Receive(buffer);
+                    if (bytesReceived > 0)
+                    {
+                        data.AddRange(buffer.Take(bytesReceived));
+                        //terminatorReceived = data.Contains(0xFD);
+                        terminatorReceived = System.Text.Encoding.Unicode.GetString(buffer).Contains("\0");
+                    }
+                }
+
+                var responseData = System.Text.Encoding.Unicode.GetString(data.ToArray());
+                var messages = responseData.Split("\0");
+                currentMessage += messages.First();
+                // TODO: Deserialize the game state here
+
+                currentMessage = "";
+                if (!messages.Last().Contains("\0") && messages.Length > 1) // this means we grabbed a piece of next message
+                {
+                    currentMessage += messages.Last();
+                }
                 //string returnData = Encoding.ASCII.GetString(receiveBytes);
-                //Console.WriteLine(returnData);
+                Console.WriteLine(currentMessage);
 
                 // Uses the IPEndPoint object to determine which of these two hosts responded.
                 //var state = GameStateSerializer.DeserializeState(returnData);

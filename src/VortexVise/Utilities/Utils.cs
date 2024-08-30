@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Net.Sockets;
+using System.Numerics;
 using System.Security.Cryptography;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
@@ -183,6 +184,23 @@ public static class Utils
         if (GameCore.PlayerThreeProfile.Gamepad != -9) list.Add(GameCore.PlayerThreeProfile);
         if (GameCore.PlayerFourProfile.Gamepad != -9) list.Add(GameCore.PlayerFourProfile);
         return list;
+    }
+
+    public static byte[] GetTcpResponse(ref TcpClient tcpClient)
+    {
+        var data = new List<byte>();
+        var buffer = new byte[512]; //size can be different, just an example
+        var terminatorReceived = false;
+        while (!terminatorReceived)
+        {
+            var bytesReceived = tcpClient.Client.Receive(buffer);
+            if (bytesReceived > 0)
+            {
+                data.AddRange(buffer.Take(bytesReceived));
+                terminatorReceived = data.Contains(0xFD);
+            }
+        }
+        return data.ToArray();
     }
 
 }
