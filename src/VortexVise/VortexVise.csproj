@@ -11,10 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\SerializableMasterServers.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
   </ItemGroup>
 

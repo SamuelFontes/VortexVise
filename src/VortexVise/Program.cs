@@ -3,6 +3,25 @@ using VortexVise.GameGlobals;
 using VortexVise.Scenes;
 using VortexVise.Utilities;
 using ZeroElectric.Vinculum;
+using Steamworks;
+
+// ...
+
+try
+{
+    SteamClient.Init(480);
+    foreach (var friend in SteamFriends.GetFriends())
+    {
+        Console.WriteLine($"{friend.Id}: {friend.Name}");
+        Console.WriteLine($"{friend.IsOnline} / {friend.SteamLevel}");
+
+    }
+}
+catch (System.Exception e)
+{
+    // Couldn't init for some reason (steam is closed etc)
+}
+SteamClient.Shutdown();
 
 // Initialization
 //---------------------------------------------------------
