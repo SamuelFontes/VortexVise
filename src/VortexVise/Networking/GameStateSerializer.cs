@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.Json;
 using VortexVise.States;
+using VortexVise.Core.States;
 
 namespace VortexVise.Networking;
 

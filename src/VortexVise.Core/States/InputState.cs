@@ -1,4 +1,4 @@
-﻿namespace VortexVise.States;
+﻿namespace VortexVise.Core.States;
 
 /// <summary>
 /// Player's input information generated every tickrate.

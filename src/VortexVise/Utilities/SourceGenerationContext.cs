@@ -1,5 +1,6 @@
 ﻿// This is needed to be able to serialize using AOT compilation
 using System.Text.Json.Serialization;
+using VortexVise.Core.States;
 using VortexVise.Models;
 using VortexVise.States;
 
@@ -10,6 +11,7 @@ namespace VortexVise;
 [JsonSerializable(typeof(List<Map>))]
 [JsonSerializable(typeof(List<PlayerProfile>))]
 [JsonSerializable(typeof(PlayerProfile))]
+[JsonSerializable(typeof(InputState))]
 public partial class SourceGenerationContext : JsonSerializerContext
 {
 }

@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using VortexVise.Core.States;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;

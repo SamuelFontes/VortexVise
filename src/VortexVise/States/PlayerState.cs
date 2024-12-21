@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.States;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using ZeroElectric.Vinculum;
