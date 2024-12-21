@@ -3,6 +3,8 @@
 using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using VortexVise.Core;
+using VortexVise.Core.Enums;
 using VortexVise.Logic;
 using VortexVise.Models;
 using VortexVise.Utilities;
@@ -212,19 +214,19 @@ public static class GameAssets
                         if (string.IsNullOrEmpty(weaponType)) throw new Exception("Can't read Weapon Type");
                         switch (weaponType)
                         {
-                            case ("PISTOL"): weapon.WeaponType = Enums.WeaponType.Pistol; break;
-                            case ("SMG"): weapon.WeaponType = Enums.WeaponType.SMG; break;
-                            case ("SHOTGUN"): weapon.WeaponType = Enums.WeaponType.Shotgun; break;
-                            case ("MELEE_BLUNT"): weapon.WeaponType = Enums.WeaponType.MeleeBlunt; break;
-                            case ("MELEE_CUT"): weapon.WeaponType = Enums.WeaponType.MeleeCut; break;
-                            case ("GRANADE"): weapon.WeaponType = Enums.WeaponType.Granade; break;
-                            case ("MINE"): weapon.WeaponType = Enums.WeaponType.Mine; break;
-                            case ("BAZOKA"): weapon.WeaponType = Enums.WeaponType.Bazoka; break;
-                            case ("HEAL"): weapon.WeaponType = Enums.WeaponType.Heal; break;
+                            case ("PISTOL"): weapon.WeaponType = WeaponType.Pistol; break;
+                            case ("SMG"): weapon.WeaponType = WeaponType.SMG; break;
+                            case ("SHOTGUN"): weapon.WeaponType = WeaponType.Shotgun; break;
+                            case ("MELEE_BLUNT"): weapon.WeaponType = WeaponType.MeleeBlunt; break;
+                            case ("MELEE_CUT"): weapon.WeaponType = WeaponType.MeleeCut; break;
+                            case ("GRANADE"): weapon.WeaponType = WeaponType.Granade; break;
+                            case ("MINE"): weapon.WeaponType = WeaponType.Mine; break;
+                            case ("BAZOKA"): weapon.WeaponType = WeaponType.Bazoka; break;
+                            case ("HEAL"): weapon.WeaponType = WeaponType.Heal; break;
                         }
 
                         // Get reloadDelay
-                        if (weapon.WeaponType != Enums.WeaponType.Heal)
+                        if (weapon.WeaponType != WeaponType.Heal)
                             weapon.ReloadDelay = float.Parse(Regex.Match(match.Value, @"(?<=RELOAD_TIME\s*=)[\d\.]*(\n|\s\s)").Value, CultureInfo.InvariantCulture);
 
                         // Color
@@ -248,17 +250,17 @@ public static class GameAssets
                         {
                             switch (effect)
                             {
-                                case ("COLD"): weapon.Effect = Enums.StatusEffects.Cold; break;
-                                case ("WET"): weapon.Effect = Enums.StatusEffects.Wet; break;
-                                case ("FIRE"): weapon.Effect = Enums.StatusEffects.Fire; break;
-                                case ("ELETRICITY"): weapon.Effect = Enums.StatusEffects.Eletricity; break;
-                                case ("FREEZED"): weapon.Effect = Enums.StatusEffects.Freezed; break;
-                                case ("CONFUSION"): weapon.Effect = Enums.StatusEffects.Confusion; break;
-                                case ("DIZZY"): weapon.Effect = Enums.StatusEffects.Dizzy; break;
-                                case ("GET_ROTATED"): weapon.Effect = Enums.StatusEffects.GetRotatedIdiot; break;
-                                case ("BLEEDING"): weapon.Effect = Enums.StatusEffects.Bleeding; break;
-                                case ("POISON"): weapon.Effect = Enums.StatusEffects.Poison; break;
-                                case ("HEAL"): weapon.Effect = Enums.StatusEffects.Heal; break;
+                                case ("COLD"): weapon.Effect = StatusEffects.Cold; break;
+                                case ("WET"): weapon.Effect = StatusEffects.Wet; break;
+                                case ("FIRE"): weapon.Effect = StatusEffects.Fire; break;
+                                case ("ELETRICITY"): weapon.Effect = StatusEffects.Eletricity; break;
+                                case ("FREEZED"): weapon.Effect = StatusEffects.Freezed; break;
+                                case ("CONFUSION"): weapon.Effect = StatusEffects.Confusion; break;
+                                case ("DIZZY"): weapon.Effect = StatusEffects.Dizzy; break;
+                                case ("GET_ROTATED"): weapon.Effect = StatusEffects.GetRotatedIdiot; break;
+                                case ("BLEEDING"): weapon.Effect = StatusEffects.Bleeding; break;
+                                case ("POISON"): weapon.Effect = StatusEffects.Poison; break;
+                                case ("HEAL"): weapon.Effect = StatusEffects.Heal; break;
                             }
                             weapon.EffectAmount = Convert.ToInt32(Regex.Match(match.Value, @"(?<=TARGET_EFFECT_AMOUNT=)\d+").Value);
                         }
@@ -272,17 +274,17 @@ public static class GameAssets
                         {
                             switch (effect)
                             {
-                                case ("COLD"): weapon.SelfEffect = Enums.StatusEffects.Cold; break;
-                                case ("WET"): weapon.SelfEffect = Enums.StatusEffects.Wet; break;
-                                case ("FIRE"): weapon.SelfEffect = Enums.StatusEffects.Fire; break;
-                                case ("ELETRICITY"): weapon.SelfEffect = Enums.StatusEffects.Eletricity; break;
-                                case ("FREEZED"): weapon.SelfEffect = Enums.StatusEffects.Freezed; break;
-                                case ("CONFUSION"): weapon.SelfEffect = Enums.StatusEffects.Confusion; break;
-                                case ("DIZZY"): weapon.SelfEffect = Enums.StatusEffects.Dizzy; break;
-                                case ("GET_ROTATED"): weapon.SelfEffect = Enums.StatusEffects.GetRotatedIdiot; break;
-                                case ("BLEEDING"): weapon.SelfEffect = Enums.StatusEffects.Bleeding; break;
-                                case ("POISON"): weapon.SelfEffect = Enums.StatusEffects.Poison; break;
-                                case ("HEAL"): weapon.SelfEffect = Enums.StatusEffects.Heal; break;
+                                case ("COLD"): weapon.SelfEffect = StatusEffects.Cold; break;
+                                case ("WET"): weapon.SelfEffect = StatusEffects.Wet; break;
+                                case ("FIRE"): weapon.SelfEffect = StatusEffects.Fire; break;
+                                case ("ELETRICITY"): weapon.SelfEffect = StatusEffects.Eletricity; break;
+                                case ("FREEZED"): weapon.SelfEffect = StatusEffects.Freezed; break;
+                                case ("CONFUSION"): weapon.SelfEffect = StatusEffects.Confusion; break;
+                                case ("DIZZY"): weapon.SelfEffect = StatusEffects.Dizzy; break;
+                                case ("GET_ROTATED"): weapon.SelfEffect = StatusEffects.GetRotatedIdiot; break;
+                                case ("BLEEDING"): weapon.SelfEffect = StatusEffects.Bleeding; break;
+                                case ("POISON"): weapon.SelfEffect = StatusEffects.Poison; break;
+                                case ("HEAL"): weapon.SelfEffect = StatusEffects.Heal; break;
                             }
                             weapon.SelfEffectAmount = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_EFFECT_AMOUNT=)\d+").Value);
                             weapon.SelfEffectPercentageChance = Convert.ToInt32(Regex.Match(match.Value, @"(?<=SELF_EFFECT_CHANCE=)\d+").Value);

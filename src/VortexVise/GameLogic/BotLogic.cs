@@ -1,4 +1,5 @@
-﻿using VortexVise.GameGlobals;
+﻿using VortexVise.Core.Enums;
+using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.States;
 
@@ -44,7 +45,7 @@ public static class BotLogic
         }
         else if (botState.HeathPoints < GameMatch.DefaultPlayerHeathPoints * 0.4f)
         {
-            bot.DropTarget = state.WeaponDrops.OrderBy(x => Math.Abs(x.Position.Y - botState.Position.Y)).FirstOrDefault(x => x.WeaponState.Weapon.WeaponType == Enums.WeaponType.Heal);
+            bot.DropTarget = state.WeaponDrops.OrderBy(x => Math.Abs(x.Position.Y - botState.Position.Y)).FirstOrDefault(x => x.WeaponState.Weapon.WeaponType == WeaponType.Heal);
         }
         else if (botState.WeaponStates.Count > 0 && bot.DropTarget != null)
         {

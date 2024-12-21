@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using VortexVise.Enums;
+using VortexVise.Core.Enums;
 using VortexVise.Logic;
 using VortexVise.States;
 using VortexVise.Utilities;
@@ -141,10 +141,10 @@ public static class GameRenderer
         {
             switch (weapon.Weapon.WeaponType)
             {
-                case Enums.WeaponType.Shotgun: destRec.Y += 5; break;
-                case Enums.WeaponType.SMG: destRec.Y += 5; break;
-                case Enums.WeaponType.Pistol: destRec.Y += 5; break;
-                case Enums.WeaponType.MeleeBlunt:
+                case WeaponType.Shotgun: destRec.Y += 5; break;
+                case WeaponType.SMG: destRec.Y += 5; break;
+                case WeaponType.Pistol: destRec.Y += 5; break;
+                case WeaponType.MeleeBlunt:
                 {
                     if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
                     {
@@ -160,7 +160,7 @@ public static class GameRenderer
                     }
                     break;
                 }
-                case Enums.WeaponType.MeleeCut:
+                case WeaponType.MeleeCut:
                 {
                     if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
                     {

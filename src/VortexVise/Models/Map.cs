@@ -1,4 +1,4 @@
-﻿using VortexVise.Enums;
+﻿using VortexVise.Core.Enums;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Models;

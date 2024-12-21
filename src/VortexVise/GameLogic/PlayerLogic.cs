@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.States;
 using ZeroElectric.Vinculum;
@@ -356,7 +357,7 @@ public static class PlayerLogic
                     idToRemove = drop.Id;
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;
                     //Heal
-                    if (drop.WeaponState.Weapon.WeaponType == Enums.WeaponType.Heal)
+                    if (drop.WeaponState.Weapon.WeaponType == WeaponType.Heal)
                     {
                         currentPlayerState.HeathPoints += drop.WeaponState.Weapon.Damage;
                         if (currentPlayerState.HeathPoints > GameMatch.DefaultPlayerHeathPoints) currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;

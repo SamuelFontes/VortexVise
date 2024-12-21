@@ -1,4 +1,4 @@
-﻿using VortexVise.Enums;
+﻿using VortexVise.Core.Enums;
 using VortexVise.GameGlobals;
 using ZeroElectric.Vinculum;
 

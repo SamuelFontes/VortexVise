@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
-using VortexVise.Enums;
+using VortexVise.Core;
+using VortexVise.Core.Enums;
 using VortexVise.Networking;
 using VortexVise.States;
 using VortexVise.Utilities;
@@ -88,7 +89,7 @@ static internal class GameUserInterface
 
     private static void DrawHud()
     {
-        if (GameMatch.GameState?.MatchState == Enums.MatchStates.Playing)
+        if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
             //  Maybe this needs to be optimized who knows
             // Player 1

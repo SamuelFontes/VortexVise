@@ -15,4 +15,8 @@
     <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VortexVise.Core\VortexVise.Core.csproj" />
+  </ItemGroup>
+
 </Project>

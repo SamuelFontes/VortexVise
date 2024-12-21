@@ -1,5 +1,6 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
+using VortexVise.Core.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.States;
 using VortexVise.Utilities;
@@ -67,7 +68,7 @@ public static class WeaponLogic
 
             switch (ws.Weapon.WeaponType)
             {
-                case Enums.WeaponType.MeleeBlunt:
+                case WeaponType.MeleeBlunt:
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
@@ -77,7 +78,7 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
                     break;
                 }
-                case Enums.WeaponType.MeleeCut:
+                case WeaponType.MeleeCut:
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
@@ -87,7 +88,7 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
                     break;
                 }
-                case Enums.WeaponType.Shotgun:
+                case WeaponType.Shotgun:
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
@@ -105,7 +106,7 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick, pitch: 0.5f);
                     break;
                 }
-                case Enums.WeaponType.Granade:
+                case WeaponType.Granade:
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                     p.X -= 16 * currentPlayerState.Direction;
@@ -142,7 +143,7 @@ public static class WeaponLogic
             currentPlayerState.Velocity = new(currentPlayerState.Velocity.X + currentPlayerState.Direction * ws.Weapon.SelfKnockback, currentPlayerState.Velocity.Y);
 
             // Reduce ammo if not melee
-            if (!(ws.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || ws.Weapon.WeaponType == Enums.WeaponType.MeleeCut))
+            if (!(ws.Weapon.WeaponType == WeaponType.MeleeBlunt || ws.Weapon.WeaponType == WeaponType.MeleeCut))
             {
                 ws.CurrentAmmo--;
             }
@@ -167,7 +168,7 @@ public static class WeaponLogic
                     {
                         hitbox.ShouldDisappear = true;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 2f);
-                        if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade)
+                        if (hitbox.Weapon.WeaponType == WeaponType.Granade)
                         {
                             hitbox.Explode(currentGameState);
                         }
@@ -180,7 +181,7 @@ public static class WeaponLogic
                 hitbox.ShouldDisappear = true;
 
             // Melee should follow the player that is using the weapon
-            if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
+            if (hitbox.Weapon.WeaponType == WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == WeaponType.MeleeCut)
             {
                 var player = lastGameState.PlayerStates.FirstOrDefault(p => p.Id == hitbox.PlayerId);
                 if (player != null)
@@ -190,7 +191,7 @@ public static class WeaponLogic
                     hitbox.HitBox = new(p.X - 16, p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
                 }
             }
-            if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) // If is granade apply gravity
+            if (hitbox.Weapon.WeaponType == WeaponType.Granade) // If is granade apply gravity
             {
                 hitbox.Velocity = new(hitbox.Velocity.X, hitbox.Velocity.Y + gravity * 0.5f * deltaTime);
 
@@ -227,10 +228,10 @@ public static class WeaponLogic
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.HitMarker);
                 }
 
-                if (hitbox.Weapon.WeaponType == Enums.WeaponType.Granade) hitbox.Explode(gameState);
+                if (hitbox.Weapon.WeaponType == WeaponType.Granade) hitbox.Explode(gameState);
 
                 // If is melee weapon it should spend ammo when hitting someone
-                if (hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == Enums.WeaponType.MeleeCut)
+                if (hitbox.Weapon.WeaponType == WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == WeaponType.MeleeCut)
                 {
                     hitbox.WeaponState.CurrentAmmo--;
                 }
@@ -243,7 +244,7 @@ public static class WeaponLogic
         foreach (var weapon in currentPlayerState.WeaponStates)
         {
             if (weapon.CurrentAmmo <= 0)
-                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id) && weapon.Weapon.WeaponType != Enums.WeaponType.Granade && weapon.Weapon.WeaponType != Enums.WeaponType.Mine)
+                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id) && weapon.Weapon.WeaponType != WeaponType.Granade && weapon.Weapon.WeaponType != WeaponType.Mine)
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop);
         }
         currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);

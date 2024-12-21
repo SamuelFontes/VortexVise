@@ -1,4 +1,5 @@
-﻿using VortexVise.GameGlobals;
+﻿using VortexVise.Core.Enums;
+using VortexVise.GameGlobals;
 using VortexVise.States;
 
 namespace VortexVise.Logic;
@@ -11,33 +12,33 @@ public static class MatchLogic
 
         if (gameState.MatchTimer < 0)
         {
-            if (gameState.MatchState == Enums.MatchStates.Warmup)
+            if (gameState.MatchState == MatchStates.Warmup)
             {
                 gameState.MatchTimer = GameMatch.MatchLengthInSeconds;
-                gameState.MatchState = Enums.MatchStates.Playing;
+                gameState.MatchState = MatchStates.Playing;
 
                 if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM);
                 else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
             }
-            else if (gameState.MatchState == Enums.MatchStates.Playing)
+            else if (gameState.MatchState == MatchStates.Playing)
             {
                 GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
                 gameState.MatchTimer = 10;
-                gameState.MatchState = Enums.MatchStates.EndScreen;
+                gameState.MatchState = MatchStates.EndScreen;
             }
-            else if (gameState.MatchState == Enums.MatchStates.EndScreen)
+            else if (gameState.MatchState == MatchStates.EndScreen)
             {
                 if (!GameCore.IsNetworkGame) gameState.IsRunning = false;
                 else
                 {
                     gameState.MatchTimer = 10;
-                    gameState.MatchState = Enums.MatchStates.Voting;
+                    gameState.MatchState = MatchStates.Voting;
                 }
             }
-            else if (gameState.MatchState == Enums.MatchStates.Voting)
+            else if (gameState.MatchState == MatchStates.Voting)
             {
                 gameState.MatchTimer = 5;
-                gameState.MatchState = Enums.MatchStates.Warmup;
+                gameState.MatchState = MatchStates.Warmup;
                 MapLogic.LoadNextMap();
             }
         }

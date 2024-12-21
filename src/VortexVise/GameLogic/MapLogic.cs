@@ -1,5 +1,6 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
+using VortexVise.Core.Enums;
 using VortexVise.GameGlobals;
 using VortexVise.Models;
 using VortexVise.Scenes;
@@ -15,7 +16,7 @@ public static class MapLogic
 
     public static void LoadMap(Map map)
     {
-        if (SceneManager.CurrentScene == Enums.GameScene.GAMEPLAY) GameAssets.MusicAndAmbience.StopMusic(); // HACK: this is to stop the music not playing in the main menu
+        if (SceneManager.CurrentScene == GameScene.GAMEPLAY) GameAssets.MusicAndAmbience.StopMusic(); // HACK: this is to stop the music not playing in the main menu
         GameMatch.CurrentMap = map;
 
         // Mirror map
