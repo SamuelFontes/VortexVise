@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexVise", "VortexVise\VortexVise.csproj", "{9CC63E0A-6E31-4999-B008-28E116EBB705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexVise.Desktop", "VortexVise.Desktop\VortexVise.Desktop.csproj", "{9CC63E0A-6E31-4999-B008-28E116EBB705}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexViseEditor", "VortexViseEditor\VortexViseEditor.csproj", "{4DBFB6B5-D4FD-4EB5-B546-2D81B4076789}"
 EndProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VortexVise.Core", "VortexVise.Core\VortexVise.Core.csproj", "{D24D53FC-C797-4000-847A-7B6702ED49D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VortexVise.Core", "VortexVise.Core\VortexVise.Core.csproj", "{D24D53FC-C797-4000-847A-7B6702ED49D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

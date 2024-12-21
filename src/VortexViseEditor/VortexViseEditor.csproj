@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VortexVise\VortexVise.csproj" />
+    <ProjectReference Include="..\VortexVise.Desktop\VortexVise.Desktop.csproj" />
   </ItemGroup>
 
 </Project>
