@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
-using VortexVise.GameGlobals;
-using VortexVise.Models;
+using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
 
 
