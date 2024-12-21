@@ -4,6 +4,7 @@ using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 using Steamworks;
+using VortexVise.Desktop.Services;
 
 // ...
 
@@ -34,8 +35,12 @@ Raylib.HideCursor();                                                            
 Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                            // Set game target FPS
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 
+// Initialize services
+InputService inputService = new InputService();
+
 // Load Assets
 GameAssets.InitializeAssets();                                                                          // Load global data 
+SceneManager sceneManager = new SceneManager(inputService);
 
 // Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
@@ -46,8 +51,7 @@ Raylib.UnloadImage(icon);                                                       
 GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
 
 // Setup and init first screen
-SceneManager.CurrentScene = GameScene.MENU;
-MenuScene.InitMenuScene();
+sceneManager.CurrentScene = GameScene.MENU;
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------
@@ -70,7 +74,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    SceneManager.UpdateScene();
+    sceneManager.UpdateScene(sceneManager);
 
 
     // Update user interface
@@ -85,10 +89,10 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw scene (gameplay or menu)
-    SceneManager.DrawScene();
+    sceneManager.DrawScene();
 
     // Draw full screen rectangle in front of everything when changing screens
-    if (SceneManager.OnTransition) SceneManager.DrawTransition();
+    if (sceneManager.OnTransition) sceneManager.DrawTransition();
 
     // Draw UI on top
     GameUserInterface.DrawUserInterface();
@@ -97,10 +101,10 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 }
 
 // Fade screen to black when exit
-SceneManager.TransitionToNewScene(GameScene.UNKNOWN);
-while (!SceneManager.TransitionFadeOut)
+sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
+while (!sceneManager.TransitionFadeOut)
 {
-    SceneManager.UpdateTransition();
+    sceneManager.UpdateTransition();
 }
 
 // De-Initialization

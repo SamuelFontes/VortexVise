@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
@@ -13,20 +14,26 @@ namespace VortexVise.Desktop.Scenes;
 /// GameplayScene
 /// All gameplay related logic should start here.
 /// </summary>
-static internal class GameplayScene
+public class GameplayScene
 {
-    static int finishScreen = 0;
-    public static double LastTimeAccumulator { get; set; }
-    public static double CurrentTime { get; set; } = 0;
-    public static float Gravity { get; set; } = 1000;
-    public static double DeltaTime { get; set; }
-    public static double LastTime { get; set; }
-    public static GameState LastState = new();
-    public static double Accumulator = 0;
-    public static GameState State = new();
-    public static List<GameState> GameStates = new();
+    int finishScreen = 0;
+    public double LastTimeAccumulator { get; set; }
+    public double CurrentTime { get; set; } = 0;
+    public float Gravity { get; set; } = 1000;
+    public double DeltaTime { get; set; }
+    public double LastTime { get; set; }
+    public GameState LastState = new();
+    public double Accumulator = 0;
+    public GameState State = new();
+    public List<GameState> GameStates = new();
+    public readonly IInputService _inputService;
 
-    static public void InitGameplayScene()
+    public GameplayScene(IInputService inputService)
+    {
+        _inputService = inputService;
+    }
+
+    public void InitGameplayScene()
     {
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
@@ -51,7 +58,7 @@ static internal class GameplayScene
         finishScreen = 0;
     }
 
-    static public void UpdateGameplayScene()
+    public void UpdateGameplayScene(SceneManager sceneManager)
     {
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
@@ -88,14 +95,14 @@ static internal class GameplayScene
             {
                 // Do all the network magic
                 // TODO: The input should be send together instead of one for each player
-                if (GameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad), GameCore.PlayerOneProfile.Id, State.Tick);
-                if (GameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerTwoProfile.Gamepad), GameCore.PlayerTwoProfile.Id, State.Tick);
-                if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, State.Tick);
-                if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(GameInput.GetInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, State.Tick);
+                if (GameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerOneProfile.Gamepad), GameCore.PlayerOneProfile.Id, State.Tick);
+                if (GameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerTwoProfile.Gamepad), GameCore.PlayerTwoProfile.Id, State.Tick);
+                if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, State.Tick);
+                if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, State.Tick);
 
                 if (GameClient.IsHost)
                 {
-                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                     State.OwnerId = GameCore.PlayerOneProfile.Id;
                     GameClient.SendState(State);
                 }
@@ -111,19 +118,19 @@ static internal class GameplayScene
                         //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
                         // TODO: Simulate all ticks in the past up to current one, apply approximations on the state that matches the tick received 
 
-                        State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                        State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                         GameClient.LastTickSimluated = receivedState.Tick;
                     }
                     else
                     {
                         // Client-Side Prediction
-                        State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                        State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                     }
                 }
             }
             else
             {
-                State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true);
+                State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
             }
             simulationTime -= DeltaTime;
             LastTime += DeltaTime;
@@ -137,7 +144,7 @@ static internal class GameplayScene
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
             double accumulatorSimulationTime = CurrentTime - LastTimeAccumulator;
             Accumulator += accumulatorSimulationTime;
-            State = GameLogic.SimulateState(LastState, CurrentTime, (float)accumulatorSimulationTime, false);
+            State = GameLogic.SimulateState(LastState, CurrentTime, (float)accumulatorSimulationTime, false, _inputService, sceneManager);
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
@@ -162,7 +169,7 @@ static internal class GameplayScene
         if (!State.IsRunning) finishScreen = 1;
     }
 
-    static public void DrawGameplayScene()
+    public void DrawGameplayScene()
     {
         Raylib.ClearBackground(Raylib.BLACK);
         if (State.PlayerStates.Count == 0) return;
@@ -183,7 +190,7 @@ static internal class GameplayScene
 
     }
 
-    static public void UnloadGameplayScene()
+    public void UnloadGameplayScene()
     {
         CameraLogic.Unload();
         PlayerLogic.Unload();
@@ -194,7 +201,7 @@ static internal class GameplayScene
         GC.Collect();
     }
 
-    static public int FinishGameplayScene()
+    public int FinishGameplayScene()
     {
         return finishScreen;
     }

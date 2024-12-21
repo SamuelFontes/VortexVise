@@ -1,4 +1,5 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
 using ZeroElectric.Vinculum;
 
@@ -7,16 +8,26 @@ namespace VortexVise.Desktop.Scenes;
 /// <summary>
 /// This should handle the scene transitions and define what is the current scene on the game.
 /// </summary>
-static internal class SceneManager
+ public class SceneManager
 {
-    public static float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
-    public static bool OnTransition { get; set; } = false;                      // Is scene transition happening
-    public static bool TransitionFadeOut { get; set; } = false;                 // Is scene fading out
-    public static GameScene TransitionFromScene { get; set; } = GameScene.UNKNOWN;// Last scene
-    public static GameScene TransitionToScene { get; set; } = GameScene.UNKNOWN;// New scene
-    public static GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
+    private MenuScene MenuScene { get; set; } 
+    private GameplayScene GameplayScene { get; set; } 
+    public  float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
+    public  bool OnTransition { get; set; } = false;                      // Is scene transition happening
+    public  bool TransitionFadeOut { get; set; } = false;                 // Is scene fading out
+    public  GameScene TransitionFromScene { get; set; } = GameScene.UNKNOWN;// Last scene
+    public  GameScene TransitionToScene { get; set; } = GameScene.UNKNOWN;// New scene
+    public  GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
+    private readonly IInputService _inputService;
 
-    public static void TransitionToNewScene(GameScene scene)
+    public SceneManager(IInputService inputService)
+    {
+        _inputService = inputService;
+        MenuScene = new MenuScene(_inputService, this);
+        GameplayScene = new GameplayScene(_inputService);
+    }
+
+    public  void TransitionToNewScene(GameScene scene)
     {
         OnTransition = true;
         TransitionFadeOut = false;
@@ -26,7 +37,7 @@ static internal class SceneManager
     }
 
     // Update transition effect (fade-in, fade-out)
-    public static void UpdateTransition()
+    public  void UpdateTransition()
     {
         if (!TransitionFadeOut)
         {
@@ -56,7 +67,7 @@ static internal class SceneManager
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
                     case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(); break;
-                    case GameScene.MENU: MenuScene.InitMenuScene(); break;
+                    case GameScene.MENU: MenuScene = new MenuScene(_inputService,this); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
                 }
@@ -83,12 +94,12 @@ static internal class SceneManager
     }
 
     // Draw transition effect (full-screen rectangle)
-    public static void DrawTransition()
+    public  void DrawTransition()
     {
         Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, Raylib.Fade(Raylib.BLACK, TransitionAlpha));
     }
 
-    public static void UpdateScene()
+    public  void UpdateScene(SceneManager sceneManager)
     {
         if (!OnTransition)
         {
@@ -98,7 +109,7 @@ static internal class SceneManager
             {
                 case GameScene.GAMEPLAY:
                 {
-                    GameplayScene.UpdateGameplayScene();
+                    GameplayScene.UpdateGameplayScene(sceneManager);
                     if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
                     //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
@@ -117,7 +128,7 @@ static internal class SceneManager
         else UpdateTransition();    // Update transition (fade-in, fade-out)
     }
 
-    public static void DrawScene()
+    public  void DrawScene()
     {
         switch (CurrentScene)
         {

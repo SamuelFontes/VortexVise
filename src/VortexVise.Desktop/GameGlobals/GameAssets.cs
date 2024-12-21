@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
+using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -40,7 +41,6 @@ public static class GameAssets
         // Gameplay
         //---------------------------------------------------------
         Gameplay.LoadWeapons();
-        Gameplay.LoadMaps();
         Gameplay.LoadSkins();
 
         // Animation
@@ -50,6 +50,8 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         GameUserInterface.InitUserInterface();
+
+        Gameplay.LoadMaps();
     }
 
     /// <summary>

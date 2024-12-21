@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Networking;
@@ -13,28 +14,32 @@ enum MenuState { MainMenu, PressStart, InputSelection, Online, Connecting, Lobby
 /// <summary>
 /// Main Menu Scene
 /// </summary>
-public static class MenuScene
+public class MenuScene
 {
-    static readonly List<UIMenuItem> menuItems = [];
-    static int finishScreen = 0;
-    static Texture logo;
-    static Texture background;
-    static Texture box;
-    static Texture keyboard;
-    static Texture gamepad;
-    static Texture gamepadSlotOn;
-    static Texture gamepadSlotOff;
-    static Texture disconnected;
-    static Texture arrow;
-    static Guid selected = Guid.Empty;
-    static Guid lastSelected;
-    static MenuState currentState = MenuState.PressStart;
-    static float arrowAnimationTimer = 0;
-    static bool arrowExpanding = true;
+    readonly List<UIMenuItem> menuItems = [];
+    int finishScreen = 0;
+    Texture logo;
+    private Texture background {get;set;}
+    Texture box;
+    Texture keyboard;
+    Texture gamepad;
+    Texture gamepadSlotOn;
+    Texture gamepadSlotOff;
+    Texture disconnected;
+    Texture arrow;
+    public Guid selected = Guid.Empty;
+    public Guid lastSelected;
+    MenuState currentState = MenuState.PressStart;
+    float arrowAnimationTimer = 0;
+    bool arrowExpanding = true;
+    private readonly IInputService _inputService;
+    private SceneManager _sceneManager;
 
-
-    static public void InitMenuScene()
+    public MenuScene(IInputService inputService, SceneManager sceneManager)
     {
+        _inputService = inputService;
+        _sceneManager = sceneManager;
+
         GameUserInterface.DisableCursor = false;
         // Initialize menu
         //----------------------------------------------------------------------------------
@@ -65,47 +70,47 @@ public static class MenuScene
 
         // PRESS START
         var state = MenuState.PressStart;
-        menuItems.Add(new UIMenuItem("PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem(this,"PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
         if (selected == Guid.Empty) selected = menuItems[0].Id;
         state = MenuState.MainMenu;
 
         // MAIN MENU
         var yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
 
         // LOBBY
         state = MenuState.Lobby;
         Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem($"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
+        menuItems.Add(new UIMenuItem(this,$"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
         //menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         //yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem($"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,$"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize * 2;
-        menuItems.Add(new UIMenuItem("START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
 
         // ONLINE
         state = MenuState.Online;
         yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem("GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this,"GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
 
         UpdateMenuScene();
     }
 
-    static public void UpdateMenuScene()
+    public void UpdateMenuScene()
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -131,7 +136,7 @@ public static class MenuScene
         }
         else // MAIN MENU
         {
-            var input = GameInput.GetInput(GameCore.PlayerOneProfile.Gamepad);
+            var input = _inputService.ReadPlayerInput(GameCore.PlayerOneProfile.Gamepad);
             if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
             {
                 if (currentState == MenuState.InputSelection)
@@ -265,7 +270,7 @@ public static class MenuScene
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
-                    MapLogic.LoadNextMap();
+                    MapLogic.LoadNextMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
@@ -281,7 +286,7 @@ public static class MenuScene
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
                     GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection, pitch: 2);
-                    MapLogic.LoadPreviousMap();
+                    MapLogic.LoadPreviousMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
@@ -325,7 +330,7 @@ public static class MenuScene
         {
             for (int i = -1; i < 4; i++)
             {
-                var input = GameInput.GetInput(i);
+                var input = _inputService.ReadPlayerInput(i);
                 if (input.Back)
                 {
                     // Disconnect or go back one screen 
@@ -454,7 +459,7 @@ public static class MenuScene
             arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
     }
 
-    static public void DrawMenuScene()
+    public void DrawMenuScene()
     {
         // Draw Background, Logo and Misc
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
@@ -504,7 +509,7 @@ public static class MenuScene
 
     }
 
-    static public void UnloadMenuScene()
+    public void UnloadMenuScene()
     {
         Raylib.UnloadTexture(logo);
         Raylib.UnloadTexture(background);
@@ -519,12 +524,12 @@ public static class MenuScene
         GC.Collect();
 
     }
-    static public int FinishMenuScene()
+    public int FinishMenuScene()
     {
         return finishScreen;
     }
 
-    static void PlaySelectionSound()
+    void PlaySelectionSound()
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
@@ -533,7 +538,8 @@ public static class MenuScene
     }
     class UIMenuItem
     {
-        public UIMenuItem(string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition, string value = "")
+        private readonly MenuScene scene;
+        public UIMenuItem(MenuScene menuScene, string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition, string value = "")
         {
             Id = Guid.NewGuid();
             Text = text;
@@ -544,6 +550,7 @@ public static class MenuScene
             Type = type;
             CenterPosition = centerPosition;
             Value = value;
+            scene = menuScene;
         }
         public Guid Id { get; }
         public string Value { get; set; }
@@ -551,7 +558,7 @@ public static class MenuScene
         public MenuItem Item { get; set; }
         public MenuState State { get; set; }
         public bool IsEnabled { get; set; }
-        public bool IsSelected { get { return selected == Id; } }
+        public bool IsSelected { get { return scene.selected == Id; } }
         public Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
         public int Size { get; set; }
@@ -575,13 +582,13 @@ public static class MenuScene
             // Check if mouse is selecting the menu
             if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, TextSize.X, TextSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
             {
-                selected = Id;
+                scene.selected = Id;
             }
 
             // Make press start always selected
-            if (currentState == MenuState.PressStart && Item == MenuItem.PressStart)
+            if (scene.currentState == MenuState.PressStart && Item == MenuItem.PressStart)
             {
-                selected = Id;
+                scene.selected = Id;
             }
 
             // Paint the text
@@ -605,15 +612,15 @@ public static class MenuScene
                 var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
                 if (textBoxSize.X % 2 != 0) textBoxSize.X++;
                 if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
-                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new((int)Position.X + textBoxSize.X + 8 + (int)arrowAnimationTimer, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new((int)Position.X - 16 - (int)arrowAnimationTimer - arrow.width, Position.Y + 8, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(scene.arrow, new(0, 0, scene.arrow.width, scene.arrow.height), new((int)Position.X + textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, Position.Y + 8, scene.arrow.width * 2, scene.arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                Raylib.DrawTexturePro(scene.arrow, new(0, 0, -scene.arrow.width, scene.arrow.height), new((int)Position.X - 16 - (int)scene.arrowAnimationTimer - scene.arrow.width, Position.Y + 8, scene.arrow.width * 2, scene.arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
             }
 
         }
     }
 
 
-    private static void DrawInputSelection()
+    private void DrawInputSelection()
     {
         Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100)); // Overlay
 
@@ -636,7 +643,7 @@ public static class MenuScene
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
         DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
-        static void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, Texture player)
+        void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, Texture player)
         {
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);

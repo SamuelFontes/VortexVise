@@ -1,12 +1,14 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.Logic;
 
 public static class MatchLogic
 {
-    public static void HandleMatchState(GameState gameState, float deltaTime)
+    public static void HandleMatchState(GameState gameState, float deltaTime, SceneManager sceneManager)
     {
         gameState.MatchTimer -= deltaTime;
 
@@ -39,7 +41,7 @@ public static class MatchLogic
             {
                 gameState.MatchTimer = 5;
                 gameState.MatchState = MatchStates.Warmup;
-                MapLogic.LoadNextMap();
+                MapLogic.LoadNextMap(sceneManager);
             }
         }
     }

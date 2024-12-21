@@ -1,5 +1,7 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.Logic;
@@ -9,7 +11,7 @@ namespace VortexVise.Desktop.Logic;
 /// </summary>
 public static class GameLogic
 {
-    public static GameState SimulateState(GameState lastState, double currentTime, float deltaTime, bool isNetworkFrame)
+    public static GameState SimulateState(GameState lastState, double currentTime, float deltaTime, bool isNetworkFrame, IInputService inputService, SceneManager sceneManager)
     {
         GameState state = new()
         {
@@ -24,7 +26,7 @@ public static class GameLogic
             Tick = isNetworkFrame ? lastState.Tick + 1 : lastState.Tick,
         };
 
-        MatchLogic.HandleMatchState(state, deltaTime);
+        MatchLogic.HandleMatchState(state, deltaTime,sceneManager);
         MatchLogic.ProcessKillFeed(state, deltaTime);
 
         if (state.MatchState == MatchStates.Warmup)
@@ -47,7 +49,7 @@ public static class GameLogic
                 PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
 
                 // Either read player input or get input from last frame 
-                if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState))
+                if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState,inputService))
                     currentPlayerState.Input = lastPlayerState.Input;
                 // TODO: Get input from network players here for the corresponding tick
                 if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state, currentPlayerState);

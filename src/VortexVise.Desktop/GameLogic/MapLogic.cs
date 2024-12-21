@@ -16,7 +16,9 @@ public static class MapLogic
 
     public static void LoadMap(Map map)
     {
-        if (SceneManager.CurrentScene == GameScene.GAMEPLAY) GameAssets.MusicAndAmbience.StopMusic(); // HACK: this is to stop the music not playing in the main menu
+        //if (shouldStopMusic) GameAssets.MusicAndAmbience.StopMusic(); 
+        // FIXME: when in gameplay it should stop the music
+
         GameMatch.CurrentMap = map;
 
         // Mirror map
@@ -49,12 +51,12 @@ public static class MapLogic
         LoadMap(map);
     }
 
-    public static void LoadNextMap()
+    public static void LoadNextMap(SceneManager sceneManager)
     {
         var map = GameAssets.Gameplay.Maps.SkipWhile(x => x.Id != GameMatch.CurrentMap.Id).Skip(1).DefaultIfEmpty(GameAssets.Gameplay.Maps.First()).First();
         LoadMap(map);
     }
-    public static void LoadPreviousMap()
+    public static void LoadPreviousMap(SceneManager sceneManager)
     {
         var map = GameAssets.Gameplay.Maps.TakeWhile(x => x.Id != GameMatch.CurrentMap.Id).DefaultIfEmpty(GameAssets.Gameplay.Maps.Last()).Last();
         LoadMap(map);
