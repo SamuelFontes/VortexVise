@@ -74,7 +74,7 @@ public static class WeaponLogic
                     {
                         var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                         p.X -= 16 * currentPlayerState.Direction;
-                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)(p.X - 16), (int)p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((p.X - 16),p.Y - 20),new(0, 0, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                         gameState.DamageHitBoxes.Add(hitbox);
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
@@ -84,7 +84,7 @@ public static class WeaponLogic
                     {
                         var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                         p.X -= 16 * currentPlayerState.Direction;
-                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20),new(0,0, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
                         gameState.DamageHitBoxes.Add(hitbox);
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
@@ -95,13 +95,13 @@ public static class WeaponLogic
                         var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
                         p.X -= 16 * currentPlayerState.Direction;
 
-                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true, currentPlayerState.WeaponStates[0]);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16),new(0,0, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true, currentPlayerState.WeaponStates[0]);
                         gameState.DamageHitBoxes.Add(hitbox);
 
-                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true, currentPlayerState.WeaponStates[0]);
+                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16),new(0,0, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true, currentPlayerState.WeaponStates[0]);
                         gameState.DamageHitBoxes.Add(hitbox);
 
-                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true, currentPlayerState.WeaponStates[0]);
+                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16),new(0,0, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true, currentPlayerState.WeaponStates[0]);
                         gameState.DamageHitBoxes.Add(hitbox);
 
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Shotgun, pitch: 1.5f);
@@ -132,7 +132,7 @@ public static class WeaponLogic
                             velocity = new(0, -GameMatch.GranadeForce);
                         velocity = Utils.OnlyAddVelocity(velocity, currentPlayerState.Velocity, 2);
 
-                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 20, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 20),new(0,0, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
                         gameState.DamageHitBoxes.Add(hitbox);
 
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.4f);
@@ -159,7 +159,11 @@ public static class WeaponLogic
         {
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
 
-            hitbox.HitBox = new System.Drawing.Rectangle((int)(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime), (int)(hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime), hitbox.HitBox.Width, hitbox.HitBox.Height);
+            hitbox.Position = new((hitbox.Position.X + hitbox.Velocity.X * deltaTime), (hitbox.Position.Y + hitbox.Velocity.Y * deltaTime));
+            hitbox.HitBox = new System.Drawing.Rectangle((int)hitbox.Position.X, 
+                (int)hitbox.Position.Y, 
+                hitbox.HitBox.Width, 
+                hitbox.HitBox.Height);
 
             // Check projectile collision with map
             if (hitbox.ShouldColide)
@@ -190,7 +194,8 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(player.Position);
                     p.X -= 16 * player.Direction;
-                    hitbox.HitBox = new((int)p.X - 16, (int)p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
+                    hitbox.Position = new(p.X - 16,p.Y - 20);
+                    hitbox.HitBox = new System.Drawing.Rectangle((int)hitbox.Position.X, (int)hitbox.Position.Y, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
                 }
             }
             if (hitbox.Weapon.WeaponType == WeaponType.Granade) // If is granade apply gravity

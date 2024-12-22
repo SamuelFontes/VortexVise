@@ -11,9 +11,12 @@ namespace VortexVise.Desktop.States;
 /// </summary>
 public class DamageHitBoxState
 {
-    public DamageHitBoxState(Guid playerId, System.Drawing.Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide, WeaponState weaponState)
+    public DamageHitBoxState(Guid playerId,Vector2 position, System.Drawing.Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide, WeaponState weaponState)
     {
         PlayerId = playerId;
+        Position = position;
+        hitBox.X = (int)position.X;
+        hitBox.Y = (int)position.Y;
         HitBox = hitBox;
         Weapon = weapon;
         HitBoxTimer = hitBoxTimer;
@@ -25,6 +28,7 @@ public class DamageHitBoxState
 
     public Guid PlayerId { get; set; }
     public System.Drawing.Rectangle HitBox { get; set; }
+    public Vector2 Position { get; set; }
     public Vector2 Velocity { get; set; }
     public SerializableVector2 SerializableVelocity { get; set; }
     public Weapon Weapon { get; set; }
