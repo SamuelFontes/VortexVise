@@ -37,22 +37,22 @@ public static class GameRenderer
         DrawHookState(rendererService, mainPlayer);
         DrawPlayerState(mainPlayer);
         DrawProjectiles(state);
-        DrawStateAnimations(state);
+        DrawStateAnimations(rendererService,state);
         DrawHud(state, mainPlayer);
     }
 
-    private static void DrawStateAnimations(GameState state)
+    private static void DrawStateAnimations(IRendererService rendererService,GameState state)
     {
         foreach (var animation in state.Animations)
         {
             if (animation.Animation == null) continue;
 
             var frameStartX = animation.State * animation.Animation.Size;
-            Rectangle sourceRec = new(frameStartX, 0.0f, animation.Animation.Size, animation.Animation.Texture.height);
+            System.Drawing.Rectangle sourceRec = new(frameStartX, 0, animation.Animation.Size, animation.Animation.Texture.Height);
 
-            Rectangle destRec = new((int)animation.Position.X, (int)animation.Position.Y, animation.Animation.Size * animation.Animation.Scale, animation.Animation.Texture.height * animation.Animation.Scale);
+            System.Drawing.Rectangle destRec = new((int)animation.Position.X, (int)animation.Position.Y, animation.Animation.Size * animation.Animation.Scale, animation.Animation.Texture.Height * animation.Animation.Scale);
 
-            Raylib.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, animation.Animation.Color);
+            rendererService.DrawTexturePro(animation.Animation.Texture, sourceRec, destRec, new(0, 0), 0, animation.Animation.Color);
 
         }
     }
