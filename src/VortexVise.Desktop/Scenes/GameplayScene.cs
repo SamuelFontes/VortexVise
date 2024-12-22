@@ -58,7 +58,7 @@ public class GameplayScene
         finishScreen = 0;
     }
 
-    public void UpdateGameplayScene(SceneManager sceneManager)
+    public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService)
     {
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
@@ -102,7 +102,7 @@ public class GameplayScene
 
                 if (GameClient.IsHost)
                 {
-                    State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                    State = GameLogic.SimulateState(collisionService,LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                     State.OwnerId = GameCore.PlayerOneProfile.Id;
                     GameClient.SendState(State);
                 }
@@ -118,19 +118,19 @@ public class GameplayScene
                         //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
                         // TODO: Simulate all ticks in the past up to current one, apply approximations on the state that matches the tick received 
 
-                        State = GameLogic.SimulateState(receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                        State = GameLogic.SimulateState(collisionService,receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                         GameClient.LastTickSimluated = receivedState.Tick;
                     }
                     else
                     {
                         // Client-Side Prediction
-                        State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                        State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
                     }
                 }
             }
             else
             {
-                State = GameLogic.SimulateState(LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
             }
             simulationTime -= DeltaTime;
             LastTime += DeltaTime;
@@ -144,7 +144,7 @@ public class GameplayScene
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
             double accumulatorSimulationTime = CurrentTime - LastTimeAccumulator;
             Accumulator += accumulatorSimulationTime;
-            State = GameLogic.SimulateState(LastState, CurrentTime, (float)accumulatorSimulationTime, false, _inputService, sceneManager);
+            State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)accumulatorSimulationTime, false, _inputService, sceneManager);
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
@@ -169,7 +169,7 @@ public class GameplayScene
         if (!State.IsRunning) finishScreen = 1;
     }
 
-    public void DrawGameplayScene()
+    public void DrawGameplayScene(IRendererService rendererService)
     {
         Raylib.ClearBackground(Raylib.BLACK);
         if (State.PlayerStates.Count == 0) return;
@@ -184,7 +184,7 @@ public class GameplayScene
             else return;
 
             CameraLogic.BeginDrawingToCamera(i, player.Position);
-            GameRenderer.DrawGameState(State, player);
+            GameRenderer.DrawGameState(rendererService,State, player);
             CameraLogic.EndDrawingToCamera(i, player.IsDead);
         }
 

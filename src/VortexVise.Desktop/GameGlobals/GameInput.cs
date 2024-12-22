@@ -1,6 +1,5 @@
 ﻿using VortexVise.Desktop.States;
 using VortexVise.Core.States;
-using ZeroElectric.Vinculum;
 using VortexVise.Core.Interfaces;
 
 namespace VortexVise.Desktop.GameGlobals;

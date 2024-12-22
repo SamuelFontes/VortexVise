@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Scenes;
@@ -24,7 +26,7 @@ public static class GameAssets
     /// <summary>
     /// Initialize all global assets when the game starts.
     /// </summary>
-    public static void InitializeAssets()
+    public static void InitializeAssets(IAssetService assetService)
     {
         // Misc
         //---------------------------------------------------------
@@ -51,13 +53,13 @@ public static class GameAssets
         //---------------------------------------------------------
         GameUserInterface.InitUserInterface();
 
-        Gameplay.LoadMaps();
+        Gameplay.LoadMaps(assetService);
     }
 
     /// <summary>
     /// Unload all game assets before game closes.
     /// </summary>
-    public static void UnloadAssets()
+    public static void UnloadAssets(IAssetService assetService)
     {
         // Misc
         //---------------------------------------------------------
@@ -74,7 +76,7 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        foreach (var map in GameAssets.Gameplay.Maps) Raylib.UnloadTexture(map.Texture);
+        foreach (var map in GameAssets.Gameplay.Maps) assetService.UnloadTexture(map.Texture);
         foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
         foreach (var w in GameAssets.Gameplay.Weapons)
         {
@@ -148,7 +150,7 @@ public static class GameAssets
             }
 
         }
-        public static void LoadMaps()
+        public static void LoadMaps(IAssetService assetService)
         {
             string mapLocation = "Resources/Maps";
             // Get all files from the Resources/Maps folder to read list of avaliable game levels aka maps
@@ -170,7 +172,7 @@ public static class GameAssets
                     //if (!pngFiles.Contains(map.TextureLocation)) throw new Exception($"Can't find image file {map.TextureLocation}");
                     map.MapLocation = file;
                     map.Id = Utils.GetFileChecksum(file);
-                    map.Texture = Raylib.LoadTexture(map.TextureLocation);
+                    map.Texture = assetService.LoadTexture(map.TextureLocation);
                     Maps.Add(map);
                 }
                 catch (Exception ex)

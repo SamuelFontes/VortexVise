@@ -1,5 +1,6 @@
 ﻿
 using VortexVise.Core.Enums;
+using VortexVise.Core.Models;
 
 namespace VortexVise.Desktop.Models;
 

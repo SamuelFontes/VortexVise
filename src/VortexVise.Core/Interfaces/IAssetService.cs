@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VortexVise.Core.Models;
 
 namespace VortexVise.Core.Interfaces
 {
-    internal interface IAssetService
+    public interface IAssetService
     {
+        public ITextureAsset LoadTexture(string fileName); 
+        void UnloadTexture(ITextureAsset texture);
     }
 }

@@ -459,7 +459,7 @@ public class MenuScene
             arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
     }
 
-    public void DrawMenuScene()
+    public void DrawMenuScene(IRendererService rendererService)
     {
         // Draw Background, Logo and Misc
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
@@ -480,9 +480,9 @@ public class MenuScene
             // Draw map
             var mapCenterPostion = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.37f);
             var size = 176;
-            var rec = new Rectangle(mapCenterPostion.X - size / 2, mapCenterPostion.Y - size / 2, size, size);
-            Raylib.DrawRectangle((int)rec.x - 8, (int)rec.y - 8, (int)rec.width + 16, (int)rec.height + 16, Raylib.BLACK);
-            Raylib.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.width, GameMatch.CurrentMap.Texture.height), rec, new(0, 0), 0, Raylib.WHITE);
+            var rec = new System.Drawing.Rectangle((int)(mapCenterPostion.X - size / 2), (int)(mapCenterPostion.Y - size / 2), size, size);
+            Raylib.DrawRectangle((int)rec.X - 8, (int)rec.Y - 8, (int)rec.Width + 16, (int)rec.Height + 16, Raylib.BLACK);
+            rendererService.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.Width, GameMatch.CurrentMap.Texture.Height), rec, new(0, 0), 0, System.Drawing.Color.White);
 
             if (!GameCore.IsNetworkGame)
             {

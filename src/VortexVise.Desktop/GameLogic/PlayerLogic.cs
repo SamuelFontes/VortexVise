@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.States;
 using ZeroElectric.Vinculum;
@@ -179,7 +181,7 @@ public static class PlayerLogic
         currentPlayerState.Position += new Vector2(currentPlayerState.Velocity.X * deltaTime, currentPlayerState.Velocity.Y * deltaTime);
     }
 
-    public static void ApplyCollisions(PlayerState currentPlayerState, PlayerState lastPlayerState, float deltaTime)
+    public static void ApplyCollisions(PlayerState currentPlayerState, PlayerState lastPlayerState, float deltaTime, ICollisionService collisionService)
     {
         var wasTouchingTheGround = currentPlayerState.IsTouchingTheGround;
         currentPlayerState.IsTouchingTheGround = false;
@@ -211,15 +213,15 @@ public static class PlayerLogic
             currentPlayerState.Velocity = new Vector2(0, currentPlayerState.Velocity.Y);
         }
 
-        List<Rectangle> playerCollisions = [];
+        List<System.Drawing.Rectangle> playerCollisions = [];
         var differenceX = currentPlayerState.Collision.X - lastPlayerState.Collision.X;
         var differenceY = currentPlayerState.Collision.Y - lastPlayerState.Collision.Y;
-        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.2f, lastPlayerState.Collision.Y + differenceY * 0.2f, 16, 16));
-        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.4f, lastPlayerState.Collision.Y + differenceY * 0.4f, 16, 16));
-        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16));
-        playerCollisions.Add(new(lastPlayerState.Collision.X + differenceX * 0.8f, lastPlayerState.Collision.Y + differenceY * 0.8f, 16, 16));
+        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.2f, lastPlayerState.Collision.Y + differenceY * 0.2f, 16, 16).ToDrawingRectangle());
+        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.4f, lastPlayerState.Collision.Y + differenceY * 0.4f, 16, 16).ToDrawingRectangle());
+        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16).ToDrawingRectangle());
+        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.8f, lastPlayerState.Collision.Y + differenceY * 0.8f, 16, 16).ToDrawingRectangle());
 
-        playerCollisions.Add(currentPlayerState.Collision);
+        playerCollisions.Add(currentPlayerState.Collision.ToDrawingRectangle());
 
         bool colided = false;
         // Apply map collisions
@@ -232,11 +234,11 @@ public static class PlayerLogic
             }
             foreach (var collision in MapLogic.GetCollisions())
             {
-                if (Raylib.CheckCollisionRecs(playerCollision, collision))
+                if (collisionService.CheckCollisionRecs(playerCollision, collision))
                 {
 
                     // This means the player is inside the thing 
-                    var collisionOverlap = Raylib.GetCollisionRec(playerCollision, collision);
+                    var collisionOverlap = collisionService.GetCollisionRec(playerCollision, collision);
 
                     Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
 
@@ -286,8 +288,8 @@ public static class PlayerLogic
         if (wasTouchingTheGround && !currentPlayerState.IsTouchingTheGround)
         {
             var feetColided = false;
-            Rectangle playerFeet = new Rectangle(currentPlayerState.Collision.X, currentPlayerState.Collision.Y + currentPlayerState.Collision.Height, currentPlayerState.Collision.Width, 1);
-            foreach (var collision in MapLogic.GetCollisions()) if (Raylib.CheckCollisionRecs(collision, playerFeet)) feetColided = true;
+            System.Drawing.Rectangle playerFeet = new System.Drawing.Rectangle((int)currentPlayerState.Collision.X, (int)(currentPlayerState.Collision.Y + currentPlayerState.Collision.Height), (int)currentPlayerState.Collision.Width, 1);
+            foreach (var collision in MapLogic.GetCollisions()) if (collisionService.CheckCollisionRecs(collision, playerFeet)) feetColided = true;
             if (feetColided)
             {
                 currentPlayerState.IsTouchingTheGround = true;

@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -16,24 +17,24 @@ public static class GameRenderer
     /// Render game state to the screen.
     /// </summary>
     /// <param name="state">Current game state.</param>
-    public static void DrawGameState(GameState state, PlayerState mainPlayer)
+    public static void DrawGameState(IRendererService rendererService, GameState state, PlayerState mainPlayer)
     {
         // Clears menu states
         GameUserInterface.IsShowingScoreboard = false;
 
         // All rendering logic should go here
-        DrawMap();
-        DrawWeaponDrops(state);
+        DrawMap(rendererService);
+        DrawWeaponDrops(rendererService, state);
         foreach (var playerState in state.PlayerStates)
         {
             if (playerState.Id == mainPlayer.Id) continue;
 
-            DrawHookState(playerState);
+            DrawHookState(rendererService, playerState);
             DrawPlayerState(playerState);
             DrawEnemyHealthBar(playerState);
         }
         // Draw main player on top for this screen
-        DrawHookState(mainPlayer);
+        DrawHookState(rendererService, mainPlayer);
         DrawPlayerState(mainPlayer);
         DrawProjectiles(state);
         DrawStateAnimations(state);
@@ -63,27 +64,27 @@ public static class GameRenderer
             if (hitbox.Weapon.ProjectileTextureLocation == string.Empty) continue;
             Rectangle sourceRec = new(0.0f, 0.0f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
 
-            Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.height * 0.5f), hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+            Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.Width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.Height * 0.5f), hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
 
             Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.height * 0.5f)), (int)WeaponLogic.WeaponRotation * 23, Raylib.WHITE);
         }
 
     }
 
-    static void DrawMap()
+    static void DrawMap(IRendererService rendererService)
     {
-        Raylib.DrawTextureRec(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.width * GameMatch.MapMirrored, GameMatch.CurrentMap.Texture.height), new Vector2(0, 0), Raylib.WHITE);
+        rendererService.DrawTextureRec(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.Width * GameMatch.MapMirrored, GameMatch.CurrentMap.Texture.Height), new Vector2(0, 0), System.Drawing.Color.White);
         if (Utils.Debug())
         {
             foreach (var collision in GameMatch.CurrentMap.Collisions) // DEBUG
             {
-                Raylib.DrawRectangleRec(collision, Raylib.BLUE);
+                rendererService.DrawRectangleRec(collision, System.Drawing.Color.Blue);
             }
         }
 
     }
 
-    static void DrawWeaponDrops(GameState currentGameState)
+    static void DrawWeaponDrops(IRendererService rendererService,GameState currentGameState)
     {
         foreach (var drop in currentGameState.WeaponDrops)
         {
@@ -97,10 +98,10 @@ public static class GameRenderer
 
             if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
         }
-        if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) Raylib.DrawRectangleRec(h.HitBox, Raylib.RED); // Debug
+        if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) rendererService.DrawRectangleRec(h.HitBox, System.Drawing.Color.Red); // Debug
     }
 
-    static void DrawHookState(PlayerState playerState)
+    static void DrawHookState(IRendererService rendererService,PlayerState playerState)
     {
         if (playerState.IsDead) return;
         if (playerState.HookState.IsHookReleased)
@@ -109,7 +110,7 @@ public static class GameRenderer
             Raylib.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
 
             if (Utils.Debug())
-                Raylib.DrawRectangleRec(playerState.HookState.Collision, Raylib.GREEN); // Debug
+                rendererService.DrawRectangleRec(playerState.HookState.Collision, System.Drawing.Color.Green); // Debug
         }
 
 

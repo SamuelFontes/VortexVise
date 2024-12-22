@@ -8,16 +8,16 @@ namespace VortexVise.Desktop.Scenes;
 /// <summary>
 /// This should handle the scene transitions and define what is the current scene on the game.
 /// </summary>
- public class SceneManager
+public class SceneManager
 {
-    private MenuScene MenuScene { get; set; } 
-    private GameplayScene GameplayScene { get; set; } 
-    public  float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
-    public  bool OnTransition { get; set; } = false;                      // Is scene transition happening
-    public  bool TransitionFadeOut { get; set; } = false;                 // Is scene fading out
-    public  GameScene TransitionFromScene { get; set; } = GameScene.UNKNOWN;// Last scene
-    public  GameScene TransitionToScene { get; set; } = GameScene.UNKNOWN;// New scene
-    public  GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
+    private MenuScene MenuScene { get; set; }
+    private GameplayScene GameplayScene { get; set; }
+    public float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
+    public bool OnTransition { get; set; } = false;                      // Is scene transition happening
+    public bool TransitionFadeOut { get; set; } = false;                 // Is scene fading out
+    public GameScene TransitionFromScene { get; set; } = GameScene.UNKNOWN;// Last scene
+    public GameScene TransitionToScene { get; set; } = GameScene.UNKNOWN;// New scene
+    public GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
     private readonly IInputService _inputService;
 
     public SceneManager(IInputService inputService)
@@ -27,7 +27,7 @@ namespace VortexVise.Desktop.Scenes;
         GameplayScene = new GameplayScene(_inputService);
     }
 
-    public  void TransitionToNewScene(GameScene scene)
+    public void TransitionToNewScene(GameScene scene)
     {
         OnTransition = true;
         TransitionFadeOut = false;
@@ -37,7 +37,7 @@ namespace VortexVise.Desktop.Scenes;
     }
 
     // Update transition effect (fade-in, fade-out)
-    public  void UpdateTransition()
+    public void UpdateTransition()
     {
         if (!TransitionFadeOut)
         {
@@ -67,7 +67,7 @@ namespace VortexVise.Desktop.Scenes;
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
                     case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(); break;
-                    case GameScene.MENU: MenuScene = new MenuScene(_inputService,this); break;
+                    case GameScene.MENU: MenuScene = new MenuScene(_inputService, this); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
                 }
@@ -94,12 +94,12 @@ namespace VortexVise.Desktop.Scenes;
     }
 
     // Draw transition effect (full-screen rectangle)
-    public  void DrawTransition()
+    public void DrawTransition()
     {
         Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, Raylib.Fade(Raylib.BLACK, TransitionAlpha));
     }
 
-    public  void UpdateScene(SceneManager sceneManager)
+    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService)
     {
         if (!OnTransition)
         {
@@ -108,32 +108,32 @@ namespace VortexVise.Desktop.Scenes;
             switch (CurrentScene)
             {
                 case GameScene.GAMEPLAY:
-                {
-                    GameplayScene.UpdateGameplayScene(sceneManager);
-                    if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
-                    //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+                    {
+                        GameplayScene.UpdateGameplayScene(sceneManager, collisionService);
+                        if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
+                        //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
-                }
-                break;
+                    }
+                    break;
                 case GameScene.MENU:
-                {
-                    MenuScene.UpdateMenuScene();
-                    if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
-                    else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
-                }
-                break;
+                    {
+                        MenuScene.UpdateMenuScene();
+                        if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
+                        else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
+                    }
+                    break;
                 default: break;
             }
         }
         else UpdateTransition();    // Update transition (fade-in, fade-out)
     }
 
-    public  void DrawScene()
+    public void DrawScene(IRendererService rendererService)
     {
         switch (CurrentScene)
         {
-            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(); break;
-            case GameScene.MENU: MenuScene.DrawMenuScene(); break;
+            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService); break;
+            case GameScene.MENU: MenuScene.DrawMenuScene(rendererService); break;
             default: break;
         }
     }

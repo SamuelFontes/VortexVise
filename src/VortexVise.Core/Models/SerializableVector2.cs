@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 public class SerializableVector2
 {

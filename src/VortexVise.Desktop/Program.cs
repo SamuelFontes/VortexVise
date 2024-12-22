@@ -5,6 +5,7 @@ using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 using Steamworks;
 using VortexVise.Desktop.Services;
+using VortexVise.Core.Interfaces;
 
 // ...
 
@@ -39,7 +40,10 @@ Raylib.SetExitKey(0);                                                           
 InputService inputService = new InputService();
 
 // Load Assets
-GameAssets.InitializeAssets();                                                                          // Load global data 
+var assetService = new AssetService();
+var rendererService = new RendererService();
+var collisionService = new CollisionService();
+GameAssets.InitializeAssets(assetService);                                                                          // Load global data 
 SceneManager sceneManager = new SceneManager(inputService);
 
 // Set Window Icon
@@ -74,7 +78,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager);
+    sceneManager.UpdateScene(sceneManager,collisionService);
 
 
     // Update user interface
@@ -89,7 +93,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw scene (gameplay or menu)
-    sceneManager.DrawScene();
+    sceneManager.DrawScene(rendererService);
 
     // Draw full screen rectangle in front of everything when changing screens
     if (sceneManager.OnTransition) sceneManager.DrawTransition();
@@ -109,6 +113,6 @@ while (!sceneManager.TransitionFadeOut)
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
-GameAssets.UnloadAssets();
+GameAssets.UnloadAssets(assetService);
 Raylib.CloseAudioDevice();     // Close audio context
 Raylib.CloseWindow();          // Close window and OpenGL context

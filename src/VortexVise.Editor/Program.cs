@@ -1,11 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Numerics;
+using VortexVise.Core.Interfaces;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
+using VortexVise.Desktop.Services;
 
+// Initialize Services
+//var assetService = new AssetService();
 
-GameAssets.InitializeAssets();
+//GameAssets.InitializeAssets(assetService);
 IOrderedEnumerable<Map> maps = GameAssets.Gameplay.Maps.OrderBy(x => x.Name);
 start:
 var mapId = 0;
@@ -56,7 +61,7 @@ Raylib.HideCursor();
 
 int state = 0;
 bool isDrawing = false;
-Rectangle selection = new();
+System.Drawing.Rectangle selection = new();
 // Main game loop
 while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
 {
@@ -109,13 +114,13 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
         {
             if (!isDrawing)
             {
-                selection.x = mapCursorX;
-                selection.y = mapCursorY;
+                selection.X = (int)mapCursorX;
+                selection.Y = (int)mapCursorY;
                 isDrawing = true;
             }
             else
             {
-                if (!(selection.x < 0 || selection.y < 0 || selection.width < 0 || selection.height < 0))
+                if (!(selection.X < 0 || selection.Y < 0 || selection.Width < 0 || selection.Height < 0))
                     map.Collisions.Add(selection);
                 isDrawing = false;
             }
@@ -137,10 +142,10 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
             var index = 0;
             foreach (var c in map.Collisions)
             {
-                if (Raylib.CheckCollisionRecs(c, rec))
-                {
-                    break;
-                }
+                //if (Raylib.CheckCollisionRecs(c, rec))
+                //{
+                    //break;
+                //}
                 index++;
 
             }
@@ -178,7 +183,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
         }
 
     }
-    if (isDrawing) selection = new((int)selection.x, (int)selection.y, (int)mapCursorX - (int)selection.x, (int)mapCursorY - (int)selection.y);
+    if (isDrawing) selection = new((int)selection.X, (int)selection.Y, (int)mapCursorX - (int)selection.X, (int)mapCursorY - (int)selection.Y);
 
 
     // SAVE
@@ -189,7 +194,7 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
         //if (mapName == null || mapName.Length == 0) mapName = map.Name;
         var mapName = map.Name;
         string collisions = "";
-        foreach (var c in map.Collisions) collisions += $"{(int)c.x},{(int)c.y},{(int)c.width},{(int)c.height};";
+        foreach (var c in map.Collisions) collisions += $"{(int)c.X},{(int)c.Y},{(int)c.Width},{(int)c.Height};";
         string playerSpawn = "";
         foreach (var c in map.PlayerSpawnPoints) playerSpawn += $"{(int)c.X},{(int)c.Y};";
         string enemySpawn = "";
@@ -220,7 +225,7 @@ GAME_MODES = DM,TDM,SURVIVAL";
     Raylib.DrawTexture(mapTexture, mapX, mapY, Raylib.WHITE);
     if (isDrawing)
     {
-        Raylib.DrawRectangle((int)selection.x + (int)mapX, (int)selection.y + (int)mapY, (int)selection.width, (int)selection.height, Raylib.BLUE);
+        Raylib.DrawRectangle((int)selection.X + (int)mapX, (int)selection.Y + (int)mapY, (int)selection.Width, (int)selection.Height, Raylib.BLUE);
     }
     foreach (var rec in map.Collisions) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, (int)rec.Width, (int)rec.Height, Raylib.BLUE);
     foreach (var rec in map.PlayerSpawnPoints) Raylib.DrawRectangle((int)rec.X + mapX, (int)rec.Y + mapY, 32, 32, Raylib.GREEN);
@@ -230,7 +235,7 @@ GAME_MODES = DM,TDM,SURVIVAL";
 
     Raylib.DrawTexturePro(mouseTexture, new(0, 0, mouseTexture.width, mouseTexture.height), cursorRec, new(0, 0), 0, color);
 
-    Raylib.DrawText($"debug: {state} {mouse.X - mapX} {mouse.Y - mapY} {(int)mapCursorX - (int)selection.x}", 0, 0, (int)roundf(20 / camera.zoom), Raylib.BLACK);
+    Raylib.DrawText($"debug: {state} {mouse.X - mapX} {mouse.Y - mapY} {(int)mapCursorX - (int)selection.X}", 0, 0, (int)roundf(20 / camera.zoom), Raylib.BLACK);
 
     Raylib.EndDrawing();
 

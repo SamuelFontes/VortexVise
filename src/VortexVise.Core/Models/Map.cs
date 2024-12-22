@@ -1,7 +1,8 @@
-﻿using VortexVise.Core.Enums;
-using ZeroElectric.Vinculum;
+﻿using System.Drawing;
+using System.Text.Json.Serialization;
+using VortexVise.Core.Enums;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Game Level/Map
@@ -22,5 +23,6 @@ public class Map
     public string MapLocation { get; set; } = "";
     public string BGM { get; set; } = "";
     public string BGS { get; set; } = "";
-    public Texture Texture { get; set; }
+    [JsonIgnore]
+    public ITextureAsset? Texture { get; set; }
 }

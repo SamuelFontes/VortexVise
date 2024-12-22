@@ -1,6 +1,7 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Scenes;
@@ -31,10 +32,10 @@ public static class MapLogic
             {
                 var mirroredCollision = new Rectangle
                 {
-                    X = GameMatch.CurrentMap.Texture.width - collision.x - collision.width,
+                    X = GameMatch.CurrentMap.Texture.Width - collision.X - collision.Width,
                     Y = collision.Y,
-                    width = collision.width,
-                    height = collision.height
+                    width = collision.Width,
+                    height = collision.Height
                 };
                 mirroredCollisions.Add(mirroredCollision);
             }
@@ -63,14 +64,14 @@ public static class MapLogic
     }
 
 
-    public static List<Rectangle> GetCollisions()
+    public static List<System.Drawing.Rectangle> GetCollisions()
     {
         return GameMatch.CurrentMap.Collisions;
     }
 
     public static Vector2 GetMapSize()
     {
-        return new Vector2(GameMatch.CurrentMap.Texture.width, GameMatch.CurrentMap.Texture.height);
+        return new Vector2(GameMatch.CurrentMap.Texture.Width, GameMatch.CurrentMap.Texture.Height);
     }
 
 }

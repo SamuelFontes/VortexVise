@@ -1,6 +1,8 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -69,73 +71,73 @@ public static class WeaponLogic
             switch (ws.Weapon.WeaponType)
             {
                 case WeaponType.MeleeBlunt:
-                {
-                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-                    p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                    {
+                        var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                        p.X -= 16 * currentPlayerState.Direction;
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)(p.X - 16), (int)p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
-                    gameState.DamageHitBoxes.Add(hitbox);
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
-                    break;
-                }
+                        gameState.DamageHitBoxes.Add(hitbox);
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.5f);
+                        break;
+                    }
                 case WeaponType.MeleeCut:
-                {
-                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-                    p.X -= 16 * currentPlayerState.Direction;
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
+                    {
+                        var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                        p.X -= 16 * currentPlayerState.Direction;
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 20, 32, 40), ws.Weapon, 0.2f, currentPlayerState.Direction, new(0, 0), false, currentPlayerState.WeaponStates[0]);
 
-                    gameState.DamageHitBoxes.Add(hitbox);
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
-                    break;
-                }
+                        gameState.DamageHitBoxes.Add(hitbox);
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 1.5f);
+                        break;
+                    }
                 case WeaponType.Shotgun:
-                {
-                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-                    p.X -= 16 * currentPlayerState.Direction;
+                    {
+                        var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                        p.X -= 16 * currentPlayerState.Direction;
 
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true, currentPlayerState.WeaponStates[0]);
-                    gameState.DamageHitBoxes.Add(hitbox);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 0), true, currentPlayerState.WeaponStates[0]);
+                        gameState.DamageHitBoxes.Add(hitbox);
 
-                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true, currentPlayerState.WeaponStates[0]);
-                    gameState.DamageHitBoxes.Add(hitbox);
+                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, 50), true, currentPlayerState.WeaponStates[0]);
+                        gameState.DamageHitBoxes.Add(hitbox);
 
-                    hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true, currentPlayerState.WeaponStates[0]);
-                    gameState.DamageHitBoxes.Add(hitbox);
+                        hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 16, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, new(1000 * currentPlayerState.Direction * -1, -50), true, currentPlayerState.WeaponStates[0]);
+                        gameState.DamageHitBoxes.Add(hitbox);
 
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Shotgun, pitch: 1.5f);
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick, pitch: 0.5f);
-                    break;
-                }
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Shotgun, pitch: 1.5f);
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick, pitch: 0.5f);
+                        break;
+                    }
                 case WeaponType.Granade:
-                {
-                    var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
-                    p.X -= 16 * currentPlayerState.Direction;
+                    {
+                        var p = PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position);
+                        p.X -= 16 * currentPlayerState.Direction;
 
-                    Vector2 velocity = new(GameMatch.GranadeForce * currentPlayerState.Direction * -1, -GameMatch.GranadeForce);
-                    if (currentPlayerState.Input.Left && currentPlayerState.Input.Down) // ↙ 
-                        velocity = new(-GameMatch.GranadeForce, GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down) // ↘
-                        velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Down) // ↓
-                        velocity = new(0, GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up) // ↖
-                        velocity = new(-GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up) // ↗
-                        velocity = new(GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Left) // ↖
-                        velocity = new(-GameMatch.GranadeForce, -GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Right) // ↗
-                        velocity = new(GameMatch.GranadeForce, -GameMatch.GranadeForce);
-                    else if (currentPlayerState.Input.Up) // ↑
-                        velocity = new(0, -GameMatch.GranadeForce);
-                    velocity = Utils.OnlyAddVelocity(velocity, currentPlayerState.Velocity, 2);
+                        Vector2 velocity = new(GameMatch.GranadeForce * currentPlayerState.Direction * -1, -GameMatch.GranadeForce);
+                        if (currentPlayerState.Input.Left && currentPlayerState.Input.Down) // ↙ 
+                            velocity = new(-GameMatch.GranadeForce, GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Right && currentPlayerState.Input.Down) // ↘
+                            velocity = new(GameMatch.GranadeForce, GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Down) // ↓
+                            velocity = new(0, GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Left && currentPlayerState.Input.Up) // ↖
+                            velocity = new(-GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Right && currentPlayerState.Input.Up) // ↗
+                            velocity = new(GameMatch.GranadeForce * 0.5f, -GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Left) // ↖
+                            velocity = new(-GameMatch.GranadeForce, -GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Right) // ↗
+                            velocity = new(GameMatch.GranadeForce, -GameMatch.GranadeForce);
+                        else if (currentPlayerState.Input.Up) // ↑
+                            velocity = new(0, -GameMatch.GranadeForce);
+                        velocity = Utils.OnlyAddVelocity(velocity, currentPlayerState.Velocity, 2);
 
-                    var hitbox = new DamageHitBoxState(currentPlayerState.Id, new(p.X - 16, p.Y - 20, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
-                    gameState.DamageHitBoxes.Add(hitbox);
+                        var hitbox = new DamageHitBoxState(currentPlayerState.Id, new((int)p.X - 16, (int)p.Y - 20, 16, 16), ws.Weapon, 0.2f, currentPlayerState.Direction, velocity, true, currentPlayerState.WeaponStates[0]);
+                        gameState.DamageHitBoxes.Add(hitbox);
 
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.4f);
-                    break;
-                }
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, pitch: 0.4f);
+                        break;
+                    }
             }
             ws.ReloadTimer = 0;
 
@@ -151,20 +153,20 @@ public static class WeaponLogic
         }
     }
 
-    public static void ProcessHitBoxes(GameState currentGameState, GameState lastGameState, float deltaTime, float gravity)
+    public static void ProcessHitBoxes(ICollisionService collisionService, GameState currentGameState, GameState lastGameState, float deltaTime, float gravity)
     {
         foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
             if (!hitbox.ShouldColide) hitbox.HitBoxTimer -= deltaTime;
 
-            hitbox.HitBox = new Rectangle(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime, hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime, hitbox.HitBox.Width, hitbox.HitBox.Height);
+            hitbox.HitBox = new System.Drawing.Rectangle((int)(hitbox.HitBox.X + hitbox.Velocity.X * deltaTime), (int)(hitbox.HitBox.Y + hitbox.Velocity.Y * deltaTime), hitbox.HitBox.Width, hitbox.HitBox.Height);
 
             // Check projectile collision with map
             if (hitbox.ShouldColide)
             {
                 foreach (var collision in GameMatch.CurrentMap.Collisions)
                 {
-                    if (Raylib.CheckCollisionRecs(collision, hitbox.HitBox))
+                    if (collisionService.CheckCollisionRecs(collision, hitbox.HitBox))
                     {
                         hitbox.ShouldDisappear = true;
                         GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 2f);
@@ -188,7 +190,7 @@ public static class WeaponLogic
                 {
                     var p = PlayerLogic.GetPlayerCenterPosition(player.Position);
                     p.X -= 16 * player.Direction;
-                    hitbox.HitBox = new(p.X - 16, p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
+                    hitbox.HitBox = new((int)p.X - 16, (int)p.Y - 20, 32, 40); // FIXME: we should get this from some other place because if it changes it should change everywhere
                 }
             }
             if (hitbox.Weapon.WeaponType == WeaponType.Granade) // If is granade apply gravity
@@ -202,12 +204,12 @@ public static class WeaponLogic
         currentGameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }
 
-    public static void ApplyHitBoxesDamage(GameState gameState, PlayerState currentPlayerState)
+    public static void ApplyHitBoxesDamage(ICollisionService collisionService, GameState gameState, PlayerState currentPlayerState)
     {
         var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || (x.IsExplosion && !currentPlayerState.IsBot));// Adding friendly fire for bots is not a good idea
         foreach (var hitbox in hitboxes)
         {
-            if (Raylib.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
+            if (collisionService.CheckCollisionRecs(currentPlayerState.Collision.ToDrawingRectangle(), hitbox.HitBox))
             {
                 // Dude was hit by projectile
                 GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, pitch: 0.5f);

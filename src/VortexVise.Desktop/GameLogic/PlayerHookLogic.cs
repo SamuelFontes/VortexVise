@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -17,7 +18,7 @@ public static class PlayerHookLogic
     /// <param name="currentPlayerState">Current player state.</param>
     /// <param name="gravity">Current gravity</param>
     /// <param name="deltaTime">Time since last frame</param>
-    public static void SimulateHookState(PlayerState currentPlayerState, float gravity, float deltaTime)
+    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
         {
@@ -145,7 +146,7 @@ public static class PlayerHookLogic
         {
             foreach (var collision in MapLogic.GetCollisions())
             {
-                if (Raylib.CheckCollisionRecs(currentPlayerState.HookState.Collision, collision))
+                if (collisionService.CheckCollisionRecs(currentPlayerState.HookState.Collision, collision))
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;

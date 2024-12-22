@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
 
