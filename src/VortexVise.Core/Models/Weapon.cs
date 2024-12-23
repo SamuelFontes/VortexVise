@@ -1,7 +1,7 @@
-﻿using VortexVise.Core.Enums;
-using ZeroElectric.Vinculum;
+﻿using System.Drawing;
+using VortexVise.Core.Enums;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Thing used to kill other things.
@@ -12,10 +12,10 @@ public class Weapon
     public string Name { get; set; } = string.Empty;
     public string TextureLocation { get; set; } = string.Empty;
     public string ProjectileTextureLocation { get; set; } = string.Empty;
-    public Color TextureColor { get; set; } = Raylib.WHITE;
+    public Color TextureColor { get; set; } = Color.White;
     public WeaponType WeaponType { get; set; }
     public float ReloadDelay { get; set; }
-    public Color Color { get; set; } = Raylib.WHITE; // This is for the gun and the projectile
+    public Color Color { get; set; } = Color.White;
     public int Damage { get; set; }
     public int Knockback { get; set; }
     public int Ammo { get; set; }
@@ -25,6 +25,6 @@ public class Weapon
     public StatusEffects SelfEffect { get; set; } = StatusEffects.None;
     public int SelfEffectPercentageChance { get; set; }
     public int SelfEffectAmount { get; set; }
-    public Texture Texture { get; set; }
-    public Texture ProjectileTexture { get; set; }
+    public ITextureAsset? Texture { get; set; }
+    public ITextureAsset? ProjectileTexture { get; set; }
 }

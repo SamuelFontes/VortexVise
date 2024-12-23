@@ -99,7 +99,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (sceneManager.OnTransition) sceneManager.DrawTransition();
 
     // Draw UI on top
-    GameUserInterface.DrawUserInterface();
+    GameUserInterface.DrawUserInterface(rendererService);
 
     Raylib.EndDrawing();
 }

@@ -1,6 +1,4 @@
-﻿using ZeroElectric.Vinculum;
-
-namespace VortexVise.Desktop.Models;
+﻿namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Define the player appearance.
@@ -11,6 +9,6 @@ public class Skin
     /// File checksum
     /// </summary>
     public string Id { get; set; } = "";
-    public Texture Texture { get; set; }
+    public ITextureAsset? Texture { get; set; }
     public string TextureLocation { get; set; } = string.Empty;
 }

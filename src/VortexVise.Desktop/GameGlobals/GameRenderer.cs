@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -30,18 +31,18 @@ public static class GameRenderer
             if (playerState.Id == mainPlayer.Id) continue;
 
             DrawHookState(rendererService, playerState);
-            DrawPlayerState(playerState);
-            DrawEnemyHealthBar(playerState);
+            DrawPlayerState(rendererService, playerState);
+            DrawEnemyHealthBar(rendererService, playerState);
         }
         // Draw main player on top for this screen
         DrawHookState(rendererService, mainPlayer);
-        DrawPlayerState(mainPlayer);
-        DrawProjectiles(state);
-        DrawStateAnimations(rendererService,state);
-        DrawHud(state, mainPlayer);
+        DrawPlayerState(rendererService, mainPlayer);
+        DrawProjectiles(rendererService, state);
+        DrawStateAnimations(rendererService, state);
+        DrawHud(rendererService, state, mainPlayer);
     }
 
-    private static void DrawStateAnimations(IRendererService rendererService,GameState state)
+    private static void DrawStateAnimations(IRendererService rendererService, GameState state)
     {
         foreach (var animation in state.Animations)
         {
@@ -57,16 +58,16 @@ public static class GameRenderer
         }
     }
 
-    private static void DrawProjectiles(GameState state)
+    private static void DrawProjectiles(IRendererService rendererService, GameState state)
     {
         foreach (var hitbox in state.DamageHitBoxes)
         {
             if (hitbox.Weapon.ProjectileTextureLocation == string.Empty) continue;
-            Rectangle sourceRec = new(0.0f, 0.0f, hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+            System.Drawing.Rectangle sourceRec = new(0, 0, hitbox.Weapon.ProjectileTexture.Width, hitbox.Weapon.ProjectileTexture.Height);
 
-            Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.Width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.Height * 0.5f), hitbox.Weapon.ProjectileTexture.width, hitbox.Weapon.ProjectileTexture.height);
+            System.Drawing.Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.Width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.Height * 0.5f), hitbox.Weapon.ProjectileTexture.Width, hitbox.Weapon.ProjectileTexture.Height);
 
-            Raylib.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.height * 0.5f)), (int)WeaponLogic.WeaponRotation * 23, Raylib.WHITE);
+            rendererService.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.Width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.Height * 0.5f)), (int)WeaponLogic.WeaponRotation * 23, System.Drawing.Color.White);
         }
 
     }
@@ -84,24 +85,24 @@ public static class GameRenderer
 
     }
 
-    static void DrawWeaponDrops(IRendererService rendererService,GameState currentGameState)
+    static void DrawWeaponDrops(IRendererService rendererService, GameState currentGameState)
     {
         foreach (var drop in currentGameState.WeaponDrops)
         {
             var rotation = (int)WeaponLogic.WeaponRotation;
             if (drop.WeaponState.Weapon.WeaponType == WeaponType.Heal) rotation = 0;
-            Rectangle sourceRec = new(0.0f, 0.0f, drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
+            System.Drawing.Rectangle sourceRec = new(0, 0, drop.WeaponState.Weapon.Texture.Width, drop.WeaponState.Weapon.Texture.Height);
 
-            Rectangle destRec = new((int)(drop.Position.X + drop.WeaponState.Weapon.Texture.width * 0.5f), (int)(drop.Position.Y + drop.WeaponState.Weapon.Texture.height * 0.5f), drop.WeaponState.Weapon.Texture.width, drop.WeaponState.Weapon.Texture.height);
+            System.Drawing.Rectangle destRec = new((int)(drop.Position.X + drop.WeaponState.Weapon.Texture.Width * 0.5f), (int)(drop.Position.Y + drop.WeaponState.Weapon.Texture.Height * 0.5f), drop.WeaponState.Weapon.Texture.Width, drop.WeaponState.Weapon.Texture.Height);
 
-            Raylib.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.width * 0.5f, drop.WeaponState.Weapon.Texture.height * 0.5f), rotation, Raylib.WHITE);
+            rendererService.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.Width * 0.5f, drop.WeaponState.Weapon.Texture.Height * 0.5f), rotation, System.Drawing.Color.White);
 
             if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
         }
         if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) rendererService.DrawRectangleRec(h.HitBox, System.Drawing.Color.Red); // Debug
     }
 
-    static void DrawHookState(IRendererService rendererService,PlayerState playerState)
+    static void DrawHookState(IRendererService rendererService, PlayerState playerState)
     {
         if (playerState.IsDead) return;
         if (playerState.HookState.IsHookReleased)
@@ -116,23 +117,25 @@ public static class GameRenderer
 
 
     }
-    static void DrawPlayerState(PlayerState playerState)
+    static void DrawPlayerState(IRendererService rendererService, PlayerState playerState)
     {
         if (playerState.IsDead) return;
         // Draw player 
         // -------------------------------------------------
-        Rectangle sourceRec = new(0.0f, 0.0f, playerState.Skin.Texture.width * playerState.Direction, playerState.Skin.Texture.height);
+        System.Drawing.Rectangle sourceRec = new(0, 0, playerState.Skin.Texture.Width * playerState.Direction, playerState.Skin.Texture.Height);
 
-        Rectangle destRec = new((int)(playerState.Position.X + playerState.Skin.Texture.width * 0.5f), (int)(playerState.Position.Y + playerState.Skin.Texture.height * 0.5f), playerState.Skin.Texture.width, playerState.Skin.Texture.height);
+        System.Drawing.Rectangle destRec = new((int)(playerState.Position.X + playerState.Skin.Texture.Width * 0.5f), (int)(playerState.Position.Y + playerState.Skin.Texture.Height * 0.5f), playerState.Skin.Texture.Width, playerState.Skin.Texture.Height);
 
         var rotation = playerState.Animation.GetAnimationRotation();
-        if (rotation != 0) destRec.Y -= 2f; // this adds a little bump to the walking animation
+        float y = destRec.Y;
+        if (rotation != 0) y -= 2f; // this adds a little bump to the walking animation
+        destRec.Y = (int)y;
 
         // Player color
-        var color = Raylib.WHITE;
-        if (playerState.DamagedTimer > 0) color = Raylib.RED;
+        var color = System.Drawing.Color.White;
+        if (playerState.DamagedTimer > 0) color = System.Drawing.Color.Red;
 
-        Raylib.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2((int)(playerState.Skin.Texture.width * 0.5f), (int)(playerState.Skin.Texture.height * 0.5f)), rotation, color); // Draw Player 
+        rendererService.DrawTexturePro(playerState.Skin.Texture, sourceRec, destRec, new Vector2((int)(playerState.Skin.Texture.Width * 0.5f), (int)(playerState.Skin.Texture.Height * 0.5f)), rotation, color); // Draw Player 
 
 
         // Draw Weapon
@@ -146,39 +149,39 @@ public static class GameRenderer
                 case WeaponType.SMG: destRec.Y += 5; break;
                 case WeaponType.Pistol: destRec.Y += 5; break;
                 case WeaponType.MeleeBlunt:
-                {
-                    if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
                     {
-                        destRec.X += 5 * playerState.Direction;
-                        sourceRec.Width = -sourceRec.width;
-                        rotation -= 45 * playerState.Direction;
+                        if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
+                        {
+                            destRec.X += 5 * playerState.Direction;
+                            sourceRec.Width = -sourceRec.Width;
+                            rotation -= 45 * playerState.Direction;
+                        }
+                        else
+                        {
+                            destRec.X -= 16 * playerState.Direction;
+                            destRec.Y += 5;
+                            rotation = 0;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        destRec.X -= 16 * playerState.Direction;
-                        destRec.Y += 5;
-                        rotation = 0;
-                    }
-                    break;
-                }
                 case WeaponType.MeleeCut:
-                {
-                    if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
                     {
-                        destRec.X += 5 * playerState.Direction;
-                        sourceRec.Width = -sourceRec.width;
-                        rotation -= 45 * playerState.Direction;
+                        if (weapon.ReloadTimer >= weapon.Weapon.ReloadDelay * 0.2f)
+                        {
+                            destRec.X += 5 * playerState.Direction;
+                            sourceRec.Width = -sourceRec.Width;
+                            rotation -= 45 * playerState.Direction;
+                        }
+                        else
+                        {
+                            destRec.X -= 16 * playerState.Direction;
+                            destRec.Y += 5;
+                            rotation = 0;
+                        }
+                        break;
                     }
-                    else
-                    {
-                        destRec.X -= 16 * playerState.Direction;
-                        destRec.Y += 5;
-                        rotation = 0;
-                    }
-                    break;
-                }
             }
-            Raylib.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.width * 0.5f, playerState.Skin.Texture.height * 0.5f), rotation, Raylib.WHITE); // Draw Player 
+            rendererService.DrawTexturePro(weapon.Weapon.Texture, sourceRec, destRec, new Vector2(playerState.Skin.Texture.Width * 0.5f, playerState.Skin.Texture.Height * 0.5f), rotation, System.Drawing.Color.White); // Draw Player 
         }
 
         if (Utils.Debug())
@@ -192,7 +195,7 @@ public static class GameRenderer
     /// </summary>
     /// <param name="state"></param>
     /// <param name="mainPlayer"></param>
-    private static void DrawHud(GameState state, PlayerState mainPlayer)
+    private static void DrawHud(IRendererService rendererService, GameState state, PlayerState mainPlayer)
     {
         // Draw weapon grab indicator
         // --------------------------------------------------------
@@ -200,7 +203,7 @@ public static class GameRenderer
         {
             if (Raylib.CheckCollisionRecs(drop.Collision, mainPlayer.Collision))
             {
-                Raylib.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, Raylib.WHITE);
+                rendererService.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, System.Drawing.Color.White);
             }
         }
 
@@ -212,15 +215,15 @@ public static class GameRenderer
             Vector2 p = new((int)mainPlayer.Position.X, (int)mainPlayer.Position.Y);
             p += new Vector2(8, -16);
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));
-                var spriteHeight = GameAssets.HUD.WideBarGreen.height;
+                rendererService.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
+                var spriteHeight = GameAssets.HUD.WideBarGreen.Height;
                 var total = 100;
                 //var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
                 var percent = (mainPlayer.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
                 int overlayHeight = (int)((percent * spriteHeight) / total);
                 if (overlayHeight % 2 != 0) overlayHeight++;
 
-                Raylib.DrawTexturePro(GameAssets.HUD.WideBarGreen, new(0, GameAssets.HUD.WideBarGreen.height - overlayHeight, GameAssets.HUD.WideBarGreen.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WideBarGreen.height - overlayHeight, GameAssets.HUD.WideBarGreen.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+                rendererService.DrawTexturePro(GameAssets.HUD.WideBarGreen, new(0, GameAssets.HUD.WideBarGreen.Height - overlayHeight, GameAssets.HUD.WideBarGreen.Width, overlayHeight), new((int)p.X, (int)p.Y + GameAssets.HUD.WideBarGreen.Height - overlayHeight, GameAssets.HUD.WideBarGreen.Width, overlayHeight), new(0, 0), 0, System.Drawing.Color.LightGray);
             }
 
             // Draw jetpack fuel
@@ -228,15 +231,15 @@ public static class GameRenderer
             {
                 p = new((int)mainPlayer.Position.X, (int)mainPlayer.Position.Y);
                 p += new Vector2(2, -16);
-                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
-                var spriteHeight = GameAssets.HUD.ThinBarOrange.height;
+                rendererService.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
+                var spriteHeight = GameAssets.HUD.ThinBarOrange.Height;
                 var total = 100;
                 var percent = (mainPlayer.JetPackFuel * 100) / GameMatch.DefaultJetPackFuel;
 
                 int overlayHeight = (int)((percent * spriteHeight) / total);
                 if (overlayHeight % 2 != 0) overlayHeight++;
 
-                Raylib.DrawTexturePro(GameAssets.HUD.ThinBarOrange, new(0, GameAssets.HUD.ThinBarOrange.height - overlayHeight, GameAssets.HUD.ThinBarOrange.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarOrange.height - overlayHeight, GameAssets.HUD.ThinBarOrange.width, overlayHeight), new(0, 0), 0, Raylib.WHITE);
+                rendererService.DrawTexturePro(GameAssets.HUD.ThinBarOrange, new(0, GameAssets.HUD.ThinBarOrange.Height - overlayHeight, GameAssets.HUD.ThinBarOrange.Width, overlayHeight), new((int)p.X, (int)(p.Y + GameAssets.HUD.ThinBarOrange.Height - overlayHeight), GameAssets.HUD.ThinBarOrange.Width, overlayHeight), new(0, 0), 0, System.Drawing.Color.White);
             }
 
             // Draw weapon bar
@@ -245,13 +248,13 @@ public static class GameRenderer
             p += new Vector2(22, -16);
             if (weapon != null)
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
-                var spriteHeight = GameAssets.HUD.ThinBarBlue.height;
+                rendererService.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
+                var spriteHeight = GameAssets.HUD.ThinBarBlue.Height;
                 var total = 100;
                 var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
                 if (percent == 100)
                 {
-                    Raylib.DrawTextureEx(GameAssets.HUD.ThinBarBlue, p, 0, 1, new(255, 255, 255, 255));
+                    rendererService.DrawTextureEx(GameAssets.HUD.ThinBarBlue, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
                 }
                 else
                 {
@@ -259,11 +262,11 @@ public static class GameRenderer
                     int overlayHeight = (int)((percent * spriteHeight) / total);
                     if (overlayHeight % 2 != 0) overlayHeight++;
 
-                    Raylib.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.ThinBarBlue.height - overlayHeight, GameAssets.HUD.ThinBarBlue.width, overlayHeight), new(0, 0), 0, new(100, 100, 100, 255));
+                    rendererService.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.Height - overlayHeight, GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new((int)p.X, (int)(p.Y + GameAssets.HUD.ThinBarBlue.Height - overlayHeight), GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new(0, 0), 0, new Color(100, 100, 100, 255).ToDrawingColor());
                 }
             }
             else
-                Raylib.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new(255, 255, 255, 255));
+                rendererService.DrawTextureEx(GameAssets.HUD.ThinBarEmpty, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
         }
 
         //Scoreboard
@@ -274,7 +277,7 @@ public static class GameRenderer
 
     }
 
-    public static void DrawEnemyHealthBar(PlayerState playerState)
+    public static void DrawEnemyHealthBar(IRendererService rendererService, PlayerState playerState)
     {
         if (playerState.IsDead) return;
         // Draw player health
@@ -282,15 +285,15 @@ public static class GameRenderer
         Vector2 p = new((int)playerState.Position.X, (int)playerState.Position.Y);
         p += new Vector2(8, -16);
         {
-            Raylib.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new(255, 255, 255, 255));
-            var spriteHeight = GameAssets.HUD.WideBarRed.height;
+            rendererService.DrawTextureEx(GameAssets.HUD.WideBarEmpty, p, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
+            var spriteHeight = GameAssets.HUD.WideBarRed.Height;
             var total = 100;
             //var percent = (weapon.ReloadTimer * 100) / weapon.Weapon.ReloadDelay;
             var percent = (playerState.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
             int overlayHeight = (int)((percent * spriteHeight) / total);
             if (overlayHeight % 2 != 0) overlayHeight++;
 
-            Raylib.DrawTexturePro(GameAssets.HUD.WideBarRed, new(0, GameAssets.HUD.WideBarRed.height - overlayHeight, GameAssets.HUD.WideBarRed.width, overlayHeight), new(p.X, p.Y + GameAssets.HUD.WideBarRed.height - overlayHeight, GameAssets.HUD.WideBarRed.width, overlayHeight), new(0, 0), 0, Raylib.LIGHTGRAY);
+            rendererService.DrawTexturePro(GameAssets.HUD.WideBarRed, new(0, GameAssets.HUD.WideBarRed.Height - overlayHeight, GameAssets.HUD.WideBarRed.Width, overlayHeight), new((int)p.X, (int)(p.Y + GameAssets.HUD.WideBarRed.Height - overlayHeight), GameAssets.HUD.WideBarRed.Width, overlayHeight), new(0, 0), 0, System.Drawing.Color.LightGray);
         }
 
     }

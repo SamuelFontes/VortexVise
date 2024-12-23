@@ -1,4 +1,4 @@
-﻿namespace VortexVise.Desktop.Models;
+﻿namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Define information about the player.

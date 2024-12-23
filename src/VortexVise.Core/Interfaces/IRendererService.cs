@@ -14,6 +14,7 @@ namespace VortexVise.Core.Interfaces
         public void DrawTexturePro(ITextureAsset texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
         public void DrawTextureRec(ITextureAsset texture, Rectangle source, Vector2 position, Color tint);
         public void DrawRectangleRec(Rectangle rec, Color color);
-
+        public void DrawTexture(ITextureAsset? texture, int x, int y, Color color);
+        public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int v1, int v2, Color white);
     }
 }

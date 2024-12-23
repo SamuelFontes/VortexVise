@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Interfaces;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Networking;
@@ -19,7 +20,7 @@ public class MenuScene
     readonly List<UIMenuItem> menuItems = [];
     int finishScreen = 0;
     Texture logo;
-    private Texture background {get;set;}
+    private Texture background { get; set; }
     Texture box;
     Texture keyboard;
     Texture gamepad;
@@ -70,41 +71,41 @@ public class MenuScene
 
         // PRESS START
         var state = MenuState.PressStart;
-        menuItems.Add(new UIMenuItem(this,"PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
+        menuItems.Add(new UIMenuItem(this, "PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
         if (selected == Guid.Empty) selected = menuItems[0].Id;
         state = MenuState.MainMenu;
 
         // MAIN MENU
         var yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
 
         // LOBBY
         state = MenuState.Lobby;
         Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
         yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,$"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
+        menuItems.Add(new UIMenuItem(this, $"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
         //menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         //yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,$"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, $"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize * 2;
-        menuItems.Add(new UIMenuItem(this,"START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
 
         // ONLINE
         state = MenuState.Online;
         yOffset = GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this,"GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
         yOffset += GameCore.MenuFontSize;
 
         UpdateMenuScene();
@@ -497,7 +498,7 @@ public class MenuScene
         // Input Selection
         if (currentState == MenuState.InputSelection)
         {
-            DrawInputSelection();
+            DrawInputSelection(rendererService);
         }
         if (Utils.Debug())
             Raylib.DrawRectangle(80, 0, 800, 600, new(255, 0, 0, 20));
@@ -620,7 +621,7 @@ public class MenuScene
     }
 
 
-    private void DrawInputSelection()
+    private void DrawInputSelection(IRendererService rendererService)
     {
         Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100)); // Overlay
 
@@ -629,21 +630,21 @@ public class MenuScene
         // Render BoxPlayerOne
         Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 200);
         Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerOne, box.width, box.height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerOne, box.width, box.height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
 
         Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 200);
         Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerTwo, box.width, box.height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
 
         Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 00);
         Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerThree, box.width, box.height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerThree, box.width, box.height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
 
         Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 00);
         Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(boxPlayerFour, box.width, box.height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerFour, box.width, box.height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
-        void DrawPlayerCard(Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, Texture player)
+        void DrawPlayerCard(IRendererService rendererService, Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, ITextureAsset player)
         {
             Vector2 skinPosition = new(cardPosition.X + cardWidth * 0.3f, cardPosition.Y + cardHeight * 0.6f);
             Vector2 inputDevicePosition = new(cardPosition.X + cardWidth * 0.7f, cardPosition.Y + cardHeight * 0.7f);
@@ -697,7 +698,7 @@ public class MenuScene
             // Draw player skin
             if (playerGamepadNumber != -9)
             {
-                Raylib.DrawTextureEx(player, new(skinPosition.X - player.width * 2f, skinPosition.Y - player.height * 2f), 0, 4, Raylib.WHITE);
+                rendererService.DrawTextureEx(player, new(skinPosition.X - player.Width * 2f, skinPosition.Y - player.Height * 2f), 0, 4, System.Drawing.Color.White);
 
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);

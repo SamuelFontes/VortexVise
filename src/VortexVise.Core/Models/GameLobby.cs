@@ -2,7 +2,7 @@
 using VortexVise.Core.Enums;
 using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Used to list game matches on server backend.

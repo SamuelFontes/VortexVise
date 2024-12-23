@@ -20,7 +20,14 @@ namespace VortexVise.Desktop.Services
 
         public void UnloadTexture(ITextureAsset texture)
         {
-            texture.Unload();
+            try
+            {
+                texture.Unload();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message); // Well I don't care
+            }
         }
     }
 }

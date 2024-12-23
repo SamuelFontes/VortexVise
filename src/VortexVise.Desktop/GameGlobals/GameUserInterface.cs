@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using VortexVise.Core;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -55,11 +57,11 @@ static internal class GameUserInterface
         CursorPosition = newCursorPosition;
     }
 
-    public static void DrawUserInterface()
+    public static void DrawUserInterface(IRendererService rendererService)
     {
         DrawDebug();
         DrawCursor();
-        DrawHud();
+        DrawHud(rendererService);
     }
     public static void UnloadUserInterface()
     {
@@ -87,7 +89,7 @@ static internal class GameUserInterface
         //Raylib.DrawFPS(0, 0);
     }
 
-    private static void DrawHud()
+    private static void DrawHud(IRendererService rendererService)
     {
         if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
@@ -95,28 +97,28 @@ static internal class GameUserInterface
             // Player 1
             var p = new Vector2(8, 8);
             var playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerOneProfile.Id);
-            if (playerState != null) DrawPlayerInfo(playerState, p);
+            if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 2
             p = new Vector2(GameCore.GameScreenWidth - 128 - 8, 8);
             playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerTwoProfile.Id);
-            if (playerState != null) DrawPlayerInfo(playerState, p);
+            if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 3
             p = new Vector2(8, GameCore.GameScreenHeight * 0.5f + 8);
             playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerThreeProfile.Id);
-            if (playerState != null) DrawPlayerInfo(playerState, p);
+            if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 4
             p = new Vector2(GameCore.GameScreenWidth - 128 - 8, GameCore.GameScreenHeight * 0.5f + 8);
             playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerFourProfile.Id);
-            if (playerState != null) DrawPlayerInfo(playerState, p);
+            if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             if (IsShowingScoreboard)
             {
                 var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
                 Raylib.DrawRectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight, new(0, 0, 0, 100));
-                DrawScoreboard(players);
+                DrawScoreboard(rendererService, players);
             }
 
             // Draw kill feed 
@@ -132,8 +134,8 @@ static internal class GameUserInterface
                     x = (int)(GameCore.GameScreenWidth - 64);
                     y = 8;
                 }
-                x -= (int)(GameAssets.HUD.KillFeedBackground.width * 0.5f);
-                Raylib.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color);
+                x -= (int)(GameAssets.HUD.KillFeedBackground.Width * 0.5f);
+                rendererService.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color.ToDrawingColor());
 
                 var killed = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KilledId);
                 if (killed == null) continue;
@@ -143,18 +145,18 @@ static internal class GameUserInterface
                     var killer = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KillerId);
                     if (killer == null) continue;
 
-                    Raylib.DrawTexture(killer.Skin.Texture, x, y, color);
+                    rendererService.DrawTexture(killer.Skin.Texture, x, y, color.ToDrawingColor());
                     x += 40;
-                    Raylib.DrawTexture(GameAssets.HUD.Kill, x, y + 8, color);
+                    rendererService.DrawTexture(GameAssets.HUD.Kill, x, y + 8, color.ToDrawingColor());
                     x += 20;
-                    Raylib.DrawTexture(killed.Skin.Texture, x, y, color);
+                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color.ToDrawingColor());
                 }
                 else
                 {
                     x += 40;
-                    Raylib.DrawTexture(GameAssets.HUD.Death, x, y + 8, color);
+                    rendererService.DrawTexture(GameAssets.HUD.Death, x, y + 8, color.ToDrawingColor());
                     x += 20;
-                    Raylib.DrawTexture(killed.Skin.Texture, x, y, color);
+                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color.ToDrawingColor());
                 }
                 y += 40;
             }
@@ -188,7 +190,7 @@ static internal class GameUserInterface
             {
                 Utils.DrawTextCentered($"DRAW", new(GameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
             }
-            GameUserInterface.DrawScoreboard(players);
+            GameUserInterface.DrawScoreboard(rendererService,players);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Voting)
         {
@@ -201,24 +203,24 @@ static internal class GameUserInterface
         if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
     }
 
-    private static void DrawPlayerInfo(PlayerState playerState, Vector2 position)
+    private static void DrawPlayerInfo(IRendererService rendererService, PlayerState playerState, Vector2 position)
     {
 
-        Raylib.DrawTexture(GameAssets.HUD.HudBorder, (int)position.X, (int)position.Y, Raylib.WHITE);
+        rendererService.DrawTexture(GameAssets.HUD.HudBorder, (int)position.X, (int)position.Y, System.Drawing.Color.White);
         if (!playerState.IsDead)
         {
-            Raylib.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, Raylib.WHITE);
-            var skinHeight = playerState.Skin.Texture.height; // fixed skin height
+            rendererService.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, System.Drawing.Color.White);
+            var skinHeight = playerState.Skin.Texture.Height; // fixed skin height
             var total = 100;
             var hpPercent = (playerState.HeathPoints * 100) / GameMatch.DefaultPlayerHeathPoints;
             int redHeight = (hpPercent * skinHeight) / total;
             if (redHeight % 2 != 0) redHeight++;
 
-            Raylib.DrawTexturePro(playerState.Skin.Texture, new(0, redHeight, 32, 32 - redHeight), new(position.X, position.Y + redHeight * 2, 64, 64 - (redHeight * 2)), new(0, 0), 0, Raylib.RED);
+            rendererService.DrawTexturePro(playerState.Skin.Texture, new(0, redHeight, 32, 32 - redHeight), new((int)position.X, (int)position.Y + redHeight * 2, 64, 64 - (redHeight * 2)), new(0, 0), 0, System.Drawing.Color.Red);
         }
         else
         {
-            Raylib.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, Raylib.DARKGRAY);
+            rendererService.DrawTextureEx(playerState.Skin.Texture, position, 0, 2, System.Drawing.Color.DarkGray);
         }
 
         // Draw bullets
@@ -226,11 +228,11 @@ static internal class GameUserInterface
         var weapon = playerState.WeaponStates.FirstOrDefault(x => x.IsEquipped);
         if (weapon != null)
         {
-            Raylib.DrawTextureEx(weapon.Weapon.Texture, weaponPosition, 0, 1, Raylib.WHITE);
+            rendererService.DrawTextureEx(weapon.Weapon.Texture, weaponPosition, 0, 1, System.Drawing.Color.White);
             weaponPosition += new Vector2(-12, 32);
             for (int i = 0; i < weapon.CurrentAmmo; i++)
             {
-                Raylib.DrawTextureEx(GameAssets.HUD.BulletCounter, weaponPosition, 0, 1, new(255, 255, 255, 255));
+                rendererService.DrawTextureEx(GameAssets.HUD.BulletCounter, weaponPosition, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
                 weaponPosition += new Vector2(8, 0);
                 if (i != 0 && i % 7 == 0) weaponPosition += new Vector2(-64, 8);
             }
@@ -238,18 +240,18 @@ static internal class GameUserInterface
 
         var scorePosition = position + new Vector2(8, 72);
 
-        Raylib.DrawTexture(GameAssets.HUD.Kill, (int)scorePosition.X, (int)scorePosition.Y, Raylib.WHITE);
+        rendererService.DrawTexture(GameAssets.HUD.Kill, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
         Utils.DrawTextCentered($"{playerState.Stats.Kills}", scorePosition, 16, Raylib.WHITE);
         scorePosition += new Vector2(32, -8);
-        Raylib.DrawTexture(GameAssets.HUD.Death, (int)scorePosition.X, (int)scorePosition.Y, Raylib.WHITE);
+        rendererService.DrawTexture(GameAssets.HUD.Death, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
         Utils.DrawTextCentered($"{playerState.Stats.Deaths}", scorePosition, 16, Raylib.WHITE);
 
 
     }
 
-    public static void DrawScoreboard(List<PlayerState> players)
+    public static void DrawScoreboard(IRendererService rendererService, List<PlayerState> players)
     {
         var y = 96;
         foreach (var player in players)
@@ -257,16 +259,16 @@ static internal class GameUserInterface
             int x = (int)(GameCore.GameScreenWidth * 0.5f);
             x -= 64;
             //Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
-            Raylib.DrawTexture(player.Skin.Texture, x - 16, y - 16, Raylib.WHITE);
+            rendererService.DrawTexture(player.Skin.Texture, x - 16, y - 16, System.Drawing.Color.White);
             x += 32;
             y -= 8;
-            Raylib.DrawTexture(GameAssets.HUD.Kill, x, y, Raylib.WHITE);
+            rendererService.DrawTexture(GameAssets.HUD.Kill, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
             Utils.DrawTextCentered($"{player.Stats.Kills}", new(x, y), 16, Raylib.WHITE);
             x += 32;
             y -= 8;
-            Raylib.DrawTexture(GameAssets.HUD.Death, x, y, Raylib.WHITE);
+            rendererService.DrawTexture(GameAssets.HUD.Death, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
             Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE);

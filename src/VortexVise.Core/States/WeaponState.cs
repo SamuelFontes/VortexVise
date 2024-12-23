@@ -1,6 +1,6 @@
-﻿using VortexVise.Desktop.Models;
+﻿using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.States;
+namespace VortexVise.Core.States;
 
 /// <summary>
 /// State for weapon.

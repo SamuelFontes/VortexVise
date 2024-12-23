@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Scenes;
@@ -31,7 +32,7 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         Misc.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
-        HUD.LoadHud();
+        HUD.LoadHud(assetService);
 
         // Sounds
         //---------------------------------------------------------
@@ -42,8 +43,8 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        Gameplay.LoadWeapons();
-        Gameplay.LoadSkins();
+        Gameplay.LoadWeapons(assetService);
+        Gameplay.LoadSkins(assetService);
 
         // Animation
         //---------------------------------------------------------
@@ -64,7 +65,7 @@ public static class GameAssets
         // Misc
         //---------------------------------------------------------
         Raylib.UnloadFont(Misc.Font);
-        HUD.Unload();
+        HUD.Unload(assetService);
 
         // Sounds
         //---------------------------------------------------------
@@ -76,12 +77,12 @@ public static class GameAssets
 
         // Gameplay
         //---------------------------------------------------------
-        foreach (var map in GameAssets.Gameplay.Maps) assetService.UnloadTexture(map.Texture);
-        foreach (var skin in Gameplay.Skins) Raylib.UnloadTexture(skin.Texture);
-        foreach (var w in GameAssets.Gameplay.Weapons)
+        foreach (var map in Gameplay.Maps) assetService.UnloadTexture(map.Texture);
+        foreach (var skin in Gameplay.Skins) assetService.UnloadTexture(skin.Texture);
+        foreach (var w in Gameplay.Weapons)
         {
-            Raylib.UnloadTexture(w.Texture);
-            Raylib.UnloadTexture(w.ProjectileTexture);
+            assetService.UnloadTexture(w.Texture);
+            assetService.UnloadTexture(w.ProjectileTexture);
         }
 
         // Animation
@@ -111,7 +112,7 @@ public static class GameAssets
         public static List<Weapon> Weapons { get; set; } = [];
         public static List<Skin> Skins { get; set; } = [];
 
-        public static void LoadSkins()
+        public static void LoadSkins(IAssetService assetService)
         {
             string[] skins = Directory.GetFiles("Resources/Skins", "*.png", SearchOption.TopDirectoryOnly);
             foreach (string skin in skins)
@@ -120,7 +121,7 @@ public static class GameAssets
                 {
                     Id = Utils.GetFileChecksum(skin),
                     TextureLocation = skin,
-                    Texture = Raylib.LoadTexture(skin)
+                    Texture = assetService.LoadTexture(skin)
                 };
                 Skins.Add(s);
             }
@@ -184,7 +185,7 @@ public static class GameAssets
             MapLogic.LoadRandomMap();
         }
 
-        public static void LoadWeapons()
+        public static void LoadWeapons(IAssetService assetService)
         {
             string weaponLocation = "Resources/Weapons";
             // Read weapons from Resources/Weapons
@@ -234,11 +235,11 @@ public static class GameAssets
 
                         // Color
                         var color = Regex.Match(match.Value, @"(?<=COLOR=)\d+,\d+,\d+,\d+").Value;
-                        if (string.IsNullOrEmpty(color)) weapon.Color = Raylib.WHITE;
+                        if (string.IsNullOrEmpty(color)) weapon.Color = System.Drawing.Color.White;
                         else
                         {
                             string[] rgba = color.Split(',');
-                            weapon.Color = new Color(Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]), Convert.ToInt32(rgba[3]));
+                            weapon.Color = new Color(Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]), Convert.ToInt32(rgba[3])).ToDrawingColor();
                         }
 
                         // Damage
@@ -302,12 +303,12 @@ public static class GameAssets
 
 
                         // Load the texture
-                        weapon.Texture = Raylib.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loading replicated textures
-                        if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTexture = Raylib.LoadTexture(weapon.ProjectileTextureLocation);
+                        weapon.Texture = assetService.LoadTexture(weapon.TextureLocation); // TODO: Create a way of not loading replicated textures
+                        if (weapon.ProjectileTextureLocation != string.Empty) weapon.ProjectileTexture = assetService.LoadTexture(weapon.ProjectileTextureLocation);
 
                         // Define Id and add to list
                         weapon.Id = id;
-                        GameAssets.Gameplay.Weapons.Add(weapon);
+                        Weapons.Add(weapon);
                         id++;
                         Console.WriteLine($"WEAPON \"{weapon.Name}\" ADDED");
                     }
@@ -476,50 +477,50 @@ public static class GameAssets
     public static class HUD
     {
 
-        public static Texture Arrow;
-        public static Texture WideBarGreen;
-        public static Texture WideBarRed;
-        public static Texture WideBarEmpty;
-        public static Texture BulletCounter;
-        public static Texture HudBorder;
-        public static Texture Kill;
-        public static Texture Death;
-        public static Texture ThinBarOrange;
-        public static Texture ThinBarBlue;
-        public static Texture ThinBarEmpty;
-        public static Texture SelectionSquare;
-        public static Texture KillFeedBackground;
-        public static void LoadHud()
+        public static ITextureAsset Arrow;
+        public static ITextureAsset WideBarGreen;
+        public static ITextureAsset WideBarRed;
+        public static ITextureAsset WideBarEmpty;
+        public static ITextureAsset BulletCounter;
+        public static ITextureAsset HudBorder;
+        public static ITextureAsset Kill;
+        public static ITextureAsset Death;
+        public static ITextureAsset ThinBarOrange;
+        public static ITextureAsset ThinBarBlue;
+        public static ITextureAsset ThinBarEmpty;
+        public static ITextureAsset SelectionSquare;
+        public static ITextureAsset KillFeedBackground;
+        public static void LoadHud(IAssetService assetService)
         {
-            WideBarGreen = Raylib.LoadTexture("Resources/Common/wide_bar_green.png");
-            WideBarRed = Raylib.LoadTexture("Resources/Common/wide_bar_red.png");
-            WideBarEmpty = Raylib.LoadTexture("Resources/Common/wide_bar_empty.png");
-            Arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
-            BulletCounter = Raylib.LoadTexture("Resources/Common/bullet.png");
-            HudBorder = Raylib.LoadTexture("Resources/Common/hud_border.png");
-            Kill = Raylib.LoadTexture("Resources/Common/kill.png");
-            Death = Raylib.LoadTexture("Resources/Common/death.png");
-            ThinBarOrange = Raylib.LoadTexture("Resources/Common/thin_bar_orange.png");
-            ThinBarBlue = Raylib.LoadTexture("Resources/Common/thin_bar_blue.png");
-            ThinBarEmpty = Raylib.LoadTexture("Resources/Common/thin_bar_empty.png");
-            SelectionSquare = Raylib.LoadTexture("Resources/Common/selection_square.png");
-            KillFeedBackground = Raylib.LoadTexture("Resources/Common/kill_feed_background.png");
+            WideBarGreen = assetService.LoadTexture("Resources/Common/wide_bar_green.png");
+            WideBarRed = assetService.LoadTexture("Resources/Common/wide_bar_red.png");
+            WideBarEmpty = assetService.LoadTexture("Resources/Common/wide_bar_empty.png");
+            Arrow = assetService.LoadTexture("Resources/Common/arrow.png");
+            BulletCounter = assetService.LoadTexture("Resources/Common/bullet.png");
+            HudBorder = assetService.LoadTexture("Resources/Common/hud_border.png");
+            Kill = assetService.LoadTexture("Resources/Common/kill.png");
+            Death = assetService.LoadTexture("Resources/Common/death.png");
+            ThinBarOrange = assetService.LoadTexture("Resources/Common/thin_bar_orange.png");
+            ThinBarBlue = assetService.LoadTexture("Resources/Common/thin_bar_blue.png");
+            ThinBarEmpty = assetService.LoadTexture("Resources/Common/thin_bar_empty.png");
+            SelectionSquare = assetService.LoadTexture("Resources/Common/selection_square.png");
+            KillFeedBackground = assetService.LoadTexture("Resources/Common/kill_feed_background.png");
         }
-        public static void Unload()
+        public static void Unload(IAssetService assetService)
         {
-            Raylib.UnloadTexture(WideBarGreen);
-            Raylib.UnloadTexture(WideBarRed);
-            Raylib.UnloadTexture(WideBarEmpty);
-            Raylib.UnloadTexture(Arrow);
-            Raylib.UnloadTexture(BulletCounter);
-            Raylib.UnloadTexture(HudBorder);
-            Raylib.UnloadTexture(Kill);
-            Raylib.UnloadTexture(Death);
-            Raylib.UnloadTexture(ThinBarOrange);
-            Raylib.UnloadTexture(ThinBarBlue);
-            Raylib.UnloadTexture(ThinBarEmpty);
-            Raylib.UnloadTexture(SelectionSquare);
-            Raylib.UnloadTexture(KillFeedBackground);
+            assetService.UnloadTexture(WideBarGreen);
+            assetService.UnloadTexture(WideBarRed);
+            assetService.UnloadTexture(WideBarEmpty);
+            assetService.UnloadTexture(Arrow);
+            assetService.UnloadTexture(BulletCounter);
+            assetService.UnloadTexture(HudBorder);
+            assetService.UnloadTexture(Kill);
+            assetService.UnloadTexture(Death);
+            assetService.UnloadTexture(ThinBarOrange);
+            assetService.UnloadTexture(ThinBarBlue);
+            assetService.UnloadTexture(ThinBarEmpty);
+            assetService.UnloadTexture(SelectionSquare);
+            assetService.UnloadTexture(KillFeedBackground);
         }
     }
 

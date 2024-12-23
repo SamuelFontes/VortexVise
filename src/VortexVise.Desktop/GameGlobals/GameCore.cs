@@ -1,4 +1,5 @@
-﻿using VortexVise.Desktop.Models;
+﻿using VortexVise.Core.Models;
+using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.GameGlobals;

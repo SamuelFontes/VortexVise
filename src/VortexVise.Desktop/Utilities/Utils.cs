@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Numerics;
 using System.Security.Cryptography;
+using VortexVise.Core.Models;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
