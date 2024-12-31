@@ -1,4 +1,4 @@
-﻿namespace VortexVise.Desktop.Models
+﻿namespace VortexVise.Core.Models
 {
     public class PlayerStats
     {

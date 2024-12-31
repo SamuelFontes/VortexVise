@@ -1,4 +1,4 @@
-﻿namespace VortexVise.Desktop.States;
+﻿namespace VortexVise.Core.States;
 
 /// <summary>
 /// Used to display kill log

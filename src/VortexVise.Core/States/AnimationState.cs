@@ -1,9 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Models;
-using VortexVise.Core.States;
-using VortexVise.Desktop.Models;
 
-namespace VortexVise.Desktop.States;
+namespace VortexVise.Core.States;
 
 /// <summary>
 /// Used to animate sprites when players are walking around. Also used to animate things like explosions
