@@ -7,6 +7,7 @@ using Steamworks;
 using VortexVise.Desktop.Services;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.GameContext;
+using System.Net;
 
 // ...
 
@@ -28,11 +29,11 @@ SteamClient.Shutdown();
 
 // Initialization
 //---------------------------------------------------------
-var gameCore = new GameCore();
+var context = new Context(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService());
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
-gameCore.GameScreenWidth = 960;
-gameCore.GameScreenHeight = 540;
-Raylib.InitWindow(gameCore.GameScreenWidth, gameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
+context.GameCore.GameScreenWidth = 960;
+context.GameCore.GameScreenHeight = 540;
+Raylib.InitWindow(context.GameCore.GameScreenWidth, context.GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
 //Raylib.ToggleBorderlessWindowed();                                                                      // Make game fullscreen
 Raylib.InitAudioDevice();                                                                               // Initialize audio device
 Raylib.HideCursor();                                                                                    // Hide windows cursor
@@ -47,7 +48,7 @@ var assetService = new AssetService();
 var rendererService = new RendererService();
 var collisionService = new CollisionService();
 GameAssets.InitializeAssets(assetService);                                                                          // Load global data 
-SceneManager sceneManager = new SceneManager(inputService,gameCore);
+SceneManager sceneManager = new SceneManager(inputService,context.GameCore);
 
 // Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
@@ -55,14 +56,14 @@ Raylib.SetWindowIcon(icon);                                                     
 Raylib.UnloadImage(icon);                                                                               // Unload icon from memory
 
 // Initiate music
-GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance,gameCore);      // Play main menu song
+GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance,context.GameCore);      // Play main menu song
 
 // Setup and init first screen
 sceneManager.CurrentScene = GameScene.MENU;
 
 // Main Game Loop
 //--------------------------------------------------------------------------------------
-while (!(Raylib.WindowShouldClose() || gameCore.GameShouldClose))
+while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
 {
     // UPDATE
     //----------------------------------------------------------------------------------
@@ -81,12 +82,12 @@ while (!(Raylib.WindowShouldClose() || gameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager,collisionService,gameCore);
+    sceneManager.UpdateScene(sceneManager,collisionService,context.GameCore);
 
 
     // Update user interface
     //----------------------------------------------------------------------------------
-    GameUserInterface.UpdateUserInterface(gameCore);
+    GameUserInterface.UpdateUserInterface(context.GameCore);
 
 
     // DRAW
@@ -96,13 +97,13 @@ while (!(Raylib.WindowShouldClose() || gameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw scene (gameplay or menu)
-    sceneManager.DrawScene(rendererService,gameCore);
+    sceneManager.DrawScene(rendererService,context.GameCore);
 
     // Draw full screen rectangle in front of everything when changing screens
-    if (sceneManager.OnTransition) sceneManager.DrawTransition(gameCore);
+    if (sceneManager.OnTransition) sceneManager.DrawTransition(context.GameCore);
 
     // Draw UI on top
-    GameUserInterface.DrawUserInterface(rendererService,gameCore);
+    GameUserInterface.DrawUserInterface(rendererService,context.GameCore);
 
     Raylib.EndDrawing();
 }
@@ -111,7 +112,7 @@ while (!(Raylib.WindowShouldClose() || gameCore.GameShouldClose))
 sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 while (!sceneManager.TransitionFadeOut)
 {
-    sceneManager.UpdateTransition(gameCore);
+    sceneManager.UpdateTransition(context.GameCore);
 }
 
 // De-Initialization
