@@ -1,4 +1,5 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameGlobals;
 using VortexVise.Desktop.Models;

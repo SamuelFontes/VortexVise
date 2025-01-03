@@ -1,9 +1,8 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using VortexVise.Core.Models;
-using VortexVise.Core.States;
-using ZeroElectric.Vinculum;
 
-namespace VortexVise.Desktop.States;
+namespace VortexVise.Core.States;
 
 /// <summary>
 /// State for dropped itens.

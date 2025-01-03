@@ -355,7 +355,7 @@ public static class PlayerLogic
             Guid? idToRemove = null;
             foreach (var drop in currentState.WeaponDrops)
             {
-                if (Raylib.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
+                if (Raylib.CheckCollisionRecs(drop.Collision.ToRaylibRectangle(), currentPlayerState.Collision))
                 {
                     idToRemove = drop.Id;
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;

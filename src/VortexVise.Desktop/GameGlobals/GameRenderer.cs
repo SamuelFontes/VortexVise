@@ -97,7 +97,7 @@ public static class GameRenderer
 
             rendererService.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.Width * 0.5f, drop.WeaponState.Weapon.Texture.Height * 0.5f), rotation, System.Drawing.Color.White);
 
-            if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision, Raylib.PURPLE); // Debug
+            if (Utils.Debug()) Raylib.DrawRectangleRec(drop.Collision.ToRaylibRectangle(), Raylib.PURPLE); // Debug
         }
         if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) rendererService.DrawRectangleRec(h.HitBox, System.Drawing.Color.Red); // Debug
     }
@@ -201,7 +201,7 @@ public static class GameRenderer
         // --------------------------------------------------------
         foreach (var drop in state.WeaponDrops)
         {
-            if (Raylib.CheckCollisionRecs(drop.Collision, mainPlayer.Collision))
+            if (Raylib.CheckCollisionRecs(drop.Collision.ToRaylibRectangle(), mainPlayer.Collision))
             {
                 rendererService.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, System.Drawing.Color.White);
             }

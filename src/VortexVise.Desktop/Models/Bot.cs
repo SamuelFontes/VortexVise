@@ -1,6 +1,7 @@
-﻿using VortexVise.Desktop.States;
+﻿using VortexVise.Core.States;
+using VortexVise.Desktop.States;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 public class Bot
 {
