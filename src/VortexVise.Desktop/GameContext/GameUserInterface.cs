@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core;
 using VortexVise.Core.Enums;
+using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Networking;

@@ -1,6 +1,6 @@
 ﻿using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.GameContext;
+namespace VortexVise.Core.GameContext;
 
 /// <summary>
 /// Game attributes.

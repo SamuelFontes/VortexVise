@@ -1,4 +1,5 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using ZeroElectric.Vinculum;

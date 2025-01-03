@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using VortexVise.Desktop.Extensions;
@@ -126,7 +127,7 @@ public static class PlayerLogic
         }
     }
 
-    public static void ProcessPlayerJump(PlayerState currentPlayerState, float deltaTime,GameCore gameCore)
+    public static void ProcessPlayerJump(PlayerState currentPlayerState, float deltaTime, GameCore gameCore)
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {

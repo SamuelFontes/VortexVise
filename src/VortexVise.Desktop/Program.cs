@@ -6,6 +6,7 @@ using ZeroElectric.Vinculum;
 using Steamworks;
 using VortexVise.Desktop.Services;
 using VortexVise.Core.Interfaces;
+using VortexVise.Core.GameContext;
 
 // ...
 

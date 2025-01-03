@@ -1,6 +1,7 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
 using VortexVise.Core.Enums;
+using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using VortexVise.Desktop.Extensions;

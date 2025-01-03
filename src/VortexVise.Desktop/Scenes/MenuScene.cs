@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.GameContext;
