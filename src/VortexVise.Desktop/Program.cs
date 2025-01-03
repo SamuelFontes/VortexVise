@@ -40,15 +40,9 @@ Raylib.HideCursor();                                                            
 Raylib.SetTargetFPS(GameSettings.TargetFPS);                                                            // Set game target FPS
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 
-// Initialize services
-InputService inputService = new InputService();
-
 // Load Assets
-var assetService = new AssetService();
-var rendererService = new RendererService();
-var collisionService = new CollisionService();
-GameAssets.InitializeAssets(assetService);                                                                          // Load global data 
-SceneManager sceneManager = new SceneManager(inputService,context.GameCore);
+GameAssets.InitializeAssets(context.AssetService);                                                                          // Load global data 
+SceneManager sceneManager = new SceneManager(context.InputService,context.GameCore);
 
 // Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
@@ -82,7 +76,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager,collisionService,context.GameCore);
+    sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore);
 
 
     // Update user interface
@@ -97,13 +91,13 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw scene (gameplay or menu)
-    sceneManager.DrawScene(rendererService,context.GameCore);
+    sceneManager.DrawScene(context.RendererService,context.GameCore);
 
     // Draw full screen rectangle in front of everything when changing screens
     if (sceneManager.OnTransition) sceneManager.DrawTransition(context.GameCore);
 
     // Draw UI on top
-    GameUserInterface.DrawUserInterface(rendererService,context.GameCore);
+    GameUserInterface.DrawUserInterface(context.RendererService,context.GameCore);
 
     Raylib.EndDrawing();
 }
@@ -117,6 +111,6 @@ while (!sceneManager.TransitionFadeOut)
 
 // De-Initialization
 //--------------------------------------------------------------------------------------
-GameAssets.UnloadAssets(assetService);
+GameAssets.UnloadAssets(context.AssetService);
 Raylib.CloseAudioDevice();     // Close audio context
 Raylib.CloseWindow();          // Close window and OpenGL context
