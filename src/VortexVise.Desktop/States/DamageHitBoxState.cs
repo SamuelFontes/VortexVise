@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 
 namespace VortexVise.Desktop.States;
 
@@ -42,7 +42,7 @@ public class DamageHitBoxState
     /// Make the thing explode
     /// </summary>
     /// <param name="gameState">Current Game State</param>
-    public void Explode(GameState gameState)
+    public void Explode(GameState gameState, GameCore gameCore)
     {
         if (IsExplosion) return;
         HitBox = new(HitBox.X - 48, HitBox.Y - 48, HitBox.Width + 96, HitBox.Height + 96);
@@ -52,6 +52,6 @@ public class DamageHitBoxState
         ShouldDisappear = false;
         IsExplosion = true;
         gameState.Animations.Add(new() { Animation = GameAssets.Animations.Explosion, Position = new(HitBox.X, HitBox.Y) });
-        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Explosion);
+        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Explosion,gameCore);
     }
 }

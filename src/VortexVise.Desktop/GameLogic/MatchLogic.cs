@@ -1,6 +1,6 @@
 ﻿using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.States;
 
@@ -8,7 +8,7 @@ namespace VortexVise.Desktop.Logic;
 
 public static class MatchLogic
 {
-    public static void HandleMatchState(GameState gameState, float deltaTime, SceneManager sceneManager)
+    public static void HandleMatchState(GameState gameState, float deltaTime, SceneManager sceneManager, GameCore gameCore)
     {
         gameState.MatchTimer -= deltaTime;
 
@@ -19,18 +19,18 @@ public static class MatchLogic
                 gameState.MatchTimer = GameMatch.MatchLengthInSeconds;
                 gameState.MatchState = MatchStates.Playing;
 
-                if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM);
-                else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
+                if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM,gameCore);
+                else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis,gameCore);
             }
             else if (gameState.MatchState == MatchStates.Playing)
             {
-                GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
+                GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance,gameCore);
                 gameState.MatchTimer = 10;
                 gameState.MatchState = MatchStates.EndScreen;
             }
             else if (gameState.MatchState == MatchStates.EndScreen)
             {
-                if (!GameCore.IsNetworkGame) gameState.IsRunning = false;
+                if (!gameCore.IsNetworkGame) gameState.IsRunning = false;
                 else
                 {
                     gameState.MatchTimer = 10;

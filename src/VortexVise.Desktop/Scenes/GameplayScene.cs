@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
@@ -33,24 +33,24 @@ public class GameplayScene
         _inputService = inputService;
     }
 
-    public void InitGameplayScene()
+    public void InitGameplayScene(GameCore gameCore)
     {
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
 
         LastTimeAccumulator = CurrentTime;
-        DeltaTime = 1d / GameCore.GameTickRate;
+        DeltaTime = 1d / gameCore.GameTickRate;
         LastTime = CurrentTime - DeltaTime;
 
 
         LastState.CurrentTime = CurrentTime;
         LastState.Gravity = Gravity;
         PlayerLogic.Init();
-        CameraLogic.Init();
-        if (GameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerOneProfile.Id, GameCore.PlayerOneProfile.Skin));
-        if (GameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerTwoProfile.Id, GameCore.PlayerTwoProfile.Skin));
-        if (GameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerThreeProfile.Id, GameCore.PlayerThreeProfile.Skin));
-        if (GameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(GameCore.PlayerFourProfile.Id, GameCore.PlayerFourProfile.Skin));
+        CameraLogic.Init(gameCore);
+        if (gameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerOneProfile.Id, gameCore.PlayerOneProfile.Skin));
+        if (gameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerTwoProfile.Id, gameCore.PlayerTwoProfile.Skin));
+        if (gameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerThreeProfile.Id, gameCore.PlayerThreeProfile.Skin));
+        if (gameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerFourProfile.Id, gameCore.PlayerFourProfile.Skin));
 
         BotLogic.Init(LastState);
 
@@ -58,7 +58,7 @@ public class GameplayScene
         finishScreen = 0;
     }
 
-    public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService)
+    public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore)
     {
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
@@ -95,15 +95,15 @@ public class GameplayScene
             {
                 // Do all the network magic
                 // TODO: The input should be send together instead of one for each player
-                if (GameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerOneProfile.Gamepad), GameCore.PlayerOneProfile.Id, State.Tick);
-                if (GameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerTwoProfile.Gamepad), GameCore.PlayerTwoProfile.Id, State.Tick);
-                if (GameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerThreeProfile.Gamepad), GameCore.PlayerThreeProfile.Id, State.Tick);
-                if (GameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(GameCore.PlayerFourProfile.Gamepad), GameCore.PlayerFourProfile.Id, State.Tick);
+                if (gameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerOneProfile.Gamepad), gameCore.PlayerOneProfile.Id, State.Tick);
+                if (gameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerTwoProfile.Gamepad), gameCore.PlayerTwoProfile.Id, State.Tick);
+                if (gameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerThreeProfile.Gamepad), gameCore.PlayerThreeProfile.Id, State.Tick);
+                if (gameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerFourProfile.Gamepad), gameCore.PlayerFourProfile.Id, State.Tick);
 
                 if (GameClient.IsHost)
                 {
-                    State = GameLogic.SimulateState(collisionService,LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
-                    State.OwnerId = GameCore.PlayerOneProfile.Id;
+                    State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager, gameCore);
+                    State.OwnerId = gameCore.PlayerOneProfile.Id;
                     GameClient.SendState(State);
                 }
                 else
@@ -112,25 +112,25 @@ public class GameplayScene
                     GameState receivedState = GameClient.LastServerState;
                     if (receivedState.Tick != GameClient.LastTickSimluated)
                     {
-                        //if (GameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerOneProfile.Id);
-                        //if (GameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerTwoProfile.Id);
-                        //if (GameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerThreeProfile.Id);
-                        //if (GameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, GameCore.PlayerFourProfile.Id);
+                        //if (gameCore.PlayerOneProfile.Gamepad != -9) receivedState.ApproximateState(LastState, gameCore.PlayerOneProfile.Id);
+                        //if (gameCore.PlayerTwoProfile.Gamepad != -9) receivedState.ApproximateState(LastState, gameCore.PlayerTwoProfile.Id);
+                        //if (gameCore.PlayerThreeProfile.Gamepad != -9) receivedState.ApproximateState(LastState, gameCore.PlayerThreeProfile.Id);
+                        //if (gameCore.PlayerFourProfile.Gamepad != -9) receivedState.ApproximateState(LastState, gameCore.PlayerFourProfile.Id);
                         // TODO: Simulate all ticks in the past up to current one, apply approximations on the state that matches the tick received 
 
-                        State = GameLogic.SimulateState(collisionService,receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                        State = GameLogic.SimulateState(collisionService, receivedState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager, gameCore);
                         GameClient.LastTickSimluated = receivedState.Tick;
                     }
                     else
                     {
                         // Client-Side Prediction
-                        State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                        State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager, gameCore);
                     }
                 }
             }
             else
             {
-                State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager);
+                State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)(DeltaTime - Accumulator), true, _inputService, sceneManager, gameCore);
             }
             simulationTime -= DeltaTime;
             LastTime += DeltaTime;
@@ -144,7 +144,7 @@ public class GameplayScene
             // This is if the player has more fps than tickrate, it will always be processed on the client side this should be the same as client-side prediction
             double accumulatorSimulationTime = CurrentTime - LastTimeAccumulator;
             Accumulator += accumulatorSimulationTime;
-            State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)accumulatorSimulationTime, false, _inputService, sceneManager);
+            State = GameLogic.SimulateState(collisionService, LastState, CurrentTime, (float)accumulatorSimulationTime, false, _inputService, sceneManager, gameCore);
             LastTimeAccumulator = CurrentTime;
             LastState = State;
         }
@@ -169,22 +169,22 @@ public class GameplayScene
         if (!State.IsRunning) finishScreen = 1;
     }
 
-    public void DrawGameplayScene(IRendererService rendererService)
+    public void DrawGameplayScene(IRendererService rendererService, GameCore gameCore)
     {
         Raylib.ClearBackground(Raylib.BLACK);
         if (State.PlayerStates.Count == 0) return;
 
-        for (int i = 0; i < Utils.GetNumberOfLocalPlayers(); i++)
+        for (int i = 0; i < Utils.GetNumberOfLocalPlayers(gameCore); i++)
         {
             PlayerState player;
-            if (i == 0) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerOneProfile.Id);
-            else if (i == 1) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerTwoProfile.Id);
-            else if (i == 2) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerThreeProfile.Id);
-            else if (i == 3) player = State.PlayerStates.First(p => p.Id == GameCore.PlayerFourProfile.Id);
+            if (i == 0) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerOneProfile.Id);
+            else if (i == 1) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerTwoProfile.Id);
+            else if (i == 2) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerThreeProfile.Id);
+            else if (i == 3) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerFourProfile.Id);
             else return;
 
-            CameraLogic.BeginDrawingToCamera(i, player.Position);
-            GameRenderer.DrawGameState(rendererService,State, player);
+            CameraLogic.BeginDrawingToCamera(i, player.Position, gameCore);
+            GameRenderer.DrawGameState(rendererService, State, player);
             CameraLogic.EndDrawingToCamera(i, player.IsDead);
         }
 

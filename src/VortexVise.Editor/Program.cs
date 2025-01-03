@@ -2,7 +2,7 @@
 using System.Numerics;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
 using VortexVise.Desktop.Services;

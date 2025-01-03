@@ -22,7 +22,8 @@ namespace VortexVise.Desktop.Services
         {
             try
             {
-                texture.Unload();
+                if(texture != null) 
+                    texture.Unload();
             }
             catch (Exception ex)
             {

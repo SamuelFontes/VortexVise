@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -25,7 +25,7 @@ public static class GameClient
     public static HttpClient httpClient = new();
     public static GameLobby? CurrentLobby;
     public static List<GameLobby>? AvailableLobbies = [];
-    public static bool IsHost { get { return CurrentLobby?.Owner.Id == GameCore.PlayerOneProfile.Id; } }
+    public static bool IsHost { get; set; } //{ return CurrentLobby?.Owner.Id == GameCore.PlayerOneProfile.Id; } }
     static public void Connect(string ip)
     {
         try

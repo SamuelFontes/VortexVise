@@ -7,7 +7,7 @@ using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Desktop.GameGlobals;
+namespace VortexVise.Desktop.GameContext;
 
 /// <summary>
 /// This will handle all game rendering

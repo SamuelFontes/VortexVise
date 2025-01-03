@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
@@ -18,14 +18,14 @@ public static class PlayerHookLogic
     /// <param name="currentPlayerState">Current player state.</param>
     /// <param name="gravity">Current gravity</param>
     /// <param name="deltaTime">Time since last frame</param>
-    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime)
+    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime, GameCore gameCore)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
         {
             currentPlayerState.HookState.IsHookReleased = false;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Velocity = new(0, 0);
-            PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false);
+            PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false,gameCore);
         }
         else if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {
@@ -36,8 +36,8 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - 4, currentPlayerState.HookState.Position.Y);
 
             // Play hook shoot sound
-            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookShoot);
+            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookShoot,gameCore);
 
             // Reset velocity
             currentPlayerState.HookState.Velocity = new(0, 0);
@@ -150,8 +150,8 @@ public static class PlayerHookLogic
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
-                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, volume: 0.5f);
+                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, gameCore, volume: 0.5f);
                 }
             }
         }

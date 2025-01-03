@@ -3,7 +3,7 @@ using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using VortexVise.Desktop.Extensions;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
 using ZeroElectric.Vinculum;
 
@@ -48,11 +48,11 @@ public static class PlayerLogic
         if (currentPlayerState.TimeSinceJump > 0) currentPlayerState.TimeSinceJump += deltaTime;
         if (currentPlayerState.DamagedTimer > 0) currentPlayerState.DamagedTimer -= deltaTime;
     }
-    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime, GameState currentGameState, GameState lastGameState)
+    public static void HandlePlayerDeath(PlayerState currentPlayerState, float deltaTime, GameState currentGameState, GameState lastGameState, GameCore gameCore)
     {
         if (currentPlayerState.HeathPoints <= 0 && !currentPlayerState.IsDead)
         {
-            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death);
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death,gameCore);
             currentPlayerState.IsDead = true;
             currentPlayerState.WeaponStates.Clear();
             currentPlayerState.HookState.IsHookReleased = false;
@@ -64,7 +64,7 @@ public static class PlayerLogic
             if (currentPlayerState.LastPlayerHitId == currentPlayerState.Id || currentPlayerState.LastPlayerHitId == Guid.Empty)
             {
                 //currentPlayerState.Stats.Kills--;
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death, pitch: 0.8f);
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Death,gameCore, pitch: 0.8f);
             }
             else
             {
@@ -72,10 +72,10 @@ public static class PlayerLogic
                 if (p != null)
                 {
                     p.Stats.Kills++;
-                    if (IsPlayerLocal(p.Id))
+                    if (IsPlayerLocal(p.Id,gameCore))
                     {
                         currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.KillConfirmation, Position = new(p.Position.X - 16, p.Position.Y - 64) });
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Kill);
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Kill,gameCore);
                     }
                 }
             }
@@ -126,12 +126,12 @@ public static class PlayerLogic
         }
     }
 
-    public static void ProcessPlayerJump(PlayerState currentPlayerState, float deltaTime)
+    public static void ProcessPlayerJump(PlayerState currentPlayerState, float deltaTime,GameCore gameCore)
     {
         if (currentPlayerState.Input.Jump && currentPlayerState.IsTouchingTheGround)
         {
-            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump, volume: 0.5f, overrideIfPlaying: false); ;
+            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Jump,gameCore, volume: 0.5f, overrideIfPlaying: false); ;
             currentPlayerState.IsTouchingTheGround = false;
             currentPlayerState.SetVelocityY(-GameMatch.PlayerJumpForce);
             currentPlayerState.CanDash = true;
@@ -139,16 +139,16 @@ public static class PlayerLogic
         }
         else if (currentPlayerState.Input.CancelHook && currentPlayerState.CanDash && currentPlayerState.TimeSinceJump > 0.1f)
         {
-            MakePlayerDashOrDoubleJump(currentPlayerState, true);
+            MakePlayerDashOrDoubleJump(currentPlayerState, true,gameCore);
         }
 
     }
 
-    public static void ProcessPlayerJetPack(PlayerState currentPlayerState, GameState currentGameState, float deltaTime)
+    public static void ProcessPlayerJetPack(PlayerState currentPlayerState, GameState currentGameState, float deltaTime,GameCore gameCore)
     {
         if (currentPlayerState.Input.JetPack && currentPlayerState.JetPackFuel > 0)
         {
-            if (IsPlayerLocal(currentPlayerState.Id)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack, pitch: 1f, volume: 0.5f, overrideIfPlaying: false);
+            if (IsPlayerLocal(currentPlayerState.Id,gameCore)) GameAssets.Sounds.PlaySound(GameAssets.Sounds.JetPack,gameCore, pitch: 1f, volume: 0.5f, overrideIfPlaying: false);
             currentGameState.Animations.Add(new() { Animation = GameAssets.Animations.Fire, Position = new(currentPlayerState.Position.X + (new Random().Next(8, 16)),currentPlayerState.Position.Y + 24) });
 
             if (currentPlayerState.Velocity.Y > 0) currentPlayerState.SetVelocityY(0);
@@ -312,12 +312,12 @@ public static class PlayerLogic
         position.Y += 16;
         return position;
     }
-    public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump)
+    public static void MakePlayerDashOrDoubleJump(PlayerState currentPlayerState, bool isDoubleJump, GameCore gameCore)
     {
         var verticalForce = -GameMatch.PlayerJumpForce * 0.2f;
         if (currentPlayerState.Input.Up) verticalForce *= 2;
-        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash, volume: 0.8f);
+        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id, gameCore))
+            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Dash,gameCore, volume: 0.8f);
         if (isDoubleJump)
         {
             if (currentPlayerState.Velocity.Y < -GameMatch.PlayerJumpForce)
@@ -348,7 +348,7 @@ public static class PlayerLogic
     }
 
 
-    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState)
+    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState, GameCore gameCore)
     {
         if (currentPlayerState.Input.GrabDrop)
         {
@@ -365,16 +365,16 @@ public static class PlayerLogic
                         currentPlayerState.HeathPoints += drop.WeaponState.Weapon.Damage;
                         if (currentPlayerState.HeathPoints > GameMatch.DefaultPlayerHeathPoints) currentPlayerState.HeathPoints = GameMatch.DefaultPlayerHeathPoints;
                         currentState.WeaponDrops.RemoveAll(x => idToRemove == x.Id);
-                        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop, pitch: 0.5f);
+                        if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                            GameAssets.Sounds.PlaySound(GameAssets.Sounds.Drop,gameCore, pitch: 0.5f);
                         return;
                     }
 
                     currentPlayerState.WeaponStates.Clear(); // TODO: REMOVE THIS, the player should be able to have more weapons
                     drop.WeaponState.IsEquipped = true;
                     currentPlayerState.WeaponStates.Add(drop.WeaponState);
-                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick);
+                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.WeaponClick,gameCore);
                     break;
                 }
             }
@@ -383,13 +383,13 @@ public static class PlayerLogic
         }
     }
 
-    public static bool IsPlayerLocal(Guid playerId)
+    public static bool IsPlayerLocal(Guid playerId,GameCore gameCore)
     {
         bool isPlayerLocal = false;
-        if (GameCore.PlayerOneProfile.Gamepad != -9 && GameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
-        if (GameCore.PlayerTwoProfile.Gamepad != -9 && GameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
-        if (GameCore.PlayerThreeProfile.Gamepad != -9 && GameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
-        if (GameCore.PlayerFourProfile.Gamepad != -9 && GameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerOneProfile.Gamepad != -9 && gameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerTwoProfile.Gamepad != -9 && gameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerThreeProfile.Gamepad != -9 && gameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerFourProfile.Gamepad != -9 && gameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
         return isPlayerLocal;
     }
 

@@ -2,7 +2,7 @@
 using VortexVise.Core.States;
 using VortexVise.Core.Interfaces;
 
-namespace VortexVise.Desktop.GameGlobals;
+namespace VortexVise.Desktop.GameContext;
 
 /// <summary>
 /// Handles all player input
@@ -21,33 +21,33 @@ public static class GameInput
     /// <param name="currentPlayerState">Current player state</param>
     /// <param name="lastPlayerState">Last player state</param>
     /// <returns>A boolean indicating if this player is one of the local players.</returns>
-    public static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState, IInputService inputService)
+    public static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState, IInputService inputService, GameCore gameCore)
     {
         bool isLocalPlayer = false;
         int gamepad = -9;
         var playerIndex = 0;
-        if (GameCore.PlayerOneProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
+        if (gameCore.PlayerOneProfile.Gamepad != -9 && lastPlayerState.Id == gameCore.PlayerOneProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerOneProfile.Gamepad;
+            gamepad = gameCore.PlayerOneProfile.Gamepad;
             playerIndex = 0;
         }
-        else if (GameCore.PlayerTwoProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
+        else if (gameCore.PlayerTwoProfile.Gamepad != -9 && lastPlayerState.Id == gameCore.PlayerTwoProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerTwoProfile.Gamepad;
+            gamepad = gameCore.PlayerTwoProfile.Gamepad;
             playerIndex = 1;
         }
-        else if (GameCore.PlayerThreeProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
+        else if (gameCore.PlayerThreeProfile.Gamepad != -9 && lastPlayerState.Id == gameCore.PlayerThreeProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerThreeProfile.Gamepad;
+            gamepad = gameCore.PlayerThreeProfile.Gamepad;
             playerIndex = 2;
         }
-        else if (GameCore.PlayerFourProfile.Gamepad != -9 && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
+        else if (gameCore.PlayerFourProfile.Gamepad != -9 && lastPlayerState.Id == gameCore.PlayerFourProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = GameCore.PlayerFourProfile.Gamepad;
+            gamepad = gameCore.PlayerFourProfile.Gamepad;
             playerIndex = 3;
         }
         if (!isLocalPlayer || gamepad == -9) return isLocalPlayer;

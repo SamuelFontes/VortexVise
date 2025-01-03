@@ -1,6 +1,6 @@
 ﻿using VortexVise.Core.Enums;
 using VortexVise.Core.States;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Logic;
 
 namespace VortexVise.Desktop.States;

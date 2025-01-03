@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Security.Cryptography;
 using VortexVise.Core.Models;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
 
@@ -130,13 +130,13 @@ public static class Utils
     /// Check how many players are connected to the game locally
     /// </summary>
     /// <returns></returns>
-    public static int GetNumberOfLocalPlayers()
+    public static int GetNumberOfLocalPlayers(GameCore gameCore)
     {
         var players = 0;
-        if (GameCore.PlayerOneProfile.Gamepad != -9) players++;
-        if (GameCore.PlayerTwoProfile.Gamepad != -9) players++;
-        if (GameCore.PlayerThreeProfile.Gamepad != -9) players++;
-        if (GameCore.PlayerFourProfile.Gamepad != -9) players++;
+        if (gameCore.PlayerOneProfile.Gamepad != -9) players++;
+        if (gameCore.PlayerTwoProfile.Gamepad != -9) players++;
+        if (gameCore.PlayerThreeProfile.Gamepad != -9) players++;
+        if (gameCore.PlayerFourProfile.Gamepad != -9) players++;
         return players;
     }
 
@@ -177,13 +177,13 @@ public static class Utils
         }
     }
 
-    public static List<PlayerProfile> GetAllLocalPlayerProfiles()
+    public static List<PlayerProfile> GetAllLocalPlayerProfiles(GameCore gameCore)
     {
         List<PlayerProfile> list = new List<PlayerProfile>();
-        if (GameCore.PlayerOneProfile.Gamepad != -9) list.Add(GameCore.PlayerOneProfile);
-        if (GameCore.PlayerTwoProfile.Gamepad != -9) list.Add(GameCore.PlayerTwoProfile);
-        if (GameCore.PlayerThreeProfile.Gamepad != -9) list.Add(GameCore.PlayerThreeProfile);
-        if (GameCore.PlayerFourProfile.Gamepad != -9) list.Add(GameCore.PlayerFourProfile);
+        if (gameCore.PlayerOneProfile.Gamepad != -9) list.Add(gameCore.PlayerOneProfile);
+        if (gameCore.PlayerTwoProfile.Gamepad != -9) list.Add(gameCore.PlayerTwoProfile);
+        if (gameCore.PlayerThreeProfile.Gamepad != -9) list.Add(gameCore.PlayerThreeProfile);
+        if (gameCore.PlayerFourProfile.Gamepad != -9) list.Add(gameCore.PlayerFourProfile);
         return list;
     }
 

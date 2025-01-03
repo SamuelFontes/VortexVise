@@ -1,4 +1,4 @@
-﻿namespace VortexVise.Desktop.GameGlobals;
+﻿namespace VortexVise.Desktop.GameContext;
 
 /// <summary>
 /// Configuration for game settings, any configuration that the user have control over should go here. This should be maintained after the user exits the game.

@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using VortexVise.Desktop.GameGlobals;
+using VortexVise.Desktop.GameContext;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Models;
@@ -15,11 +15,11 @@ public class PlayerCamera
     public Vector2 CameraPosition;
     public Vector2 CameraOffset;
 
-    public void SetupCamera(float offsetX, float offsetY)
+    public void SetupCamera(float offsetX, float offsetY, GameCore gameCore)
     {
         CameraOffset.X = offsetX;
         CameraOffset.Y = offsetY;
-        var cameraView = new Vector2(GameCore.GameScreenWidth * offsetX, GameCore.GameScreenHeight * offsetY);
+        var cameraView = new Vector2(gameCore.GameScreenWidth * offsetX, gameCore.GameScreenHeight * offsetY);
         Camera.offset = cameraView;
         Camera.target = cameraView;
         Camera.zoom = 1;

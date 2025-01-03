@@ -13,7 +13,7 @@ using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Desktop.GameGlobals;
+namespace VortexVise.Desktop.GameContext;
 
 /// <summary>
 /// 
@@ -340,27 +340,27 @@ public static class GameAssets
         public static string MusicAssetPixelatedDiscordance = "Resources/Audio/Music/PixelatedDiscordance.mp3";
         public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
 
-        public static void PlayMusic(string music)
+        public static void PlayMusic(string music, GameCore gameCore)
         {
-            if (IsMusicPlaying) StopMusic();
+            if (IsMusicPlaying) StopMusic(gameCore);
             Music = Raylib.LoadMusicStream(music);
             Raylib.PlayMusicStream(Music);
             IsMusicPlaying = true;
             Raylib.SetMusicVolume(Music, 0.8f);
         }
 
-        public static void StopMusic()
+        public static void StopMusic(GameCore gameCore)
         {
             if (!IsMusicPlaying) return;
-            Sounds.PlaySound(Sounds.VinylScratch, pitch: 0.7f);
+            Sounds.PlaySound(Sounds.VinylScratch,gameCore, pitch: 0.7f);
             Raylib.StopMusicStream(Music);
             Raylib.UnloadMusicStream(Music);
             IsMusicPlaying = false;
         }
 
-        public static void PlayCustomMusic(string musicName)
+        public static void PlayCustomMusic(string musicName, GameCore gameCore)
         {
-            if (IsMusicPlaying) StopMusic();
+            if (IsMusicPlaying) StopMusic(gameCore);
             Music = Raylib.LoadMusicStream($"Resources/Audio/Music/{musicName}.mp3");
             Raylib.PlayMusicStream(Music);
             IsMusicPlaying = true;
@@ -436,9 +436,9 @@ public static class GameAssets
             Raylib.UnloadSound(Kill);
             Raylib.UnloadSound(JetPack);
         }
-        public static void PlaySound(Sound sound, float pan = 0.5f, float pitch = 1f, float volume = 1f, bool overrideIfPlaying = true)
+        public static void PlaySound(Sound sound, GameCore gameCore, float pan = 0.5f, float pitch = 1f, float volume = 1f, bool overrideIfPlaying = true)
         {
-            if (GameCore.IsServer) return; // Audio don't play on the server
+            if (gameCore.IsServer) return; // Audio don't play on the server
             if (!overrideIfPlaying && Raylib.IsSoundPlaying(sound)) return;
 
             volume *= GameSettings.VolumeSounds;
