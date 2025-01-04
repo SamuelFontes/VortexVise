@@ -19,6 +19,11 @@ namespace VortexVise.Desktop.Services
             ZeroElectric.Vinculum.Raylib.DrawRectangleRec(rec.ToRaylibRectangle(), color.ToRaylibColor());
         }
 
+        public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DrawTexture(ITextureAsset? texture, int x, int y, Color color)
         {
             if (texture is TextureAsset raylibTexture)
@@ -65,6 +70,11 @@ namespace VortexVise.Desktop.Services
             {
                 throw new ArgumentException("Invalid texture asset type.");
             }
+        }
+
+        public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing)
+        {
+            throw new NotImplementedException();
         }
     }
 }
