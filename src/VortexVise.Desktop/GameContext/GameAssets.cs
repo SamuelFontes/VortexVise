@@ -240,7 +240,7 @@ public static class GameAssets
                         else
                         {
                             string[] rgba = color.Split(',');
-                            weapon.Color = new Color(Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]), Convert.ToInt32(rgba[3])).ToDrawingColor();
+                            weapon.Color = System.Drawing.Color.FromArgb(Convert.ToInt32(rgba[3]),Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]));
                         }
 
                         // Damage
