@@ -1,4 +1,6 @@
-﻿namespace VortexVise.Core.Models;
+﻿using VortexVise.Core.Interfaces;
+
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Define the player appearance.

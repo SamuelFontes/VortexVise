@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VortexVise.Core.Models;
+using VortexVise.Core.Interfaces;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Models

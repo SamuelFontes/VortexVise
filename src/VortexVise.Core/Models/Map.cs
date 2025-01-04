@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Text.Json.Serialization;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Interfaces;
 
 namespace VortexVise.Core.Models;
 

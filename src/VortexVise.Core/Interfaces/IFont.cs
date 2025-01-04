@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VortexVise.Core.Models
+namespace VortexVise.Core.Interfaces
 {
     public interface IFontAsset
     {
-        public void Load(string path); 
+        public void Load(string path);
         public void Unload();
     }
 }

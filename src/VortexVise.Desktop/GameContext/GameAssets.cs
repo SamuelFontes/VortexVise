@@ -1,16 +1,12 @@
-﻿
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
-using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
-using VortexVise.Desktop.Scenes;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
 
@@ -526,4 +522,3 @@ public static class GameAssets
     }
 
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VortexVise.Core.Interfaces;
-using VortexVise.Core.Models;
 using VortexVise.Desktop.Models;
 
 namespace VortexVise.Desktop.Services
