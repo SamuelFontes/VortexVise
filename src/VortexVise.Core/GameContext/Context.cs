@@ -14,6 +14,6 @@ namespace VortexVise.Core.GameContext
         public IInputService InputService { get; set; } = inputService;
         public IRendererService RendererService { get; set; } = rendererService;
         public ISoundService SoundService { get; set; } = soundService;
-        public GameCore GameCore { get; set; }
+        public GameCore GameCore { get; set; } = new();
     }
 }

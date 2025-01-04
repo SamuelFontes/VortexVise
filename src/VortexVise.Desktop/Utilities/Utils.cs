@@ -2,7 +2,9 @@
 using System.Numerics;
 using System.Security.Cryptography;
 using VortexVise.Core.GameContext;
+using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
 using ZeroElectric.Vinculum;
@@ -120,11 +122,11 @@ public static class Utils
     /// <param name="textPosition"></param>
     /// <param name="textSize"></param>
     /// <param name="color"></param>
-    public static void DrawTextCentered(string text, Vector2 textPosition, int textSize, Color color)
+    public static void DrawTextCentered(string text, Vector2 textPosition, int textSize, Color color, IRendererService rendererService)
     {
-        var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, text, textSize, 0);
+        var textBoxSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, text, textSize, 0);
         var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
-        Raylib.DrawTextEx(GameAssets.Misc.Font, text, pos, textSize, 0, color);
+        rendererService.DrawTextEx(GameAssets.Misc.Font, text, pos, textSize, 0, color.ToDrawingColor());
     }
 
     /// <summary>

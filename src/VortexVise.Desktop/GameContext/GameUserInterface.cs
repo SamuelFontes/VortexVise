@@ -169,18 +169,18 @@ static internal class GameUserInterface
         if (GameMatch.GameState?.MatchState == MatchStates.Warmup)
         {
             Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
-            Utils.DrawTextCentered($"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE);
+            Utils.DrawTextCentered($"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE, rendererService);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.EndScreen)
         {
             Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
             var y = 64;
             var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
             if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
@@ -189,7 +189,7 @@ static internal class GameUserInterface
             }
             else
             {
-                Utils.DrawTextCentered($"DRAW", new(gameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+                Utils.DrawTextCentered($"DRAW", new(gameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE, rendererService);
             }
             GameUserInterface.DrawScoreboard(rendererService, players, gameCore);
         }
@@ -197,7 +197,7 @@ static internal class GameUserInterface
         {
             Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE);
+            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
         }
 
 
@@ -243,11 +243,11 @@ static internal class GameUserInterface
 
         rendererService.DrawTexture(GameAssets.HUD.Kill, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
-        Utils.DrawTextCentered($"{playerState.Stats.Kills}", scorePosition, 16, Raylib.WHITE);
+        Utils.DrawTextCentered($"{playerState.Stats.Kills}", scorePosition, 16, Raylib.WHITE, rendererService);
         scorePosition += new Vector2(32, -8);
         rendererService.DrawTexture(GameAssets.HUD.Death, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
-        Utils.DrawTextCentered($"{playerState.Stats.Deaths}", scorePosition, 16, Raylib.WHITE);
+        Utils.DrawTextCentered($"{playerState.Stats.Deaths}", scorePosition, 16, Raylib.WHITE, rendererService);
 
 
     }
@@ -266,13 +266,13 @@ static internal class GameUserInterface
             rendererService.DrawTexture(GameAssets.HUD.Kill, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
-            Utils.DrawTextCentered($"{player.Stats.Kills}", new(x, y), 16, Raylib.WHITE);
+            Utils.DrawTextCentered($"{player.Stats.Kills}", new(x, y), 16, Raylib.WHITE, rendererService);
             x += 32;
             y -= 8;
             rendererService.DrawTexture(GameAssets.HUD.Death, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
-            Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE);
+            Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE, rendererService);
             y += 32;
         }
 

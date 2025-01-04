@@ -32,7 +32,7 @@ public static class GameAssets
     {
         // Misc
         //---------------------------------------------------------
-        Misc.Font = Raylib.LoadFont("Resources/Common/DeltaBlock.ttf");
+        Misc.Font.Load("Resources/Common/DeltaBlock.ttf");
         HUD.LoadHud(assetService);
 
         // Sounds
@@ -65,7 +65,7 @@ public static class GameAssets
     {
         // Misc
         //---------------------------------------------------------
-        Raylib.UnloadFont(Misc.Font);
+        Misc.Font.Unload();
         HUD.Unload(assetService);
 
         // Sounds
@@ -100,7 +100,7 @@ public static class GameAssets
     /// </summary>
     public static class Misc
     {
-        public static Font Font;                                                    // Global font
+        public static IFontAsset Font = new FontAsset();                                                    // Global font
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
+using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Networking;
@@ -37,7 +38,7 @@ public class MenuScene
     private readonly IInputService _inputService;
     private SceneManager _sceneManager;
 
-    public MenuScene(IInputService inputService, SceneManager sceneManager, GameCore gameCore)
+    public MenuScene(IInputService inputService, SceneManager sceneManager, GameCore gameCore, IRendererService rendererService)
     {
         _inputService = inputService;
         _sceneManager = sceneManager;
@@ -109,10 +110,10 @@ public class MenuScene
         menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
         yOffset += gameCore.MenuFontSize;
 
-        UpdateMenuScene(gameCore);
+        UpdateMenuScene(gameCore,rendererService);
     }
 
-    public void UpdateMenuScene(GameCore gameCore)
+    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService)
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -446,7 +447,7 @@ public class MenuScene
         PlaySelectionSound(gameCore);
 
         // Update menu
-        foreach (var item in menuItems) if (item.State == currentState) item.Update();
+        foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService);
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
         if (s == null) selected = Guid.Empty;
         else selected = s.Id;
@@ -471,11 +472,11 @@ public class MenuScene
         else if (currentState == MenuState.Online)
         {
             // TODO: add here input with text
-            Utils.DrawTextCentered("CONNECT TO: ", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
+            Utils.DrawTextCentered("CONNECT TO: ", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE, rendererService);
         }
         else if (currentState == MenuState.Connecting)
         {
-            Utils.DrawTextCentered("CONNECTING", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 64, Raylib.WHITE);
+            Utils.DrawTextCentered("CONNECTING", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 64, Raylib.WHITE, rendererService);
         }
         else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {
@@ -488,13 +489,13 @@ public class MenuScene
 
             if (!gameCore.IsNetworkGame)
             {
-                Utils.DrawTextCentered("ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE);
+                Utils.DrawTextCentered("ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE, rendererService);
             }
         }
 
         // Draw menu
         //----------------------------------------------------------------------------------
-        foreach (var item in menuItems) if (item.State == currentState) item.Draw();
+        foreach (var item in menuItems) if (item.State == currentState) item.Draw(rendererService);
 
         // Input Selection
         if (currentState == MenuState.InputSelection)
@@ -567,7 +568,7 @@ public class MenuScene
         Color Color { get; set; }
         public MenuItemType Type { get; set; }
         Vector2 TextSize;
-        public void Update()
+        public void Update(IRendererService rendererService)
         {
             if (Type == MenuItemType.TextInput && IsSelected)
             {
@@ -578,7 +579,7 @@ public class MenuScene
             }
 
             // Center the text
-            TextSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
+            TextSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
             var pos = new Vector2(CenterPosition.X - TextSize.X * 0.5f, CenterPosition.Y - TextSize.Y * 0.5f); // Centers text
 
             // Check if mouse is selecting the menu
@@ -601,17 +602,17 @@ public class MenuScene
             Position = pos;
         }
 
-        public void Draw()
+        public void Draw(IRendererService rendererService)
         {
             // Draw input box
             if (Type == MenuItemType.TextInput)
                 Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
             // Draw the text
-            Raylib.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color);
+            rendererService.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color.ToDrawingColor());
 
             if (Type == MenuItemType.Selection && IsSelected)
             {
-                var textBoxSize = Raylib.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
+                var textBoxSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
                 if (textBoxSize.X % 2 != 0) textBoxSize.X++;
                 if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
                 Raylib.DrawTexturePro(scene.arrow, new(0, 0, scene.arrow.width, scene.arrow.height), new((int)Position.X + textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, Position.Y + 8, scene.arrow.width * 2, scene.arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
@@ -703,7 +704,7 @@ public class MenuScene
 
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Utils.DrawTextCentered(profileName, profileNamePosition, gameCore.MenuFontSize, Raylib.WHITE);
+                Utils.DrawTextCentered(profileName, profileNamePosition, gameCore.MenuFontSize, Raylib.WHITE, rendererService);
             }
         }
 

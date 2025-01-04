@@ -21,7 +21,14 @@ namespace VortexVise.Desktop.Services
 
         public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint)
         {
-            throw new NotImplementedException();
+            if (font is FontAsset raylibFont)
+            {
+            ZeroElectric.Vinculum.Raylib.DrawTextEx(raylibFont.Font, text, position, fontSize, spacing, tint.ToRaylibColor());
+            }
+            else
+            {
+                throw new ArgumentException("Invalid asset type.");
+            }
         }
 
         public void DrawTexture(ITextureAsset? texture, int x, int y, Color color)
@@ -74,7 +81,14 @@ namespace VortexVise.Desktop.Services
 
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing)
         {
-            throw new NotImplementedException();
+            if (font is FontAsset raylibFont)
+            {
+                return ZeroElectric.Vinculum.Raylib.MeasureTextEx(raylibFont.Font, text, fontSize, spacing);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid asset type.");
+            }
         }
     }
 }
