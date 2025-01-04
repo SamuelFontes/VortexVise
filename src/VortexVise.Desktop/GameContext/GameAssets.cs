@@ -326,8 +326,8 @@ public static class GameAssets
     /// </summary>
     public static class MusicAndAmbience
     {
-        public static VortexVise.Desktop.Models.Music Music = new();                                                  // Background music
-        public static VortexVise.Desktop.Models.Music Ambience = new();                                               // Background sounds
+        public static IMusicAsset Music = new VortexVise.Desktop.Models.MusicAsset();                                                  // Background music
+        public static IMusicAsset Ambience = new VortexVise.Desktop.Models.MusicAsset();                                               // Background sounds
 
         // Music list
         //---------------------------------------------------------

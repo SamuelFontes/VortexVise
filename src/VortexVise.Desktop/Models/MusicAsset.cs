@@ -8,7 +8,7 @@ using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Models
 {
-    public class Music : IMusic
+    public class MusicAsset: IMusicAsset
     {
         public bool IsPlaying { get; set; }
         public bool IsLoaded { get; set; }

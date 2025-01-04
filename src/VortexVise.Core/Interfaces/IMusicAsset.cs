@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VortexVise.Core.Interfaces
 {
-    public interface IMusic
+    public interface IMusicAsset
     {
         public bool IsPlaying { get; set; }
         public bool IsLoaded { get; set; }
