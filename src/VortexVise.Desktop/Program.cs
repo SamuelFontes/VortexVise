@@ -73,7 +73,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_F7)) Utils.SwitchDebug();
 
     // Update music
-    if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
+    if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
     // Update game
     sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore, context.RendererService, context.AssetService);

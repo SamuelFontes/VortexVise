@@ -70,7 +70,7 @@ public static class GameAssets
 
         // Music And Ambience
         //---------------------------------------------------------
-        if (MusicAndAmbience.IsMusicPlaying) Raylib.UnloadMusicStream(MusicAndAmbience.Music);
+        if (MusicAndAmbience.Music.IsPlaying) MusicAndAmbience.Music.Unload();
 
         // Gameplay
         //---------------------------------------------------------
@@ -326,11 +326,8 @@ public static class GameAssets
     /// </summary>
     public static class MusicAndAmbience
     {
-        public static Music Music;                                                  // Background music
-        public static Music Ambience;                                               // Background sounds
-
-        public static bool IsMusicPlaying = false;
-        public static bool IsAmbiencePlaying = false;
+        public static VortexVise.Desktop.Models.Music Music = new();                                                  // Background music
+        public static VortexVise.Desktop.Models.Music Ambience = new();                                               // Background sounds
 
         // Music list
         //---------------------------------------------------------
@@ -339,37 +336,34 @@ public static class GameAssets
 
         public static void PlayMusic(string music, GameCore gameCore)
         {
-            if (IsMusicPlaying) StopMusic(gameCore);
-            Music = Raylib.LoadMusicStream(music);
-            Raylib.PlayMusicStream(Music);
-            IsMusicPlaying = true;
-            Raylib.SetMusicVolume(Music, 0.8f);
+            if (Music.IsPlaying) StopMusic(gameCore);
+            Music.Load(music);
+            Music.Play();
+            Music.SetVolume(0.8f); // TODO: get global volume
         }
 
         public static void StopMusic(GameCore gameCore)
         {
-            if (!IsMusicPlaying) return;
+            if (!Music.IsPlaying) return;
             Sounds.PlaySound(Sounds.VinylScratch,gameCore, pitch: 0.7f);
-            Raylib.StopMusicStream(Music);
-            Raylib.UnloadMusicStream(Music);
-            IsMusicPlaying = false;
+            Music.Stop();
+            Music.Unload();
         }
 
         public static void PlayCustomMusic(string musicName, GameCore gameCore)
         {
-            if (IsMusicPlaying) StopMusic(gameCore);
-            Music = Raylib.LoadMusicStream($"Resources/Audio/Music/{musicName}.mp3");
-            Raylib.PlayMusicStream(Music);
-            IsMusicPlaying = true;
-            Raylib.SetMusicVolume(Music, 0.8f);
+            if (Music.IsPlaying) StopMusic(gameCore);
+            Music.Load($"Resources/Audio/Music/{musicName}.mp3");
+            Music.Play();
+            Music.SetVolume(0.8f); // TODO: get global volume
         }
 
         // Ambience Sounds
         //---------------------------------------------------------
         public static void PlayAmbience(string ambience)
         {
-            if (IsAmbiencePlaying) Raylib.UnloadMusicStream(Ambience);
-            Ambience = Raylib.LoadMusicStream(ambience);
+            if (Ambience.IsPlaying) Ambience.Unload();
+            Ambience.Load(ambience);
         }
 
     }
