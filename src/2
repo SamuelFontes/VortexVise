@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
@@ -15,9 +15,9 @@ namespace VortexVise.Desktop.Logic;
 /// </summary>
 public static class PlayerLogic
 {
-    static public void Init(IAssetService assetService)
+    static public void Init()
     {
-        GameAssets.Gameplay.HookTexture = assetService.LoadTexture("Resources/Sprites/GFX/hook.png");
+        GameAssets.Gameplay.HookTexture = Raylib.LoadTexture("Resources/Sprites/GFX/hook.png");
     }
     static public void Unload(IAssetService assetService)
     {

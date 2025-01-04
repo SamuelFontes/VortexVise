@@ -108,7 +108,7 @@ public static class GameAssets
     /// </summary>
     public static class Gameplay
     {
-        public static Texture HookTexture;
+        public static ITextureAsset HookTexture;
         public static List<Map> Maps { get; set; } = [];
         public static List<Weapon> Weapons { get; set; } = [];
         public static List<Skin> Skins { get; set; } = [];

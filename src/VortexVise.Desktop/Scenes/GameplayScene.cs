@@ -34,7 +34,7 @@ public class GameplayScene
         _inputService = inputService;
     }
 
-    public void InitGameplayScene(GameCore gameCore)
+    public void InitGameplayScene(GameCore gameCore, IAssetService assetService)
     {
         GameUserInterface.DisableCursor = true;
         CurrentTime = Raylib.GetTime();
@@ -46,7 +46,7 @@ public class GameplayScene
 
         LastState.CurrentTime = CurrentTime;
         LastState.Gravity = Gravity;
-        PlayerLogic.Init();
+        PlayerLogic.Init(assetService);
         CameraLogic.Init(gameCore);
         if (gameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerOneProfile.Id, gameCore.PlayerOneProfile.Skin));
         if (gameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerTwoProfile.Id, gameCore.PlayerTwoProfile.Skin));
@@ -191,10 +191,10 @@ public class GameplayScene
 
     }
 
-    public void UnloadGameplayScene()
+    public void UnloadGameplayScene(IAssetService assetService)
     {
         CameraLogic.Unload();
-        PlayerLogic.Unload();
+        PlayerLogic.Unload(assetService);
         LastState = new();
         State = new();
         BotLogic.Unload();

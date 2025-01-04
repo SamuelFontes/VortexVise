@@ -38,7 +38,7 @@ public class SceneManager
     }
 
     // Update transition effect (fade-in, fade-out)
-    public void UpdateTransition(GameCore gameCore, IRendererService rendererService)
+    public void UpdateTransition(GameCore gameCore, IRendererService rendererService, IAssetService assetService)
     {
         if (!TransitionFadeOut)
         {
@@ -56,7 +56,7 @@ public class SceneManager
                     //case LOGO: UnloadLogoScreen(); break;
                     //case TITLE: UnloadTitleScreen(); break;
                     //case OPTIONS: UnloadOptionsScreen(); break;
-                    case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(); break;
+                    case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(assetService); break;
                     case GameScene.MENU: MenuScene.UnloadMenuScene(); break;
                     //case ENDING: UnloadEndingScreen(); break;
                     default: break;
@@ -67,7 +67,7 @@ public class SceneManager
                 {
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
-                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore); break;
+                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore,assetService); break;
                     case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, gameCore, rendererService); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
@@ -100,7 +100,7 @@ public class SceneManager
         Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, Raylib.Fade(Raylib.BLACK, TransitionAlpha));
     }
 
-    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService)
+    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService, IAssetService assetService)
     {
         if (!OnTransition)
         {
@@ -126,7 +126,7 @@ public class SceneManager
                 default: break;
             }
         }
-        else UpdateTransition(gameCore,rendererService);    // Update transition (fade-in, fade-out)
+        else UpdateTransition(gameCore,rendererService, assetService);    // Update transition (fade-in, fade-out)
     }
 
     public void DrawScene(IRendererService rendererService, GameCore gameCore)

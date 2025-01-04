@@ -76,7 +76,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.IsMusicPlaying) Raylib.UpdateMusicStream(GameAssets.MusicAndAmbience.Music);       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore, context.RendererService);
+    sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore, context.RendererService, context.AssetService);
 
 
     // Update user interface
@@ -106,7 +106,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
 sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 while (!sceneManager.TransitionFadeOut)
 {
-    sceneManager.UpdateTransition(context.GameCore, context.RendererService);
+    sceneManager.UpdateTransition(context.GameCore, context.RendererService,context.AssetService);
 }
 
 // De-Initialization

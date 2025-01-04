@@ -108,7 +108,7 @@ public static class GameRenderer
         if (playerState.HookState.IsHookReleased)
         {
             Raylib.DrawLineEx(PlayerLogic.GetPlayerCenterPosition(playerState.Position), new Vector2((int)playerState.HookState.Position.X + 3, (int)playerState.HookState.Position.Y + 3), 1, new Color(159, 79, 0, 255));
-            Raylib.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Raylib.WHITE);
+            rendererService.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, System.Drawing.Color.White);
 
             if (Utils.Debug())
                 rendererService.DrawRectangleRec(playerState.HookState.Collision, System.Drawing.Color.Green); // Debug
