@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PublishAot>true</PublishAot>
     <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <ItemGroup>
