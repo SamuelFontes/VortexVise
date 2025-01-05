@@ -14,7 +14,7 @@ namespace VortexVise.Core.Interfaces
         public void DrawTextureRec(ITextureAsset texture, Rectangle source, Vector2 position, Color tint);
         public void DrawRectangleRec(Rectangle rec, Color color);
         public void DrawTexture(ITextureAsset? texture, int x, int y, Color color);
-        public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int v1, int v2, Color white);
+        public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int rotation, int scale, Color white);
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing);
         public void DrawText(string text, Vector2 position, float fontSize, Color tint);
         public void DrawTextCentered(IFontAsset font,string text, Vector2 textPosition, int textSize, Color color);

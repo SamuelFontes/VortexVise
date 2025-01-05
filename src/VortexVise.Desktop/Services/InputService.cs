@@ -12,6 +12,22 @@ namespace VortexVise.Desktop.Services
 {
     internal class InputService : IInputService
     {
+        public GamepadSlot GetPressStart()
+        {
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
+                return GamepadSlot.MouseAndKeyboard; // Mouse and keyboard
+            else if (Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+                return GamepadSlot.GamepadOne;
+            else if (Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+                return GamepadSlot.GamepadTwo;
+            else if (Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+                return GamepadSlot.GamepadThree;
+            else if (Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
+                return GamepadSlot.GamepadFour;
+            else
+                return GamepadSlot.Disconnected;
+        }
+
         public InputState ReadPlayerInput(GamepadSlot gamepad)
         {
             int gamepadId = (int)gamepad;
@@ -43,7 +59,7 @@ namespace VortexVise.Desktop.Services
                     input.GrabDrop = true;
                 if (Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT) || Raylib.IsKeyDown(KeyboardKey.KEY_J))
                     input.Hook = true;
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_J) || Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) || Raylib.IsKeyPressed(KeyboardKey.KEY_J) || Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
                     input.Confirm = true;
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_ESCAPE))
                     input.Back = true;

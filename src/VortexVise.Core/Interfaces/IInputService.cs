@@ -22,5 +22,6 @@ namespace VortexVise.Core.Interfaces
         /// <param name="text">Reference of string that needs to change</param>
         /// <param name="isCursorVisible">Reference to cursor visibility toggle</param>
         public void UpdateTextUsingKeyboard(ref string text, ref bool isCursorVisible);
+        public GamepadSlot GetPressStart();
     }
 }

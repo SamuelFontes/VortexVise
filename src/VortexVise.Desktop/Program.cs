@@ -76,7 +76,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore, context.RendererService, context.AssetService);
+    sceneManager.UpdateScene(sceneManager,context.CollisionService,context.GameCore, context.RendererService, context.AssetService, context.InputService);
 
 
     // Update user interface

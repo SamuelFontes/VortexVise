@@ -47,11 +47,11 @@ namespace VortexVise.Desktop.Services
             }
         }
 
-        public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int v1, int v2, Color color)
+        public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int rotation, int scale, Color color)
         {
             if (texture is TextureAsset raylibTexture)
             {
-                ZeroElectric.Vinculum.Raylib.DrawTextureEx(raylibTexture.Texture, position, v1, v2, color.ToRaylibColor());
+                ZeroElectric.Vinculum.Raylib.DrawTextureEx(raylibTexture.Texture, position, rotation, scale, color.ToRaylibColor());
             }
             else
             {

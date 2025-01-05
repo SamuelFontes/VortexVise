@@ -101,7 +101,7 @@ public class SceneManager
         rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
     }
 
-    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService, IAssetService assetService)
+    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService, IAssetService assetService, IInputService inputService)
     {
         if (!OnTransition)
         {
@@ -119,7 +119,7 @@ public class SceneManager
                     break;
                 case GameScene.MENU:
                     {
-                        MenuScene.UpdateMenuScene(gameCore, rendererService, collisionService);
+                        MenuScene.UpdateMenuScene(gameCore, rendererService, collisionService, inputService);
                         if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
                         else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
                     }

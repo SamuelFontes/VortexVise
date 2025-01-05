@@ -8,7 +8,6 @@ using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Scenes;
 
@@ -111,25 +110,16 @@ public class MenuScene
         menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
         yOffset += gameCore.MenuFontSize;
 
-        UpdateMenuScene(gameCore, rendererService, collisionService);
+        UpdateMenuScene(gameCore, rendererService, collisionService, inputService);
     }
 
-    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService, ICollisionService collisionService)
+    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService, ICollisionService collisionService, IInputService inputService)
     {
         // Update
         //----------------------------------------------------------------------------------
         if (currentState == MenuState.PressStart) // MAIN MENU PRESS START 
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
-                gameCore.PlayerOneProfile.Gamepad = GamepadSlot.MouseAndKeyboard; // Mouse and keyboard
-            else if (Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(0, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                gameCore.PlayerOneProfile.Gamepad = GamepadSlot.GamepadOne;
-            else if (Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(1, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                gameCore.PlayerOneProfile.Gamepad = GamepadSlot.GamepadTwo;
-            else if (Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(2, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                gameCore.PlayerOneProfile.Gamepad = GamepadSlot.GamepadThree;
-            else if (Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_MIDDLE_RIGHT) || Raylib.IsGamepadButtonPressed(3, GamepadButton.GAMEPAD_BUTTON_LEFT_FACE_DOWN))
-                gameCore.PlayerOneProfile.Gamepad = GamepadSlot.GamepadFour;
+            gameCore.PlayerOneProfile.Gamepad = inputService.GetPressStart();
             if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected)
             {
                 GameUserInterface.IsCursorVisible = false;
@@ -141,7 +131,7 @@ public class MenuScene
         else // MAIN MENU
         {
             var input = _inputService.ReadPlayerInput(gameCore.PlayerOneProfile.Gamepad);
-            if (input.Confirm || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))
+            if (input.Confirm)
             {
                 if (currentState == MenuState.InputSelection)
                 {
