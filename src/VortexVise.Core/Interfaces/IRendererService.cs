@@ -24,5 +24,7 @@ namespace VortexVise.Core.Interfaces
         public int GetScreenHeight();
         public Vector2 GetMousePosition();
         public float GetFrameTime();
+        public double GetTime();
+        public void ClearBackground(Color color);
     }
 }

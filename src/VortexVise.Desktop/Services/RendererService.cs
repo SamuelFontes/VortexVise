@@ -133,5 +133,14 @@ namespace VortexVise.Desktop.Services
                 throw new ArgumentException("Invalid asset type.");
             }
         }
+
+        public void ClearBackground(Color color)
+        {
+            ZeroElectric.Vinculum.Raylib.ClearBackground(color.ToRaylibColor());  
+        }
+        public double GetTime()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetTime();
+        }
     }
 }

@@ -68,7 +68,7 @@ public class SceneManager
                 {
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
-                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore, assetService); break;
+                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore, assetService,rendererService); break;
                     case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, gameCore, rendererService, collisionService); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
@@ -111,7 +111,7 @@ public class SceneManager
             {
                 case GameScene.GAMEPLAY:
                     {
-                        GameplayScene.UpdateGameplayScene(sceneManager, collisionService, gameCore);
+                        GameplayScene.UpdateGameplayScene(sceneManager, collisionService, gameCore,rendererService);
                         if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
                         //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 

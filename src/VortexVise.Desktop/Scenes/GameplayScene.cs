@@ -8,7 +8,6 @@ using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Scenes;
 
@@ -35,10 +34,10 @@ public class GameplayScene
         _inputService = inputService;
     }
 
-    public void InitGameplayScene(GameCore gameCore, IAssetService assetService)
+    public void InitGameplayScene(GameCore gameCore, IAssetService assetService, IRendererService rendererService)
     {
         GameUserInterface.DisableCursor = true;
-        CurrentTime = Raylib.GetTime();
+        CurrentTime = rendererService.GetTime();
 
         LastTimeAccumulator = CurrentTime;
         DeltaTime = 1d / gameCore.GameTickRate;
@@ -60,7 +59,7 @@ public class GameplayScene
         finishScreen = 0;
     }
 
-    public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore)
+    public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService)
     {
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
         //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
@@ -85,12 +84,12 @@ public class GameplayScene
         //}
         bool isSlowerThanTickRate = false;
 
-        CurrentTime = Raylib.GetTime();
+        CurrentTime = rendererService.GetTime();
         double simulationTime = CurrentTime - LastTime;
 
         while (simulationTime >= DeltaTime) // perform one update for every interval passed
         {
-            CurrentTime = Raylib.GetTime();
+            CurrentTime = rendererService.GetTime();
             isSlowerThanTickRate = true;
 
             if (GameClient.IsConnected)
@@ -173,7 +172,7 @@ public class GameplayScene
 
     public void DrawGameplayScene(IRendererService rendererService, GameCore gameCore, ICollisionService collisionService)
     {
-        Raylib.ClearBackground(Raylib.BLACK);
+        rendererService.ClearBackground(System.Drawing.Color.Black);
         if (State.PlayerStates.Count == 0) return;
 
         for (int i = 0; i < Utils.GetNumberOfLocalPlayers(gameCore); i++)
