@@ -8,7 +8,6 @@ using VortexVise.Core.Models;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.GameContext;
 
@@ -426,16 +425,6 @@ public static class GameAssets
             VinylScratch.Unload();
             Kill.Unload();
             JetPack.Unload();
-        }
-        public static void PlaySound(Sound sound, GameCore gameCore, float pan = 0.5f, float pitch = 1f, float volume = 1f, bool overrideIfPlaying = true)
-        {
-            if (!overrideIfPlaying && Raylib.IsSoundPlaying(sound)) return;
-
-            volume *= GameSettings.VolumeSounds;
-            Raylib.SetSoundPan(sound, pan);
-            Raylib.SetSoundPitch(sound, pitch);
-            Raylib.SetSoundVolume(sound, volume);
-            Raylib.PlaySound(sound);
         }
     }
 
