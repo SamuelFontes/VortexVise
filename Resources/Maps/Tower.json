@@ -628,8 +628,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\Tower.png",
-  "MapLocation": "Resources/Maps\\Tower.ini",
+  "TextureLocation": "Resources/Maps/Tower.png",
+  "MapLocation": "Resources/Maps/Tower.ini",
   "BGM": "",
   "BGS": "",
   "Texture": {

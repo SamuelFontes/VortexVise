@@ -376,8 +376,8 @@
     1,
     2
   ],
-  "TextureLocation": "Resources/Maps\\TheSubmergedFrontier.png",
-  "MapLocation": "Resources/Maps\\TheSubmergedFrontier.ini",
+  "TextureLocation": "Resources/Maps/TheSubmergedFrontier.png",
+  "MapLocation": "Resources/Maps/TheSubmergedFrontier.ini",
   "BGM": "underwater",
   "BGS": "",
   "Texture": {
