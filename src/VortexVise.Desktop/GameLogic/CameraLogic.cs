@@ -20,117 +20,60 @@ public static class CameraLogic
         var players = Utils.GetNumberOfLocalPlayers(gameCore);
         if (players == 1)
         {
-            var camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture(gameCore.GameScreenWidth, gameCore.GameScreenHeight)
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.5f, 0.5f,gameCore);
+            var camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, gameCore.GameScreenWidth, gameCore.GameScreenHeight, 0.5f, 0.5f);
             GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 2)
         {
             // Player 1
-            var camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), gameCore.GameScreenHeight)
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.5f,gameCore);
+            var camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), gameCore.GameScreenHeight, 0.25f, 0.5f);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), gameCore.GameScreenHeight)
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new((int)(gameCore.GameScreenWidth * 0.5f), 0);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.5f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), gameCore.GameScreenHeight, 0.25f, 0.5f, (int)(gameCore.GameScreenWidth * 0.5f), 0);
             GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 3)
         {
             // Player 1
-            var camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.5f, 0.25f,gameCore);
+            var camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new(0, (int)(gameCore.GameScreenHeight * 0.5f));
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(gameCore.GameScreenWidth * 0.5f), 0);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f));
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,0, (int)(gameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 4)
         {
             // Player 1
-            var camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            var camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 2
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new((int)(gameCore.GameScreenWidth * 0.5f), 0);
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(gameCore.GameScreenWidth * 0.5f), 0);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new(0, (int)(gameCore.GameScreenHeight * 0.5f));
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,0, (int)(gameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 4
-            camera = new PlayerCamera
-            {
-                RenderTexture = Raylib.LoadRenderTexture((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f))
-            };
-            camera.RenderRectangle = new(0, 0, camera.RenderTexture.texture.width, -camera.RenderTexture.texture.height);
-            camera.CameraPosition = new((int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f));
-            camera.Camera = new Camera2D();
-            camera.SetupCamera(0.25f, 0.25f,gameCore);
+            camera = new PlayerCamera();
+            camera.Setup(gameCore.GameScreenWidth, gameCore.GameScreenHeight, (int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(gameCore.GameScreenWidth * 0.5f), (int)(gameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
-
         }
     }
     /// <summary>
@@ -143,7 +86,7 @@ public static class CameraLogic
         Raylib.EndTextureMode();
         Raylib.BeginTextureMode(GameMatch.PlayerCameras[index].RenderTexture);
         Raylib.ClearBackground(Raylib.BLACK); // Make area outside the map be black on the camera view
-        ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera,gameCore);
+        ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera, gameCore);
         Raylib.BeginMode2D(GameMatch.PlayerCameras[index].Camera);
     }
     /// <summary>
@@ -154,7 +97,7 @@ public static class CameraLogic
     {
         Raylib.EndMode2D();
         Raylib.EndTextureMode();
-        //Raylib.BeginTextureMode(gameCore.GameRendering); // Really important, otherwise will fuck everything up, this is the main game screen 
+        //Raylib.BeginTextureMode(gameCore.GameRendering); // Really important, otherwise will fuck everything up
         if (isPlayerDead)
             Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.GRAY);
         else
@@ -190,7 +133,7 @@ public static class CameraLogic
 
         if (gameCore.GameScreenWidth / Utils.GetNumberOfLocalPlayers(gameCore) >= MapLogic.GetMapSize().X) // Only if map is bigger than screen
             target.X = MapLogic.GetMapSize().X * 0.5f;
-        if (gameCore.GameScreenHeight  /Utils.GetNumberOfLocalPlayers(gameCore) >= MapLogic.GetMapSize().Y) // Only if map is bigger than screen
+        if (gameCore.GameScreenHeight / Utils.GetNumberOfLocalPlayers(gameCore) >= MapLogic.GetMapSize().Y) // Only if map is bigger than screen
             target.Y = MapLogic.GetMapSize().Y * 0.5f;
 
         target.X = (int)target.X;

@@ -12,6 +12,14 @@ namespace VortexVise.Desktop.Services
 {
     internal class InputService : IInputService
     {
+        public DebugCommand GetDebugCommand()
+        {
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_HOME))
+                return DebugCommand.AddDummyGamepad;
+            else
+                return DebugCommand.None;
+        }
+
         public GamepadSlot GetPressStart()
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) || Raylib.IsGestureDetected(Gesture.GESTURE_TAP))

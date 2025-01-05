@@ -424,6 +424,15 @@ public class MenuScene
                     }
                 }
             }
+            if (inputService.GetDebugCommand() == DebugCommand.AddDummyGamepad)
+            {
+                if (gameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Disconnected)
+                    gameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Dummy;
+                else if (gameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Disconnected)
+                    gameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Dummy;
+                else if (gameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
+                    gameCore.PlayerFourProfile.Gamepad = GamepadSlot.Dummy;
+            }
 
         }
 
@@ -439,7 +448,7 @@ public class MenuScene
         PlaySelectionSound(gameCore);
 
         // Update menu
-        foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService,collisionService);
+        foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService, collisionService);
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
         if (s == null) selected = Guid.Empty;
         else selected = s.Id;

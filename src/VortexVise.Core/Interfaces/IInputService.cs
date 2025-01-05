@@ -23,5 +23,6 @@ namespace VortexVise.Core.Interfaces
         /// <param name="isCursorVisible">Reference to cursor visibility toggle</param>
         public void UpdateTextUsingKeyboard(ref string text, ref bool isCursorVisible);
         public GamepadSlot GetPressStart();
+        public DebugCommand GetDebugCommand();
     }
 }

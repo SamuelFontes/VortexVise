@@ -4,73 +4,6 @@
 namespace VortexVise.Core.Enums;
 
 /// <summary>
-/// GameMode, defines the rules for the current match
-/// </summary>
-public enum GameMode
-{
-    /// <summary>
-    /// Free for all
-    /// </summary>
-    DeathMatch = 0,
-    /// <summary>
-    /// Team based death match
-    /// </summary>
-    TeamDeathMatch,
-    /// <summary>
-    /// Rogue like survival mode
-    /// </summary>
-    Survival
-};
-
-/// <summary>
-/// GameScreen, defines what scene the game is in 
-/// </summary>
-public enum GameScene
-{
-    /// <summary>
-    /// Used for transitioning screens
-    /// </summary>
-    UNKNOWN = -1,
-    /// <summary>
-    /// Game and library logo
-    /// </summary>
-    LOGO = 0,
-    /// <summary>
-    /// Title screen
-    /// </summary>
-    MENU,
-    /// <summary>
-    /// Options screen
-    /// </summary>
-    OPTIONS,
-    /// <summary>
-    /// Gameplay screen
-    /// </summary>
-    GAMEPLAY,
-    /// <summary>
-    /// Ending screen
-    /// </summary>
-    ENDING
-};
-
-/// <summary>
-/// Weapon type
-/// </summary>
-public enum WeaponType
-{
-    Pistol,
-    SMG,
-    Shotgun,
-    MeleeBlunt,
-    MeleeCut,
-    Granade,
-    Mine,
-    Bazoka,
-    Heal,
-
-};
-
-/// <summary>
 /// StatusEffects
 /// </summary>
 public enum StatusEffects
@@ -136,32 +69,3 @@ public enum StatusEffects
     /// </summary>
     Ivunerable,
 };
-
-
-public enum MatchStates
-{
-    Warmup,
-    Playing,
-    EndScreen,
-    Voting,
-    Lobby,
-};
-
-public enum NetworkMessageType
-{
-    Join,
-    Disconnect,
-    SendInput,
-    SendGameState,
-    SendTextMessage
-};
-
-public enum GamepadSlot
-{
-    Disconnected = -9,
-    MouseAndKeyboard = -1,
-    GamepadOne = 0,
-    GamepadTwo = 1,
-    GamepadThree = 2,
-    GamepadFour = 3,
-}
