@@ -136,11 +136,41 @@ namespace VortexVise.Desktop.Services
 
         public void ClearBackground(Color color)
         {
-            ZeroElectric.Vinculum.Raylib.ClearBackground(color.ToRaylibColor());  
+            ZeroElectric.Vinculum.Raylib.ClearBackground(color.ToRaylibColor());
         }
         public double GetTime()
         {
             return ZeroElectric.Vinculum.Raylib.GetTime();
+        }
+
+        public void BeginDrawingToCamera(IPlayerCamera camera)
+        {
+            if (camera is PlayerCamera raylibCamera)
+            {
+                ZeroElectric.Vinculum.Raylib.EndTextureMode();
+                ZeroElectric.Vinculum.Raylib.BeginTextureMode(raylibCamera.RenderTexture);
+                ZeroElectric.Vinculum.Raylib.ClearBackground(ZeroElectric.Vinculum.Raylib.BLACK); // Make area outside the map be black on the camera view
+                ZeroElectric.Vinculum.Raylib.BeginMode2D(raylibCamera.Camera);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid camera type.");
+            }
+        }
+
+        public void EndDrawingToCamera(IPlayerCamera camera, Color color)
+        {
+            if (camera is PlayerCamera raylibCamera)
+            {
+                ZeroElectric.Vinculum.Raylib.EndMode2D();
+                ZeroElectric.Vinculum.Raylib.EndTextureMode();
+                //ZeroElectric.Vinculum.Raylib.BeginTextureMode(gameCore.GameRendering); // Enable this in case of rendering to render texture
+                ZeroElectric.Vinculum.Raylib.DrawTextureRec(raylibCamera.RenderTexture.texture, raylibCamera.RenderRectangle, raylibCamera.CameraPosition, color.ToRaylibColor());
+            }
+            else
+            {
+                throw new ArgumentException("Invalid camera type.");
+            }
         }
     }
 }

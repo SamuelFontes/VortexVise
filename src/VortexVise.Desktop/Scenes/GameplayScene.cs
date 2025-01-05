@@ -183,10 +183,11 @@ public class GameplayScene
             else if (i == 2) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerThreeProfile.Id);
             else if (i == 3) player = State.PlayerStates.First(p => p.Id == gameCore.PlayerFourProfile.Id);
             else return;
-
-            CameraLogic.BeginDrawingToCamera(i, player.Position, gameCore);
+            var camera = GameMatch.PlayerCameras[i];
+            rendererService.BeginDrawingToCamera(camera);
+            CameraLogic.ProcessCamera(player.Position, camera, gameCore);
             GameRenderer.DrawGameState(rendererService, State, player, collisionService);
-            CameraLogic.EndDrawingToCamera(i, player.IsDead);
+            rendererService.EndDrawingToCamera(camera, player.IsDead ? System.Drawing.Color.Gray : System.Drawing.Color.White);
         }
 
     }

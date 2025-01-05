@@ -13,5 +13,7 @@ namespace VortexVise.Core.Interfaces
         public Vector2 CameraOffset { get; set; }
 
         public void Setup(int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,float offsetX, float offsetY, int cameraPositionX = 0, int cameraPositionY = 0);
+        public void SetTarget(Vector2 target);
+        public void Unload();
     }
 }

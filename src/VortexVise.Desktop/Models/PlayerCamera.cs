@@ -17,6 +17,14 @@ public class PlayerCamera : IPlayerCamera
     public Vector2 CameraPosition { get; set; }
     public Vector2 CameraOffset { get; set; }
 
+    public void SetTarget(Vector2 target)
+    {
+        // TODO: move this to some other core
+        // Make camera smooth
+        Camera.target.X = RayMath.Lerp(Camera.target.X, target.X, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
+        Camera.target.Y = RayMath.Lerp(Camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
+    }
+
     public void Setup(int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,float offsetX, float offsetY, int cameraPositionX = 0, int cameraPositionY = 0)
     {
         RenderTexture = Raylib.LoadRenderTexture(cameraWidth, cameraHeight);
@@ -28,5 +36,10 @@ public class PlayerCamera : IPlayerCamera
         Camera.target = cameraView;
         Camera.zoom = 1;
         CameraPosition = new(cameraPositionX,cameraPositionY);
+    }
+
+    public void Unload()
+    {
+        Raylib.UnloadRenderTexture(RenderTexture);
     }
 }

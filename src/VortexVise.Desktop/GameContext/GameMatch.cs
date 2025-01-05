@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
@@ -35,7 +36,7 @@ public static class GameMatch
     /// <summary>
     /// Current gameplay cameras, used to render player view.
     /// </summary>
-    public static List<PlayerCamera> PlayerCameras { get; set; } = [];
+    public static List<IPlayerCamera> PlayerCameras { get; set; } = [];
     /// <summary>
     /// How long a match takes
     /// </summary>

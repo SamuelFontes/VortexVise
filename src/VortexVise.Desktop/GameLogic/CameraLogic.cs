@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.GameContext;
+using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Utilities;
@@ -76,33 +77,6 @@ public static class CameraLogic
             GameMatch.PlayerCameras.Add(camera);
         }
     }
-    /// <summary>
-    /// Start drawing to specific camera.
-    /// </summary>
-    /// <param name="index">Defines what camera it will be drawing to. 0 to 3.</param>
-    /// <param name="targetPosition">Define the position the camera will be targeting. Usually this is the player position.</param>
-    public static void BeginDrawingToCamera(int index, Vector2 targetPosition, GameCore gameCore)
-    {
-        Raylib.EndTextureMode();
-        Raylib.BeginTextureMode(GameMatch.PlayerCameras[index].RenderTexture);
-        Raylib.ClearBackground(Raylib.BLACK); // Make area outside the map be black on the camera view
-        ProcessCamera(ref targetPosition, GameMatch.PlayerCameras[index], ref GameMatch.PlayerCameras[index].Camera, gameCore);
-        Raylib.BeginMode2D(GameMatch.PlayerCameras[index].Camera);
-    }
-    /// <summary>
-    /// End drawing to a specific camera.
-    /// </summary>
-    /// <param name="index">Defines what camera it will stop drawing to. 0 to 3.</param>
-    public static void EndDrawingToCamera(int index, bool isPlayerDead)
-    {
-        Raylib.EndMode2D();
-        Raylib.EndTextureMode();
-        //Raylib.BeginTextureMode(gameCore.GameRendering); // Really important, otherwise will fuck everything up
-        if (isPlayerDead)
-            Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.GRAY);
-        else
-            Raylib.DrawTextureRec(GameMatch.PlayerCameras[index].RenderTexture.texture, GameMatch.PlayerCameras[index].RenderRectangle, GameMatch.PlayerCameras[index].CameraPosition, Raylib.WHITE);
-    }
 
     /// <summary>
     /// Unload all camera related textures.
@@ -111,12 +85,12 @@ public static class CameraLogic
     {
         foreach (var camera in GameMatch.PlayerCameras)
         {
-            Raylib.UnloadRenderTexture(camera.RenderTexture);
+            camera.Unload();
         }
         GameMatch.PlayerCameras.Clear();
     }
 
-    static void ProcessCamera(ref Vector2 targetPosition, PlayerCamera playerCamera, ref Camera2D camera, GameCore gameCore)
+    public static void ProcessCamera(Vector2 targetPosition, IPlayerCamera playerCamera, GameCore gameCore)
     {
         Vector2 target = new((int)targetPosition.X, (int)targetPosition.Y);
 
@@ -139,7 +113,6 @@ public static class CameraLogic
         target.X = (int)target.X;
         target.Y = (int)target.Y;
         // Make camera smooth
-        camera.target.X = RayMath.Lerp(camera.target.X, target.X, 1 - (float)Math.Exp(-4 * Raylib.GetFrameTime()));
-        camera.target.Y = RayMath.Lerp(camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
+        playerCamera.SetTarget(target);
     }
 }
