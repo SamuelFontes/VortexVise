@@ -32,15 +32,11 @@ namespace VortexVise.Web.Services
 
         public void HandleWindowEvents()
         {
-            Console.WriteLine("IsKeyPress?");
             // Debug toggle
-            if (Raylib.IsKeyPressed(KeyboardKey.F7))
+            if (Raylib.IsKeyPressed(KeyboardKey.F9))
             {
-                Console.WriteLine("Gonna debug");
                 Utils.SwitchDebug();
-                Console.WriteLine("Debug");
             }
-            Console.WriteLine("Nope");
         }
     }
 }

@@ -76,6 +76,7 @@ namespace VortexVise.Core.GameGlobals
             if (CursorAlpha > 255) alpha = 255;
             else alpha = (int)CursorAlpha;
 
+            if(alpha < 0) alpha = 0;
 
             if (!DisableCursor)
             {
@@ -127,7 +128,9 @@ namespace VortexVise.Core.GameGlobals
                 foreach (var kill in GameMatch.GameState.KillFeedStates)
                 {
                     var color = System.Drawing.Color.White;
-                    if (kill.Timer < 3) color = System.Drawing.Color.FromArgb((byte)(kill.Timer * 255 / 3), color);
+                    int alpha = (byte)(kill.Timer * 255 / 3);
+                    if (alpha < 0) alpha = 0;
+                    if (kill.Timer < 3) color = System.Drawing.Color.FromArgb(alpha, color);
                     int x = (int)(GameCore.GameScreenWidth * 0.5f);
                     if (Utils.GetNumberOfLocalPlayers() == 1)
                     {

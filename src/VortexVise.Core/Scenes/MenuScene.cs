@@ -60,7 +60,7 @@ namespace VortexVise.Core.Scenes
             RefreshMenuItems();
             UpdateMenuScene(rendererService, collisionService, inputService);
         }
-        
+
         void RefreshMenuItems()
         {
             menuItems.Clear();
@@ -79,7 +79,7 @@ namespace VortexVise.Core.Scenes
             var yOffset = GameCore.MenuFontSize;
             menuItems.Add(new UIMenuItem(this, "LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
             yOffset += GameCore.MenuFontSize;
-            menuItems.Add(new UIMenuItem(this, "ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+            menuItems.Add(new UIMenuItem(this, "ONLINE", MenuItem.Online, state, false, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
             yOffset += GameCore.MenuFontSize;
             menuItems.Add(new UIMenuItem(this, "EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
 
@@ -456,7 +456,11 @@ namespace VortexVise.Core.Scenes
 
             // Update visual things
             if (arrowAnimationTimer > 10) arrowExpanding = false;
-            else if (arrowAnimationTimer < 0) arrowExpanding = true;
+            else if (arrowAnimationTimer < 0)
+            {
+                arrowAnimationTimer = 0;
+                arrowExpanding = true;
+            }
 
             if (arrowExpanding)
                 arrowAnimationTimer += rendererService.GetFrameTime() * 8;

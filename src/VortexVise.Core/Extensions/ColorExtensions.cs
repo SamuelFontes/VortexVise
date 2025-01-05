@@ -12,9 +12,12 @@ namespace VortexVise.Core.Extensions
         /// <returns></returns>
         public static Color Fade(this Color color, float alpha)
         {
-            if (alpha < 0.0f) alpha = 0.0f;
+            if (alpha < 0.0f) alpha = 0;
             else if (alpha > 1.0f)
-                alpha = 1.0f; return Color.FromArgb((int)(255 * alpha), color.R, color.G, color.B);
+                alpha = 1.0f; 
+            int alphaValue = (int)(255 * alpha);
+            if(alphaValue < 0) alphaValue = 0;
+            return Color.FromArgb(0, color.R, color.G, color.B);
         }
     }
 }
