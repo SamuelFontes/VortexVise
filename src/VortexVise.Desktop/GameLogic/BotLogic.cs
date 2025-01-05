@@ -3,7 +3,6 @@ using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
-using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.Logic;

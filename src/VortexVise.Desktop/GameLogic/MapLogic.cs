@@ -1,11 +1,8 @@
-﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
+﻿using System.Drawing;
 using System.Numerics;
-using VortexVise.Core.Enums;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.GameContext;
-using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Scenes;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Logic;
 
@@ -34,8 +31,8 @@ public static class MapLogic
                 {
                     X = GameMatch.CurrentMap.Texture.Width - collision.X - collision.Width,
                     Y = collision.Y,
-                    width = collision.Width,
-                    height = collision.Height
+                    Width = collision.Width,
+                    Height = collision.Height
                 };
                 mirroredCollisions.Add(mirroredCollision);
             }
@@ -75,4 +72,3 @@ public static class MapLogic
     }
 
 }
-#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.

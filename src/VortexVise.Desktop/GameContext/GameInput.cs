@@ -1,8 +1,8 @@
-﻿using VortexVise.Desktop.States;
-using VortexVise.Core.States;
-using VortexVise.Core.Interfaces;
-using VortexVise.Core.Enums;
+﻿using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
+using VortexVise.Core.Interfaces;
+using VortexVise.Core.States;
+using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.GameContext;
 

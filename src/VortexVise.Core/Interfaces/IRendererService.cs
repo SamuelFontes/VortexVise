@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VortexVise.Core.Interfaces
 {
@@ -17,7 +12,7 @@ namespace VortexVise.Core.Interfaces
         public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int rotation, int scale, Color white);
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing);
         public void DrawText(string text, Vector2 position, float fontSize, Color tint);
-        public void DrawTextCentered(IFontAsset font,string text, Vector2 textPosition, int textSize, Color color);
+        public void DrawTextCentered(IFontAsset font, string text, Vector2 textPosition, int textSize, Color color);
         public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint);
         public void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
         public int GetScreenWidth();

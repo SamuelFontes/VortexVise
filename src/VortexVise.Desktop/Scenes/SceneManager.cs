@@ -2,8 +2,6 @@
 using VortexVise.Core.Extensions;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameContext;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Scenes;
 

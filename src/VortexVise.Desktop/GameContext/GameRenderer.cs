@@ -2,7 +2,6 @@
 using System.Numerics;
 using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Logic;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -262,7 +261,7 @@ public static class GameRenderer
                     int overlayHeight = (int)((percent * spriteHeight) / total);
                     if (overlayHeight % 2 != 0) overlayHeight++;
 
-                    rendererService.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.Height - overlayHeight, GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new((int)p.X, (int)(p.Y + GameAssets.HUD.ThinBarBlue.Height - overlayHeight), GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new(0, 0), 0, Color.FromArgb(255,100, 100, 100));
+                    rendererService.DrawTexturePro(GameAssets.HUD.ThinBarBlue, new(0, GameAssets.HUD.ThinBarBlue.Height - overlayHeight, GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new((int)p.X, (int)(p.Y + GameAssets.HUD.ThinBarBlue.Height - overlayHeight), GameAssets.HUD.ThinBarBlue.Width, overlayHeight), new(0, 0), 0, Color.FromArgb(255, 100, 100, 100));
                 }
             }
             else

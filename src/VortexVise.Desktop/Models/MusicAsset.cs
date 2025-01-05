@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VortexVise.Core.Interfaces;
+﻿using VortexVise.Core.Interfaces;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Models
 {
-    public class MusicAsset: IMusicAsset
+    public class MusicAsset : IMusicAsset
     {
         public bool IsPlaying { get; set; }
         public bool IsLoaded { get; set; }

@@ -2,7 +2,6 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.Logic;
@@ -235,7 +234,7 @@ public static class GameAssets
                         else
                         {
                             string[] rgba = color.Split(',');
-                            weapon.Color = System.Drawing.Color.FromArgb(Convert.ToInt32(rgba[3]),Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]));
+                            weapon.Color = System.Drawing.Color.FromArgb(Convert.ToInt32(rgba[3]), Convert.ToInt32(rgba[0]), Convert.ToInt32(rgba[1]), Convert.ToInt32(rgba[2]));
                         }
 
                         // Damage
@@ -437,11 +436,11 @@ public static class GameAssets
         public static Animation Fire;
         public static void LoadAnimations(IAssetService assetService)
         {
-            Blood = new Animation(assetService,"Resources/Sprites/GFX/death.png", 32, 5, 1, System.Drawing.Color.White, 0.05f); ;
-            Explosion = new Animation(assetService,"Resources/Sprites/GFX/explosion.png", 32, 5, 4, System.Drawing.Color.White, 0.05f); ;
-            HitMarker = new Animation(assetService,"Resources/Sprites/GFX/hitmarker.png", 32, 1, 1, System.Drawing.Color.White, 0.2f); ;
-            KillConfirmation = new Animation(assetService,"Resources/Common/kill_confirmed.png", 64, 5, 1, System.Drawing.Color.White, 0.1f); ;
-            Fire = new Animation(assetService,"Resources/Common/fire.png", 8, 4, 1, System.Drawing.Color.White, 0.02f);
+            Blood = new Animation(assetService, "Resources/Sprites/GFX/death.png", 32, 5, 1, System.Drawing.Color.White, 0.05f); ;
+            Explosion = new Animation(assetService, "Resources/Sprites/GFX/explosion.png", 32, 5, 4, System.Drawing.Color.White, 0.05f); ;
+            HitMarker = new Animation(assetService, "Resources/Sprites/GFX/hitmarker.png", 32, 1, 1, System.Drawing.Color.White, 0.2f); ;
+            KillConfirmation = new Animation(assetService, "Resources/Common/kill_confirmed.png", 64, 5, 1, System.Drawing.Color.White, 0.1f); ;
+            Fire = new Animation(assetService, "Resources/Common/fire.png", 8, 4, 1, System.Drawing.Color.White, 0.02f);
         }
         public static void UnloadAnimations(IAssetService assetService)
         {

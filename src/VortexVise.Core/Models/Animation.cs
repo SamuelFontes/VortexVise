@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using VortexVise.Core.Interfaces;
 
 namespace VortexVise.Core.Models
 {
     public class Animation
     {
-        public Animation(IAssetService assetService,string textureLocation, int size, int stateAmount, int scale, Color color, float frameTime)
+        public Animation(IAssetService assetService, string textureLocation, int size, int stateAmount, int scale, Color color, float frameTime)
         {
             Texture = assetService.LoadTexture(textureLocation);
             Size = size;

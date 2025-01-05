@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.Json;
-using VortexVise.Desktop.States;
 using VortexVise.Core.States;
+using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.Networking;
 

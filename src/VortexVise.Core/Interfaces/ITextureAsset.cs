@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VortexVise.Core.Enums;
-
-namespace VortexVise.Core.Interfaces
+﻿namespace VortexVise.Core.Interfaces
 {
     public interface ITextureAsset
     {

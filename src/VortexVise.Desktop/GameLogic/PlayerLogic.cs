@@ -1,12 +1,12 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
-using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
-using ZeroElectric.Vinculum;
+using VortexVise.Desktop.Utilities;
 
 namespace VortexVise.Desktop.Logic;
 
@@ -112,18 +112,18 @@ public static class PlayerLogic
         {
             currentPlayerState.AddVelocity(new(GameMatch.PlayerAcceleration * deltaTime, 0));
             if (currentPlayerState.Velocity.X > GameMatch.PlayerMaxSpeed)
-                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed, 1f - (float)Math.Exp(-5f * deltaTime)));
+                currentPlayerState.SetVelocityX(Utils.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
         else if (currentPlayerState.Input.Left && !currentPlayerState.Input.Right)
         {
             currentPlayerState.AddVelocity(new(-(GameMatch.PlayerAcceleration * deltaTime), 0));
             if (currentPlayerState.Velocity.X < GameMatch.PlayerMaxSpeed * -1)
-                currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime)));
+                currentPlayerState.SetVelocityX(Utils.Lerp(currentPlayerState.Velocity.X, GameMatch.PlayerMaxSpeed * -1, 1f - (float)Math.Exp(-5f * deltaTime)));
         }
         else
         {
             float desaceleration = currentPlayerState.IsTouchingTheGround || currentPlayerState.Velocity.Y == 0f ? 10f : 0.5f;
-            currentPlayerState.SetVelocityX(RayMath.Lerp(currentPlayerState.Velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime)));
+            currentPlayerState.SetVelocityX(Utils.Lerp(currentPlayerState.Velocity.X, 0, 1f - (float)Math.Exp(-desaceleration * deltaTime)));
         }
     }
 
@@ -218,10 +218,10 @@ public static class PlayerLogic
         List<System.Drawing.Rectangle> playerCollisions = [];
         var differenceX = currentPlayerState.Collision.X - lastPlayerState.Collision.X;
         var differenceY = currentPlayerState.Collision.Y - lastPlayerState.Collision.Y;
-        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.2f, lastPlayerState.Collision.Y + differenceY * 0.2f, 16, 16).ToDrawingRectangle());
-        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.4f, lastPlayerState.Collision.Y + differenceY * 0.4f, 16, 16).ToDrawingRectangle());
-        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16).ToDrawingRectangle());
-        playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.8f, lastPlayerState.Collision.Y + differenceY * 0.8f, 16, 16).ToDrawingRectangle());
+        playerCollisions.Add(new Rectangle((int)(lastPlayerState.Collision.X + differenceX * 0.2f), (int)(lastPlayerState.Collision.Y + differenceY * 0.2f), 16, 16));
+        playerCollisions.Add(new Rectangle((int)(lastPlayerState.Collision.X + differenceX * 0.4f), (int)(lastPlayerState.Collision.Y + differenceY * 0.4f), 16, 16));
+        playerCollisions.Add(new Rectangle((int)(lastPlayerState.Collision.X + differenceX * 0.6f), (int)(lastPlayerState.Collision.Y + differenceY * 0.6f), 16, 16));
+        playerCollisions.Add(new Rectangle((int)(lastPlayerState.Collision.X + differenceX * 0.8f), (int)(lastPlayerState.Collision.Y + differenceY * 0.8f), 16, 16));
 
         playerCollisions.Add(currentPlayerState.Collision);
 

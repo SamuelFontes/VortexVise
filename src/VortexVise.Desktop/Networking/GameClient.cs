@@ -1,14 +1,11 @@
 ﻿using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
-using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
-using VortexVise.Desktop.Utilities;
 
 namespace VortexVise.Desktop.Networking;
 

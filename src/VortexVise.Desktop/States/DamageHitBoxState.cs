@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
@@ -11,7 +10,7 @@ namespace VortexVise.Desktop.States;
 /// </summary>
 public class DamageHitBoxState
 {
-    public DamageHitBoxState(Guid playerId,Vector2 position, System.Drawing.Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide, WeaponState weaponState)
+    public DamageHitBoxState(Guid playerId, Vector2 position, System.Drawing.Rectangle hitBox, Weapon weapon, float hitBoxTimer, int direction, Vector2 velocity, bool shouldColide, WeaponState weaponState)
     {
         PlayerId = playerId;
         Position = position;

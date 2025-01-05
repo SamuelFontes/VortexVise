@@ -45,12 +45,12 @@ public static class CameraLogic
 
             // Player 2
             camera = new PlayerCamera();
-            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(GameCore.GameScreenWidth * 0.5f), 0);
+            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f, (int)(GameCore.GameScreenWidth * 0.5f), 0);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
             camera = new PlayerCamera();
-            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,0, (int)(GameCore.GameScreenHeight * 0.5f));
+            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f, 0, (int)(GameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
         }
         else if (players == 4)
@@ -62,17 +62,17 @@ public static class CameraLogic
 
             // Player 2
             camera = new PlayerCamera();
-            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(GameCore.GameScreenWidth * 0.5f), 0);
+            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f, (int)(GameCore.GameScreenWidth * 0.5f), 0);
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 3
             camera = new PlayerCamera();
-            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,0, (int)(GameCore.GameScreenHeight * 0.5f));
+            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f, 0, (int)(GameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
 
             // Player 4
             camera = new PlayerCamera();
-            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f,(int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f));
+            camera.Setup(GameCore.GameScreenWidth, GameCore.GameScreenHeight, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f), 0.25f, 0.25f, (int)(GameCore.GameScreenWidth * 0.5f), (int)(GameCore.GameScreenHeight * 0.5f));
             GameMatch.PlayerCameras.Add(camera);
         }
     }

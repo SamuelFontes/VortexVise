@@ -1,10 +1,8 @@
 ﻿using System.Numerics;
-using VortexVise.Core;
 using VortexVise.Core.Enums;
 using VortexVise.Core.Extensions;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.States;

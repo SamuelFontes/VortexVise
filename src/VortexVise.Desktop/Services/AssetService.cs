@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VortexVise.Core.Interfaces;
+﻿using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Models;
 
 namespace VortexVise.Desktop.Services
@@ -21,7 +16,7 @@ namespace VortexVise.Desktop.Services
         {
             try
             {
-                if(texture != null) 
+                if (texture != null)
                     texture.Unload();
             }
             catch (Exception ex)

@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
-using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop;

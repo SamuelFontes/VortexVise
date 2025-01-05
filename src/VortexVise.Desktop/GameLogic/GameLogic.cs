@@ -1,5 +1,4 @@
 ﻿using VortexVise.Core.Enums;
-using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Scenes;
@@ -12,7 +11,7 @@ namespace VortexVise.Desktop.Logic;
 /// </summary>
 public static class GameLogic
 {
-    public static GameState SimulateState(ICollisionService collisionService,GameState lastState, double currentTime, float deltaTime, bool isNetworkFrame, IInputService inputService, SceneManager sceneManager)
+    public static GameState SimulateState(ICollisionService collisionService, GameState lastState, double currentTime, float deltaTime, bool isNetworkFrame, IInputService inputService, SceneManager sceneManager)
     {
         GameState state = new()
         {
@@ -27,7 +26,7 @@ public static class GameLogic
             Tick = isNetworkFrame ? lastState.Tick + 1 : lastState.Tick,
         };
 
-        MatchLogic.HandleMatchState(state, deltaTime,sceneManager);
+        MatchLogic.HandleMatchState(state, deltaTime, sceneManager);
         MatchLogic.ProcessKillFeed(state, deltaTime);
 
         if (state.MatchState == MatchStates.Warmup)
@@ -37,7 +36,7 @@ public static class GameLogic
         }
         else if (state.MatchState == MatchStates.Playing)
         {
-            WeaponLogic.ProcessHitBoxes(collisionService,state, lastState, deltaTime, state.Gravity);
+            WeaponLogic.ProcessHitBoxes(collisionService, state, lastState, deltaTime, state.Gravity);
 
             // Update state animations
             state.Animations.RemoveAll(x => x.ShouldDisappear);
@@ -50,7 +49,7 @@ public static class GameLogic
                 PlayerLogic.CopyLastPlayerState(currentPlayerState, lastPlayerState);
 
                 // Either read player input or get input from last frame 
-                if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState,inputService))
+                if (!GameInput.ReadLocalPlayerInput(isNetworkFrame, currentPlayerState, lastPlayerState, inputService))
                     currentPlayerState.Input = lastPlayerState.Input;
                 // TODO: Get input from network players here for the corresponding tick
                 if (currentPlayerState.IsBot && isNetworkFrame) currentPlayerState.Input = BotLogic.GenerateBotInput(state, currentPlayerState);
@@ -70,13 +69,13 @@ public static class GameLogic
                 PlayerLogic.ProcessPlayerJump(currentPlayerState, deltaTime);
                 PlayerLogic.ApplyPlayerGravity(currentPlayerState, deltaTime, state.Gravity);
                 PlayerLogic.ProcessPlayerJetPack(currentPlayerState, state, deltaTime);
-                PlayerHookLogic.SimulateHookState(collisionService,currentPlayerState, state.Gravity, deltaTime);
-                if (isNetworkFrame) WeaponLogic.ApplyHitBoxesDamage(collisionService,state, currentPlayerState); // Only apply damage on tick frames
+                PlayerHookLogic.SimulateHookState(collisionService, currentPlayerState, state.Gravity, deltaTime);
+                if (isNetworkFrame) WeaponLogic.ApplyHitBoxesDamage(collisionService, state, currentPlayerState); // Only apply damage on tick frames
                 PlayerLogic.ApplyPlayerVelocity(currentPlayerState, deltaTime);
-                PlayerLogic.ApplyCollisions(currentPlayerState, lastPlayerState, deltaTime,collisionService);
+                PlayerLogic.ApplyCollisions(currentPlayerState, lastPlayerState, deltaTime, collisionService);
 
                 WeaponLogic.BreakPlayerWeapon(currentPlayerState);
-                PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState,collisionService);
+                PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState, collisionService);
 
                 WeaponLogic.ProcessPlayerShooting(currentPlayerState, state, deltaTime);
 

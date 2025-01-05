@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
-using VortexVise.Core.Services;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameContext;
 using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Models;
@@ -25,17 +23,17 @@ public class PlayerCamera : IPlayerCamera
         Camera.target.Y = RayMath.Lerp(Camera.target.Y, target.Y, 1 - (float)Math.Exp(-3 * Raylib.GetFrameTime()));
     }
 
-    public void Setup(int screenWidth, int screenHeight, int cameraWidth, int cameraHeight,float offsetX, float offsetY, int cameraPositionX = 0, int cameraPositionY = 0)
+    public void Setup(int screenWidth, int screenHeight, int cameraWidth, int cameraHeight, float offsetX, float offsetY, int cameraPositionX = 0, int cameraPositionY = 0)
     {
         RenderTexture = Raylib.LoadRenderTexture(cameraWidth, cameraHeight);
         RenderRectangle = new(0, 0, RenderTexture.texture.width, -RenderTexture.texture.height);
         Camera = new Camera2D();
-        CameraOffset = new(offsetX,offsetY);
+        CameraOffset = new(offsetX, offsetY);
         var cameraView = new Vector2(screenWidth * offsetX, screenHeight * offsetY);
         Camera.offset = cameraView;
         Camera.target = cameraView;
         Camera.zoom = 1;
-        CameraPosition = new(cameraPositionX,cameraPositionY);
+        CameraPosition = new(cameraPositionX, cameraPositionY);
     }
 
     public void Unload()

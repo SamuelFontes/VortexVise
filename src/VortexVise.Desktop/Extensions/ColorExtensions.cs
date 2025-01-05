@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using ZeroElectric.Vinculum;
-
-namespace VortexVise.Desktop.Extensions
+﻿namespace VortexVise.Desktop.Extensions
 {
     public static class ColorExtensions
     {

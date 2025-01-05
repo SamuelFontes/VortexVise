@@ -3,11 +3,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
-using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
-using VortexVise.Desktop.Extensions;
-using VortexVise.Desktop.GameContext;
-using VortexVise.Desktop.Models;
 
 namespace VortexVise.Desktop.Utilities;
 
@@ -162,6 +158,13 @@ public static class Utils
             }
         }
         return data.ToArray();
+    }
+
+    public static float Lerp(float start, float end, float amount)
+    {
+        float result = start + amount * (end - start);
+
+        return result;
     }
 
 }

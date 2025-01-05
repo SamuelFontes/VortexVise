@@ -1,10 +1,9 @@
 ﻿using System.Numerics;
-using VortexVise.Core.GameGlobals;
+using VortexVise.Core.Extensions;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Logic;
 
@@ -19,7 +18,7 @@ public static class PlayerHookLogic
     /// <param name="currentPlayerState">Current player state.</param>
     /// <param name="gravity">Current gravity</param>
     /// <param name="deltaTime">Time since last frame</param>
-    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime)
+    public static void SimulateHookState(ICollisionService collisionService, PlayerState currentPlayerState, float gravity, float deltaTime)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
         {
@@ -118,7 +117,7 @@ public static class PlayerHookLogic
             // Shooting the hook
             currentPlayerState.HookState.Velocity += new Vector2(0, gravity * 0.5f * deltaTime);
 
-            float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
+            float distance = Vector2.Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
             if (distance > GameMatch.HookSizeLimit && (currentPlayerState.HookState.Velocity.X != 0 || currentPlayerState.HookState.Velocity.Y < 0))
             {
@@ -133,11 +132,11 @@ public static class PlayerHookLogic
             // Should pull player here
             Vector2 direction = Utils.GetVector2Direction(PlayerLogic.GetPlayerCenterPosition(currentPlayerState.Position), currentPlayerState.HookState.Position);
 
-            float distance = RayMath.Vector2Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
+            float distance = Vector2.Distance(currentPlayerState.HookState.Position, currentPlayerState.Position);
 
             if (distance > GameMatch.HookPullOffset)
             {
-                Vector2 velocity = RayMath.Vector2Scale(direction, GameMatch.HookPullForce);
+                Vector2 velocity = direction.Scale(GameMatch.HookPullForce);
                 currentPlayerState.AddVelocityWithDeltaTime(velocity, deltaTime);
             }
         }

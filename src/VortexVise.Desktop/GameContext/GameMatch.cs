@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
-using VortexVise.Desktop.Models;
 using VortexVise.Desktop.States;
 
 namespace VortexVise.Desktop.GameContext;

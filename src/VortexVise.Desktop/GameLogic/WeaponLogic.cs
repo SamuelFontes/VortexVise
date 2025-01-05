@@ -1,14 +1,10 @@
-﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
-using System.Numerics;
+﻿using System.Numerics;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
-using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Logic;
 
@@ -260,4 +256,3 @@ public static class WeaponLogic
     }
 
 }
-#pragma warning restore SYSLIB1045 // Convert to 'GeneratedRegexAttribute'.
