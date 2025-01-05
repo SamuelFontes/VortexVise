@@ -19,6 +19,9 @@ namespace VortexVise.Desktop.Models
         {
             AssetPath = assetPath;
         }
+        public TextureAsset()
+        {
+        }
 
         public void Load()
         {
@@ -34,6 +37,12 @@ namespace VortexVise.Desktop.Models
             Height = 0;
             Width = 0;
             IsLoaded = false;
+        }
+
+        public void Load(string assetPath)
+        {
+            AssetPath = assetPath;
+            Load();
         }
     }
 }

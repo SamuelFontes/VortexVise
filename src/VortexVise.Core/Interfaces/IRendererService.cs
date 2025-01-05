@@ -18,5 +18,7 @@ namespace VortexVise.Core.Interfaces
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing);
         public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint);
         public void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
+        public int GetScreenWidth();
+        public int GetScreenHeight();
     }
 }

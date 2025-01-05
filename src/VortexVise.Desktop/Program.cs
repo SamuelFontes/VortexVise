@@ -81,7 +81,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
 
     // Update user interface
     //----------------------------------------------------------------------------------
-    GameUserInterface.UpdateUserInterface(context.GameCore);
+    GameUserInterface.UpdateUserInterface(context.GameCore,context.RendererService);
 
 
     // DRAW

@@ -4,6 +4,7 @@ using VortexVise.Core.Enums;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
+using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
@@ -16,7 +17,7 @@ namespace VortexVise.Desktop.GameContext;
 /// </summary>
 static internal class GameUserInterface
 {
-    public static Texture Cursor { get; private set; }
+    public static ITextureAsset Cursor { get; private set; } = new TextureAsset();
     public static Vector2 CursorPosition { get; private set; }
     public static float TimeIdle { get; private set; } = 0;
     public static float CursorAlpha { get; private set; } = 0;
@@ -25,18 +26,18 @@ static internal class GameUserInterface
     public static bool IsShowingScoreboard { get; set; } = false;
     public static void InitUserInterface()
     {
-        Cursor = Raylib.LoadTexture("Resources/Common/cursor.png");
+        Cursor.Load("Resources/Common/cursor.png");
         IsCursorVisible = false;
         DisableCursor = false;
     }
-    public static void UpdateUserInterface(GameCore gameCore)
+    public static void UpdateUserInterface(GameCore gameCore, IRendererService rendererService)
     {
         // Handle cursor, show and hide cursor based on movement
         //---------------------------------------------------------
         Vector2 newCursorPosition = Raylib.GetMousePosition();
         Vector2 virtualMouse = new();
-        virtualMouse.X = (newCursorPosition.X - (Raylib.GetScreenWidth() - gameCore.GameScreenWidth) * 0.5f);
-        virtualMouse.Y = (newCursorPosition.Y - (Raylib.GetScreenHeight() - gameCore.GameScreenHeight) * 0.5f);
+        virtualMouse.X = (newCursorPosition.X - (rendererService.GetScreenWidth() - gameCore.GameScreenWidth) * 0.5f);
+        virtualMouse.Y = (newCursorPosition.Y - (rendererService.GetScreenHeight() - gameCore.GameScreenHeight) * 0.5f);
         virtualMouse = RayMath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(gameCore.GameScreenWidth, gameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
@@ -61,15 +62,15 @@ static internal class GameUserInterface
     public static void DrawUserInterface(IRendererService rendererService, GameCore gameCore)
     {
         DrawDebug();
-        DrawCursor();
+        DrawCursor(rendererService);
         DrawHud(rendererService, gameCore);
     }
     public static void UnloadUserInterface()
     {
-        Raylib.UnloadTexture(Cursor);
+        Cursor.Unload();
     }
 
-    private static void DrawCursor()
+    private static void DrawCursor(IRendererService rendererService)
     {
         // Draw Cursor
         //---------------------------------------------------------
@@ -80,7 +81,7 @@ static internal class GameUserInterface
 
         if (!DisableCursor)
         {
-            Raylib.DrawTexture(Cursor, (int)CursorPosition.X, (int)CursorPosition.Y, new Color(255, 255, 255, alpha));
+            rendererService.DrawTexture(Cursor, (int)CursorPosition.X, (int)CursorPosition.Y, System.Drawing.Color.FromArgb(alpha,255, 255, 255));
         }
 
     }

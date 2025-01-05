@@ -13,7 +13,8 @@ namespace VortexVise.Core.Interfaces
         public bool IsLoaded { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
-        public void Load();
+        public void Load(); // TODO: remove this
+        public void Load(string assetPath);
         public void Unload();
     }
 }

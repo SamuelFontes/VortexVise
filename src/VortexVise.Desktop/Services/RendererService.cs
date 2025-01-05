@@ -83,6 +83,16 @@ namespace VortexVise.Desktop.Services
             }
         }
 
+        public int GetScreenHeight()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetScreenHeight();
+        }
+
+        public int GetScreenWidth()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetScreenWidth();
+        }
+
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing)
         {
             if (font is FontAsset raylibFont)
