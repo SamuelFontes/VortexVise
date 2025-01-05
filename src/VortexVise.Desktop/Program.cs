@@ -42,7 +42,7 @@ Raylib.SetExitKey(0);                                                           
 
 // Load Assets
 GameAssets.InitializeAssets(context.AssetService);                                                                          // Load global data 
-SceneManager sceneManager = new SceneManager(context.InputService,context.GameCore, context.RendererService);
+SceneManager sceneManager = new SceneManager(context.InputService,context.GameCore, context.RendererService, context.CollisionService);
 
 // Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
@@ -106,7 +106,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
 sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 while (!sceneManager.TransitionFadeOut)
 {
-    sceneManager.UpdateTransition(context.GameCore, context.RendererService,context.AssetService);
+    sceneManager.UpdateTransition(context.GameCore, context.RendererService,context.AssetService, context.CollisionService);
 }
 
 // De-Initialization

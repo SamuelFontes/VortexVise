@@ -4,6 +4,7 @@ using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Logic;
+using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.Utilities;
 using ZeroElectric.Vinculum;
@@ -20,15 +21,15 @@ public class MenuScene
 {
     readonly List<UIMenuItem> menuItems = [];
     int finishScreen = 0;
-    Texture logo;
-    private Texture background { get; set; }
-    Texture box;
-    Texture keyboard;
-    Texture gamepad;
-    Texture gamepadSlotOn;
-    Texture gamepadSlotOff;
-    Texture disconnected;
-    Texture arrow;
+    ITextureAsset logo = new TextureAsset();
+    private ITextureAsset background { get; set; } = new TextureAsset();
+    ITextureAsset box = new TextureAsset();
+    ITextureAsset keyboard = new TextureAsset();
+    ITextureAsset gamepad = new TextureAsset();
+    ITextureAsset gamepadSlotOn = new TextureAsset();
+    ITextureAsset gamepadSlotOff = new TextureAsset();
+    ITextureAsset disconnected = new TextureAsset();
+    ITextureAsset arrow = new TextureAsset();
     public Guid selected = Guid.Empty;
     public Guid lastSelected;
     MenuState currentState = MenuState.PressStart;
@@ -37,7 +38,7 @@ public class MenuScene
     private readonly IInputService _inputService;
     private SceneManager _sceneManager;
 
-    public MenuScene(IInputService inputService, SceneManager sceneManager, GameCore gameCore, IRendererService rendererService)
+    public MenuScene(IInputService inputService, SceneManager sceneManager, GameCore gameCore, IRendererService rendererService, ICollisionService collisionService)
     {
         _inputService = inputService;
         _sceneManager = sceneManager;
@@ -49,15 +50,15 @@ public class MenuScene
 
         // Load textures
         //----------------------------------------------------------------------------------
-        logo = Raylib.LoadTexture("Resources/Common/vortex-vise-logo.png");
-        background = Raylib.LoadTexture("Resources/Common/MenuBackground.png");
-        box = Raylib.LoadTexture("Resources/Common/rounded_box.png");
-        keyboard = Raylib.LoadTexture("Resources/Common/keyboard.png");
-        gamepad = Raylib.LoadTexture("Resources/Common/xbox_gamepad.png");
-        disconnected = Raylib.LoadTexture("Resources/Common/xbox_gamepad_disconnected.png");
-        gamepadSlotOn = Raylib.LoadTexture("Resources/Common/gamepad_slot_on.png");
-        gamepadSlotOff = Raylib.LoadTexture("Resources/Common/gamepad_slot_off.png");
-        arrow = Raylib.LoadTexture("Resources/Common/arrow.png");
+        logo.Load("Resources/Common/vortex-vise-logo.png");
+        background.Load("Resources/Common/MenuBackground.png");
+        box.Load("Resources/Common/rounded_box.png");
+        keyboard.Load("Resources/Common/keyboard.png");
+        gamepad.Load("Resources/Common/xbox_gamepad.png");
+        disconnected.Load("Resources/Common/xbox_gamepad_disconnected.png");
+        gamepadSlotOn.Load("Resources/Common/gamepad_slot_on.png");
+        gamepadSlotOff.Load("Resources/Common/gamepad_slot_off.png");
+        arrow.Load("Resources/Common/arrow.png");
 
         // Load player skins
         //----------------------------------------------------------------------------------
@@ -109,10 +110,10 @@ public class MenuScene
         menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
         yOffset += gameCore.MenuFontSize;
 
-        UpdateMenuScene(gameCore,rendererService);
+        UpdateMenuScene(gameCore, rendererService, collisionService);
     }
 
-    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService)
+    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService, ICollisionService collisionService)
     {
         // Update
         //----------------------------------------------------------------------------------
@@ -160,7 +161,7 @@ public class MenuScene
                 {
                     finishScreen = 2;
                     GameAssets.MusicAndAmbience.StopMusic(gameCore);
-                    GameAssets.Sounds.Click.Play( pitch: 0.5f);
+                    GameAssets.Sounds.Click.Play(pitch: 0.5f);
                     return;
                 }
                 else if (currentState == MenuState.Connecting)
@@ -271,13 +272,13 @@ public class MenuScene
             {
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.Selection.Play( pitch: 2);
+                    GameAssets.Sounds.Selection.Play(pitch: 2);
                     MapLogic.LoadNextMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.Selection.Play( pitch: 2);
+                    GameAssets.Sounds.Selection.Play(pitch: 2);
                     GameMatch.NumberOfBots--;
                     if (GameMatch.NumberOfBots < 0) GameMatch.NumberOfBots = 0;
                     menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -287,13 +288,13 @@ public class MenuScene
             {
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.Selection.Play( pitch: 2);
+                    GameAssets.Sounds.Selection.Play(pitch: 2);
                     MapLogic.LoadPreviousMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.Selection.Play( pitch: 2);
+                    GameAssets.Sounds.Selection.Play(pitch: 2);
                     GameMatch.NumberOfBots++;
                     if (GameMatch.NumberOfBots > 10) GameMatch.NumberOfBots = 10;
                     menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -302,7 +303,7 @@ public class MenuScene
             }
             else if (input.Back)
             {
-                GameAssets.Sounds.Click.Play( pitch: 0.5f);
+                GameAssets.Sounds.Click.Play(pitch: 0.5f);
                 if (currentState == MenuState.MainMenu)
                 {
                     currentState = MenuState.PressStart;
@@ -359,28 +360,28 @@ public class MenuScene
                 {
                     if (i == gameCore.PlayerOneProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerTwoProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerThreeProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerFourProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerFourProfile.Skin = skin;
@@ -390,28 +391,28 @@ public class MenuScene
                 {
                     if (i == gameCore.PlayerOneProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerTwoProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerThreeProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerFourProfile.Gamepad)
                     {
-                        GameAssets.Sounds.Selection.Play( pitch: 2);
+                        GameAssets.Sounds.Selection.Play(pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerFourProfile.Skin = skin;
@@ -446,7 +447,7 @@ public class MenuScene
         PlaySelectionSound(gameCore);
 
         // Update menu
-        foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService);
+        foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService,collisionService);
         var s = menuItems.FirstOrDefault(x => x.IsSelected);
         if (s == null) selected = Guid.Empty;
         else selected = s.Id;
@@ -456,18 +457,18 @@ public class MenuScene
         else if (arrowAnimationTimer < 0) arrowExpanding = true;
 
         if (arrowExpanding)
-            arrowAnimationTimer += Raylib.GetFrameTime() * 8;
+            arrowAnimationTimer += rendererService.GetFrameTime() * 8;
         else
-            arrowAnimationTimer -= Raylib.GetFrameTime() * 8;
+            arrowAnimationTimer -= rendererService.GetFrameTime() * 8;
     }
 
     public void DrawMenuScene(IRendererService rendererService, GameCore gameCore)
     {
         // Draw Background, Logo and Misc
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
-        Raylib.DrawTextureEx(background, backgroundPos, 0, 2, Raylib.DARKGRAY);
+        rendererService.DrawTextureEx(background, backgroundPos, 0, 2, System.Drawing.Color.DarkGray);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
-            Raylib.DrawTextureEx(logo, new Vector2(gameCore.GameScreenWidth * 0.5f - logo.width * 0.5f, gameCore.GameScreenHeight * 0.3f - logo.width * 0.5f), 0, 1, Raylib.WHITE);
+            rendererService.DrawTextureEx(logo, new Vector2(gameCore.GameScreenWidth * 0.5f - logo.Width * 0.5f, gameCore.GameScreenHeight * 0.3f - logo.Width * 0.5f), 0, 1, System.Drawing.Color.White);
         else if (currentState == MenuState.Online)
         {
             // TODO: add here input with text
@@ -483,12 +484,12 @@ public class MenuScene
             var mapCenterPostion = new Vector2(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.37f);
             var size = 176;
             var rec = new System.Drawing.Rectangle((int)(mapCenterPostion.X - size / 2), (int)(mapCenterPostion.Y - size / 2), size, size);
-            Raylib.DrawRectangle((int)rec.X - 8, (int)rec.Y - 8, (int)rec.Width + 16, (int)rec.Height + 16, Raylib.BLACK);
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle((int)rec.X - 8, (int)rec.Y - 8, (int)rec.Width + 16, (int)rec.Height + 16), System.Drawing.Color.Black);
             rendererService.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.Width, GameMatch.CurrentMap.Texture.Height), rec, new(0, 0), 0, System.Drawing.Color.White);
 
             if (!gameCore.IsNetworkGame)
             {
-                rendererService.DrawTextCentered(GameAssets.Misc.Font,"ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, "ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
             }
         }
 
@@ -502,7 +503,7 @@ public class MenuScene
             DrawInputSelection(rendererService, gameCore);
         }
         if (Utils.Debug())
-            Raylib.DrawRectangle(80, 0, 800, 600, new(255, 0, 0, 20));
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(80, 0, 800, 600), System.Drawing.Color.FromArgb(20, 255, 0, 0));
 
 
         // Play selection sound
@@ -513,15 +514,15 @@ public class MenuScene
 
     public void UnloadMenuScene()
     {
-        Raylib.UnloadTexture(logo);
-        Raylib.UnloadTexture(background);
-        Raylib.UnloadTexture(box);
-        Raylib.UnloadTexture(keyboard);
-        Raylib.UnloadTexture(gamepad);
-        Raylib.UnloadTexture(disconnected);
-        Raylib.UnloadTexture(gamepadSlotOn);
-        Raylib.UnloadTexture(gamepadSlotOff);
-        Raylib.UnloadTexture(arrow);
+        logo.Unload();
+        background.Unload();
+        box.Unload();
+        keyboard.Unload();
+        gamepad.Unload();
+        disconnected.Unload();
+        gamepadSlotOn.Unload();
+        gamepadSlotOff.Unload();
+        arrow.Unload();
         menuItems.Clear();
         GC.Collect();
 
@@ -564,10 +565,10 @@ public class MenuScene
         public Vector2 Position { get; set; }
         public Vector2 CenterPosition { get; set; }
         public int Size { get; set; }
-        Color Color { get; set; }
+        System.Drawing.Color Color { get; set; }
         public MenuItemType Type { get; set; }
         Vector2 TextSize;
-        public void Update(IRendererService rendererService)
+        public void Update(IRendererService rendererService, ICollisionService collisionService)
         {
             if (Type == MenuItemType.TextInput && IsSelected)
             {
@@ -582,7 +583,7 @@ public class MenuScene
             var pos = new Vector2(CenterPosition.X - TextSize.X * 0.5f, CenterPosition.Y - TextSize.Y * 0.5f); // Centers text
 
             // Check if mouse is selecting the menu
-            if (IsEnabled && GameUserInterface.IsCursorVisible && Raylib.CheckCollisionRecs(new Rectangle(pos.X, pos.Y, TextSize.X, TextSize.Y), new Rectangle(GameUserInterface.CursorPosition.X, GameUserInterface.CursorPosition.Y, 1, 1)))
+            if (IsEnabled && GameUserInterface.IsCursorVisible && collisionService.CheckCollisionRecs(new System.Drawing.Rectangle((int)pos.X, (int)pos.Y, (int)TextSize.X, (int)TextSize.Y), new System.Drawing.Rectangle((int)GameUserInterface.CursorPosition.X, (int)GameUserInterface.CursorPosition.Y, 1, 1)))
             {
                 scene.selected = Id;
             }
@@ -594,9 +595,9 @@ public class MenuScene
             }
 
             // Paint the text
-            if (!IsEnabled) Color = Raylib.GRAY;
-            else if (IsSelected) Color = Raylib.ORANGE;
-            else Color = Raylib.RAYWHITE;
+            if (!IsEnabled) Color = System.Drawing.Color.Gray;
+            else if (IsSelected) Color = System.Drawing.Color.Orange;
+            else Color = System.Drawing.Color.White;
 
             Position = pos;
         }
@@ -605,17 +606,17 @@ public class MenuScene
         {
             // Draw input box
             if (Type == MenuItemType.TextInput)
-                Raylib.DrawRectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4, new(0, 0, 0, 100));
+                rendererService.DrawRectangleRec(new System.Drawing.Rectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4), System.Drawing.Color.FromArgb(100, 0, 0, 0));
             // Draw the text
-            rendererService.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color.ToDrawingColor());
+            rendererService.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color);
 
             if (Type == MenuItemType.Selection && IsSelected)
             {
                 var textBoxSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
                 if (textBoxSize.X % 2 != 0) textBoxSize.X++;
                 if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
-                Raylib.DrawTexturePro(scene.arrow, new(0, 0, scene.arrow.width, scene.arrow.height), new((int)Position.X + textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, Position.Y + 8, scene.arrow.width * 2, scene.arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Raylib.DrawTexturePro(scene.arrow, new(0, 0, -scene.arrow.width, scene.arrow.height), new((int)Position.X - 16 - (int)scene.arrowAnimationTimer - scene.arrow.width, Position.Y + 8, scene.arrow.width * 2, scene.arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
+                rendererService.DrawTexturePro(scene.arrow, new(0, 0, scene.arrow.Width, scene.arrow.Height), new((int)Position.X + (int)textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, (int)Position.Y + 8, scene.arrow.Width * 2, scene.arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                rendererService.DrawTexturePro(scene.arrow, new(0, 0, -scene.arrow.Width, scene.arrow.Height), new((int)Position.X - 16 - (int)scene.arrowAnimationTimer - scene.arrow.Width, (int)Position.Y + 8, scene.arrow.Width * 2, scene.arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
             }
 
         }
@@ -624,26 +625,26 @@ public class MenuScene
 
     private void DrawInputSelection(IRendererService rendererService, GameCore gameCore)
     {
-        Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100)); // Overlay
+        rendererService.DrawRectangleRec(new(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0)); // Overlay
 
         Vector2 screenCenter = new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f);
 
         // Render BoxPlayerOne
         Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 200);
-        Raylib.DrawTextureEx(box, boxPlayerOne, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(rendererService, boxPlayerOne, box.width, box.height, gameCore.PlayerOneProfile.Gamepad, gameCore.PlayerOneProfile.Name, gameCore.PlayerOneProfile.Skin.Texture);
+        rendererService.DrawTextureEx(box, boxPlayerOne, 0, 1, System.Drawing.Color.White);
+        DrawPlayerCard(rendererService, boxPlayerOne, box.Width, box.Height, gameCore.PlayerOneProfile.Gamepad, gameCore.PlayerOneProfile.Name, gameCore.PlayerOneProfile.Skin.Texture);
 
         Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 200);
-        Raylib.DrawTextureEx(box, boxPlayerTwo, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(rendererService, boxPlayerTwo, box.width, box.height, gameCore.PlayerTwoProfile.Gamepad, gameCore.PlayerTwoProfile.Name, gameCore.PlayerTwoProfile.Skin.Texture);
+        rendererService.DrawTextureEx(box, boxPlayerTwo, 0, 1, System.Drawing.Color.White);
+        DrawPlayerCard(rendererService, boxPlayerTwo, box.Width, box.Height, gameCore.PlayerTwoProfile.Gamepad, gameCore.PlayerTwoProfile.Name, gameCore.PlayerTwoProfile.Skin.Texture);
 
         Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 00);
-        Raylib.DrawTextureEx(box, boxPlayerThree, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(rendererService, boxPlayerThree, box.width, box.height, gameCore.PlayerThreeProfile.Gamepad, gameCore.PlayerThreeProfile.Name, gameCore.PlayerThreeProfile.Skin.Texture);
+        rendererService.DrawTextureEx(box, boxPlayerThree, 0, 1, System.Drawing.Color.White);
+        DrawPlayerCard(rendererService, boxPlayerThree, box.Width, box.Height, gameCore.PlayerThreeProfile.Gamepad, gameCore.PlayerThreeProfile.Name, gameCore.PlayerThreeProfile.Skin.Texture);
 
         Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 00);
-        Raylib.DrawTextureEx(box, boxPlayerFour, 0, 1, Raylib.WHITE);
-        DrawPlayerCard(rendererService, boxPlayerFour, box.width, box.height, gameCore.PlayerFourProfile.Gamepad, gameCore.PlayerFourProfile.Name, gameCore.PlayerFourProfile.Skin.Texture);
+        rendererService.DrawTextureEx(box, boxPlayerFour, 0, 1, System.Drawing.Color.White);
+        DrawPlayerCard(rendererService, boxPlayerFour, box.Width, box.Height, gameCore.PlayerFourProfile.Gamepad, gameCore.PlayerFourProfile.Name, gameCore.PlayerFourProfile.Skin.Texture);
 
         void DrawPlayerCard(IRendererService rendererService, Vector2 cardPosition, int cardWidth, int cardHeight, int playerGamepadNumber, string profileName, ITextureAsset player)
         {
@@ -654,46 +655,46 @@ public class MenuScene
             if (playerGamepadNumber == -1)
             {
                 // mouse and keyboard
-                Raylib.DrawTextureEx(keyboard, new(inputDevicePosition.X - keyboard.width * 1f, inputDevicePosition.Y - keyboard.height * 1f), 0, 2, Raylib.WHITE);
+                rendererService.DrawTextureEx(keyboard, new(inputDevicePosition.X - keyboard.Width * 1f, inputDevicePosition.Y - keyboard.Height * 1f), 0, 2, System.Drawing.Color.White);
             }
             else if (playerGamepadNumber == 0)
             {
-                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
             }
             else if (playerGamepadNumber == 1)
             {
-                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
 
             }
             else if (playerGamepadNumber == 2)
             {
-                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
             }
             else if (playerGamepadNumber == 3)
             {
-                Raylib.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.width * 1f, inputDevicePosition.Y - gamepad.height * 1f), 0, 2, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 1f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.width * 2f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
-                Raylib.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.width * 3f, gamepadSlotPostion.Y), 0, 1, Raylib.WHITE);
+                rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
             }
             else if (playerGamepadNumber == -9)
             {
                 // Disconnected
                 Vector2 disconnectedPosition = new(cardPosition.X + cardWidth * 0.5f, cardPosition.Y + cardHeight * 0.5f);
-                Raylib.DrawTextureEx(disconnected, new(disconnectedPosition.X - disconnected.width * 2f, disconnectedPosition.Y - disconnected.height * 2f), 0, 4, Raylib.WHITE);
+                rendererService.DrawTextureEx(disconnected, new(disconnectedPosition.X - disconnected.Width * 2f, disconnectedPosition.Y - disconnected.Height * 2f), 0, 4, System.Drawing.Color.White);
             }
 
             // Draw player skin
@@ -701,9 +702,9 @@ public class MenuScene
             {
                 rendererService.DrawTextureEx(player, new(skinPosition.X - player.Width * 2f, skinPosition.Y - player.Height * 2f), 0, 4, System.Drawing.Color.White);
 
-                Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                rendererService.DrawTextCentered(GameAssets.Misc.Font,profileName, profileNamePosition, gameCore.MenuFontSize, System.Drawing.Color.White);
+                rendererService.DrawTexturePro(arrow, new(0, 0, arrow.Width, arrow.Height), new((int)skinPosition.X + 54 + (int)arrowAnimationTimer, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                rendererService.DrawTexturePro(arrow, new(0, 0, -arrow.Width, arrow.Height), new((int)skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.Width, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, profileName, profileNamePosition, gameCore.MenuFontSize, System.Drawing.Color.White);
             }
         }
 
