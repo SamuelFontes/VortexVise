@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 
-namespace VortexVise.Core.GameContext
+namespace VortexVise.Core.Services
 {
-    public class Context(IAssetService assetService, ICollisionService collisionService, IInputService inputService, IRendererService rendererService, ISoundService soundService)
+    public class GameServices(IAssetService assetService, ICollisionService collisionService, IInputService inputService, IRendererService rendererService, ISoundService soundService)
     {
         public IAssetService AssetService { get; set; } = assetService;
         public ICollisionService CollisionService { get; set; } = collisionService;

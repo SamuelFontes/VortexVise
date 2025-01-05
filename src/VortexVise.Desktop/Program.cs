@@ -6,7 +6,7 @@ using ZeroElectric.Vinculum;
 using Steamworks;
 using VortexVise.Desktop.Services;
 using VortexVise.Core.Interfaces;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.Services;
 using System.Net;
 using VortexVise.Core.GameGlobals;
 
@@ -30,7 +30,7 @@ SteamClient.Shutdown();
 
 // Initialization
 //---------------------------------------------------------
-var context = new Context(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService());
+var context = new GameServices(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService());
 Raylib.SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);                                               // Make game window resizeble
 Raylib.InitWindow(GameCore.GameScreenWidth, GameCore.GameScreenHeight, "Vortex Vise");                  // Create game window
 //Raylib.ToggleBorderlessWindowed();                                                                      // Make game fullscreen
