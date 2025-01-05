@@ -164,7 +164,7 @@ namespace VortexVise.Desktop.Services
             {
                 ZeroElectric.Vinculum.Raylib.EndMode2D();
                 ZeroElectric.Vinculum.Raylib.EndTextureMode();
-                //ZeroElectric.Vinculum.Raylib.BeginTextureMode(gameCore.GameRendering); // Enable this in case of rendering to render texture
+                //ZeroElectric.Vinculum.Raylib.BeginTextureMode(GameCore.GameRendering); // Enable this in case of rendering to render texture
                 ZeroElectric.Vinculum.Raylib.DrawTextureRec(raylibCamera.RenderTexture.texture, raylibCamera.RenderRectangle, raylibCamera.CameraPosition, color.ToRaylibColor());
             }
             else

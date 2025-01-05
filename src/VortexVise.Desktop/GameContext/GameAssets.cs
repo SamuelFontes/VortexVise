@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.Logic;
@@ -333,15 +333,15 @@ public static class GameAssets
         public static string MusicAssetPixelatedDiscordance = "Resources/Audio/Music/PixelatedDiscordance.mp3";
         public static string MusicAssetNotGonnaLeoThis = "Resources/Audio/Music/NotGonnaLeoThis.mp3";
 
-        public static void PlayMusic(string music, GameCore gameCore)
+        public static void PlayMusic(string music)
         {
-            if (Music.IsPlaying) StopMusic(gameCore);
+            if (Music.IsPlaying) StopMusic();
             Music.Load(music);
             Music.Play();
             Music.SetVolume(0.8f); // TODO: get global volume
         }
 
-        public static void StopMusic(GameCore gameCore)
+        public static void StopMusic()
         {
             if (!Music.IsPlaying) return;
             Sounds.VinylScratch.Play(pitch: 0.7f);
@@ -349,9 +349,9 @@ public static class GameAssets
             Music.Unload();
         }
 
-        public static void PlayCustomMusic(string musicName, GameCore gameCore)
+        public static void PlayCustomMusic(string musicName)
         {
-            if (Music.IsPlaying) StopMusic(gameCore);
+            if (Music.IsPlaying) StopMusic();
             Music.Load($"Resources/Audio/Music/{musicName}.mp3");
             Music.Play();
             Music.SetVolume(0.8f); // TODO: get global volume

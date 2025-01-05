@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
@@ -38,7 +38,7 @@ public class MenuScene
     private readonly IInputService _inputService;
     private SceneManager _sceneManager;
 
-    public MenuScene(IInputService inputService, SceneManager sceneManager, GameCore gameCore, IRendererService rendererService, ICollisionService collisionService)
+    public MenuScene(IInputService inputService, SceneManager sceneManager, IRendererService rendererService, ICollisionService collisionService)
     {
         _inputService = inputService;
         _sceneManager = sceneManager;
@@ -62,65 +62,65 @@ public class MenuScene
 
         // Load player skins
         //----------------------------------------------------------------------------------
-        if (gameCore.PlayerOneProfile.Skin.Id == "") gameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (gameCore.PlayerTwoProfile.Skin.Id == "") gameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (gameCore.PlayerThreeProfile.Skin.Id == "") gameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
-        if (gameCore.PlayerFourProfile.Skin.Id == "") gameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerOneProfile.Skin.Id == "") GameCore.PlayerOneProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerTwoProfile.Skin.Id == "") GameCore.PlayerTwoProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerThreeProfile.Skin.Id == "") GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
+        if (GameCore.PlayerFourProfile.Skin.Id == "") GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
         // Initialize items
         //----------------------------------------------------------------------------------
-        Vector2 mainMenuTextPosition = new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.7f);
+        Vector2 mainMenuTextPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
 
         // PRESS START
         var state = MenuState.PressStart;
-        menuItems.Add(new UIMenuItem(this, "PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition, gameCore));
+        menuItems.Add(new UIMenuItem(this, "PRESS START", MenuItem.PressStart, state, true, MenuItemType.Button, mainMenuTextPosition));
         menuItems[0].IsEnabled = true;
         if (selected == Guid.Empty) selected = menuItems[0].Id;
         state = MenuState.MainMenu;
 
         // MAIN MENU
-        var yOffset = gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
+        var yOffset = GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "LOCAL", MenuItem.Local, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "ONLINE", MenuItem.Online, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "EXIT", MenuItem.Exit, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
 
         // LOBBY
         state = MenuState.Lobby;
-        Vector2 lobbyButtonPosition = new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.6f);
-        yOffset = gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, $"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition, gameCore));
+        Vector2 lobbyButtonPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.6f);
+        yOffset = GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, $"MAP: {GameMatch.CurrentMap.Name}", MenuItem.ChangeMap, state, true, MenuItemType.Selection, lobbyButtonPosition));
         //menuItems.Add(new UIMenuItem("MODE: DEATHMATCH", MenuItem.ChangeGameMode, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
-        //yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, $"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize * 2;
-        menuItems.Add(new UIMenuItem(this, "START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
+        //yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, $"BOTS: {GameMatch.NumberOfBots}", MenuItem.ChangeNumberOfBots, state, true, MenuItemType.Selection, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize * 2;
+        menuItems.Add(new UIMenuItem(this, "START GAME", MenuItem.StartGame, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(lobbyButtonPosition.X, lobbyButtonPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
 
         // ONLINE
         state = MenuState.Online;
-        yOffset = gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
-        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset), gameCore));
-        yOffset += gameCore.MenuFontSize;
+        yOffset = GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "192.168.1.166:9999", MenuItem.IP, state, true, MenuItemType.TextInput, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "Connect", MenuItem.Connect, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
+        menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
+        yOffset += GameCore.MenuFontSize;
 
-        UpdateMenuScene(gameCore, rendererService, collisionService, inputService);
+        UpdateMenuScene(rendererService, collisionService, inputService);
     }
 
-    public void UpdateMenuScene(GameCore gameCore, IRendererService rendererService, ICollisionService collisionService, IInputService inputService)
+    public void UpdateMenuScene(IRendererService rendererService, ICollisionService collisionService, IInputService inputService)
     {
         // Update
         //----------------------------------------------------------------------------------
         if (currentState == MenuState.PressStart) // MAIN MENU PRESS START 
         {
-            gameCore.PlayerOneProfile.Gamepad = inputService.GetPressStart();
-            if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected)
+            GameCore.PlayerOneProfile.Gamepad = inputService.GetPressStart();
+            if (GameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected)
             {
                 GameUserInterface.IsCursorVisible = false;
                 GameAssets.Sounds.Click.Play(pitch: 0.8f);
@@ -130,13 +130,13 @@ public class MenuScene
         }
         else // MAIN MENU
         {
-            var input = _inputService.ReadPlayerInput(gameCore.PlayerOneProfile.Gamepad);
+            var input = _inputService.ReadPlayerInput(GameCore.PlayerOneProfile.Gamepad);
             if (input.Confirm)
             {
                 if (currentState == MenuState.InputSelection)
                 {
                     GameAssets.Sounds.Click.Play();
-                    if (gameCore.IsNetworkGame)
+                    if (GameCore.IsNetworkGame)
                     {
                         currentState = MenuState.Online;
                         selected = menuItems.First(x => x.State == currentState).Id;
@@ -151,7 +151,7 @@ public class MenuScene
                 else if (currentState == MenuState.Lobby && selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.StartGame && x.State == currentState)?.Id)
                 {
                     finishScreen = 2;
-                    GameAssets.MusicAndAmbience.StopMusic(gameCore);
+                    GameAssets.MusicAndAmbience.StopMusic();
                     GameAssets.Sounds.Click.Play(pitch: 0.5f);
                     return;
                 }
@@ -168,7 +168,7 @@ public class MenuScene
                         case MenuItem.Exit:
                             {
                                 finishScreen = -1;   // EXIT
-                                gameCore.GameShouldClose = true;
+                                GameCore.GameShouldClose = true;
                                 GameAssets.Sounds.Click.Play();
                                 break;
                             }
@@ -176,7 +176,7 @@ public class MenuScene
                             {
 
                                 //finishScreen = 2;   // GAMEPLAY
-                                gameCore.IsNetworkGame = false;
+                                GameCore.IsNetworkGame = false;
                                 GameAssets.Sounds.Click.Play();
                                 currentState = MenuState.InputSelection;
                                 break;
@@ -184,7 +184,7 @@ public class MenuScene
                         case MenuItem.Online:
                             {
                                 //finishScreen = 2;   // GAMEPLAY
-                                gameCore.IsNetworkGame = true;
+                                GameCore.IsNetworkGame = true;
                                 GameAssets.Sounds.Click.Play();
                                 currentState = MenuState.InputSelection;
                                 break;
@@ -300,15 +300,15 @@ public class MenuScene
                     currentState = MenuState.PressStart;
                     menuItems[0].IsEnabled = true;
                     selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
-                    gameCore.PlayerOneProfile.Gamepad = GamepadSlot.Disconnected;
+                    GameCore.PlayerOneProfile.Gamepad = GamepadSlot.Disconnected;
                 }
                 if (currentState == MenuState.InputSelection || currentState == MenuState.Lobby)
                 {
                     currentState = MenuState.MainMenu;
                     selected = menuItems.Where(x => x.IsEnabled && x.State == currentState).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
-                    gameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Disconnected;
-                    gameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Disconnected;
-                    gameCore.PlayerFourProfile.Gamepad = GamepadSlot.Disconnected;
+                    GameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Disconnected;
+                    GameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Disconnected;
+                    GameCore.PlayerFourProfile.Gamepad = GamepadSlot.Disconnected;
                 }
                 else if (currentState == MenuState.Connecting)
                 {
@@ -329,109 +329,109 @@ public class MenuScene
                 if (input.Back)
                 {
                     // Disconnect or go back one screen 
-                    if (gamepad == gameCore.PlayerOneProfile.Gamepad)
+                    if (gamepad == GameCore.PlayerOneProfile.Gamepad)
                     {
                         currentState = MenuState.MainMenu;
                         break;
                     }
-                    else if (gamepad == gameCore.PlayerTwoProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerTwoProfile.Gamepad)
                     {
-                        gameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Disconnected;
+                        GameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Disconnected;
                     }
-                    else if (gamepad == gameCore.PlayerThreeProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerThreeProfile.Gamepad)
                     {
-                        gameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Disconnected;
+                        GameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Disconnected;
                     }
-                    else if (gamepad == gameCore.PlayerFourProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerFourProfile.Gamepad)
                     {
-                        gameCore.PlayerFourProfile.Gamepad = GamepadSlot.Disconnected;
+                        GameCore.PlayerFourProfile.Gamepad = GamepadSlot.Disconnected;
                     }
 
                 }
                 else if (input.UIRight)
                 {
-                    if (gamepad == gameCore.PlayerOneProfile.Gamepad)
+                    if (gamepad == GameCore.PlayerOneProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
-                        gameCore.PlayerOneProfile.Skin = skin;
+                        GameCore.PlayerOneProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerTwoProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerTwoProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
-                        gameCore.PlayerTwoProfile.Skin = skin;
+                        GameCore.PlayerTwoProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerThreeProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerThreeProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
-                        gameCore.PlayerThreeProfile.Skin = skin;
+                        GameCore.PlayerThreeProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerFourProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerFourProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
-                        gameCore.PlayerFourProfile.Skin = skin;
+                        GameCore.PlayerFourProfile.Skin = skin;
                     }
                 }
                 else if (input.UILeft)
                 {
-                    if (gamepad == gameCore.PlayerOneProfile.Gamepad)
+                    if (gamepad == GameCore.PlayerOneProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
-                        gameCore.PlayerOneProfile.Skin = skin;
+                        GameCore.PlayerOneProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerTwoProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerTwoProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
-                        gameCore.PlayerTwoProfile.Skin = skin;
+                        GameCore.PlayerTwoProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerThreeProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerThreeProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
-                        gameCore.PlayerThreeProfile.Skin = skin;
+                        GameCore.PlayerThreeProfile.Skin = skin;
                     }
-                    else if (gamepad == gameCore.PlayerFourProfile.Gamepad)
+                    else if (gamepad == GameCore.PlayerFourProfile.Gamepad)
                     {
                         GameAssets.Sounds.Selection.Play(pitch: 2);
-                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
+                        var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != GameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
-                        gameCore.PlayerFourProfile.Skin = skin;
+                        GameCore.PlayerFourProfile.Skin = skin;
                     }
 
                 }
                 else if (input.Confirm)
                 {
-                    if (gamepad != gameCore.PlayerOneProfile.Gamepad && gamepad != gameCore.PlayerTwoProfile.Gamepad && gamepad != gameCore.PlayerThreeProfile.Gamepad && gamepad != gameCore.PlayerFourProfile.Gamepad)
+                    if (gamepad != GameCore.PlayerOneProfile.Gamepad && gamepad != GameCore.PlayerTwoProfile.Gamepad && gamepad != GameCore.PlayerThreeProfile.Gamepad && gamepad != GameCore.PlayerFourProfile.Gamepad)
                     {
-                        if (gameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Disconnected)
-                            gameCore.PlayerTwoProfile.Gamepad = gamepad;
-                        else if (gameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Disconnected)
-                            gameCore.PlayerThreeProfile.Gamepad = gamepad;
-                        else if (gameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
-                            gameCore.PlayerFourProfile.Gamepad = gamepad;
+                        if (GameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Disconnected)
+                            GameCore.PlayerTwoProfile.Gamepad = gamepad;
+                        else if (GameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Disconnected)
+                            GameCore.PlayerThreeProfile.Gamepad = gamepad;
+                        else if (GameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
+                            GameCore.PlayerFourProfile.Gamepad = gamepad;
                     }
                 }
             }
             if (inputService.GetDebugCommand() == DebugCommand.AddDummyGamepad)
             {
-                if (gameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Disconnected)
-                    gameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Dummy;
-                else if (gameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Disconnected)
-                    gameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Dummy;
-                else if (gameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
-                    gameCore.PlayerFourProfile.Gamepad = GamepadSlot.Dummy;
+                if (GameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Disconnected)
+                    GameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Dummy;
+                else if (GameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Disconnected)
+                    GameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Dummy;
+                else if (GameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
+                    GameCore.PlayerFourProfile.Gamepad = GamepadSlot.Dummy;
             }
 
         }
@@ -445,7 +445,7 @@ public class MenuScene
         }
 
         // Play selection sound
-        PlaySelectionSound(gameCore);
+        PlaySelectionSound();
 
         // Update menu
         foreach (var item in menuItems) if (item.State == currentState) item.Update(rendererService, collisionService);
@@ -463,34 +463,34 @@ public class MenuScene
             arrowAnimationTimer -= rendererService.GetFrameTime() * 8;
     }
 
-    public void DrawMenuScene(IRendererService rendererService, GameCore gameCore)
+    public void DrawMenuScene(IRendererService rendererService)
     {
         // Draw Background, Logo and Misc
         Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
         rendererService.DrawTextureEx(background, backgroundPos, 0, 2, System.Drawing.Color.DarkGray);
         if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
-            rendererService.DrawTextureEx(logo, new Vector2(gameCore.GameScreenWidth * 0.5f - logo.Width * 0.5f, gameCore.GameScreenHeight * 0.3f - logo.Width * 0.5f), 0, 1, System.Drawing.Color.White);
+            rendererService.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.Width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.Width * 0.5f), 0, 1, System.Drawing.Color.White);
         else if (currentState == MenuState.Online)
         {
             // TODO: add here input with text
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECT TO: ", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECT TO: ", new(GameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
         }
         else if (currentState == MenuState.Connecting)
         {
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECTING", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 64, System.Drawing.Color.White);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECTING", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 64, System.Drawing.Color.White);
         }
         else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {
             // Draw map
-            var mapCenterPostion = new Vector2(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.37f);
+            var mapCenterPostion = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.37f);
             var size = 176;
             var rec = new System.Drawing.Rectangle((int)(mapCenterPostion.X - size / 2), (int)(mapCenterPostion.Y - size / 2), size, size);
             rendererService.DrawRectangleRec(new System.Drawing.Rectangle((int)rec.X - 8, (int)rec.Y - 8, (int)rec.Width + 16, (int)rec.Height + 16), System.Drawing.Color.Black);
             rendererService.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.Width, GameMatch.CurrentMap.Texture.Height), rec, new(0, 0), 0, System.Drawing.Color.White);
 
-            if (!gameCore.IsNetworkGame)
+            if (!GameCore.IsNetworkGame)
             {
-                rendererService.DrawTextCentered(GameAssets.Misc.Font, "ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, "ARCADE", new(GameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
             }
         }
 
@@ -501,7 +501,7 @@ public class MenuScene
         // Input Selection
         if (currentState == MenuState.InputSelection)
         {
-            DrawInputSelection(rendererService, gameCore);
+            DrawInputSelection(rendererService);
         }
         if (Utils.Debug())
             rendererService.DrawRectangleRec(new System.Drawing.Rectangle(80, 0, 800, 600), System.Drawing.Color.FromArgb(20, 255, 0, 0));
@@ -509,7 +509,7 @@ public class MenuScene
 
         // Play selection sound
         //----------------------------------------------------------------------------------
-        PlaySelectionSound(gameCore);
+        PlaySelectionSound();
 
     }
 
@@ -533,7 +533,7 @@ public class MenuScene
         return finishScreen;
     }
 
-    void PlaySelectionSound(GameCore gameCore)
+    void PlaySelectionSound()
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
@@ -543,14 +543,14 @@ public class MenuScene
     class UIMenuItem
     {
         private readonly MenuScene scene;
-        public UIMenuItem(MenuScene menuScene, string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition, GameCore gameCore, string value = "")
+        public UIMenuItem(MenuScene menuScene, string text, MenuItem item, MenuState state, bool isEnabled, MenuItemType type, Vector2 centerPosition, string value = "")
         {
             Id = Guid.NewGuid();
             Text = text;
             Item = item;
             State = state;
             IsEnabled = isEnabled;
-            Size = gameCore.MenuFontSize;
+            Size = GameCore.MenuFontSize;
             Type = type;
             CenterPosition = centerPosition;
             Value = value;
@@ -624,28 +624,28 @@ public class MenuScene
     }
 
 
-    private void DrawInputSelection(IRendererService rendererService, GameCore gameCore)
+    private void DrawInputSelection(IRendererService rendererService)
     {
-        rendererService.DrawRectangleRec(new(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0)); // Overlay
+        rendererService.DrawRectangleRec(new(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0)); // Overlay
 
-        Vector2 screenCenter = new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f);
+        Vector2 screenCenter = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 
         // Render BoxPlayerOne
         Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 200);
         rendererService.DrawTextureEx(box, boxPlayerOne, 0, 1, System.Drawing.Color.White);
-        DrawPlayerCard(rendererService, boxPlayerOne, box.Width, box.Height, gameCore.PlayerOneProfile.Gamepad, gameCore.PlayerOneProfile.Name, gameCore.PlayerOneProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerOne, box.Width, box.Height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
 
         Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 200);
         rendererService.DrawTextureEx(box, boxPlayerTwo, 0, 1, System.Drawing.Color.White);
-        DrawPlayerCard(rendererService, boxPlayerTwo, box.Width, box.Height, gameCore.PlayerTwoProfile.Gamepad, gameCore.PlayerTwoProfile.Name, gameCore.PlayerTwoProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerTwo, box.Width, box.Height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
 
         Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 00);
         rendererService.DrawTextureEx(box, boxPlayerThree, 0, 1, System.Drawing.Color.White);
-        DrawPlayerCard(rendererService, boxPlayerThree, box.Width, box.Height, gameCore.PlayerThreeProfile.Gamepad, gameCore.PlayerThreeProfile.Name, gameCore.PlayerThreeProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerThree, box.Width, box.Height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
 
         Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 00);
         rendererService.DrawTextureEx(box, boxPlayerFour, 0, 1, System.Drawing.Color.White);
-        DrawPlayerCard(rendererService, boxPlayerFour, box.Width, box.Height, gameCore.PlayerFourProfile.Gamepad, gameCore.PlayerFourProfile.Name, gameCore.PlayerFourProfile.Skin.Texture);
+        DrawPlayerCard(rendererService, boxPlayerFour, box.Width, box.Height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
         void DrawPlayerCard(IRendererService rendererService, Vector2 cardPosition, int cardWidth, int cardHeight, GamepadSlot playerGamepadNumber, string profileName, ITextureAsset player)
         {
@@ -705,7 +705,7 @@ public class MenuScene
 
                 rendererService.DrawTexturePro(arrow, new(0, 0, arrow.Width, arrow.Height), new((int)skinPosition.X + 54 + (int)arrowAnimationTimer, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
                 rendererService.DrawTexturePro(arrow, new(0, 0, -arrow.Width, arrow.Height), new((int)skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.Width, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
-                rendererService.DrawTextCentered(GameAssets.Misc.Font, profileName, profileNamePosition, gameCore.MenuFontSize, System.Drawing.Color.White);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, profileName, profileNamePosition, GameCore.MenuFontSize, System.Drawing.Color.White);
             }
         }
 

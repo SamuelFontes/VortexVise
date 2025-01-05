@@ -1,5 +1,5 @@
 ﻿using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Scenes;
@@ -9,7 +9,7 @@ namespace VortexVise.Desktop.Logic;
 
 public static class MatchLogic
 {
-    public static void HandleMatchState(GameState gameState, float deltaTime, SceneManager sceneManager, GameCore gameCore)
+    public static void HandleMatchState(GameState gameState, float deltaTime, SceneManager sceneManager)
     {
         gameState.MatchTimer -= deltaTime;
 
@@ -20,18 +20,18 @@ public static class MatchLogic
                 gameState.MatchTimer = GameMatch.MatchLengthInSeconds;
                 gameState.MatchState = MatchStates.Playing;
 
-                if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM,gameCore);
-                else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis,gameCore);
+                if (GameMatch.CurrentMap.BGM != "") GameAssets.MusicAndAmbience.PlayCustomMusic(GameMatch.CurrentMap.BGM);
+                else GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetNotGonnaLeoThis);
             }
             else if (gameState.MatchState == MatchStates.Playing)
             {
-                GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance,gameCore);
+                GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);
                 gameState.MatchTimer = 10;
                 gameState.MatchState = MatchStates.EndScreen;
             }
             else if (gameState.MatchState == MatchStates.EndScreen)
             {
-                if (!gameCore.IsNetworkGame) gameState.IsRunning = false;
+                if (!GameCore.IsNetworkGame) gameState.IsRunning = false;
                 else
                 {
                     gameState.MatchTimer = 10;

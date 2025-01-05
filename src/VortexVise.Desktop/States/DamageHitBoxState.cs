@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
@@ -43,7 +43,7 @@ public class DamageHitBoxState
     /// Make the thing explode
     /// </summary>
     /// <param name="gameState">Current Game State</param>
-    public void Explode(GameState gameState, GameCore gameCore)
+    public void Explode(GameState gameState)
     {
         if (IsExplosion) return;
         HitBox = new(HitBox.X - 48, HitBox.Y - 48, HitBox.Width + 96, HitBox.Height + 96);

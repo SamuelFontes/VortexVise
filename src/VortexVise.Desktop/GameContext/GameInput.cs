@@ -1,8 +1,8 @@
 ﻿using VortexVise.Desktop.States;
 using VortexVise.Core.States;
 using VortexVise.Core.Interfaces;
-using VortexVise.Core.GameContext;
 using VortexVise.Core.Enums;
+using VortexVise.Core.GameGlobals;
 
 namespace VortexVise.Desktop.GameContext;
 
@@ -23,33 +23,33 @@ public static class GameInput
     /// <param name="currentPlayerState">Current player state</param>
     /// <param name="lastPlayerState">Last player state</param>
     /// <returns>A boolean indicating if this player is one of the local players.</returns>
-    public static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState, IInputService inputService, GameCore gameCore)
+    public static bool ReadLocalPlayerInput(bool isNetworkFrame, PlayerState currentPlayerState, PlayerState lastPlayerState, IInputService inputService)
     {
         bool isLocalPlayer = false;
         GamepadSlot gamepad = GamepadSlot.Disconnected;
         var playerIndex = 0;
-        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == gameCore.PlayerOneProfile.Id)
+        if (GameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == GameCore.PlayerOneProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = gameCore.PlayerOneProfile.Gamepad;
+            gamepad = GameCore.PlayerOneProfile.Gamepad;
             playerIndex = 0;
         }
-        else if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == gameCore.PlayerTwoProfile.Id)
+        else if (GameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == GameCore.PlayerTwoProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = gameCore.PlayerTwoProfile.Gamepad;
+            gamepad = GameCore.PlayerTwoProfile.Gamepad;
             playerIndex = 1;
         }
-        else if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == gameCore.PlayerThreeProfile.Id)
+        else if (GameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == GameCore.PlayerThreeProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = gameCore.PlayerThreeProfile.Gamepad;
+            gamepad = GameCore.PlayerThreeProfile.Gamepad;
             playerIndex = 2;
         }
-        else if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == gameCore.PlayerFourProfile.Id)
+        else if (GameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected && lastPlayerState.Id == GameCore.PlayerFourProfile.Id)
         {
             isLocalPlayer = true;
-            gamepad = gameCore.PlayerFourProfile.Gamepad;
+            gamepad = GameCore.PlayerFourProfile.Gamepad;
             playerIndex = 3;
         }
         if (!isLocalPlayer || gamepad == GamepadSlot.Disconnected) return isLocalPlayer;

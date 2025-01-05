@@ -1,5 +1,5 @@
 ﻿using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
@@ -27,13 +27,13 @@ public static class BotLogic
     {
         GameMatch.Bots.Clear();
     }
-    public static InputState GenerateBotInput(GameState state, PlayerState botState, GameCore gameCore)
+    public static InputState GenerateBotInput(GameState state, PlayerState botState)
     {
         var rand = new Random();
         var input = new InputState();
         Bot bot = GameMatch.Bots.First(x => x.Id == botState.Id);
         bot.TickCounter++;
-        if (bot.TickCounter > gameCore.GameTickRate * 2)
+        if (bot.TickCounter > GameCore.GameTickRate * 2)
         {
             bot.DropTarget = null;
             bot.EnemyTarget = null;

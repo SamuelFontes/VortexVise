@@ -1,7 +1,7 @@
 ﻿#pragma warning disable SYSLIB1045 // Convert to 'GeneratedRegexAttribute'. Honestly this will only run once so we don't care about performance
 using System.Numerics;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using VortexVise.Desktop.Extensions;
@@ -27,7 +27,7 @@ public static class WeaponLogic
             currentGameState.WeaponDrops.Add(new WeaponDropState(dropState.WeaponState, dropState.DropTimer, dropState.Position, dropState.Velocity));
         }
     }
-    public static void SpawnWeapons(GameState currentGameState, float deltaTime, GameCore gameCore)
+    public static void SpawnWeapons(GameState currentGameState, float deltaTime)
     {
         WeaponSpawnTimer += deltaTime;
         if (WeaponSpawnTimer > GameMatch.WeaponSpawnDelay)
@@ -58,7 +58,7 @@ public static class WeaponLogic
         WeaponRotation -= deltaTime * 100;
     }
 
-    public static void ProcessPlayerShooting(PlayerState currentPlayerState, GameState gameState, float deltaTime, GameCore gameCore)
+    public static void ProcessPlayerShooting(PlayerState currentPlayerState, GameState gameState, float deltaTime)
     {
         if (currentPlayerState.WeaponStates.Count <= 0) return; // FIXME: change this when player can grab more weapons
 
@@ -155,7 +155,7 @@ public static class WeaponLogic
         }
     }
 
-    public static void ProcessHitBoxes(ICollisionService collisionService, GameState currentGameState, GameState lastGameState, float deltaTime, float gravity, GameCore gameCore)
+    public static void ProcessHitBoxes(ICollisionService collisionService, GameState currentGameState, GameState lastGameState, float deltaTime, float gravity)
     {
         foreach (var hitbox in currentGameState.DamageHitBoxes)
         {
@@ -178,7 +178,7 @@ public static class WeaponLogic
                         GameAssets.Sounds.HookHit.Play(pitch: 2f);
                         if (hitbox.Weapon.WeaponType == WeaponType.Granade)
                         {
-                            hitbox.Explode(currentGameState, gameCore);
+                            hitbox.Explode(currentGameState);
                         }
                         break;
                     }
@@ -211,7 +211,7 @@ public static class WeaponLogic
         currentGameState.DamageHitBoxes.RemoveAll(x => x.HitBoxTimer <= 0 || x.ShouldDisappear);
     }
 
-    public static void ApplyHitBoxesDamage(ICollisionService collisionService, GameState gameState, PlayerState currentPlayerState, GameCore gameCore)
+    public static void ApplyHitBoxesDamage(ICollisionService collisionService, GameState gameState, PlayerState currentPlayerState)
     {
         var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || (x.IsExplosion && !currentPlayerState.IsBot));// Adding friendly fire for bots is not a good idea
         foreach (var hitbox in hitboxes)
@@ -229,7 +229,7 @@ public static class WeaponLogic
                 currentPlayerState.LastPlayerHitId = hitbox.PlayerId;
 
                 // Show HitMaker if player is local 
-                if (PlayerLogic.IsPlayerLocal(hitbox.PlayerId, gameCore))
+                if (PlayerLogic.IsPlayerLocal(hitbox.PlayerId))
                 {
                     var player = gameState.PlayerStates.FirstOrDefault(x => x.Id == hitbox.PlayerId);
                     if (player == null) break;
@@ -237,7 +237,7 @@ public static class WeaponLogic
                     GameAssets.Sounds.HitMarker.Play();
                 }
 
-                if (hitbox.Weapon.WeaponType == WeaponType.Granade) hitbox.Explode(gameState, gameCore);
+                if (hitbox.Weapon.WeaponType == WeaponType.Granade) hitbox.Explode(gameState);
 
                 // If is melee weapon it should spend ammo when hitting someone
                 if (hitbox.Weapon.WeaponType == WeaponType.MeleeBlunt || hitbox.Weapon.WeaponType == WeaponType.MeleeCut)
@@ -248,12 +248,12 @@ public static class WeaponLogic
 
         }
     }
-    public static void BreakPlayerWeapon(PlayerState currentPlayerState, GameCore gameCore)
+    public static void BreakPlayerWeapon(PlayerState currentPlayerState)
     {
         foreach (var weapon in currentPlayerState.WeaponStates)
         {
             if (weapon.CurrentAmmo <= 0)
-                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id, gameCore) && weapon.Weapon.WeaponType != WeaponType.Granade && weapon.Weapon.WeaponType != WeaponType.Mine)
+                if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id) && weapon.Weapon.WeaponType != WeaponType.Granade && weapon.Weapon.WeaponType != WeaponType.Mine)
                     GameAssets.Sounds.Drop.Play();
         }
         currentPlayerState.WeaponStates.RemoveAll(x => x.CurrentAmmo <= 0);

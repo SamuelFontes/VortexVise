@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 
 namespace VortexVise.Core.GameContext
@@ -14,6 +15,5 @@ namespace VortexVise.Core.GameContext
         public IInputService InputService { get; set; } = inputService;
         public IRendererService RendererService { get; set; } = rendererService;
         public ISoundService SoundService { get; set; } = soundService;
-        public GameCore GameCore { get; set; } = new();
     }
 }

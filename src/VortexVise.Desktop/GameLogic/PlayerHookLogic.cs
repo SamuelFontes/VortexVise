@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.States;
@@ -19,14 +19,14 @@ public static class PlayerHookLogic
     /// <param name="currentPlayerState">Current player state.</param>
     /// <param name="gravity">Current gravity</param>
     /// <param name="deltaTime">Time since last frame</param>
-    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime, GameCore gameCore)
+    public static void SimulateHookState(ICollisionService collisionService,PlayerState currentPlayerState, float gravity, float deltaTime)
     {
         if (currentPlayerState.Input.CancelHook && currentPlayerState.HookState.IsHookAttached)
         {
             currentPlayerState.HookState.IsHookReleased = false;
             currentPlayerState.HookState.IsHookAttached = false;
             currentPlayerState.HookState.Velocity = new(0, 0);
-            PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false,gameCore);
+            PlayerLogic.MakePlayerDashOrDoubleJump(currentPlayerState, false);
         }
         else if (!currentPlayerState.HookState.IsPressingHookKey && currentPlayerState.Input.Hook)
         {
@@ -37,7 +37,7 @@ public static class PlayerHookLogic
             currentPlayerState.HookState.Position = new(currentPlayerState.HookState.Position.X - 4, currentPlayerState.HookState.Position.Y);
 
             // Play hook shoot sound
-            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+            if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                 GameAssets.Sounds.HookShoot.Play();
 
             // Reset velocity
@@ -151,7 +151,7 @@ public static class PlayerHookLogic
                 {
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
-                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
+                    if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id))
                         GameAssets.Sounds.HookHit.Play(volume: 0.5f);
                 }
             }

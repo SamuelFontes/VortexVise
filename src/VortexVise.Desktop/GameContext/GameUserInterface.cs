@@ -2,7 +2,7 @@
 using VortexVise.Core;
 using VortexVise.Core.Enums;
 using VortexVise.Core.Extensions;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.Models;
@@ -30,15 +30,15 @@ static internal class GameUserInterface
         IsCursorVisible = false;
         DisableCursor = false;
     }
-    public static void UpdateUserInterface(GameCore gameCore, IRendererService rendererService)
+    public static void UpdateUserInterface(IRendererService rendererService)
     {
         // Handle cursor, show and hide cursor based on movement
         //---------------------------------------------------------
         Vector2 newCursorPosition = rendererService.GetMousePosition();
         Vector2 virtualMouse = new();
-        virtualMouse.X = (newCursorPosition.X - (rendererService.GetScreenWidth() - gameCore.GameScreenWidth) * 0.5f);
-        virtualMouse.Y = (newCursorPosition.Y - (rendererService.GetScreenHeight() - gameCore.GameScreenHeight) * 0.5f);
-        virtualMouse = virtualMouse.Clamp(new(0, 0), new Vector2(gameCore.GameScreenWidth, gameCore.GameScreenHeight));
+        virtualMouse.X = (newCursorPosition.X - (rendererService.GetScreenWidth() - GameCore.GameScreenWidth) * 0.5f);
+        virtualMouse.Y = (newCursorPosition.Y - (rendererService.GetScreenHeight() - GameCore.GameScreenHeight) * 0.5f);
+        virtualMouse = virtualMouse.Clamp(new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
         if (newCursorPosition.X != CursorPosition.X || newCursorPosition.Y != CursorPosition.Y)
@@ -59,11 +59,11 @@ static internal class GameUserInterface
         CursorPosition = newCursorPosition;
     }
 
-    public static void DrawUserInterface(IRendererService rendererService, GameCore gameCore)
+    public static void DrawUserInterface(IRendererService rendererService)
     {
         DrawDebug();
         DrawCursor(rendererService);
-        DrawHud(rendererService, gameCore);
+        DrawHud(rendererService);
     }
     public static void UnloadUserInterface()
     {
@@ -91,36 +91,36 @@ static internal class GameUserInterface
         //Raylib.DrawFPS(0, 0);
     }
 
-    private static void DrawHud(IRendererService rendererService, GameCore gameCore)
+    private static void DrawHud(IRendererService rendererService)
     {
         if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
             //  Maybe this needs to be optimized who knows
             // Player 1
             var p = new Vector2(8, 8);
-            var playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == gameCore.PlayerOneProfile.Id);
+            var playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerOneProfile.Id);
             if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 2
-            p = new Vector2(gameCore.GameScreenWidth - 128 - 8, 8);
-            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == gameCore.PlayerTwoProfile.Id);
+            p = new Vector2(GameCore.GameScreenWidth - 128 - 8, 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerTwoProfile.Id);
             if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 3
-            p = new Vector2(8, gameCore.GameScreenHeight * 0.5f + 8);
-            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == gameCore.PlayerThreeProfile.Id);
+            p = new Vector2(8, GameCore.GameScreenHeight * 0.5f + 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerThreeProfile.Id);
             if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             // Player 4
-            p = new Vector2(gameCore.GameScreenWidth - 128 - 8, gameCore.GameScreenHeight * 0.5f + 8);
-            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == gameCore.PlayerFourProfile.Id);
+            p = new Vector2(GameCore.GameScreenWidth - 128 - 8, GameCore.GameScreenHeight * 0.5f + 8);
+            playerState = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == GameCore.PlayerFourProfile.Id);
             if (playerState != null) DrawPlayerInfo(rendererService, playerState, p);
 
             if (IsShowingScoreboard)
             {
                 var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
-                DrawScoreboard(rendererService, players, gameCore);
+                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                DrawScoreboard(rendererService, players);
             }
 
             // Draw kill feed 
@@ -130,10 +130,10 @@ static internal class GameUserInterface
             {
                 var color = System.Drawing.Color.White;
                 if (kill.Timer < 3) color = System.Drawing.Color.FromArgb((byte)(kill.Timer * 255 / 3), color);
-                int x = (int)(gameCore.GameScreenWidth * 0.5f);
-                if (Utils.GetNumberOfLocalPlayers(gameCore) == 1)
+                int x = (int)(GameCore.GameScreenWidth * 0.5f);
+                if (Utils.GetNumberOfLocalPlayers() == 1)
                 {
-                    x = (int)(gameCore.GameScreenWidth - 64);
+                    x = (int)(GameCore.GameScreenWidth - 64);
                     y = 8;
                 }
                 x -= (int)(GameAssets.HUD.KillFeedBackground.Width * 0.5f);
@@ -169,36 +169,36 @@ static internal class GameUserInterface
         // Global HUD
         if (GameMatch.GameState?.MatchState == MatchStates.Warmup)
         {
-            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 32, System.Drawing.Color.White);
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, System.Drawing.Color.White);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.EndScreen)
         {
-            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"RESULTS - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
             var y = 64;
             var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
             if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
-                //Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(gameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.ColorSystem.Drawing.Color.White);
+                //Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(GameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.ColorSystem.Drawing.Color.White);
             }
             else
             {
-                rendererService.DrawTextCentered(GameAssets.Misc.Font, $"DRAW", new(gameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.Color.White);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, $"DRAW", new(GameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.Color.White);
             }
-            GameUserInterface.DrawScoreboard(rendererService, players, gameCore);
+            GameUserInterface.DrawScoreboard(rendererService, players);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Voting)
         {
-            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"MAP VOTING - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"MAP VOTING - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
         }
 
 
@@ -253,12 +253,12 @@ static internal class GameUserInterface
 
     }
 
-    public static void DrawScoreboard(IRendererService rendererService, List<PlayerState> players, GameCore gameCore)
+    public static void DrawScoreboard(IRendererService rendererService, List<PlayerState> players)
     {
         var y = 96;
         foreach (var player in players)
         {
-            int x = (int)(gameCore.GameScreenWidth * 0.5f);
+            int x = (int)(GameCore.GameScreenWidth * 0.5f);
             x -= 64;
             //rendererService.DrawTextCentered($"Player {player.Id}", new(x, y), 16, System.Drawing.Color.White);
             rendererService.DrawTexture(player.Skin.Texture, x - 16, y - 16, System.Drawing.Color.White);

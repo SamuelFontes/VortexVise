@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Security.Cryptography;
 using VortexVise.Core.Enums;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 using VortexVise.Desktop.Extensions;
@@ -90,13 +90,13 @@ public static class Utils
     /// Check how many players are connected to the game locally
     /// </summary>
     /// <returns></returns>
-    public static int GetNumberOfLocalPlayers(GameCore gameCore)
+    public static int GetNumberOfLocalPlayers()
     {
         var players = 0;
-        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) players++;
-        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) players++;
-        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) players++;
-        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (GameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (GameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (GameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (GameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) players++;
         return players;
     }
 
@@ -137,13 +137,13 @@ public static class Utils
         }
     }
 
-    public static List<PlayerProfile> GetAllLocalPlayerProfiles(GameCore gameCore)
+    public static List<PlayerProfile> GetAllLocalPlayerProfiles()
     {
         List<PlayerProfile> list = new List<PlayerProfile>();
-        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerOneProfile);
-        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerTwoProfile);
-        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerThreeProfile);
-        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerFourProfile);
+        if (GameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) list.Add(GameCore.PlayerOneProfile);
+        if (GameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) list.Add(GameCore.PlayerTwoProfile);
+        if (GameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) list.Add(GameCore.PlayerThreeProfile);
+        if (GameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) list.Add(GameCore.PlayerFourProfile);
         return list;
     }
 

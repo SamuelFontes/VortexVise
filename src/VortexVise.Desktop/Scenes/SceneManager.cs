@@ -1,6 +1,6 @@
 ﻿using VortexVise.Core.Enums;
 using VortexVise.Core.Extensions;
-using VortexVise.Core.GameContext;
+using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
 using ZeroElectric.Vinculum;
@@ -22,10 +22,10 @@ public class SceneManager
     public GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
     private readonly IInputService _inputService;
 
-    public SceneManager(IInputService inputService, GameCore gameCore, IRendererService rendererService, ICollisionService collisionService)
+    public SceneManager(IInputService inputService, IRendererService rendererService, ICollisionService collisionService)
     {
         _inputService = inputService;
-        MenuScene = new MenuScene(_inputService, this, gameCore, rendererService, collisionService);
+        MenuScene = new MenuScene(_inputService, this, rendererService, collisionService);
         GameplayScene = new GameplayScene(_inputService);
     }
 
@@ -39,7 +39,7 @@ public class SceneManager
     }
 
     // Update transition effect (fade-in, fade-out)
-    public void UpdateTransition(GameCore gameCore, IRendererService rendererService, IAssetService assetService, ICollisionService collisionService)
+    public void UpdateTransition(IRendererService rendererService, IAssetService assetService, ICollisionService collisionService)
     {
         if (!TransitionFadeOut)
         {
@@ -68,8 +68,8 @@ public class SceneManager
                 {
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
-                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore, assetService,rendererService); break;
-                    case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, gameCore, rendererService, collisionService); break;
+                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(assetService, rendererService); break;
+                    case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, rendererService, collisionService); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
                 }
@@ -96,12 +96,12 @@ public class SceneManager
     }
 
     // Draw transition effect (full-screen rectangle)
-    public void DrawTransition(GameCore gameCore, IRendererService rendererService)
+    public void DrawTransition(IRendererService rendererService)
     {
-        rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
+        rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
     }
 
-    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService, IAssetService assetService, IInputService inputService)
+    public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)
     {
         if (!OnTransition)
         {
@@ -111,7 +111,7 @@ public class SceneManager
             {
                 case GameScene.GAMEPLAY:
                     {
-                        GameplayScene.UpdateGameplayScene(sceneManager, collisionService, gameCore,rendererService);
+                        GameplayScene.UpdateGameplayScene(sceneManager, collisionService, rendererService);
                         if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
                         //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
@@ -119,7 +119,7 @@ public class SceneManager
                     break;
                 case GameScene.MENU:
                     {
-                        MenuScene.UpdateMenuScene(gameCore, rendererService, collisionService, inputService);
+                        MenuScene.UpdateMenuScene(rendererService, collisionService, inputService);
                         if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
                         else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
                     }
@@ -127,15 +127,15 @@ public class SceneManager
                 default: break;
             }
         }
-        else UpdateTransition(gameCore, rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
+        else UpdateTransition(rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
     }
 
-    public void DrawScene(IRendererService rendererService, GameCore gameCore, ICollisionService collisionService)
+    public void DrawScene(IRendererService rendererService, ICollisionService collisionService)
     {
         switch (CurrentScene)
         {
-            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService, gameCore, collisionService); break;
-            case GameScene.MENU: MenuScene.DrawMenuScene(rendererService, gameCore); break;
+            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService, collisionService); break;
+            case GameScene.MENU: MenuScene.DrawMenuScene(rendererService); break;
             default: break;
         }
     }
