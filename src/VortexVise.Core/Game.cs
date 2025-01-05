@@ -28,13 +28,12 @@ namespace VortexVise.Core
             where TTextureAsset : ITextureAsset, new()
         {
             // Initialization
-            //---------------------------------------------------------
             _services.WindowService.InitializeWindow();
 
             // Load Assets
             GameAssets.InitializeAssets<TFontAsset, TMusicAsset, TSoundAsset, TTextureAsset>(_services.AssetService);                                                                          // Load global data 
             GameUserInterface.InitUserInterface<TTextureAsset>();
-            SceneManager sceneManager = new SceneManager(typeof(TTextureAsset), _services.InputService, _services.RendererService, _services.CollisionService);
+            SceneManager sceneManager = new SceneManager( _services.InputService, _services.RendererService, _services.CollisionService);
 
             // Initiate music
             GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
@@ -43,7 +42,6 @@ namespace VortexVise.Core
             sceneManager.CurrentScene = GameScene.MENU;
 
             // Main Game Loop
-            //--------------------------------------------------------------------------------------
             while (!GameCore.GameShouldClose)
             {
                 // UPDATE
@@ -54,13 +52,10 @@ namespace VortexVise.Core
                 if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
                 // Update game
-                sceneManager.UpdateScene<TPlayerCamera, TTextureAsset>(sceneManager, _services.CollisionService, _services.RendererService, _services.AssetService, _services.InputService);
-
+                sceneManager.UpdateScene<TPlayerCamera>(sceneManager, _services.CollisionService, _services.RendererService, _services.AssetService, _services.InputService);
 
                 // Update user interface
-                //----------------------------------------------------------------------------------
                 GameUserInterface.UpdateUserInterface(_services.RendererService);
-
 
                 // DRAW
                 //----------------------------------------------------------------------------------
@@ -80,15 +75,6 @@ namespace VortexVise.Core
                 _services.RendererService.EndDrawing();
             }
 
-            // Fade screen to black when exit
-            sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
-            while (!sceneManager.TransitionFadeOut)
-            {
-                sceneManager.UpdateTransition<TPlayerCamera, TTextureAsset>(_services.RendererService, _services.AssetService, _services.CollisionService);
-            }
-
-            // De-Initialization
-            //--------------------------------------------------------------------------------------
             GameAssets.UnloadAssets(_services.AssetService);
         }
     }

@@ -19,15 +19,6 @@ namespace VortexVise.Core.Scenes
     {
         readonly List<UIMenuItem> menuItems = [];
         int finishScreen = 0;
-        ITextureAsset logo;
-        ITextureAsset background { get; set; }
-        ITextureAsset box;
-        ITextureAsset keyboard;
-        ITextureAsset gamepad;
-        ITextureAsset gamepadSlotOn;
-        ITextureAsset gamepadSlotOff;
-        ITextureAsset disconnected;
-        ITextureAsset arrow;
         public Guid selected = Guid.Empty;
         public Guid lastSelected;
         MenuState currentState = MenuState.PressStart;
@@ -36,17 +27,8 @@ namespace VortexVise.Core.Scenes
         private readonly IInputService _inputService;
         private SceneManager _sceneManager;
 
-        public MenuScene(Type textureAssetType, IInputService inputService, SceneManager sceneManager, IRendererService rendererService, ICollisionService collisionService)
+        public MenuScene(IInputService inputService, SceneManager sceneManager, IRendererService rendererService, ICollisionService collisionService)
         {
-            logo = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            background = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            box = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            keyboard = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            gamepad = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            gamepadSlotOn = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            gamepadSlotOff = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            disconnected = (ITextureAsset)Activator.CreateInstance(textureAssetType);
-            arrow = (ITextureAsset)Activator.CreateInstance(textureAssetType);
             _inputService = inputService;
             _sceneManager = sceneManager;
 
@@ -57,15 +39,15 @@ namespace VortexVise.Core.Scenes
 
             // Load textures
             //----------------------------------------------------------------------------------
-            logo.Load("Resources/Common/vortex-vise-logo.png");
-            background.Load("Resources/Common/MenuBackground.png");
-            box.Load("Resources/Common/rounded_box.png");
-            keyboard.Load("Resources/Common/keyboard.png");
-            gamepad.Load("Resources/Common/xbox_gamepad.png");
-            disconnected.Load("Resources/Common/xbox_gamepad_disconnected.png");
-            gamepadSlotOn.Load("Resources/Common/gamepad_slot_on.png");
-            gamepadSlotOff.Load("Resources/Common/gamepad_slot_off.png");
-            arrow.Load("Resources/Common/arrow.png");
+            GameAssets.MenuLogo.Load("Resources/Common/vortex-vise-logo.png");
+            GameAssets.MenuBackground.Load("Resources/Common/MenuBackground.png");
+            GameAssets.MenuBox.Load("Resources/Common/rounded_box.png");
+            GameAssets.MenuKeyboard.Load("Resources/Common/keyboard.png");
+            GameAssets.MenuGamepad.Load("Resources/Common/xbox_gamepad.png");
+            GameAssets.MenuDisconnected.Load("Resources/Common/xbox_gamepad_disconnected.png");
+            GameAssets.MenuGamepadSlotOn.Load("Resources/Common/gamepad_slot_on.png");
+            GameAssets.MenuGamepadSlotOff.Load("Resources/Common/gamepad_slot_off.png");
+            GameAssets.MenuArrow.Load("Resources/Common/arrow.png");
 
             // Load player skins
             //----------------------------------------------------------------------------------
@@ -474,9 +456,9 @@ namespace VortexVise.Core.Scenes
         {
             // Draw Background, Logo and Misc
             Vector2 backgroundPos = new(0, 0); // Can use this to move the background around
-            rendererService.DrawTextureEx(background, backgroundPos, 0, 2, System.Drawing.Color.DarkGray);
+            rendererService.DrawTextureEx(GameAssets.MenuBackground, backgroundPos, 0, 2, System.Drawing.Color.DarkGray);
             if (currentState == MenuState.PressStart || currentState == MenuState.MainMenu)
-                rendererService.DrawTextureEx(logo, new Vector2(GameCore.GameScreenWidth * 0.5f - logo.Width * 0.5f, GameCore.GameScreenHeight * 0.3f - logo.Width * 0.5f), 0, 1, System.Drawing.Color.White);
+                rendererService.DrawTextureEx(GameAssets.MenuLogo, new Vector2(GameCore.GameScreenWidth * 0.5f - GameAssets.MenuLogo.Width * 0.5f, GameCore.GameScreenHeight * 0.3f - GameAssets.MenuLogo.Width * 0.5f), 0, 1, System.Drawing.Color.White);
             else if (currentState == MenuState.Online)
             {
                 // TODO: add here input with text
@@ -522,15 +504,6 @@ namespace VortexVise.Core.Scenes
 
         public void UnloadMenuScene()
         {
-            logo.Unload();
-            background.Unload();
-            box.Unload();
-            keyboard.Unload();
-            gamepad.Unload();
-            disconnected.Unload();
-            gamepadSlotOn.Unload();
-            gamepadSlotOff.Unload();
-            arrow.Unload();
             menuItems.Clear();
             GC.Collect();
 
@@ -623,8 +596,8 @@ namespace VortexVise.Core.Scenes
                     var textBoxSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, Text, Size, 0);
                     if (textBoxSize.X % 2 != 0) textBoxSize.X++;
                     if (textBoxSize.Y % 2 != 0) textBoxSize.Y++;
-                    rendererService.DrawTexturePro(scene.arrow, new(0, 0, scene.arrow.Width, scene.arrow.Height), new((int)Position.X + (int)textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, (int)Position.Y + 8, scene.arrow.Width * 2, scene.arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
-                    rendererService.DrawTexturePro(scene.arrow, new(0, 0, -scene.arrow.Width, scene.arrow.Height), new((int)Position.X - 16 - (int)scene.arrowAnimationTimer - scene.arrow.Width, (int)Position.Y + 8, scene.arrow.Width * 2, scene.arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                    rendererService.DrawTexturePro(GameAssets.MenuArrow, new(0, 0, GameAssets.MenuArrow.Width, GameAssets.MenuArrow.Height), new((int)Position.X + (int)textBoxSize.X + 8 + (int)scene.arrowAnimationTimer, (int)Position.Y + 8, GameAssets.MenuArrow.Width * 2, GameAssets.MenuArrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                    rendererService.DrawTexturePro(GameAssets.MenuArrow, new(0, 0, -GameAssets.MenuArrow.Width, GameAssets.MenuArrow.Height), new((int)Position.X - 16 - (int)scene.arrowAnimationTimer - GameAssets.MenuArrow.Width, (int)Position.Y + 8, GameAssets.MenuArrow.Width * 2, GameAssets.MenuArrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
                 }
 
             }
@@ -639,20 +612,20 @@ namespace VortexVise.Core.Scenes
 
             // Render BoxPlayerOne
             Vector2 boxPlayerOne = new(screenCenter.X - 316, screenCenter.Y - 200);
-            rendererService.DrawTextureEx(box, boxPlayerOne, 0, 1, System.Drawing.Color.White);
-            DrawPlayerCard(rendererService, boxPlayerOne, box.Width, box.Height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
+            rendererService.DrawTextureEx(GameAssets.MenuBox, boxPlayerOne, 0, 1, System.Drawing.Color.White);
+            DrawPlayerCard(rendererService, boxPlayerOne, GameAssets.MenuBox.Width, GameAssets.MenuBox.Height, GameCore.PlayerOneProfile.Gamepad, GameCore.PlayerOneProfile.Name, GameCore.PlayerOneProfile.Skin.Texture);
 
             Vector2 boxPlayerTwo = new(screenCenter.X + 16, screenCenter.Y - 200);
-            rendererService.DrawTextureEx(box, boxPlayerTwo, 0, 1, System.Drawing.Color.White);
-            DrawPlayerCard(rendererService, boxPlayerTwo, box.Width, box.Height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
+            rendererService.DrawTextureEx(GameAssets.MenuBox, boxPlayerTwo, 0, 1, System.Drawing.Color.White);
+            DrawPlayerCard(rendererService, boxPlayerTwo, GameAssets.MenuBox.Width, GameAssets.MenuBox.Height, GameCore.PlayerTwoProfile.Gamepad, GameCore.PlayerTwoProfile.Name, GameCore.PlayerTwoProfile.Skin.Texture);
 
             Vector2 boxPlayerThree = new(screenCenter.X - 316, screenCenter.Y + 00);
-            rendererService.DrawTextureEx(box, boxPlayerThree, 0, 1, System.Drawing.Color.White);
-            DrawPlayerCard(rendererService, boxPlayerThree, box.Width, box.Height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
+            rendererService.DrawTextureEx(GameAssets.MenuBox, boxPlayerThree, 0, 1, System.Drawing.Color.White);
+            DrawPlayerCard(rendererService, boxPlayerThree, GameAssets.MenuBox.Width, GameAssets.MenuBox.Height, GameCore.PlayerThreeProfile.Gamepad, GameCore.PlayerThreeProfile.Name, GameCore.PlayerThreeProfile.Skin.Texture);
 
             Vector2 boxPlayerFour = new(screenCenter.X + 16, screenCenter.Y + 00);
-            rendererService.DrawTextureEx(box, boxPlayerFour, 0, 1, System.Drawing.Color.White);
-            DrawPlayerCard(rendererService, boxPlayerFour, box.Width, box.Height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
+            rendererService.DrawTextureEx(GameAssets.MenuBox, boxPlayerFour, 0, 1, System.Drawing.Color.White);
+            DrawPlayerCard(rendererService, boxPlayerFour, GameAssets.MenuBox.Width, GameAssets.MenuBox.Height, GameCore.PlayerFourProfile.Gamepad, GameCore.PlayerFourProfile.Name, GameCore.PlayerFourProfile.Skin.Texture);
 
             void DrawPlayerCard(IRendererService rendererService, Vector2 cardPosition, int cardWidth, int cardHeight, GamepadSlot playerGamepadNumber, string profileName, ITextureAsset player)
             {
@@ -663,46 +636,46 @@ namespace VortexVise.Core.Scenes
                 if (playerGamepadNumber == GamepadSlot.MouseAndKeyboard)
                 {
                     // mouse and keyboard
-                    rendererService.DrawTextureEx(keyboard, new(inputDevicePosition.X - keyboard.Width * 1f, inputDevicePosition.Y - keyboard.Height * 1f), 0, 2, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuKeyboard, new(inputDevicePosition.X - GameAssets.MenuKeyboard.Width * 1f, inputDevicePosition.Y - GameAssets.MenuKeyboard.Height * 1f), 0, 2, System.Drawing.Color.White);
                 }
                 else if (playerGamepadNumber == GamepadSlot.GamepadOne)
                 {
-                    rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepad, new(inputDevicePosition.X - GameAssets.MenuGamepad.Width * 1f, inputDevicePosition.Y - GameAssets.MenuGamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOn, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
                 }
                 else if (playerGamepadNumber == GamepadSlot.GamepadTwo)
                 {
-                    rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepad, new(inputDevicePosition.X - GameAssets.MenuGamepad.Width * 1f, inputDevicePosition.Y - GameAssets.MenuGamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOn, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
 
                 }
                 else if (playerGamepadNumber == GamepadSlot.GamepadThree)
                 {
-                    rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepad, new(inputDevicePosition.X - GameAssets.MenuGamepad.Width * 1f, inputDevicePosition.Y - GameAssets.MenuGamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOn, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
                 }
                 else if (playerGamepadNumber == GamepadSlot.GamepadFour)
                 {
-                    rendererService.DrawTextureEx(gamepad, new(inputDevicePosition.X - gamepad.Width * 1f, inputDevicePosition.Y - gamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOff, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
-                    rendererService.DrawTextureEx(gamepadSlotOn, new(gamepadSlotPostion.X + gamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepad, new(inputDevicePosition.X - GameAssets.MenuGamepad.Width * 1f, inputDevicePosition.Y - GameAssets.MenuGamepad.Height * 1f), 0, 2, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 1f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOff, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 2f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuGamepadSlotOn, new(gamepadSlotPostion.X + GameAssets.MenuGamepadSlotOn.Width * 3f, gamepadSlotPostion.Y), 0, 1, System.Drawing.Color.White);
                 }
                 else if (playerGamepadNumber == GamepadSlot.Disconnected)
                 {
                     // Disconnected
                     Vector2 disconnectedPosition = new(cardPosition.X + cardWidth * 0.5f, cardPosition.Y + cardHeight * 0.5f);
-                    rendererService.DrawTextureEx(disconnected, new(disconnectedPosition.X - disconnected.Width * 2f, disconnectedPosition.Y - disconnected.Height * 2f), 0, 4, System.Drawing.Color.White);
+                    rendererService.DrawTextureEx(GameAssets.MenuDisconnected, new(disconnectedPosition.X - GameAssets.MenuDisconnected.Width * 2f, disconnectedPosition.Y - GameAssets.MenuDisconnected.Height * 2f), 0, 4, System.Drawing.Color.White);
                 }
 
                 // Draw player skin
@@ -710,8 +683,8 @@ namespace VortexVise.Core.Scenes
                 {
                     rendererService.DrawTextureEx(player, new(skinPosition.X - player.Width * 2f, skinPosition.Y - player.Height * 2f), 0, 4, System.Drawing.Color.White);
 
-                    rendererService.DrawTexturePro(arrow, new(0, 0, arrow.Width, arrow.Height), new((int)skinPosition.X + 54 + (int)arrowAnimationTimer, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
-                    rendererService.DrawTexturePro(arrow, new(0, 0, -arrow.Width, arrow.Height), new((int)skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.Width, (int)skinPosition.Y, arrow.Width * 2, arrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                    rendererService.DrawTexturePro(GameAssets.MenuArrow, new(0, 0, GameAssets.MenuArrow.Width, GameAssets.MenuArrow.Height), new((int)skinPosition.X + 54 + (int)arrowAnimationTimer, (int)skinPosition.Y, GameAssets.MenuArrow.Width * 2, GameAssets.MenuArrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
+                    rendererService.DrawTexturePro(GameAssets.MenuArrow, new(0, 0, -GameAssets.MenuArrow.Width, GameAssets.MenuArrow.Height), new((int)skinPosition.X - 54 - (int)arrowAnimationTimer - GameAssets.MenuArrow.Width, (int)skinPosition.Y, GameAssets.MenuArrow.Width * 2, GameAssets.MenuArrow.Height * 2), new(0, 0), 0, System.Drawing.Color.White);
                     rendererService.DrawTextCentered(GameAssets.Misc.Font, profileName, profileNamePosition, GameCore.MenuFontSize, System.Drawing.Color.White);
                 }
             }

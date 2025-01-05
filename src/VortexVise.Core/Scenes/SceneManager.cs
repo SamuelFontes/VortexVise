@@ -20,10 +20,10 @@ namespace VortexVise.Core.Scenes
         public GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
         private readonly IInputService _inputService;
 
-        public SceneManager(Type textureType, IInputService inputService, IRendererService rendererService, ICollisionService collisionService)
+        public SceneManager( IInputService inputService, IRendererService rendererService, ICollisionService collisionService)
         {
             _inputService = inputService;
-            MenuScene = new MenuScene(textureType, _inputService, this, rendererService, collisionService);
+            MenuScene = new MenuScene(_inputService, this, rendererService, collisionService);
             GameplayScene = new GameplayScene(_inputService);
         }
 
@@ -37,9 +37,8 @@ namespace VortexVise.Core.Scenes
         }
 
         // Update transition effect (fade-in, fade-out)
-        public void UpdateTransition<TCamera,TTextureAsset>(IRendererService rendererService, IAssetService assetService, ICollisionService collisionService) 
+        public void UpdateTransition<TCamera>(IRendererService rendererService, IAssetService assetService, ICollisionService collisionService) 
             where TCamera : IPlayerCamera, new()
-            where TTextureAsset : ITextureAsset, new()
         {
             if (!TransitionFadeOut)
             {
@@ -69,7 +68,7 @@ namespace VortexVise.Core.Scenes
                         //case LOGO: InitLogoScreen(); break;
                         //case TITLE: InitTitleScreen(); break;
                         case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene<TCamera>(assetService, rendererService); break;
-                        case GameScene.MENU: MenuScene = new MenuScene(typeof(TTextureAsset),_inputService, this, rendererService, collisionService); break;
+                        case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, rendererService, collisionService); break;
                         //case ENDING: InitEndingScreen(); break;
                         default: break;
                     }
@@ -101,9 +100,8 @@ namespace VortexVise.Core.Scenes
             rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
         }
 
-        public void UpdateScene<TCamera,TTextureAsset>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)
+        public void UpdateScene<TCamera>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)
             where TCamera : IPlayerCamera, new()
-            where TTextureAsset : ITextureAsset, new()
         {
             if (!OnTransition)
             {
@@ -129,7 +127,7 @@ namespace VortexVise.Core.Scenes
                     default: break;
                 }
             }
-            else UpdateTransition<TCamera,TTextureAsset>(rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
+            else UpdateTransition<TCamera>(rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
         }
 
         public void DrawScene(IRendererService rendererService, ICollisionService collisionService)

@@ -18,6 +18,15 @@ namespace VortexVise.Core.GameGlobals
     /// </summary>
     public static class GameAssets
     {
+        public static ITextureAsset MenuLogo { get; set; }
+        public static ITextureAsset MenuBackground { get; set; }
+        public static ITextureAsset MenuBox { get; set; }
+        public static ITextureAsset MenuKeyboard { get; set; }
+        public static ITextureAsset MenuGamepad { get; set; }
+        public static ITextureAsset MenuGamepadSlotOn { get; set; }
+        public static ITextureAsset MenuGamepadSlotOff { get; set; }
+        public static ITextureAsset MenuDisconnected { get; set; }
+        public static ITextureAsset MenuArrow { get; set; }
         /// <summary>
         /// Initialize all global assets when the game starts.
         /// </summary>
@@ -46,6 +55,17 @@ namespace VortexVise.Core.GameGlobals
             Sounds.VinylScratch = new TSoundAsset();
             Sounds.Kill = new TSoundAsset();
             Sounds.JetPack = new TSoundAsset();
+
+            MenuLogo = new TTextureAsset();
+            MenuBackground = new TTextureAsset();
+            MenuBox = new TTextureAsset();
+            MenuKeyboard = new TTextureAsset();
+            MenuGamepad = new TTextureAsset();
+            MenuGamepadSlotOn = new TTextureAsset();
+            MenuGamepadSlotOff = new TTextureAsset();
+            MenuDisconnected = new TTextureAsset();
+            MenuArrow = new TTextureAsset();
+
             // Misc
             //---------------------------------------------------------
             Misc.Font.Load("Resources/Common/DeltaBlock.ttf");
@@ -521,6 +541,15 @@ namespace VortexVise.Core.GameGlobals
                 assetService.UnloadTexture(ThinBarEmpty);
                 assetService.UnloadTexture(SelectionSquare);
                 assetService.UnloadTexture(KillFeedBackground);
+                MenuLogo.Unload();
+                MenuBackground.Unload();
+                MenuBox.Unload();
+                MenuKeyboard.Unload();
+                MenuGamepad.Unload();
+                MenuDisconnected.Unload();
+                MenuGamepadSlotOn.Unload();
+                MenuGamepadSlotOff.Unload();
+                MenuArrow.Unload();
             }
         }
 
