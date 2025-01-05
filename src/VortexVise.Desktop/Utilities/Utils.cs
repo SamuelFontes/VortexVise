@@ -116,20 +116,6 @@ public static class Utils
     }
 
     /// <summary>
-    /// Draw text by defining the center coordinate
-    /// </summary>
-    /// <param name="text"></param>
-    /// <param name="textPosition"></param>
-    /// <param name="textSize"></param>
-    /// <param name="color"></param>
-    public static void DrawTextCentered(string text, Vector2 textPosition, int textSize, Color color, IRendererService rendererService)
-    {
-        var textBoxSize = rendererService.MeasureTextEx(GameAssets.Misc.Font, text, textSize, 0);
-        var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
-        rendererService.DrawTextEx(GameAssets.Misc.Font, text, pos, textSize, 0, color.ToDrawingColor());
-    }
-
-    /// <summary>
     /// Check how many players are connected to the game locally
     /// </summary>
     /// <returns></returns>

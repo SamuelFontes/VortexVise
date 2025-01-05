@@ -16,9 +16,13 @@ namespace VortexVise.Core.Interfaces
         public void DrawTexture(ITextureAsset? texture, int x, int y, Color color);
         public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int v1, int v2, Color white);
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing);
+        public void DrawText(string text, Vector2 position, float fontSize, Color tint);
+        public void DrawTextCentered(IFontAsset font,string text, Vector2 textPosition, int textSize, Color color);
         public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint);
         public void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
         public int GetScreenWidth();
         public int GetScreenHeight();
+        public Vector2 GetMousePosition();
+        public float GetFrameTime();
     }
 }

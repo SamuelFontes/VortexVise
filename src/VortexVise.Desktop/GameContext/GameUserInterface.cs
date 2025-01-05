@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core;
 using VortexVise.Core.Enums;
+using VortexVise.Core.Extensions;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.Extensions;
@@ -8,7 +9,6 @@ using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Networking;
 using VortexVise.Desktop.States;
 using VortexVise.Desktop.Utilities;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.GameContext;
 
@@ -34,11 +34,11 @@ static internal class GameUserInterface
     {
         // Handle cursor, show and hide cursor based on movement
         //---------------------------------------------------------
-        Vector2 newCursorPosition = Raylib.GetMousePosition();
+        Vector2 newCursorPosition = rendererService.GetMousePosition();
         Vector2 virtualMouse = new();
         virtualMouse.X = (newCursorPosition.X - (rendererService.GetScreenWidth() - gameCore.GameScreenWidth) * 0.5f);
         virtualMouse.Y = (newCursorPosition.Y - (rendererService.GetScreenHeight() - gameCore.GameScreenHeight) * 0.5f);
-        virtualMouse = RayMath.Vector2Clamp(virtualMouse, new(0, 0), new Vector2(gameCore.GameScreenWidth, gameCore.GameScreenHeight));
+        virtualMouse = virtualMouse.Clamp(new(0, 0), new Vector2(gameCore.GameScreenWidth, gameCore.GameScreenHeight));
         newCursorPosition = virtualMouse;
 
         if (newCursorPosition.X != CursorPosition.X || newCursorPosition.Y != CursorPosition.Y)
@@ -51,10 +51,10 @@ static internal class GameUserInterface
         {
             // Hide cursor after a few seconds
             if (IsCursorVisible && TimeIdle > 2) IsCursorVisible = false;
-            else if (TimeIdle < 2) TimeIdle += Raylib.GetFrameTime();
+            else if (TimeIdle < 2) TimeIdle += rendererService.GetFrameTime();
         }
         if (IsCursorVisible && CursorAlpha < 255) CursorAlpha = 255; // When showing it shows at once
-        else if (!IsCursorVisible && CursorAlpha > 0) CursorAlpha -= Raylib.GetFrameTime() * 300; // Slowly hides cursor when no movement
+        else if (!IsCursorVisible && CursorAlpha > 0) CursorAlpha -= rendererService.GetFrameTime() * 300; // Slowly hides cursor when no movement
 
         CursorPosition = newCursorPosition;
     }
@@ -81,13 +81,13 @@ static internal class GameUserInterface
 
         if (!DisableCursor)
         {
-            rendererService.DrawTexture(Cursor, (int)CursorPosition.X, (int)CursorPosition.Y, System.Drawing.Color.FromArgb(alpha,255, 255, 255));
+            rendererService.DrawTexture(Cursor, (int)CursorPosition.X, (int)CursorPosition.Y, System.Drawing.Color.FromArgb(alpha, 255, 255, 255));
         }
 
     }
     private static void DrawDebug()
     {
-        //Raylib.DrawTextEx(GameAssets.Misc.Font, Utils.DebugText, new(8, 540 - 32), 32f, 0, Raylib.WHITE);
+        //Raylib.DrawTextEx(GameAssets.Misc.Font, Utils.DebugText, new(8, 540 - 32), 32f, 0, System.Drawing.Color.White);
         //Raylib.DrawFPS(0, 0);
     }
 
@@ -119,7 +119,7 @@ static internal class GameUserInterface
             if (IsShowingScoreboard)
             {
                 var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-                Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
+                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                 DrawScoreboard(rendererService, players, gameCore);
             }
 
@@ -128,8 +128,8 @@ static internal class GameUserInterface
             var y = 48;
             foreach (var kill in GameMatch.GameState.KillFeedStates)
             {
-                var color = Raylib.WHITE;
-                if (kill.Timer < 3) color.a = (byte)(kill.Timer * 255 / 3);
+                var color = System.Drawing.Color.White;
+                if (kill.Timer < 3) color = System.Drawing.Color.FromArgb((byte)(kill.Timer * 255 / 3), color);
                 int x = (int)(gameCore.GameScreenWidth * 0.5f);
                 if (Utils.GetNumberOfLocalPlayers(gameCore) == 1)
                 {
@@ -137,7 +137,7 @@ static internal class GameUserInterface
                     y = 8;
                 }
                 x -= (int)(GameAssets.HUD.KillFeedBackground.Width * 0.5f);
-                rendererService.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color.ToDrawingColor());
+                rendererService.DrawTexture(GameAssets.HUD.KillFeedBackground, x, y, color);
 
                 var killed = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KilledId);
                 if (killed == null) continue;
@@ -147,18 +147,18 @@ static internal class GameUserInterface
                     var killer = GameMatch.GameState.PlayerStates.FirstOrDefault(x => x.Id == kill.KillerId);
                     if (killer == null) continue;
 
-                    rendererService.DrawTexture(killer.Skin.Texture, x, y, color.ToDrawingColor());
+                    rendererService.DrawTexture(killer.Skin.Texture, x, y, color);
                     x += 40;
-                    rendererService.DrawTexture(GameAssets.HUD.Kill, x, y + 8, color.ToDrawingColor());
+                    rendererService.DrawTexture(GameAssets.HUD.Kill, x, y + 8, color);
                     x += 20;
-                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color.ToDrawingColor());
+                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color);
                 }
                 else
                 {
                     x += 40;
-                    rendererService.DrawTexture(GameAssets.HUD.Death, x, y + 8, color.ToDrawingColor());
+                    rendererService.DrawTexture(GameAssets.HUD.Death, x, y + 8, color);
                     x += 20;
-                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color.ToDrawingColor());
+                    rendererService.DrawTexture(killed.Skin.Texture, x, y, color);
                 }
                 y += 40;
             }
@@ -169,40 +169,40 @@ static internal class GameUserInterface
         // Global HUD
         if (GameMatch.GameState?.MatchState == MatchStates.Warmup)
         {
-            Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
-            Utils.DrawTextCentered($"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 32, Raylib.WHITE, rendererService);
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 32, System.Drawing.Color.White);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Playing)
         {
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"{t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.EndScreen)
         {
-            Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"RESULTS - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"RESULTS - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
             var y = 64;
             var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
             if (players.Count > 1 && players[0].Stats.Kills > players[1].Stats.Kills)
             {
-                //Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(gameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE);
+                //Utils.DrawTextCentered($"PLAYER {players[0].Id} WON!", new(gameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.ColorSystem.Drawing.Color.White);
             }
             else
             {
-                Utils.DrawTextCentered($"DRAW", new(gameCore.GameScreenWidth * 0.5f, y), 32, Raylib.WHITE, rendererService);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font, $"DRAW", new(gameCore.GameScreenWidth * 0.5f, y), 32, System.Drawing.Color.White);
             }
             GameUserInterface.DrawScoreboard(rendererService, players, gameCore);
         }
         else if (GameMatch.GameState?.MatchState == MatchStates.Voting)
         {
-            Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, new(0, 0, 0, 100));
+            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
             var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
-            Utils.DrawTextCentered($"MAP VOTING - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"MAP VOTING - {t.ToString(@"mm\:ss")}", new(gameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
         }
 
 
-        if (GameClient.IsConnected) Raylib.DrawText(GameClient.Ping.ToString(), 0, 32, 32, Raylib.RAYWHITE);
+        if (GameClient.IsConnected) rendererService.DrawText(GameClient.Ping.ToString(), new(0, 32), 32, System.Drawing.Color.White);
     }
 
     private static void DrawPlayerInfo(IRendererService rendererService, PlayerState playerState, Vector2 position)
@@ -234,7 +234,7 @@ static internal class GameUserInterface
             weaponPosition += new Vector2(-12, 32);
             for (int i = 0; i < weapon.CurrentAmmo; i++)
             {
-                rendererService.DrawTextureEx(GameAssets.HUD.BulletCounter, weaponPosition, 0, 1, new Color(255, 255, 255, 255).ToDrawingColor());
+                rendererService.DrawTextureEx(GameAssets.HUD.BulletCounter, weaponPosition, 0, 1, System.Drawing.Color.FromArgb(255, 255, 255, 255));
                 weaponPosition += new Vector2(8, 0);
                 if (i != 0 && i % 7 == 0) weaponPosition += new Vector2(-64, 8);
             }
@@ -244,11 +244,11 @@ static internal class GameUserInterface
 
         rendererService.DrawTexture(GameAssets.HUD.Kill, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
-        Utils.DrawTextCentered($"{playerState.Stats.Kills}", scorePosition, 16, Raylib.WHITE, rendererService);
+        rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{playerState.Stats.Kills}", scorePosition, 16, System.Drawing.Color.White);
         scorePosition += new Vector2(32, -8);
         rendererService.DrawTexture(GameAssets.HUD.Death, (int)scorePosition.X, (int)scorePosition.Y, System.Drawing.Color.White);
         scorePosition += new Vector2(32, 8);
-        Utils.DrawTextCentered($"{playerState.Stats.Deaths}", scorePosition, 16, Raylib.WHITE, rendererService);
+        rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{playerState.Stats.Deaths}", scorePosition, 16, System.Drawing.Color.White);
 
 
     }
@@ -260,20 +260,20 @@ static internal class GameUserInterface
         {
             int x = (int)(gameCore.GameScreenWidth * 0.5f);
             x -= 64;
-            //Utils.DrawTextCentered($"Player {player.Id}", new(x, y), 16, Raylib.WHITE);
+            //rendererService.DrawTextCentered($"Player {player.Id}", new(x, y), 16, System.Drawing.Color.White);
             rendererService.DrawTexture(player.Skin.Texture, x - 16, y - 16, System.Drawing.Color.White);
             x += 32;
             y -= 8;
             rendererService.DrawTexture(GameAssets.HUD.Kill, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
-            Utils.DrawTextCentered($"{player.Stats.Kills}", new(x, y), 16, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{player.Stats.Kills}", new(x, y), 16, System.Drawing.Color.White);
             x += 32;
             y -= 8;
             rendererService.DrawTexture(GameAssets.HUD.Death, x, y, System.Drawing.Color.White);
             x += 32;
             y += 8;
-            Utils.DrawTextCentered($"{player.Stats.Deaths}", new(x, y), 16, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, $"{player.Stats.Deaths}", new(x, y), 16, System.Drawing.Color.White);
             y += 32;
         }
 

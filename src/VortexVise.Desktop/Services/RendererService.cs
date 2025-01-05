@@ -93,11 +93,40 @@ namespace VortexVise.Desktop.Services
             return ZeroElectric.Vinculum.Raylib.GetScreenWidth();
         }
 
+        public Vector2 GetMousePosition()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetMousePosition();
+        }
+
+        public float GetFrameTime()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetFrameTime();
+        }
+
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing)
         {
             if (font is FontAsset raylibFont)
             {
                 return ZeroElectric.Vinculum.Raylib.MeasureTextEx(raylibFont.Font, text, fontSize, spacing);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid asset type.");
+            }
+        }
+
+        public void DrawText(string text, Vector2 position, float fontSize, Color tint)
+        {
+            ZeroElectric.Vinculum.Raylib.DrawText(text, position.X, position.Y, fontSize, tint.ToRaylibColor());
+        }
+
+        public void DrawTextCentered(IFontAsset font, string text, Vector2 textPosition, int textSize, Color color)
+        {
+            if (font is FontAsset raylibFont)
+            {
+                var textBoxSize = MeasureTextEx(raylibFont, text, textSize, 0);
+                var pos = new Vector2(textPosition.X - textBoxSize.X * 0.5f, textPosition.Y - textBoxSize.Y * 0.5f); // Centers text
+                DrawTextEx(raylibFont, text, pos, textSize, 0, color);
             }
             else
             {

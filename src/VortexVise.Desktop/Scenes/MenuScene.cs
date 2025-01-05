@@ -471,11 +471,11 @@ public class MenuScene
         else if (currentState == MenuState.Online)
         {
             // TODO: add here input with text
-            Utils.DrawTextCentered("CONNECT TO: ", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECT TO: ", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
         }
         else if (currentState == MenuState.Connecting)
         {
-            Utils.DrawTextCentered("CONNECTING", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 64, Raylib.WHITE, rendererService);
+            rendererService.DrawTextCentered(GameAssets.Misc.Font, "CONNECTING", new(gameCore.GameScreenWidth * 0.5f, gameCore.GameScreenHeight * 0.5f), 64, System.Drawing.Color.White);
         }
         else if (currentState == MenuState.Lobby && menuItems.Count > 0)
         {
@@ -488,7 +488,7 @@ public class MenuScene
 
             if (!gameCore.IsNetworkGame)
             {
-                Utils.DrawTextCentered("ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, Raylib.WHITE, rendererService);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font,"ARCADE", new(gameCore.GameScreenWidth * 0.5f, 64), 64, System.Drawing.Color.White);
             }
         }
 
@@ -703,7 +703,7 @@ public class MenuScene
 
                 Raylib.DrawTexturePro(arrow, new(0, 0, arrow.width, arrow.height), new(skinPosition.X + 54 + (int)arrowAnimationTimer, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
                 Raylib.DrawTexturePro(arrow, new(0, 0, -arrow.width, arrow.height), new(skinPosition.X - 54 - (int)arrowAnimationTimer - arrow.width, skinPosition.Y, arrow.width * 2, arrow.height * 2), new(0, 0), 0, Raylib.WHITE);
-                Utils.DrawTextCentered(profileName, profileNamePosition, gameCore.MenuFontSize, Raylib.WHITE, rendererService);
+                rendererService.DrawTextCentered(GameAssets.Misc.Font,profileName, profileNamePosition, gameCore.MenuFontSize, System.Drawing.Color.White);
             }
         }
 
