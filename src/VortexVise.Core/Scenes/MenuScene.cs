@@ -56,6 +56,14 @@ namespace VortexVise.Core.Scenes
             if (GameCore.PlayerThreeProfile.Skin.Id == "") GameCore.PlayerThreeProfile.Skin = GameAssets.Gameplay.Skins.First();
             if (GameCore.PlayerFourProfile.Skin.Id == "") GameCore.PlayerFourProfile.Skin = GameAssets.Gameplay.Skins.First();
 
+
+            RefreshMenuItems();
+            UpdateMenuScene(rendererService, collisionService, inputService);
+        }
+        
+        void RefreshMenuItems()
+        {
+            menuItems.Clear();
             // Initialize items
             //----------------------------------------------------------------------------------
             Vector2 mainMenuTextPosition = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.7f);
@@ -99,11 +107,15 @@ namespace VortexVise.Core.Scenes
             menuItems.Add(new UIMenuItem(this, "GO BACK", MenuItem.Return, state, true, MenuItemType.Button, new(mainMenuTextPosition.X, mainMenuTextPosition.Y + yOffset)));
             yOffset += GameCore.MenuFontSize;
 
-            UpdateMenuScene(rendererService, collisionService, inputService);
         }
 
         public void UpdateMenuScene(IRendererService rendererService, ICollisionService collisionService, IInputService inputService)
         {
+            if (GameCore.ResolutionUpdate) // Handle Resolution Changes
+            {
+                RefreshMenuItems();
+            }
+
             // Update
             //----------------------------------------------------------------------------------
             if (currentState == MenuState.PressStart) // MAIN MENU PRESS START 
