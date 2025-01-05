@@ -100,8 +100,8 @@ namespace VortexVise.Core.Scenes
             rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
         }
 
-        public void UpdateScene<TCamera>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)
-            where TCamera : IPlayerCamera, new()
+        public void UpdateScene<TPlayerCamera>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)
+            where TPlayerCamera : IPlayerCamera, new()
         {
             if (!OnTransition)
             {
@@ -111,7 +111,7 @@ namespace VortexVise.Core.Scenes
                 {
                     case GameScene.GAMEPLAY:
                         {
-                            GameplayScene.UpdateGameplayScene(sceneManager, collisionService, rendererService);
+                            GameplayScene.UpdateGameplayScene<TPlayerCamera>(sceneManager, collisionService, rendererService);
                             if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
                             //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
@@ -127,7 +127,7 @@ namespace VortexVise.Core.Scenes
                     default: break;
                 }
             }
-            else UpdateTransition<TCamera>(rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
+            else UpdateTransition<TPlayerCamera>(rendererService, assetService, collisionService);    // Update transition (fade-in, fade-out)
         }
 
         public void DrawScene(IRendererService rendererService, ICollisionService collisionService)

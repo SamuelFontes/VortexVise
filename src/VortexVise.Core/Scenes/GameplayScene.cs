@@ -56,7 +56,8 @@ namespace VortexVise.Core.Scenes
             finishScreen = 0;
         }
 
-        public void UpdateGameplayScene(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService)
+        public void UpdateGameplayScene<TPlayerCamera>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService)
+            where TPlayerCamera : IPlayerCamera, new()
         {
             //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F2)) MapLogic.LoadNextMap();
             //if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3))
@@ -165,6 +166,12 @@ namespace VortexVise.Core.Scenes
             //}
 
             if (!State.IsRunning) finishScreen = 1;
+
+            if (GameCore.ResolutionUpdate) // There was a change in the resolution
+            {
+                CameraLogic.Unload();
+                CameraLogic.Init<TPlayerCamera>();
+            }
         }
 
         public void DrawGameplayScene(IRendererService rendererService, ICollisionService collisionService)

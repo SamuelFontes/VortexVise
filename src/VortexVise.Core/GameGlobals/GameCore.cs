@@ -20,6 +20,9 @@ namespace VortexVise.Core.GameGlobals
         /// Defines internal game rendering resolution.
         /// </summary>
         public static int GameScreenHeight { get; set; } = 540;
+        /// <summary>
+        /// Game Name
+        /// </summary>
         public static string GameName { get; set; } = "Vortex Vise";
         /// <summary>
         /// Global Font Size
@@ -53,5 +56,6 @@ namespace VortexVise.Core.GameGlobals
         /// Player profile
         /// </summary>
         public static PlayerProfile PlayerFourProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerFour", Gamepad = GamepadSlot.Disconnected };
+        public static bool ResolutionUpdate { get; set; } = false;
     }
 }

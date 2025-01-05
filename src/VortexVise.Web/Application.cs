@@ -32,7 +32,6 @@ namespace RaylibWasm
         [JSExport]
         public static void UpdateFrame()
         {
-            Console.WriteLine("RUN FRAME");
             Game.Update<PlayerCamera>();
         }
     }
