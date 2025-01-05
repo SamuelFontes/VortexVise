@@ -2,9 +2,8 @@
 using System.Text.Json.Serialization;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
-using VortexVise.Desktop.States;
 
-namespace VortexVise.Desktop;
+namespace VortexVise.Core;
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(List<GameState>))]
 [JsonSerializable(typeof(List<GameLobby>))]

@@ -1,11 +1,10 @@
 ﻿using Steamworks;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
+using VortexVise.Core.Models;
+using VortexVise.Core.Scenes;
 using VortexVise.Core.Services;
-using VortexVise.Desktop.GameContext;
-using VortexVise.Desktop.Scenes;
-using VortexVise.Desktop.Services;
-using VortexVise.Desktop.Utilities;
+using VortexVise.Core.Utilities;
 using ZeroElectric.Vinculum;
 
 // ...
@@ -38,8 +37,9 @@ Raylib.SetTargetFPS(GameSettings.TargetFPS);                                    
 Raylib.SetExitKey(0);                                                                                   // Disable escape closing the game
 
 // Load Assets
-GameAssets.InitializeAssets(context.AssetService);                                                                          // Load global data 
-SceneManager sceneManager = new SceneManager(context.InputService, context.RendererService, context.CollisionService);
+GameAssets.InitializeAssets<FontAsset,MusicAsset,SoundAsset,TextureAsset>(context.AssetService);                                                                          // Load global data 
+GameUserInterface.InitUserInterface<TextureAsset>();
+SceneManager sceneManager = new SceneManager(typeof(TextureAsset),context.InputService, context.RendererService, context.CollisionService);
 
 // Set Window Icon
 Image icon = Raylib.LoadImage("Resources/Skins/afatso.png");                                            // Load icon at runtime
@@ -73,7 +73,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
     if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
     // Update game
-    sceneManager.UpdateScene(sceneManager, context.CollisionService, context.RendererService, context.AssetService, context.InputService);
+    sceneManager.UpdateScene<PlayerCamera,TextureAsset>(sceneManager, context.CollisionService, context.RendererService, context.AssetService, context.InputService);
 
 
     // Update user interface
@@ -103,7 +103,7 @@ while (!(Raylib.WindowShouldClose() || GameCore.GameShouldClose))
 sceneManager.TransitionToNewScene(GameScene.UNKNOWN);
 while (!sceneManager.TransitionFadeOut)
 {
-    sceneManager.UpdateTransition(context.RendererService, context.AssetService, context.CollisionService);
+    sceneManager.UpdateTransition<PlayerCamera,TextureAsset>(context.RendererService, context.AssetService, context.CollisionService);
 }
 
 // De-Initialization

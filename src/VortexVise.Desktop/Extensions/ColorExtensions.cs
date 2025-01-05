@@ -1,4 +1,4 @@
-﻿namespace VortexVise.Desktop.Extensions
+﻿namespace VortexVise.Core.Extensions
 {
     public static class ColorExtensions
     {

@@ -2,7 +2,7 @@
 using VortexVise.Core.Interfaces;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Desktop.Models;
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Used to create camera logic in CameraLogic.

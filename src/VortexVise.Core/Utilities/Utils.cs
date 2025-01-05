@@ -5,7 +5,7 @@ using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.Utilities;
+namespace VortexVise.Core.Utilities;
 
 /// <summary>
 /// Useful global functions.

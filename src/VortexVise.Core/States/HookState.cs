@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.States;
+namespace VortexVise.Core.States;
 
 /// <summary>
 /// State for a player ninja rope/grappling hook.

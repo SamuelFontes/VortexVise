@@ -1,10 +1,10 @@
 ﻿using System.Drawing;
 using System.Numerics;
 using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.Extensions;
-using VortexVise.Desktop.Models;
+using VortexVise.Core.Extensions;
+using VortexVise.Core.Models;
 
-namespace VortexVise.Desktop.Services
+namespace VortexVise.Core.Services
 {
     internal class RendererService : IRendererService
     {

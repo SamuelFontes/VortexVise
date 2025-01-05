@@ -1,8 +1,8 @@
 ﻿using VortexVise.Core.Interfaces;
-using VortexVise.Desktop.GameContext;
 using ZeroElectric.Vinculum;
+using VortexVise.Core.GameGlobals;
 
-namespace VortexVise.Desktop.Models
+namespace VortexVise.Core.Models
 {
     public class SoundAsset : ISoundAsset
     {
