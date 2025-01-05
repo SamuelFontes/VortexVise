@@ -387,10 +387,10 @@ public static class PlayerLogic
     public static bool IsPlayerLocal(Guid playerId, GameCore gameCore)
     {
         bool isPlayerLocal = false;
-        if (gameCore.PlayerOneProfile.Gamepad != -9 && gameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
-        if (gameCore.PlayerTwoProfile.Gamepad != -9 && gameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
-        if (gameCore.PlayerThreeProfile.Gamepad != -9 && gameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
-        if (gameCore.PlayerFourProfile.Gamepad != -9 && gameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected && gameCore.PlayerOneProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected && gameCore.PlayerTwoProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected && gameCore.PlayerThreeProfile.Id == playerId) isPlayerLocal = true;
+        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected && gameCore.PlayerFourProfile.Id == playerId) isPlayerLocal = true;
         return isPlayerLocal;
     }
 

@@ -1,4 +1,6 @@
-﻿namespace VortexVise.Core.Models;
+﻿using VortexVise.Core.Enums;
+
+namespace VortexVise.Core.Models;
 
 /// <summary>
 /// Define information about the player.
@@ -6,7 +8,7 @@
 public class PlayerProfile
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public int Gamepad { get; set; } = -9;
+    public GamepadSlot Gamepad { get; set; } = GamepadSlot.MouseAndKeyboard;
     public string Name { get; set; } = string.Empty;
     public Skin Skin { get; set; } = new Skin() { Id = "" };
 }

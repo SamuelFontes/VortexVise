@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using ZeroElectric.Vinculum;
@@ -11,8 +12,9 @@ namespace VortexVise.Desktop.Services
 {
     internal class InputService : IInputService
     {
-        public InputState ReadPlayerInput(int gamepadId)
+        public InputState ReadPlayerInput(GamepadSlot gamepad)
         {
+            int gamepadId = (int)gamepad;
             InputState input = new();
             if (gamepadId == -1)
             {

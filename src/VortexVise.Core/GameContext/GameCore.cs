@@ -1,4 +1,5 @@
-﻿using VortexVise.Core.Models;
+﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Models;
 
 namespace VortexVise.Core.GameContext;
 
@@ -38,19 +39,19 @@ public class GameCore
     /// <summary>
     /// Player profile
     /// </summary>
-    public PlayerProfile PlayerOneProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerOne", Gamepad = -9 };
+    public PlayerProfile PlayerOneProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerOne", Gamepad = GamepadSlot.Disconnected };
     /// <summary>
     /// Player profile
     /// </summary>
-    public PlayerProfile PlayerTwoProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerTwo", Gamepad = -9 };
+    public PlayerProfile PlayerTwoProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerTwo", Gamepad = GamepadSlot.Disconnected };
     /// <summary>
     /// Player profile
     /// </summary>
-    public PlayerProfile PlayerThreeProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerThree", Gamepad = -9 };
+    public PlayerProfile PlayerThreeProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerThree", Gamepad = GamepadSlot.Disconnected };
     /// <summary>
     /// Player profile
     /// </summary>
-    public PlayerProfile PlayerFourProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerFour", Gamepad = -9 };
+    public PlayerProfile PlayerFourProfile { get; set; } = new() { Id = Guid.NewGuid(), Name = "PlayerFour", Gamepad = GamepadSlot.Disconnected };
     /// <summary>
     /// Max amount of weapons a player can carry
     /// </summary>

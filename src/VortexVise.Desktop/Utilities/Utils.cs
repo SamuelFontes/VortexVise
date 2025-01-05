@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Numerics;
 using System.Security.Cryptography;
+using VortexVise.Core.Enums;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
@@ -92,10 +93,10 @@ public static class Utils
     public static int GetNumberOfLocalPlayers(GameCore gameCore)
     {
         var players = 0;
-        if (gameCore.PlayerOneProfile.Gamepad != -9) players++;
-        if (gameCore.PlayerTwoProfile.Gamepad != -9) players++;
-        if (gameCore.PlayerThreeProfile.Gamepad != -9) players++;
-        if (gameCore.PlayerFourProfile.Gamepad != -9) players++;
+        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) players++;
+        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) players++;
         return players;
     }
 
@@ -139,10 +140,10 @@ public static class Utils
     public static List<PlayerProfile> GetAllLocalPlayerProfiles(GameCore gameCore)
     {
         List<PlayerProfile> list = new List<PlayerProfile>();
-        if (gameCore.PlayerOneProfile.Gamepad != -9) list.Add(gameCore.PlayerOneProfile);
-        if (gameCore.PlayerTwoProfile.Gamepad != -9) list.Add(gameCore.PlayerTwoProfile);
-        if (gameCore.PlayerThreeProfile.Gamepad != -9) list.Add(gameCore.PlayerThreeProfile);
-        if (gameCore.PlayerFourProfile.Gamepad != -9) list.Add(gameCore.PlayerFourProfile);
+        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerOneProfile);
+        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerTwoProfile);
+        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerThreeProfile);
+        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) list.Add(gameCore.PlayerFourProfile);
         return list;
     }
 

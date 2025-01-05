@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using VortexVise.Core.Enums;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
@@ -48,10 +49,10 @@ public class GameplayScene
         LastState.Gravity = Gravity;
         PlayerLogic.Init(assetService);
         CameraLogic.Init(gameCore);
-        if (gameCore.PlayerOneProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerOneProfile.Id, gameCore.PlayerOneProfile.Skin));
-        if (gameCore.PlayerTwoProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerTwoProfile.Id, gameCore.PlayerTwoProfile.Skin));
-        if (gameCore.PlayerThreeProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerThreeProfile.Id, gameCore.PlayerThreeProfile.Skin));
-        if (gameCore.PlayerFourProfile.Gamepad != -9) LastState.PlayerStates.Add(new(gameCore.PlayerFourProfile.Id, gameCore.PlayerFourProfile.Skin));
+        if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) LastState.PlayerStates.Add(new(gameCore.PlayerOneProfile.Id, gameCore.PlayerOneProfile.Skin));
+        if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) LastState.PlayerStates.Add(new(gameCore.PlayerTwoProfile.Id, gameCore.PlayerTwoProfile.Skin));
+        if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) LastState.PlayerStates.Add(new(gameCore.PlayerThreeProfile.Id, gameCore.PlayerThreeProfile.Skin));
+        if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) LastState.PlayerStates.Add(new(gameCore.PlayerFourProfile.Id, gameCore.PlayerFourProfile.Skin));
 
         BotLogic.Init(LastState);
 
@@ -96,10 +97,10 @@ public class GameplayScene
             {
                 // Do all the network magic
                 // TODO: The input should be send together instead of one for each player
-                if (gameCore.PlayerOneProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerOneProfile.Gamepad), gameCore.PlayerOneProfile.Id, State.Tick);
-                if (gameCore.PlayerTwoProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerTwoProfile.Gamepad), gameCore.PlayerTwoProfile.Id, State.Tick);
-                if (gameCore.PlayerThreeProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerThreeProfile.Gamepad), gameCore.PlayerThreeProfile.Id, State.Tick);
-                if (gameCore.PlayerFourProfile.Gamepad != -9) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerFourProfile.Gamepad), gameCore.PlayerFourProfile.Id, State.Tick);
+                if (gameCore.PlayerOneProfile.Gamepad != GamepadSlot.Disconnected) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerOneProfile.Gamepad), gameCore.PlayerOneProfile.Id, State.Tick);
+                if (gameCore.PlayerTwoProfile.Gamepad != GamepadSlot.Disconnected) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerTwoProfile.Gamepad), gameCore.PlayerTwoProfile.Id, State.Tick);
+                if (gameCore.PlayerThreeProfile.Gamepad != GamepadSlot.Disconnected) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerThreeProfile.Gamepad), gameCore.PlayerThreeProfile.Id, State.Tick);
+                if (gameCore.PlayerFourProfile.Gamepad != GamepadSlot.Disconnected) GameClient.SendInput(_inputService.ReadPlayerInput(gameCore.PlayerFourProfile.Gamepad), gameCore.PlayerFourProfile.Id, State.Tick);
 
                 if (GameClient.IsHost)
                 {

@@ -155,3 +155,13 @@ public enum NetworkMessageType
     SendGameState,
     SendTextMessage
 };
+
+public enum GamepadSlot
+{
+    Disconnected = -9,
+    MouseAndKeyboard = -1,
+    GamepadOne = 0,
+    GamepadTwo = 1,
+    GamepadThree = 2,
+    GamepadFour = 3,
+}
