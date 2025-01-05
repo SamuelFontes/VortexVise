@@ -7,7 +7,6 @@ using VortexVise.Core.Models;
 using VortexVise.Desktop.Extensions;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.Utilities;
 
@@ -47,7 +46,7 @@ public static class Utils
     public static Vector2 GetVector2Direction(Vector2 from, Vector2 to)
     {
         Vector2 direction = new() { X = to.X - from.X, Y = to.Y - from.Y };
-        direction = RayMath.Vector2Normalize(direction);
+        direction = Vector2.Normalize(direction);
         return direction;
     }
 
@@ -68,37 +67,8 @@ public static class Utils
         _debug = !_debug;
     }
 
-    /// <summary>
-    /// Used on input
-    /// </summary>
-    /// <param name="text">Reference of string that needs to change</param>
     public static void UpdateTextUsingKeyboard(ref string text)
     {
-        if ((Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) || Raylib.IsKeyPressedRepeat(KeyboardKey.KEY_BACKSPACE)) && text.Length > 0)
-        {
-            GameUserInterface.IsCursorVisible = false;
-            text = text.Remove(text.Length - 1);
-        }
-        else if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && Raylib.IsKeyPressed(KeyboardKey.KEY_V))
-        {
-            text += Raylib.GetClipboardTextAsString();
-        }
-        else
-        {
-            int keyPressed = Raylib.GetCharPressed();
-            if (keyPressed != 0)
-            {
-                GameUserInterface.IsCursorVisible = false;
-                unsafe
-                {
-                    int codepointSize = 0;
-                    string textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
-                    if (textPressed.Length > codepointSize)
-                        textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length - codepointSize));
-                    text += textPressed;
-                }
-            }
-        }
     }
 
     /// <summary>

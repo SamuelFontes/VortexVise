@@ -95,5 +95,34 @@ namespace VortexVise.Desktop.Services
             return input;
 
         }
+
+        public void UpdateTextUsingKeyboard(ref string text, ref bool isCursorVisible)
+        {
+            if ((Raylib.IsKeyPressed(KeyboardKey.KEY_BACKSPACE) || Raylib.IsKeyPressedRepeat(KeyboardKey.KEY_BACKSPACE)) && text.Length > 0)
+            {
+                isCursorVisible = false;
+                text = text.Remove(text.Length - 1);
+            }
+            else if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_CONTROL) && Raylib.IsKeyPressed(KeyboardKey.KEY_V))
+            {
+                text += Raylib.GetClipboardTextAsString();
+            }
+            else
+            {
+                int keyPressed = Raylib.GetCharPressed();
+                if (keyPressed != 0)
+                {
+                    isCursorVisible = false;
+                    unsafe
+                    {
+                        int codepointSize = 0;
+                        string textPressed = Raylib.CodepointToUTF8String(keyPressed, &codepointSize);
+                        if (textPressed.Length > codepointSize)
+                            textPressed = textPressed.Remove(textPressed.Length - (textPressed.Length - codepointSize));
+                        text += textPressed;
+                    }
+                }
+            }
+        }
     }
 }
