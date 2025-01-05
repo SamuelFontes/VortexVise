@@ -1,7 +1,7 @@
 ﻿using VortexVise.Core.Interfaces;
 using VortexVise.Core.Models;
 
-namespace VortexVise.Core.Services
+namespace VortexVise.Desktop.Services
 {
     internal class AssetService : IAssetService
     {

@@ -3,7 +3,7 @@ using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Core.Services
+namespace VortexVise.Desktop.Services
 {
     internal class InputService : IInputService
     {

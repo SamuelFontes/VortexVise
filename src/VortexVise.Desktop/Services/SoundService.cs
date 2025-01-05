@@ -1,6 +1,6 @@
 ﻿using VortexVise.Core.Interfaces;
 
-namespace VortexVise.Core.Services
+namespace VortexVise.Desktop.Services
 {
     public class SoundService : ISoundService
     {

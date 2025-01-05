@@ -23,5 +23,7 @@ namespace VortexVise.Core.Interfaces
         public void ClearBackground(Color color);
         public void BeginDrawingToCamera(IPlayerCamera camera);
         public void EndDrawingToCamera(IPlayerCamera camera, Color color);
+        public void BeginDrawing();
+        public void EndDrawing();
     }
 }

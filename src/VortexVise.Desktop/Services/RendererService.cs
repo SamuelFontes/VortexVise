@@ -4,7 +4,7 @@ using VortexVise.Core.Interfaces;
 using VortexVise.Core.Extensions;
 using VortexVise.Core.Models;
 
-namespace VortexVise.Core.Services
+namespace VortexVise.Desktop.Services
 {
     internal class RendererService : IRendererService
     {
@@ -166,6 +166,15 @@ namespace VortexVise.Core.Services
             {
                 throw new ArgumentException("Invalid camera type.");
             }
+        }
+
+        public void BeginDrawing()
+        {
+            ZeroElectric.Vinculum.Raylib.BeginDrawing();
+        }
+        public void EndDrawing()
+        {
+            ZeroElectric.Vinculum.Raylib.EndDrawing();
         }
     }
 }

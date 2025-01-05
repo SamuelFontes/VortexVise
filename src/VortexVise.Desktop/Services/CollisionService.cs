@@ -1,7 +1,7 @@
 ﻿using VortexVise.Core.Interfaces;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Core.Services
+namespace VortexVise.Desktop.Services
 {
     internal class CollisionService : ICollisionService
     {
