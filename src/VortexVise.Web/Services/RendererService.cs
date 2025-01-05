@@ -1,26 +1,27 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
-using VortexVise.Core.Interfaces;
-using VortexVise.Core.Extensions;
-using VortexVise.Core.Models;
-using System;
 using System.Text;
+using VortexVise.Core.Interfaces;
 using VortexVise.Web.Extensions;
 using VortexVise.Web.Models;
 
 namespace VortexVise.Web.Services
 {
-    internal class RendererService : IRendererService
+    public class RendererService : IRendererService
     {
+
         public void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color)
         {
             Raylib_cs.Raylib.DrawLineEx(startPos, endPos, thick, color.ToRaylibColor());
         }
 
+
         public void DrawRectangleRec(Rectangle rec, Color color)
         {
             Raylib_cs.Raylib.DrawRectangleRec(rec.ToRaylibRectangle(), color.ToRaylibColor());
         }
+
 
         public void DrawTextEx(IFontAsset font, string text, Vector2 position, float fontSize, float spacing, Color tint)
         {
@@ -34,6 +35,7 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void DrawTexture(ITextureAsset? texture, int x, int y, Color color)
         {
             if (texture is TextureAsset raylibTexture)
@@ -45,6 +47,7 @@ namespace VortexVise.Web.Services
                 throw new ArgumentException("Invalid texture asset type.");
             }
         }
+
 
         public void DrawTextureEx(ITextureAsset? texture, Vector2 position, int rotation, int scale, Color color)
         {
@@ -58,6 +61,7 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void DrawTexturePro(ITextureAsset texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
         {
             if (texture is TextureAsset raylibTexture)
@@ -69,6 +73,7 @@ namespace VortexVise.Web.Services
                 throw new ArgumentException("Invalid texture asset type.");
             }
         }
+
 
         public void DrawTextureRec(ITextureAsset texture, Rectangle source, Vector2 position, Color tint)
         {
@@ -82,25 +87,30 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public int GetScreenHeight()
         {
             return Raylib_cs.Raylib.GetScreenHeight();
         }
+
 
         public int GetScreenWidth()
         {
             return Raylib_cs.Raylib.GetScreenWidth();
         }
 
+
         public Vector2 GetMousePosition()
         {
             return Raylib_cs.Raylib.GetMousePosition();
         }
 
+
         public float GetFrameTime()
         {
             return Raylib_cs.Raylib.GetFrameTime();
         }
+
 
         public Vector2 MeasureTextEx(IFontAsset font, string text, float fontSize, float spacing)
         {
@@ -113,6 +123,7 @@ namespace VortexVise.Web.Services
                 throw new ArgumentException("Invalid asset type.");
             }
         }
+
 
         public void DrawText(string text, Vector2 position, float fontSize, Color tint)
         {
@@ -128,6 +139,7 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void DrawTextCentered(IFontAsset font, string text, Vector2 textPosition, int textSize, Color color)
         {
             if (font is FontAsset raylibFont)
@@ -142,14 +154,17 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void ClearBackground(Color color)
         {
             Raylib_cs.Raylib.ClearBackground(color.ToRaylibColor());
         }
+
         public double GetTime()
         {
             return Raylib_cs.Raylib.GetTime();
         }
+
 
         public void BeginDrawingToCamera(IPlayerCamera camera)
         {
@@ -166,6 +181,7 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void EndDrawingToCamera(IPlayerCamera camera, Color color)
         {
             if (camera is PlayerCamera raylibCamera)
@@ -181,10 +197,12 @@ namespace VortexVise.Web.Services
             }
         }
 
+
         public void BeginDrawing()
         {
             Raylib_cs.Raylib.BeginDrawing();
         }
+
         public void EndDrawing()
         {
             Raylib_cs.Raylib.EndDrawing();

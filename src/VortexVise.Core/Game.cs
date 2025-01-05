@@ -49,11 +49,14 @@ namespace VortexVise.Core
         {
             // UPDATE
             //----------------------------------------------------------------------------------
+            Console.WriteLine(" window events");
             _services.WindowService.HandleWindowEvents();
 
             // Update music
+            Console.WriteLine("update music");
             if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
+            Console.WriteLine("update game");
             // Update game
             sceneManager.UpdateScene<TPlayerCamera>(sceneManager, _services.CollisionService, _services.RendererService, _services.AssetService, _services.InputService);
 

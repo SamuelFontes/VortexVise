@@ -14,11 +14,13 @@ public class PlayerCamera : IPlayerCamera
     public Vector2 CameraPosition { get; set; }
     public Vector2 CameraOffset { get; set; }
 
+
     public void SetTarget(Vector2 target)
     {
         // TODO: Make camera smooth
         Camera.Target = target;
     }
+
 
     public void Setup(int screenWidth, int screenHeight, int cameraWidth, int cameraHeight, float offsetX, float offsetY, int cameraPositionX = 0, int cameraPositionY = 0)
     {
@@ -32,6 +34,7 @@ public class PlayerCamera : IPlayerCamera
         Camera.Zoom = 1;
         CameraPosition = new(cameraPositionX, cameraPositionY);
     }
+
 
     public void Unload()
     {

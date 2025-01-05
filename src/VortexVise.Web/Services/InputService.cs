@@ -1,12 +1,13 @@
-﻿using VortexVise.Core.Enums;
+﻿using Raylib_cs;
+using VortexVise.Core.Enums;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.States;
-using Raylib_cs;
 
 namespace VortexVise.Web.Services
 {
-    internal class InputService : IInputService
+    public class InputService : IInputService
     {
+
         public DebugCommand GetDebugCommand()
         {
             if (Raylib.IsKeyPressed(KeyboardKey.Home))
@@ -14,6 +15,7 @@ namespace VortexVise.Web.Services
             else
                 return DebugCommand.None;
         }
+
 
         public GamepadSlot GetPressStart()
         {
@@ -30,6 +32,7 @@ namespace VortexVise.Web.Services
             else
                 return GamepadSlot.Disconnected;
         }
+
 
         public InputState ReadPlayerInput(GamepadSlot gamepad)
         {
@@ -116,6 +119,7 @@ namespace VortexVise.Web.Services
             return input;
 
         }
+
 
         public void UpdateTextUsingKeyboard(ref string text, ref bool isCursorVisible)
         {

@@ -1,6 +1,5 @@
 ﻿using System.Net.Sockets;
 using System.Numerics;
-using System.Security.Cryptography;
 using VortexVise.Core.Enums;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Models;
@@ -123,14 +122,16 @@ public static class Utils
 
     public static string GetFileChecksum(string filename)
     {
-        using (var md5 = MD5.Create())
-        {
-            using (var stream = File.OpenRead(filename))
-            {
-                var hash = md5.ComputeHash(stream);
-                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            }
-        }
+        return Guid.NewGuid().ToString();
+        // TODO: Implement other kinds of hashing, does not work on wasm
+        //using (var md5 = MD5.Create())
+        //{
+        //    using (var stream = File.OpenRead(filename))
+        //    {
+        //        var hash = md5.ComputeHash(stream);
+        //        return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+        //    }
+        //}
     }
 
     public static List<PlayerProfile> GetAllLocalPlayerProfiles()

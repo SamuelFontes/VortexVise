@@ -2,7 +2,7 @@
 
 namespace VortexVise.Web.Models
 {
-    internal class TextureAsset : ITextureAsset
+    public class TextureAsset : ITextureAsset
     {
         public string AssetPath { get; set; } = string.Empty;
         public bool IsLoaded { get; set; } = false;
@@ -17,6 +17,7 @@ namespace VortexVise.Web.Models
         {
         }
 
+
         public void Load()
         {
             Texture = Raylib_cs.Raylib.LoadTexture(AssetPath);
@@ -25,6 +26,7 @@ namespace VortexVise.Web.Models
             IsLoaded = true;
         }
 
+
         public void Unload()
         {
             Raylib_cs.Raylib.UnloadTexture(Texture);
@@ -32,6 +34,7 @@ namespace VortexVise.Web.Models
             Width = 0;
             IsLoaded = false;
         }
+
 
         public void Load(string assetPath)
         {

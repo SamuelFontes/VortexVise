@@ -1,5 +1,6 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Raylib_cs;
+﻿using Raylib_cs;
+using System;
+using System.Runtime.InteropServices.JavaScript;
 using VortexVise.Core;
 using VortexVise.Core.Services;
 using VortexVise.Web.Models;
@@ -11,7 +12,7 @@ namespace RaylibWasm
     {
         private static Texture2D logo;
         private static Game Game;
-        
+
         /// <summary>
         /// Application entry point
         /// </summary>
@@ -19,8 +20,8 @@ namespace RaylibWasm
         {
             // Run game 
             GameServices services = new GameServices(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService(), new WindowService());
-            Game game = new Game(services);
-            game.Init<FontAsset,MusicAsset,SoundAsset,TextureAsset>();
+            Game = new Game(services);
+            Game.Init<FontAsset, MusicAsset, SoundAsset, TextureAsset>();
 
             //game.Unload();
         }
@@ -31,6 +32,7 @@ namespace RaylibWasm
         [JSExport]
         public static void UpdateFrame()
         {
+            Console.WriteLine("RUN FRAME");
             Game.Update<PlayerCamera>();
         }
     }
