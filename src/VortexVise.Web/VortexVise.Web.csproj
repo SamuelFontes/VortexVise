@@ -28,6 +28,10 @@
     <WasmFilesToIncludeInFileSystem Include="Resources\**\*.*" TargetPath="Resources\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VortexVise.Core\VortexVise.Core.csproj" />
+  </ItemGroup>
+
   <Choose>
     <When Condition=" $(Configuration) == 'Debug' ">
       <PropertyGroup>

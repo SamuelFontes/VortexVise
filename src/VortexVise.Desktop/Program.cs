@@ -30,4 +30,10 @@ SteamClient.Shutdown();
 // Run game 
 GameServices services = new GameServices(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService(), new WindowService());
 Game game = new Game(services);
-game.Run<FontAsset,MusicAsset,PlayerCamera,SoundAsset,TextureAsset>();
+game.Init<FontAsset,MusicAsset,SoundAsset,TextureAsset>();
+// Main Game Loop
+while (!GameCore.GameShouldClose)
+{
+    game.Update<PlayerCamera>();
+}
+game.Unload();

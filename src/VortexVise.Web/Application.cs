@@ -1,21 +1,28 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 using Raylib_cs;
+using VortexVise.Core;
+using VortexVise.Core.Services;
+using VortexVise.Web.Models;
+using VortexVise.Web.Services;
 
 namespace RaylibWasm
 {
     public partial class Application
     {
         private static Texture2D logo;
+        private static Game Game;
         
         /// <summary>
         /// Application entry point
         /// </summary>
         public static void Main()
         {
-            Raylib.InitWindow(512, 512, "RaylibWasm");
-            Raylib.SetTargetFPS(60);
-            
-            logo = Raylib.LoadTexture("Resources/raylib_logo.png");
+            // Run game 
+            GameServices services = new GameServices(new AssetService(), new CollisionService(), new InputService(), new RendererService(), new SoundService(), new WindowService());
+            Game game = new Game(services);
+            game.Init<FontAsset,MusicAsset,SoundAsset,TextureAsset>();
+
+            //game.Unload();
         }
 
         /// <summary>
@@ -24,16 +31,7 @@ namespace RaylibWasm
         [JSExport]
         public static void UpdateFrame()
         {
-            Raylib.BeginDrawing();
-
-            Raylib.ClearBackground(Color.White);
-
-            Raylib.DrawFPS(4, 4);
-            Raylib.DrawText("All systems operational!", 4, 32, 20, Color.Maroon);
-            
-            Raylib.DrawTexture(logo, 4, 64, Color.White);
-
-            Raylib.EndDrawing();
+            Game.Update<PlayerCamera>();
         }
     }
 }

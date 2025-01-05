@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,15 +16,15 @@ namespace VortexVise.Core
     public class Game
     {
         private GameServices _services;
+        private SceneManager sceneManager; 
         public Game(GameServices services)
         {
             _services = services;
         }
 
-        public void Run<TFontAsset, TMusicAsset, TPlayerCamera, TSoundAsset, TTextureAsset>()
+        public void Init<TFontAsset, TMusicAsset, TSoundAsset, TTextureAsset>()
             where TFontAsset : IFontAsset, new()
             where TMusicAsset : IMusicAsset, new()
-            where TPlayerCamera : IPlayerCamera, new()
             where TSoundAsset : ISoundAsset, new()
             where TTextureAsset : ITextureAsset, new()
         {
@@ -33,7 +34,7 @@ namespace VortexVise.Core
             // Load Assets
             GameAssets.InitializeAssets<TFontAsset, TMusicAsset, TSoundAsset, TTextureAsset>(_services.AssetService);                                                                          // Load global data 
             GameUserInterface.InitUserInterface<TTextureAsset>();
-            SceneManager sceneManager = new SceneManager( _services.InputService, _services.RendererService, _services.CollisionService);
+            sceneManager = new SceneManager(_services.InputService, _services.RendererService, _services.CollisionService);
 
             // Initiate music
             GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
@@ -41,40 +42,44 @@ namespace VortexVise.Core
             // Setup and init first screen
             sceneManager.CurrentScene = GameScene.MENU;
 
-            // Main Game Loop
-            while (!GameCore.GameShouldClose)
-            {
-                // UPDATE
-                //----------------------------------------------------------------------------------
-                _services.WindowService.HandleWindowEvents();
 
-                // Update music
-                if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
+        }
 
-                // Update game
-                sceneManager.UpdateScene<TPlayerCamera>(sceneManager, _services.CollisionService, _services.RendererService, _services.AssetService, _services.InputService);
+        public void Update<TPlayerCamera>() where TPlayerCamera: IPlayerCamera, new()
+        {
+            // UPDATE
+            //----------------------------------------------------------------------------------
+            _services.WindowService.HandleWindowEvents();
 
-                // Update user interface
-                GameUserInterface.UpdateUserInterface(_services.RendererService);
+            // Update music
+            if (GameAssets.MusicAndAmbience.Music.IsPlaying) GameAssets.MusicAndAmbience.Music.Update();       // NOTE: Music keeps playing between screens
 
-                // DRAW
-                //----------------------------------------------------------------------------------
+            // Update game
+            sceneManager.UpdateScene<TPlayerCamera>(sceneManager, _services.CollisionService, _services.RendererService, _services.AssetService, _services.InputService);
 
-                _services.RendererService.BeginDrawing();
-                _services.RendererService.ClearBackground(Color.Black);
+            // Update user interface
+            GameUserInterface.UpdateUserInterface(_services.RendererService);
 
-                // Draw scene (gameplay or menu)
-                sceneManager.DrawScene(_services.RendererService, _services.CollisionService);
+            // DRAW
+            //----------------------------------------------------------------------------------
 
-                // Draw full screen rectangle in front of everything when changing screens
-                if (sceneManager.OnTransition) sceneManager.DrawTransition(_services.RendererService);
+            _services.RendererService.BeginDrawing();
+            _services.RendererService.ClearBackground(Color.Black);
 
-                // Draw UI on top
-                GameUserInterface.DrawUserInterface(_services.RendererService);
+            // Draw scene (gameplay or menu)
+            sceneManager.DrawScene(_services.RendererService, _services.CollisionService);
 
-                _services.RendererService.EndDrawing();
-            }
+            // Draw full screen rectangle in front of everything when changing screens
+            if (sceneManager.OnTransition) sceneManager.DrawTransition(_services.RendererService);
 
+            // Draw UI on top
+            GameUserInterface.DrawUserInterface(_services.RendererService);
+
+            _services.RendererService.EndDrawing();
+        }
+
+        public void Unload()
+        {
             GameAssets.UnloadAssets(_services.AssetService);
         }
     }
