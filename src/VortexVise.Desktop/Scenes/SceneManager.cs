@@ -129,11 +129,11 @@ public class SceneManager
         else UpdateTransition(gameCore,rendererService, assetService);    // Update transition (fade-in, fade-out)
     }
 
-    public void DrawScene(IRendererService rendererService, GameCore gameCore)
+    public void DrawScene(IRendererService rendererService, GameCore gameCore, ICollisionService collisionService)
     {
         switch (CurrentScene)
         {
-            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService,gameCore); break;
+            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService,gameCore, collisionService); break;
             case GameScene.MENU: MenuScene.DrawMenuScene(rendererService,gameCore); break;
             default: break;
         }

@@ -170,7 +170,7 @@ public class GameplayScene
         if (!State.IsRunning) finishScreen = 1;
     }
 
-    public void DrawGameplayScene(IRendererService rendererService, GameCore gameCore)
+    public void DrawGameplayScene(IRendererService rendererService, GameCore gameCore, ICollisionService collisionService)
     {
         Raylib.ClearBackground(Raylib.BLACK);
         if (State.PlayerStates.Count == 0) return;
@@ -185,7 +185,7 @@ public class GameplayScene
             else return;
 
             CameraLogic.BeginDrawingToCamera(i, player.Position, gameCore);
-            GameRenderer.DrawGameState(rendererService, State, player);
+            GameRenderer.DrawGameState(rendererService, State, player, collisionService);
             CameraLogic.EndDrawingToCamera(i, player.IsDead);
         }
 

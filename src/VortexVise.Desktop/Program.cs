@@ -91,7 +91,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     Raylib.ClearBackground(Raylib.BLACK);
 
     // Draw scene (gameplay or menu)
-    sceneManager.DrawScene(context.RendererService,context.GameCore);
+    sceneManager.DrawScene(context.RendererService,context.GameCore, context.CollisionService);
 
     // Draw full screen rectangle in front of everything when changing screens
     if (sceneManager.OnTransition) sceneManager.DrawTransition(context.GameCore);

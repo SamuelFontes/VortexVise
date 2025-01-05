@@ -13,6 +13,11 @@ namespace VortexVise.Desktop.Services
 {
     internal class RendererService : IRendererService
     {
+        public void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color)
+        {
+            ZeroElectric.Vinculum.Raylib.DrawLineEx(startPos, endPos, thick, color.ToRaylibColor());
+        }
+
         public void DrawRectangleRec(Rectangle rec, Color color)
         {
             ZeroElectric.Vinculum.Raylib.DrawRectangleRec(rec.ToRaylibRectangle(), color.ToRaylibColor());
@@ -22,7 +27,7 @@ namespace VortexVise.Desktop.Services
         {
             if (font is FontAsset raylibFont)
             {
-            ZeroElectric.Vinculum.Raylib.DrawTextEx(raylibFont.Font, text, position, fontSize, spacing, tint.ToRaylibColor());
+                ZeroElectric.Vinculum.Raylib.DrawTextEx(raylibFont.Font, text, position, fontSize, spacing, tint.ToRaylibColor());
             }
             else
             {
@@ -46,7 +51,7 @@ namespace VortexVise.Desktop.Services
         {
             if (texture is TextureAsset raylibTexture)
             {
-                ZeroElectric.Vinculum.Raylib.DrawTextureEx(raylibTexture.Texture, position, v1,v2, color.ToRaylibColor());
+                ZeroElectric.Vinculum.Raylib.DrawTextureEx(raylibTexture.Texture, position, v1, v2, color.ToRaylibColor());
             }
             else
             {
