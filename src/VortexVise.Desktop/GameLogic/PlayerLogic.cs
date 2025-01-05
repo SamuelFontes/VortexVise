@@ -223,7 +223,7 @@ public static class PlayerLogic
         playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.6f, lastPlayerState.Collision.Y + differenceY * 0.6f, 16, 16).ToDrawingRectangle());
         playerCollisions.Add(new Rectangle(lastPlayerState.Collision.X + differenceX * 0.8f, lastPlayerState.Collision.Y + differenceY * 0.8f, 16, 16).ToDrawingRectangle());
 
-        playerCollisions.Add(currentPlayerState.Collision.ToDrawingRectangle());
+        playerCollisions.Add(currentPlayerState.Collision);
 
         bool colided = false;
         // Apply map collisions
@@ -349,14 +349,14 @@ public static class PlayerLogic
     }
 
 
-    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState, GameCore gameCore)
+    public static void ProcessPlayerPickUpItem(GameState currentState, PlayerState currentPlayerState, GameCore gameCore, ICollisionService collisionService)
     {
         if (currentPlayerState.Input.GrabDrop)
         {
             Guid? idToRemove = null;
             foreach (var drop in currentState.WeaponDrops)
             {
-                if (Raylib.CheckCollisionRecs(drop.Collision.ToRaylibRectangle(), currentPlayerState.Collision))
+                if (collisionService.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
                 {
                     idToRemove = drop.Id;
                     //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;

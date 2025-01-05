@@ -76,7 +76,7 @@ public static class GameLogic
                 PlayerLogic.ApplyCollisions(currentPlayerState, lastPlayerState, deltaTime,collisionService);
 
                 WeaponLogic.BreakPlayerWeapon(currentPlayerState, gameCore);
-                PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState,gameCore);
+                PlayerLogic.ProcessPlayerPickUpItem(state, currentPlayerState,gameCore,collisionService);
 
                 WeaponLogic.ProcessPlayerShooting(currentPlayerState, state, deltaTime, gameCore);
 

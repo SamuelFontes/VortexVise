@@ -1,9 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using VortexVise.Core.Models;
 using VortexVise.Core.States;
 using VortexVise.Desktop.GameContext;
 using VortexVise.Desktop.Models;
-using ZeroElectric.Vinculum;
 
 namespace VortexVise.Desktop.States;
 
@@ -30,7 +30,7 @@ public class PlayerState
     public float JetPackFuel { get; set; } = GameMatch.DefaultJetPackFuel;
     public Skin Skin { get; set; }
     public PlayerStats Stats { get; set; }
-    public Rectangle Collision { get { return new Rectangle(Position.X + 8, Position.Y + 8, 16, 16); } }
+    public Rectangle Collision { get { return new Rectangle((int)Position.X + 8, (int)Position.Y + 8, 16, 16); } }
 
     public InputState Input { get; set; } = new InputState();
     public HookState HookState { get; set; } = new HookState();

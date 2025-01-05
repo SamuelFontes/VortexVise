@@ -186,7 +186,7 @@ public static class GameRenderer
 
         if (Utils.Debug())
         {
-            rendererService.DrawRectangleRec(playerState.Collision.ToDrawingRectangle(), System.Drawing.Color.Green); // Debug
+            rendererService.DrawRectangleRec(playerState.Collision, System.Drawing.Color.Green); // Debug
         }
     }
 
@@ -201,7 +201,7 @@ public static class GameRenderer
         // --------------------------------------------------------
         foreach (var drop in state.WeaponDrops)
         {
-            if (collisionService.CheckCollisionRecs(drop.Collision, mainPlayer.Collision.ToDrawingRectangle()))
+            if (collisionService.CheckCollisionRecs(drop.Collision, mainPlayer.Collision))
             {
                 rendererService.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, System.Drawing.Color.White);
             }

@@ -216,7 +216,7 @@ public static class WeaponLogic
         var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || (x.IsExplosion && !currentPlayerState.IsBot));// Adding friendly fire for bots is not a good idea
         foreach (var hitbox in hitboxes)
         {
-            if (collisionService.CheckCollisionRecs(currentPlayerState.Collision.ToDrawingRectangle(), hitbox.HitBox))
+            if (collisionService.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
             {
                 // Dude was hit by projectile
                 GameAssets.Sounds.HookHit.Play(pitch: 0.5f);
