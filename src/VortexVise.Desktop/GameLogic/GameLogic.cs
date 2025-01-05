@@ -32,7 +32,7 @@ public static class GameLogic
 
         if (state.MatchState == MatchStates.Warmup)
         {
-            if ((int)state.MatchTimer < (int)lastState.MatchTimer) GameAssets.Sounds.PlaySound(GameAssets.Sounds.HitMarker,gameCore, pitch: 0.5f);
+            if ((int)state.MatchTimer < (int)lastState.MatchTimer) GameAssets.Sounds.HitMarker.Play(pitch: 0.5f);
             state.PlayerStates = lastState.PlayerStates;
         }
         else if (state.MatchState == MatchStates.Playing)

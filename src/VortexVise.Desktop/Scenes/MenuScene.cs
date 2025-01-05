@@ -131,7 +131,7 @@ public class MenuScene
             if (gameCore.PlayerOneProfile.Gamepad != -9)
             {
                 GameUserInterface.IsCursorVisible = false;
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore, pitch: 0.8f);
+                GameAssets.Sounds.Click.Play(pitch: 0.8f);
                 currentState = MenuState.MainMenu;
                 selected = menuItems.First(x => x.Item == MenuItem.Local && x.State == currentState).Id;
             }
@@ -143,7 +143,7 @@ public class MenuScene
             {
                 if (currentState == MenuState.InputSelection)
                 {
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore);
+                    GameAssets.Sounds.Click.Play();
                     if (gameCore.IsNetworkGame)
                     {
                         currentState = MenuState.Online;
@@ -160,7 +160,7 @@ public class MenuScene
                 {
                     finishScreen = 2;
                     GameAssets.MusicAndAmbience.StopMusic(gameCore);
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore, pitch: 0.5f);
+                    GameAssets.Sounds.Click.Play( pitch: 0.5f);
                     return;
                 }
                 else if (currentState == MenuState.Connecting)
@@ -177,7 +177,7 @@ public class MenuScene
                             {
                                 finishScreen = -1;   // EXIT
                                 gameCore.GameShouldClose = true;
-                                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore);
+                                GameAssets.Sounds.Click.Play();
                                 break;
                             }
                         case MenuItem.Local:
@@ -185,7 +185,7 @@ public class MenuScene
 
                                 //finishScreen = 2;   // GAMEPLAY
                                 gameCore.IsNetworkGame = false;
-                                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore);
+                                GameAssets.Sounds.Click.Play();
                                 currentState = MenuState.InputSelection;
                                 break;
                             }
@@ -193,13 +193,13 @@ public class MenuScene
                             {
                                 //finishScreen = 2;   // GAMEPLAY
                                 gameCore.IsNetworkGame = true;
-                                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore);
+                                GameAssets.Sounds.Click.Play();
                                 currentState = MenuState.InputSelection;
                                 break;
                             }
                         case MenuItem.Return:
                             {
-                                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore);
+                                GameAssets.Sounds.Click.Play();
                                 currentState = MenuState.MainMenu;
                                 selected = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                                 break;
@@ -207,7 +207,7 @@ public class MenuScene
                         case MenuItem.Connect:
                             {
                                 currentState = MenuState.Connecting;
-                                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click, gameCore);
+                                GameAssets.Sounds.Click.Play();
                                 var config = menuItems.Where(x => x.State == currentState && x.IsEnabled).Select(x => x.Id).DefaultIfEmpty(Guid.Empty).FirstOrDefault();
                                 string ip = menuItems.First(_ => _.Item == MenuItem.IP).Text;
                                 GameClient.Connect(ip);
@@ -271,13 +271,13 @@ public class MenuScene
             {
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                    GameAssets.Sounds.Selection.Play( pitch: 2);
                     MapLogic.LoadNextMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                    GameAssets.Sounds.Selection.Play( pitch: 2);
                     GameMatch.NumberOfBots--;
                     if (GameMatch.NumberOfBots < 0) GameMatch.NumberOfBots = 0;
                     menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -287,13 +287,13 @@ public class MenuScene
             {
                 if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeMap && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                    GameAssets.Sounds.Selection.Play( pitch: 2);
                     MapLogic.LoadPreviousMap(_sceneManager);
                     menuItems.First(x => selected == x.Id).Text = $"MAP: {GameMatch.CurrentMap.Name}";
                 }
                 else if (selected == menuItems.FirstOrDefault(x => x.Item == MenuItem.ChangeNumberOfBots && x.State == currentState)?.Id)
                 {
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                    GameAssets.Sounds.Selection.Play( pitch: 2);
                     GameMatch.NumberOfBots++;
                     if (GameMatch.NumberOfBots > 10) GameMatch.NumberOfBots = 10;
                     menuItems.First(x => selected == x.Id).Text = $"BOTS: {GameMatch.NumberOfBots}";
@@ -302,7 +302,7 @@ public class MenuScene
             }
             else if (input.Back)
             {
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.Click,gameCore, pitch: 0.5f);
+                GameAssets.Sounds.Click.Play( pitch: 0.5f);
                 if (currentState == MenuState.MainMenu)
                 {
                     currentState = MenuState.PressStart;
@@ -321,7 +321,7 @@ public class MenuScene
                 else if (currentState == MenuState.Connecting)
                 {
                     currentState = MenuState.Online;
-                    GameAssets.Sounds.PlaySound(GameAssets.Sounds.VinylScratch,gameCore);
+                    GameAssets.Sounds.VinylScratch.Play();
                     selected = menuItems.First(x => x.Item == MenuItem.Connect && x.State == currentState).Id;
                 }
             }
@@ -359,28 +359,28 @@ public class MenuScene
                 {
                     if (i == gameCore.PlayerOneProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerTwoProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerThreeProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerFourProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.SkipWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).Skip(1).FirstOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.First();
                         gameCore.PlayerFourProfile.Skin = skin;
@@ -390,28 +390,28 @@ public class MenuScene
                 {
                     if (i == gameCore.PlayerOneProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerOneProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerOneProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerTwoProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerTwoProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerTwoProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerThreeProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerThreeProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerThreeProfile.Skin = skin;
                     }
                     else if (i == gameCore.PlayerFourProfile.Gamepad)
                     {
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore, pitch: 2);
+                        GameAssets.Sounds.Selection.Play( pitch: 2);
                         var skin = GameAssets.Gameplay.Skins.TakeWhile(item => item.Id != gameCore.PlayerFourProfile.Skin.Id).LastOrDefault();
                         if (skin == null) skin = GameAssets.Gameplay.Skins.Last();
                         gameCore.PlayerFourProfile.Skin = skin;
@@ -438,7 +438,7 @@ public class MenuScene
         if (currentState == MenuState.Connecting && !GameClient.IsConnecting && !GameClient.IsConnected)
         {
             currentState = MenuState.Online;
-            GameAssets.Sounds.PlaySound(GameAssets.Sounds.VinylScratch,gameCore);
+            GameAssets.Sounds.VinylScratch.Play();
             selected = menuItems.First(x => x.Item == MenuItem.Connect && x.State == currentState).Id;
         }
 
@@ -535,7 +535,7 @@ public class MenuScene
     {
         // Play selection sound when change selection
         //----------------------------------------------------------------------------------
-        if (lastSelected != selected && selected != Guid.Empty) GameAssets.Sounds.PlaySound(GameAssets.Sounds.Selection,gameCore);
+        if (lastSelected != selected && selected != Guid.Empty) GameAssets.Sounds.Selection.Play();
         lastSelected = selected;
     }
     class UIMenuItem

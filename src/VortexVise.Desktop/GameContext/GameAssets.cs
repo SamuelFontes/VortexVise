@@ -345,7 +345,7 @@ public static class GameAssets
         public static void StopMusic(GameCore gameCore)
         {
             if (!Music.IsPlaying) return;
-            Sounds.PlaySound(Sounds.VinylScratch,gameCore, pitch: 0.7f);
+            Sounds.VinylScratch.Play(pitch: 0.7f);
             Music.Stop();
             Music.Unload();
         }
@@ -373,63 +373,62 @@ public static class GameAssets
     /// </summary>
     public static class Sounds
     {
-        public static Sound HookShoot;
-        public static Sound HookHit;
-        public static Sound Jump;
-        public static Sound Dash;
-        public static Sound Click;
-        public static Sound Selection;
-        public static Sound WeaponDrop;
-        public static Sound WeaponClick;
-        public static Sound Death;
-        public static Sound Shotgun;
-        public static Sound Drop;
-        public static Sound HitMarker;
-        public static Sound Explosion;
-        public static Sound VinylScratch;
-        public static Sound Kill;
-        public static Sound JetPack;
+        public static ISoundAsset HookShoot = new SoundAsset();
+        public static ISoundAsset HookHit = new SoundAsset();
+        public static ISoundAsset Jump = new SoundAsset();
+        public static ISoundAsset Dash = new SoundAsset();
+        public static ISoundAsset Click = new SoundAsset();
+        public static ISoundAsset Selection = new SoundAsset();
+        public static ISoundAsset WeaponDrop = new SoundAsset();
+        public static ISoundAsset WeaponClick = new SoundAsset();
+        public static ISoundAsset Death = new SoundAsset();
+        public static ISoundAsset Shotgun = new SoundAsset();
+        public static ISoundAsset Drop = new SoundAsset();
+        public static ISoundAsset HitMarker = new SoundAsset();
+        public static ISoundAsset Explosion = new SoundAsset();
+        public static ISoundAsset VinylScratch = new SoundAsset();
+        public static ISoundAsset Kill = new SoundAsset();
+        public static ISoundAsset JetPack = new SoundAsset();
         public static void Init()
         {
-            HookShoot = Raylib.LoadSound("Resources/Audio/FX/hook_fire.wav");
-            HookHit = Raylib.LoadSound("Resources/Audio/FX/hook_hit.wav");
-            Jump = Raylib.LoadSound("Resources/Audio/FX/jump.wav");
-            Dash = Raylib.LoadSound("Resources/Audio/FX/dash.wav");
-            Click = Raylib.LoadSound("Resources/Audio/FX/click.wav");
-            Selection = Raylib.LoadSound("Resources/Audio/FX/selection.wav");
-            WeaponDrop = Raylib.LoadSound("Resources/Audio/FX/metal_drop.wav");
-            WeaponClick = Raylib.LoadSound("Resources/Audio/FX/weapon_click.wav");
-            Death = Raylib.LoadSound("Resources/Audio/FX/death3.ogg");
-            Shotgun = Raylib.LoadSound("Resources/Audio/FX/shotgun.ogg");
-            Drop = Raylib.LoadSound("Resources/Audio/FX/Drop.ogg");
-            HitMarker = Raylib.LoadSound("Resources/Audio/FX/hitmarker.ogg");
-            Explosion = Raylib.LoadSound("Resources/Audio/FX/explosion.ogg");
-            VinylScratch = Raylib.LoadSound("Resources/Audio/FX/vinyl_scratch.ogg");
-            Kill = Raylib.LoadSound("Resources/Audio/FX/kill.ogg");
-            JetPack = Raylib.LoadSound("Resources/Audio/FX/jetpack.ogg");
+            HookShoot.Load("Resources/Audio/FX/hook_fire.wav");
+            HookHit.Load("Resources/Audio/FX/hook_hit.wav");
+            Jump.Load("Resources/Audio/FX/jump.wav");
+            Dash.Load("Resources/Audio/FX/dash.wav");
+            Click.Load("Resources/Audio/FX/click.wav");
+            Selection.Load("Resources/Audio/FX/selection.wav");
+            WeaponDrop.Load("Resources/Audio/FX/metal_drop.wav");
+            WeaponClick.Load("Resources/Audio/FX/weapon_click.wav");
+            Death.Load("Resources/Audio/FX/death3.ogg");
+            Shotgun.Load("Resources/Audio/FX/shotgun.ogg");
+            Drop.Load("Resources/Audio/FX/Drop.ogg");
+            HitMarker.Load("Resources/Audio/FX/hitmarker.ogg");
+            Explosion.Load("Resources/Audio/FX/explosion.ogg");
+            VinylScratch.Load("Resources/Audio/FX/vinyl_scratch.ogg");
+            Kill.Load("Resources/Audio/FX/kill.ogg");
+            JetPack.Load("Resources/Audio/FX/jetpack.ogg");
         }
         public static void Unload()
         {
-            Raylib.UnloadSound(HookShoot);
-            Raylib.UnloadSound(HookHit);
-            Raylib.UnloadSound(Jump);
-            Raylib.UnloadSound(Dash);
-            Raylib.UnloadSound(Click);
-            Raylib.UnloadSound(Selection);
-            Raylib.UnloadSound(WeaponDrop);
-            Raylib.UnloadSound(WeaponClick);
-            Raylib.UnloadSound(Death);
-            Raylib.UnloadSound(Shotgun);
-            Raylib.UnloadSound(Drop);
-            Raylib.UnloadSound(HitMarker);
-            Raylib.UnloadSound(Explosion);
-            Raylib.UnloadSound(VinylScratch);
-            Raylib.UnloadSound(Kill);
-            Raylib.UnloadSound(JetPack);
+            HookShoot.Unload();
+            HookHit.Unload();
+            Jump.Unload();
+            Dash.Unload();
+            Click.Unload();
+            Selection.Unload();
+            WeaponDrop.Unload();
+            WeaponClick.Unload();
+            Death.Unload();
+            Shotgun.Unload();
+            Drop.Unload();
+            HitMarker.Unload();
+            Explosion.Unload();
+            VinylScratch.Unload();
+            Kill.Unload();
+            JetPack.Unload();
         }
         public static void PlaySound(Sound sound, GameCore gameCore, float pan = 0.5f, float pitch = 1f, float volume = 1f, bool overrideIfPlaying = true)
         {
-            if (gameCore.IsServer) return; // Audio don't play on the server
             if (!overrideIfPlaying && Raylib.IsSoundPlaying(sound)) return;
 
             volume *= GameSettings.VolumeSounds;

@@ -38,7 +38,7 @@ public static class PlayerHookLogic
 
             // Play hook shoot sound
             if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
-                GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookShoot,gameCore);
+                GameAssets.Sounds.HookShoot.Play();
 
             // Reset velocity
             currentPlayerState.HookState.Velocity = new(0, 0);
@@ -152,7 +152,7 @@ public static class PlayerHookLogic
                     // Hook colided
                     currentPlayerState.HookState.IsHookAttached = true;
                     if (PlayerLogic.IsPlayerLocal(currentPlayerState.Id,gameCore))
-                        GameAssets.Sounds.PlaySound(GameAssets.Sounds.HookHit, gameCore, volume: 0.5f);
+                        GameAssets.Sounds.HookHit.Play(volume: 0.5f);
                 }
             }
         }
