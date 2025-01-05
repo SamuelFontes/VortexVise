@@ -94,7 +94,7 @@ while (!(Raylib.WindowShouldClose() || context.GameCore.GameShouldClose))
     sceneManager.DrawScene(context.RendererService,context.GameCore, context.CollisionService);
 
     // Draw full screen rectangle in front of everything when changing screens
-    if (sceneManager.OnTransition) sceneManager.DrawTransition(context.GameCore);
+    if (sceneManager.OnTransition) sceneManager.DrawTransition(context.GameCore,context.RendererService);
 
     // Draw UI on top
     GameUserInterface.DrawUserInterface(context.RendererService,context.GameCore);

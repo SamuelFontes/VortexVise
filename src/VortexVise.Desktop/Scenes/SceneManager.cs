@@ -1,4 +1,5 @@
 ﻿using VortexVise.Core.Enums;
+using VortexVise.Core.Extensions;
 using VortexVise.Core.GameContext;
 using VortexVise.Core.Interfaces;
 using VortexVise.Desktop.GameContext;
@@ -21,10 +22,10 @@ public class SceneManager
     public GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
     private readonly IInputService _inputService;
 
-    public SceneManager(IInputService inputService,GameCore gameCore, IRendererService rendererService)
+    public SceneManager(IInputService inputService, GameCore gameCore, IRendererService rendererService)
     {
         _inputService = inputService;
-        MenuScene = new MenuScene(_inputService, this,gameCore, rendererService);
+        MenuScene = new MenuScene(_inputService, this, gameCore, rendererService);
         GameplayScene = new GameplayScene(_inputService);
     }
 
@@ -42,7 +43,7 @@ public class SceneManager
     {
         if (!TransitionFadeOut)
         {
-            TransitionAlpha += Raylib.GetFrameTime();
+            TransitionAlpha += rendererService.GetFrameTime();
 
             // NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
             // For that reason we compare against 1.01f, to avoid last frame loading stop
@@ -67,7 +68,7 @@ public class SceneManager
                 {
                     //case LOGO: InitLogoScreen(); break;
                     //case TITLE: InitTitleScreen(); break;
-                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore,assetService); break;
+                    case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene(gameCore, assetService); break;
                     case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, gameCore, rendererService); break;
                     //case ENDING: InitEndingScreen(); break;
                     default: break;
@@ -81,7 +82,7 @@ public class SceneManager
         }
         else  // Transition fade out logic
         {
-            TransitionAlpha -= Raylib.GetFrameTime();
+            TransitionAlpha -= rendererService.GetFrameTime();
 
             if (TransitionAlpha < -0.01f)
             {
@@ -95,9 +96,9 @@ public class SceneManager
     }
 
     // Draw transition effect (full-screen rectangle)
-    public void DrawTransition(GameCore gameCore)
+    public void DrawTransition(GameCore gameCore, IRendererService rendererService)
     {
-        Raylib.DrawRectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight, Raylib.Fade(Raylib.BLACK, TransitionAlpha));
+        rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, gameCore.GameScreenWidth, gameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
     }
 
     public void UpdateScene(SceneManager sceneManager, ICollisionService collisionService, GameCore gameCore, IRendererService rendererService, IAssetService assetService)
@@ -126,15 +127,15 @@ public class SceneManager
                 default: break;
             }
         }
-        else UpdateTransition(gameCore,rendererService, assetService);    // Update transition (fade-in, fade-out)
+        else UpdateTransition(gameCore, rendererService, assetService);    // Update transition (fade-in, fade-out)
     }
 
     public void DrawScene(IRendererService rendererService, GameCore gameCore, ICollisionService collisionService)
     {
         switch (CurrentScene)
         {
-            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService,gameCore, collisionService); break;
-            case GameScene.MENU: MenuScene.DrawMenuScene(rendererService,gameCore); break;
+            case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService, gameCore, collisionService); break;
+            case GameScene.MENU: MenuScene.DrawMenuScene(rendererService, gameCore); break;
             default: break;
         }
     }
