@@ -17,7 +17,7 @@ namespace VortexVise.Core.Extensions
                 alpha = 1.0f; 
             int alphaValue = (int)(255 * alpha);
             if(alphaValue < 0) alphaValue = 0;
-            return Color.FromArgb(0, color.R, color.G, color.B);
+            return Color.FromArgb(alphaValue, color.R, color.G, color.B);
         }
     }
 }
