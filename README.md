@@ -2,9 +2,9 @@
 	<img src="/Resources/Common/vortex-vise-logo.png" alt="VortexViseLogo" />
 </p>
 <h1>Vortex Vise</h1>
-VortexVise is an old school deathmatch game made with Raylib.  
-
-Can be played with bots or up to 4 players over local split screen multiplayer, to join press either A or Enter on the skin selection screen.  
+VortexVise is an Open Source old school style deathmatch game made with Raylib in C#.  
+Can be played with bots or up to 4 players over local split screen multiplayer, to join press either A or Enter on the character selection screen.  
+It has a nice portability layer it can be compiled both for Desktop and Web so it's easialy portable to other platforms.  
 
 [Play on your Browser](https://samuelfontes.github.io/VortexViseDemo/)  
 [Download](https://github.com/SamuelFontes/VortexVise/releases/download/release/VortexVise.zip)  
