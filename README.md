@@ -6,8 +6,8 @@ VortexVise is an old school deathmatch game made with Raylib.
 
 Can be played with bots or up to 4 players over local split screen multiplayer, to join press either A or Enter on the skin selection screen.  
 
-[Download](https://github.com/SamuelFontes/VortexVise/releases/download/release/VortexVise.zip)  
 [Play on your Browser](https://samuelfontes.github.io/VortexViseDemo/)  
+[Download](https://github.com/SamuelFontes/VortexVise/releases/download/release/VortexVise.zip)  
 [Itch.io](https://samuelfontes.itch.io/vortexvise)
 <h2>Controls - MouseAndKeyboard/Gamepad  </h2>
 [Menu]  
@@ -41,4 +41,4 @@ UseJetPack - LeftShift/LeftTrigger
 
 <h2>License</h2>
 The game is licensed under GPL 2, so you can do wathever you want with the code as long as you give the credits and publish the source code if you made any changes.  
-If you want to get this code with a more permissive license just message me.  
+If you want to get this code with a more permissive license just message me, if you want to use this code as base for something else I can change the license to MIT or something.  
