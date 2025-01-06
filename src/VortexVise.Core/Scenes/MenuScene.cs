@@ -434,6 +434,15 @@ namespace VortexVise.Core.Scenes
                     else if (GameCore.PlayerFourProfile.Gamepad == GamepadSlot.Disconnected)
                         GameCore.PlayerFourProfile.Gamepad = GamepadSlot.Dummy;
                 }
+                if (inputService.GetDebugCommand() == DebugCommand.RemoveDummyGamepad)
+                {
+                    if (GameCore.PlayerFourProfile.Gamepad == GamepadSlot.Dummy)
+                        GameCore.PlayerFourProfile.Gamepad = GamepadSlot.Disconnected;
+                    else if (GameCore.PlayerThreeProfile.Gamepad == GamepadSlot.Dummy)
+                        GameCore.PlayerThreeProfile.Gamepad = GamepadSlot.Disconnected;
+                    else if (GameCore.PlayerTwoProfile.Gamepad == GamepadSlot.Dummy)
+                        GameCore.PlayerTwoProfile.Gamepad = GamepadSlot.Disconnected;
+                }
 
             }
 

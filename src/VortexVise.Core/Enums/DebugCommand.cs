@@ -5,5 +5,6 @@
         None,
         ToggleDebugView,
         AddDummyGamepad,
+        RemoveDummyGamepad,
     }
 }

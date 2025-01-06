@@ -11,6 +11,8 @@ namespace VortexVise.Desktop.Services
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_HOME))
                 return DebugCommand.AddDummyGamepad;
+            else if (Raylib.IsKeyPressed(KeyboardKey.KEY_PAGE_UP))
+                return DebugCommand.RemoveDummyGamepad;
             else
                 return DebugCommand.None;
         }
