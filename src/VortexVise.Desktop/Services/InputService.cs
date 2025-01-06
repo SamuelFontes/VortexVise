@@ -46,13 +46,13 @@ namespace VortexVise.Desktop.Services
                     input.Up = true;
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_S) || Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
                     input.Down = true;
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT))// || Raylib.IsKeyPressed(KeyboardKey.KEY_A))
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_LEFT) || Raylib.IsKeyPressed(KeyboardKey.KEY_A))
                     input.UILeft = true;
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT))// || Raylib.IsKeyPressed(KeyboardKey.KEY_D))
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_RIGHT) || Raylib.IsKeyPressed(KeyboardKey.KEY_D))
                     input.UIRight = true;
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP))// || Raylib.IsKeyPressed(KeyboardKey.KEY_W))
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_UP) || Raylib.IsKeyPressed(KeyboardKey.KEY_W))
                     input.UIUp = true;
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN))// || Raylib.IsKeyPressed(KeyboardKey.KEY_S))
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_DOWN) || Raylib.IsKeyPressed(KeyboardKey.KEY_S))
                     input.UIDown = true;
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) || Raylib.IsKeyDown(KeyboardKey.KEY_K) || Raylib.IsKeyDown(KeyboardKey.KEY_LEFT_ALT))
                     input.Jump = true;
