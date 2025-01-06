@@ -46,7 +46,7 @@ If you want to get this code with a more permissive license just message me, if 
 <h2>Compiling</h2>
 Both Versions require dotnet 8 installed on your machine.  
 <h3>Desktop</h3>
-Open the root folder on the terminal and just run like normal(should work)  
+Open the root folder on the terminal and just run like normal
 
 ```
 cd src\VortexVise.Desktop
