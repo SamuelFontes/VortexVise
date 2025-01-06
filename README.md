@@ -47,13 +47,16 @@ If you want to get this code with a more permissive license just message me, if 
 Both Versions require dotnet 8 installed on your machine.  
 <h3>Desktop</h3>
 Open the root folder on the terminal and just run like normal(should work)  
+
 ```
 cd src\VortexVise.Desktop
 dotnet run
 ```
+
 <h3>Web</h3>
 Credits to these guys on figuring out how to do this shit: (https://github.com/Kiriller12/RaylibWasm)  
 Open the root folder on the terminal then nstall wasm things, publish and then dotnet-serve to run:  
+
 ```
 cd src\VortexVise.Web
 dotnet workload install wasm-tools
