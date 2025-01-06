@@ -54,7 +54,8 @@ dotnet run
 ```
 
 <h3>Web</h3>
-Credits to these guys on figuring out how to do this shit: (https://github.com/Kiriller12/RaylibWasm)  
+Credits to these guys on figuring out how to do this shit: https://github.com/Kiriller12/RaylibWasm    
+  
 Open the root folder on the terminal then install wasm things, publish and then dotnet-serve to run:  
 
 ```
