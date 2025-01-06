@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using VortexVise.Core.GameGlobals;
@@ -46,5 +47,20 @@ namespace VortexVise.Desktop.Services
             // Debug toggle
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_F7)) Utils.SwitchDebug();
         }
+        public int GetScreenHeight()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetScreenHeight();
+        }
+
+        public int GetScreenWidth()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetScreenWidth();
+        }
+
+        public Vector2 GetMousePosition()
+        {
+            return ZeroElectric.Vinculum.Raylib.GetMousePosition();
+        }
+
     }
 }

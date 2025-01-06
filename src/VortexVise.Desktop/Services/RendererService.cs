@@ -13,7 +13,7 @@ namespace VortexVise.Desktop.Services
             ZeroElectric.Vinculum.Raylib.DrawLineEx(startPos, endPos, thick, color.ToRaylibColor());
         }
 
-        public void DrawRectangleRec(Rectangle rec, Color color)
+        public void DrawRectangle(Rectangle rec, Color color)
         {
             ZeroElectric.Vinculum.Raylib.DrawRectangleRec(rec.ToRaylibRectangle(), color.ToRaylibColor());
         }
@@ -76,21 +76,6 @@ namespace VortexVise.Desktop.Services
             {
                 throw new ArgumentException("Invalid texture asset type.");
             }
-        }
-
-        public int GetScreenHeight()
-        {
-            return ZeroElectric.Vinculum.Raylib.GetScreenHeight();
-        }
-
-        public int GetScreenWidth()
-        {
-            return ZeroElectric.Vinculum.Raylib.GetScreenWidth();
-        }
-
-        public Vector2 GetMousePosition()
-        {
-            return ZeroElectric.Vinculum.Raylib.GetMousePosition();
         }
 
         public float GetFrameTime()

@@ -146,7 +146,7 @@ namespace VortexVise.Core.GameLogic
             {
                 foreach (var collision in MapLogic.GetCollisions())
                 {
-                    if (collisionService.CheckCollisionRecs(currentPlayerState.HookState.Collision, collision))
+                    if (collisionService.DetectCollision(currentPlayerState.HookState.Collision, collision))
                     {
                         // Hook colided
                         currentPlayerState.HookState.IsHookAttached = true;

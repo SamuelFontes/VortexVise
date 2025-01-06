@@ -234,11 +234,11 @@ namespace VortexVise.Core.GameLogic
                 }
                 foreach (var collision in MapLogic.GetCollisions())
                 {
-                    if (collisionService.CheckCollisionRecs(playerCollision, collision))
+                    if (collisionService.DetectCollision(playerCollision, collision))
                     {
 
                         // This means the player is inside the thing 
-                        var collisionOverlap = collisionService.GetCollisionRec(playerCollision, collision);
+                        var collisionOverlap = collisionService.GetCollision(playerCollision, collision);
 
                         Vector2 colliderCenter = new(collision.X + collision.Width * 0.5f, collision.Y + collision.Height * 0.5f);
 
@@ -289,7 +289,7 @@ namespace VortexVise.Core.GameLogic
             {
                 var feetColided = false;
                 Rectangle playerFeet = new Rectangle(currentPlayerState.Collision.X, currentPlayerState.Collision.Y + currentPlayerState.Collision.Height, currentPlayerState.Collision.Width, 1);
-                foreach (var collision in MapLogic.GetCollisions()) if (collisionService.CheckCollisionRecs(collision, playerFeet)) feetColided = true;
+                foreach (var collision in MapLogic.GetCollisions()) if (collisionService.DetectCollision(collision, playerFeet)) feetColided = true;
                 if (feetColided)
                 {
                     currentPlayerState.IsTouchingTheGround = true;
@@ -354,7 +354,7 @@ namespace VortexVise.Core.GameLogic
                 Guid? idToRemove = null;
                 foreach (var drop in currentState.WeaponDrops)
                 {
-                    if (collisionService.CheckCollisionRecs(drop.Collision, currentPlayerState.Collision))
+                    if (collisionService.DetectCollision(drop.Collision, currentPlayerState.Collision))
                     {
                         idToRemove = drop.Id;
                         //foreach (var w in currentPlayerState.WeaponStates) w.IsEquipped = false;

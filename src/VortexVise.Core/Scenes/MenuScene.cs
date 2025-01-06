@@ -499,7 +499,7 @@ namespace VortexVise.Core.Scenes
                 var mapCenterPostion = new Vector2(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.37f);
                 var size = 176;
                 var rec = new System.Drawing.Rectangle((int)(mapCenterPostion.X - size / 2), (int)(mapCenterPostion.Y - size / 2), size, size);
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(rec.X - 8, rec.Y - 8, rec.Width + 16, rec.Height + 16), System.Drawing.Color.Black);
+                rendererService.DrawRectangle(new System.Drawing.Rectangle(rec.X - 8, rec.Y - 8, rec.Width + 16, rec.Height + 16), System.Drawing.Color.Black);
                 rendererService.DrawTexturePro(GameMatch.CurrentMap.Texture, new(0, 0, GameMatch.CurrentMap.Texture.Width, GameMatch.CurrentMap.Texture.Height), rec, new(0, 0), 0, System.Drawing.Color.White);
 
                 if (!GameCore.IsNetworkGame)
@@ -518,7 +518,7 @@ namespace VortexVise.Core.Scenes
                 DrawInputSelection(rendererService);
             }
             if (Utils.Debug())
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(80, 0, 800, 600), System.Drawing.Color.FromArgb(20, 255, 0, 0));
+                rendererService.DrawRectangle(new System.Drawing.Rectangle(80, 0, 800, 600), System.Drawing.Color.FromArgb(20, 255, 0, 0));
 
 
             // Play selection sound
@@ -589,7 +589,7 @@ namespace VortexVise.Core.Scenes
                 var pos = new Vector2(CenterPosition.X - TextSize.X * 0.5f, CenterPosition.Y - TextSize.Y * 0.5f); // Centers text
 
                 // Check if mouse is selecting the menu
-                if (IsEnabled && GameUserInterface.IsCursorVisible && collisionService.CheckCollisionRecs(new System.Drawing.Rectangle((int)pos.X, (int)pos.Y, (int)TextSize.X, (int)TextSize.Y), new System.Drawing.Rectangle((int)GameUserInterface.CursorPosition.X, (int)GameUserInterface.CursorPosition.Y, 1, 1)))
+                if (IsEnabled && GameUserInterface.IsCursorVisible && collisionService.DetectCollision(new System.Drawing.Rectangle((int)pos.X, (int)pos.Y, (int)TextSize.X, (int)TextSize.Y), new System.Drawing.Rectangle((int)GameUserInterface.CursorPosition.X, (int)GameUserInterface.CursorPosition.Y, 1, 1)))
                 {
                     scene.selected = Id;
                 }
@@ -612,7 +612,7 @@ namespace VortexVise.Core.Scenes
             {
                 // Draw input box
                 if (Type == MenuItemType.TextInput)
-                    rendererService.DrawRectangleRec(new System.Drawing.Rectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                    rendererService.DrawRectangle(new System.Drawing.Rectangle((int)Position.X - 4, (int)Position.Y - 2, (int)TextSize.X + 8, (int)TextSize.Y + 4), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                 // Draw the text
                 rendererService.DrawTextEx(GameAssets.Misc.Font, Text, Position, Size, 0, Color);
 
@@ -631,7 +631,7 @@ namespace VortexVise.Core.Scenes
 
         private void DrawInputSelection(IRendererService rendererService)
         {
-            rendererService.DrawRectangleRec(new(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0)); // Overlay
+            rendererService.DrawRectangle(new(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0)); // Overlay
 
             Vector2 screenCenter = new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f);
 

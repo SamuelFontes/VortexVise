@@ -6,6 +6,7 @@ using VortexVise.Core.Networking;
 using VortexVise.Core.States;
 using VortexVise.Core.Models;
 using VortexVise.Core.Utilities;
+using VortexVise.Core.Services;
 
 namespace VortexVise.Core.GameGlobals
 {
@@ -28,14 +29,14 @@ namespace VortexVise.Core.GameGlobals
             IsCursorVisible = false;
             DisableCursor = false;
         }
-        public static void UpdateUserInterface(IRendererService rendererService)
+        public static void UpdateUserInterface(GameServices services)
         {
             // Handle cursor, show and hide cursor based on movement
             //---------------------------------------------------------
-            Vector2 newCursorPosition = rendererService.GetMousePosition();
+            Vector2 newCursorPosition = services.WindowService.GetMousePosition();
             Vector2 virtualMouse = new();
-            virtualMouse.X = newCursorPosition.X - (rendererService.GetScreenWidth() - GameCore.GameScreenWidth) * 0.5f;
-            virtualMouse.Y = newCursorPosition.Y - (rendererService.GetScreenHeight() - GameCore.GameScreenHeight) * 0.5f;
+            virtualMouse.X = newCursorPosition.X - (services.WindowService.GetScreenWidth() - GameCore.GameScreenWidth) * 0.5f;
+            virtualMouse.Y = newCursorPosition.Y - (services.WindowService.GetScreenHeight() - GameCore.GameScreenHeight) * 0.5f;
             virtualMouse = virtualMouse.Clamp(new(0, 0), new Vector2(GameCore.GameScreenWidth, GameCore.GameScreenHeight));
             newCursorPosition = virtualMouse;
 
@@ -49,10 +50,10 @@ namespace VortexVise.Core.GameGlobals
             {
                 // Hide cursor after a few seconds
                 if (IsCursorVisible && TimeIdle > 2) IsCursorVisible = false;
-                else if (TimeIdle < 2) TimeIdle += rendererService.GetFrameTime();
+                else if (TimeIdle < 2) TimeIdle += services.RendererService.GetFrameTime();
             }
             if (IsCursorVisible && CursorAlpha < 255) CursorAlpha = 255; // When showing it shows at once
-            else if (!IsCursorVisible && CursorAlpha > 0) CursorAlpha -= rendererService.GetFrameTime() * 300; // Slowly hides cursor when no movement
+            else if (!IsCursorVisible && CursorAlpha > 0) CursorAlpha -= services.RendererService.GetFrameTime() * 300; // Slowly hides cursor when no movement
 
             CursorPosition = newCursorPosition;
         }
@@ -118,7 +119,7 @@ namespace VortexVise.Core.GameGlobals
                 if (IsShowingScoreboard)
                 {
                     var players = GameMatch.GameState.PlayerStates.OrderByDescending(x => x.Stats.Kills).ToList();
-                    rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                    rendererService.DrawRectangle(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                     DrawScoreboard(rendererService, players);
                 }
 
@@ -170,7 +171,7 @@ namespace VortexVise.Core.GameGlobals
             // Global HUD
             if (GameMatch.GameState?.MatchState == MatchStates.Warmup)
             {
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                rendererService.DrawRectangle(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                 rendererService.DrawTextCentered(GameAssets.Misc.Font, $"STARTING IN {(int)GameMatch.GameState.MatchTimer + 1}", new(GameCore.GameScreenWidth * 0.5f, GameCore.GameScreenHeight * 0.5f), 32, System.Drawing.Color.White);
             }
             else if (GameMatch.GameState?.MatchState == MatchStates.Playing)
@@ -180,7 +181,7 @@ namespace VortexVise.Core.GameGlobals
             }
             else if (GameMatch.GameState?.MatchState == MatchStates.EndScreen)
             {
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                rendererService.DrawRectangle(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                 var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
                 rendererService.DrawTextCentered(GameAssets.Misc.Font, $"RESULTS - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
                 var y = 64;
@@ -197,7 +198,7 @@ namespace VortexVise.Core.GameGlobals
             }
             else if (GameMatch.GameState?.MatchState == MatchStates.Voting)
             {
-                rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
+                rendererService.DrawRectangle(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.FromArgb(100, 0, 0, 0));
                 var t = TimeSpan.FromSeconds((int)GameMatch.GameState.MatchTimer);
                 rendererService.DrawTextCentered(GameAssets.Misc.Font, $"MAP VOTING - {t.ToString(@"mm\:ss")}", new(GameCore.GameScreenWidth * 0.5f, 32), 32, System.Drawing.Color.White);
             }

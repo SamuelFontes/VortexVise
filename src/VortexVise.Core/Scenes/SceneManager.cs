@@ -2,6 +2,7 @@
 using VortexVise.Core.Extensions;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
+using VortexVise.Core.Services;
 
 namespace VortexVise.Core.Scenes
 {
@@ -10,6 +11,7 @@ namespace VortexVise.Core.Scenes
     /// </summary>
     public class SceneManager
     {
+        private readonly GameServices services;
         private MenuScene MenuScene { get; set; }
         private GameplayScene GameplayScene { get; set; }
         public float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
@@ -97,7 +99,7 @@ namespace VortexVise.Core.Scenes
         // Draw transition effect (full-screen rectangle)
         public void DrawTransition(IRendererService rendererService)
         {
-            rendererService.DrawRectangleRec(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
+            rendererService.DrawRectangle(new System.Drawing.Rectangle(0, 0, GameCore.GameScreenWidth, GameCore.GameScreenHeight), System.Drawing.Color.Black.Fade(TransitionAlpha));
         }
 
         public void UpdateScene<TPlayerCamera>(SceneManager sceneManager, ICollisionService collisionService, IRendererService rendererService, IAssetService assetService, IInputService inputService)

@@ -167,7 +167,7 @@ namespace VortexVise.Core.GameLogic
                 {
                     foreach (var collision in GameMatch.CurrentMap.Collisions)
                     {
-                        if (collisionService.CheckCollisionRecs(collision, hitbox.HitBox))
+                        if (collisionService.DetectCollision(collision, hitbox.HitBox))
                         {
                             hitbox.ShouldDisappear = true;
                             GameAssets.Sounds.HookHit.Play(pitch: 2f);
@@ -211,7 +211,7 @@ namespace VortexVise.Core.GameLogic
             var hitboxes = gameState.DamageHitBoxes.Where(x => x.PlayerId != currentPlayerState.Id || x.IsExplosion && !currentPlayerState.IsBot);// Adding friendly fire for bots is not a good idea
             foreach (var hitbox in hitboxes)
             {
-                if (collisionService.CheckCollisionRecs(currentPlayerState.Collision, hitbox.HitBox))
+                if (collisionService.DetectCollision(currentPlayerState.Collision, hitbox.HitBox))
                 {
                     // Dude was hit by projectile
                     GameAssets.Sounds.HookHit.Play(pitch: 0.5f);

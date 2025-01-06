@@ -17,7 +17,7 @@ namespace VortexVise.Web.Services
         }
 
 
-        public void DrawRectangleRec(Rectangle rec, Color color)
+        public void DrawRectangle(Rectangle rec, Color color)
         {
             Raylib_cs.Raylib.DrawRectangleRec(rec.ToRaylibRectangle(), color.ToRaylibColor());
         }
@@ -87,23 +87,6 @@ namespace VortexVise.Web.Services
             }
         }
 
-
-        public int GetScreenHeight()
-        {
-            return Raylib_cs.Raylib.GetScreenHeight();
-        }
-
-
-        public int GetScreenWidth()
-        {
-            return Raylib_cs.Raylib.GetScreenWidth();
-        }
-
-
-        public Vector2 GetMousePosition()
-        {
-            return Raylib_cs.Raylib.GetMousePosition();
-        }
 
 
         public float GetFrameTime()

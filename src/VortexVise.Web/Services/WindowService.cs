@@ -1,5 +1,6 @@
 ﻿using Raylib_cs;
 using System;
+using System.Numerics;
 using VortexVise.Core.GameGlobals;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Utilities;
@@ -37,6 +38,23 @@ namespace VortexVise.Web.Services
             {
                 Utils.SwitchDebug();
             }
+        }
+
+        public int GetScreenHeight()
+        {
+            return Raylib_cs.Raylib.GetScreenHeight();
+        }
+
+
+        public int GetScreenWidth()
+        {
+            return Raylib_cs.Raylib.GetScreenWidth();
+        }
+
+
+        public Vector2 GetMousePosition()
+        {
+            return Raylib_cs.Raylib.GetMousePosition();
         }
     }
 }

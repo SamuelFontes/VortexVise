@@ -78,7 +78,7 @@ namespace VortexVise.Core.GameGlobals
             {
                 foreach (var collision in GameMatch.CurrentMap.Collisions) // DEBUG
                 {
-                    rendererService.DrawRectangleRec(collision, Color.Blue);
+                    rendererService.DrawRectangle(collision, Color.Blue);
                 }
             }
 
@@ -96,9 +96,9 @@ namespace VortexVise.Core.GameGlobals
 
                 rendererService.DrawTexturePro(drop.WeaponState.Weapon.Texture, sourceRec, destRec, new(drop.WeaponState.Weapon.Texture.Width * 0.5f, drop.WeaponState.Weapon.Texture.Height * 0.5f), rotation, Color.White);
 
-                if (Utils.Debug()) rendererService.DrawRectangleRec(drop.Collision, Color.Purple); // Debug
+                if (Utils.Debug()) rendererService.DrawRectangle(drop.Collision, Color.Purple); // Debug
             }
-            if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) rendererService.DrawRectangleRec(h.HitBox, Color.Red); // Debug
+            if (Utils.Debug()) foreach (var h in currentGameState.DamageHitBoxes) rendererService.DrawRectangle(h.HitBox, Color.Red); // Debug
         }
 
         static void DrawHookState(IRendererService rendererService, PlayerState playerState)
@@ -110,7 +110,7 @@ namespace VortexVise.Core.GameGlobals
                 rendererService.DrawTexture(GameAssets.Gameplay.HookTexture, (int)playerState.HookState.Position.X, (int)playerState.HookState.Position.Y, Color.White);
 
                 if (Utils.Debug())
-                    rendererService.DrawRectangleRec(playerState.HookState.Collision, Color.Green); // Debug
+                    rendererService.DrawRectangle(playerState.HookState.Collision, Color.Green); // Debug
             }
 
 
@@ -185,7 +185,7 @@ namespace VortexVise.Core.GameGlobals
 
             if (Utils.Debug())
             {
-                rendererService.DrawRectangleRec(playerState.Collision, Color.Green); // Debug
+                rendererService.DrawRectangle(playerState.Collision, Color.Green); // Debug
             }
         }
 
@@ -200,7 +200,7 @@ namespace VortexVise.Core.GameGlobals
             // --------------------------------------------------------
             foreach (var drop in state.WeaponDrops)
             {
-                if (collisionService.CheckCollisionRecs(drop.Collision, mainPlayer.Collision))
+                if (collisionService.DetectCollision(drop.Collision, mainPlayer.Collision))
                 {
                     rendererService.DrawTexture(GameAssets.HUD.SelectionSquare, (int)drop.Position.X, (int)drop.Position.Y, Color.White);
                 }
