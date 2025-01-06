@@ -12,9 +12,6 @@ namespace VortexVise.Core.GameLogic
     /// </summary>
     public static class WeaponLogic
     {
-        public static float WeaponSpawnTimer { get; set; } = 0;
-        public static float WeaponRotation { get; set; } = 0;
-
         public static void CopyLastState(GameState currentGameState, GameState lastGameState)
         {
             foreach (var dropState in lastGameState.WeaponDrops)
@@ -24,10 +21,10 @@ namespace VortexVise.Core.GameLogic
         }
         public static void SpawnWeapons(GameState currentGameState, float deltaTime)
         {
-            WeaponSpawnTimer += deltaTime;
-            if (WeaponSpawnTimer > GameMatch.WeaponSpawnDelay)
+            GameMatch.WeaponSpawnTimer += deltaTime;
+            if (GameMatch.WeaponSpawnTimer > GameMatch.WeaponSpawnDelay)
             {
-                WeaponSpawnTimer = 0;
+                GameMatch.WeaponSpawnTimer = 0;
                 var weapon = GameAssets.Gameplay.Weapons.OrderBy(x => Guid.NewGuid()).First();
 
                 Vector2 spawnPoint = GameMatch.CurrentMap.ItemSpawnPoints.OrderBy(x => Guid.NewGuid()).First().Deserialize();
@@ -50,7 +47,7 @@ namespace VortexVise.Core.GameLogic
             }
 
             // create animation
-            WeaponRotation -= deltaTime * 100;
+            GameMatch.WeaponRotation -= deltaTime * 100;
         }
 
         public static void ProcessPlayerShooting(PlayerState currentPlayerState, GameState gameState, float deltaTime)

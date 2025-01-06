@@ -66,7 +66,7 @@ namespace VortexVise.Core.GameGlobals
 
                 Rectangle destRec = new((int)(hitbox.HitBox.X + hitbox.HitBox.Width * 0.5f), hitbox.HitBox.Y + (int)(hitbox.HitBox.Height * 0.5f), hitbox.Weapon.ProjectileTexture.Width, hitbox.Weapon.ProjectileTexture.Height);
 
-                rendererService.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.Width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.Height * 0.5f)), (int)WeaponLogic.WeaponRotation * 23, Color.White);
+                rendererService.DrawTexturePro(hitbox.Weapon.ProjectileTexture, sourceRec, destRec, new((int)(hitbox.Weapon.ProjectileTexture.Width * 0.5f), (int)(hitbox.Weapon.ProjectileTexture.Height * 0.5f)), (int)GameMatch.WeaponRotation * 23, Color.White);
             }
 
         }
@@ -88,7 +88,7 @@ namespace VortexVise.Core.GameGlobals
         {
             foreach (var drop in currentGameState.WeaponDrops)
             {
-                var rotation = (int)WeaponLogic.WeaponRotation;
+                var rotation = (int)GameMatch.WeaponRotation;
                 if (drop.WeaponState.Weapon.WeaponType == WeaponType.Heal) rotation = 0;
                 Rectangle sourceRec = new(0, 0, drop.WeaponState.Weapon.Texture.Width, drop.WeaponState.Weapon.Texture.Height);
 

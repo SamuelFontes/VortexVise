@@ -11,7 +11,6 @@ namespace VortexVise.Core.GameLogic
     /// </summary>
     public static class MapLogic
     {
-
         public static void LoadMap(Map map)
         {
             //if (shouldStopMusic) GameAssets.MusicAndAmbience.StopMusic(); 

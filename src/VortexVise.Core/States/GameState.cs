@@ -49,7 +49,7 @@ namespace VortexVise.Core.States
                 playerState.Stats.Deaths = 0;
                 playerState.JetPackFuel = GameMatch.DefaultJetPackFuel;
             }
-            WeaponLogic.WeaponRotation = 0;
+            GameMatch.WeaponRotation = 0;
             WeaponDrops.Clear();
             foreach (var spawn in GameMatch.CurrentMap.ItemSpawnPoints)
             {

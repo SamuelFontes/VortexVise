@@ -97,5 +97,7 @@ namespace VortexVise.Core.GameGlobals
         /// Current game state. Please don't mess with this outside the GameLogic. It's here to reset things when changing maps.
         /// </summary>
         public static GameState? GameState { get; set; }
+        public static float WeaponSpawnTimer { get; set; } = 0;
+        public static float WeaponRotation { get; set; } = 0;
     }
 }
