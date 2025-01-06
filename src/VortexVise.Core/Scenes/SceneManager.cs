@@ -15,9 +15,9 @@ namespace VortexVise.Core.Scenes
         public float TransitionAlpha { get; set; } = 0.0f;                   // Transition Alpha
         public bool OnTransition { get; set; } = false;                      // Is scene transition happening
         public bool TransitionFadeOut { get; set; } = false;                 // Is scene fading out
-        public GameScene TransitionFromScene { get; set; } = GameScene.UNKNOWN;// Last scene
-        public GameScene TransitionToScene { get; set; } = GameScene.UNKNOWN;// New scene
-        public GameScene CurrentScene { get; set; } = GameScene.LOGO;        // Defines what is the current scene
+        public GameScene TransitionFromScene { get; set; } = GameScene.Unknown;// Last scene
+        public GameScene TransitionToScene { get; set; } = GameScene.Unknown;// New scene
+        public GameScene CurrentScene { get; set; } = GameScene.Logo;        // Defines what is the current scene
         private readonly IInputService _inputService;
 
         public SceneManager( IInputService inputService, IRendererService rendererService, ICollisionService collisionService)
@@ -56,8 +56,8 @@ namespace VortexVise.Core.Scenes
                         //case LOGO: UnloadLogoScreen(); break;
                         //case TITLE: UnloadTitleScreen(); break;
                         //case OPTIONS: UnloadOptionsScreen(); break;
-                        case GameScene.GAMEPLAY: GameplayScene.UnloadGameplayScene(assetService); break;
-                        case GameScene.MENU: MenuScene.UnloadMenuScene(); break;
+                        case GameScene.Gameplay: GameplayScene.UnloadGameplayScene(assetService); break;
+                        case GameScene.Menu: MenuScene.UnloadMenuScene(); break;
                         //case ENDING: UnloadEndingScreen(); break;
                         default: break;
                     }
@@ -67,8 +67,8 @@ namespace VortexVise.Core.Scenes
                     {
                         //case LOGO: InitLogoScreen(); break;
                         //case TITLE: InitTitleScreen(); break;
-                        case GameScene.GAMEPLAY: GameplayScene.InitGameplayScene<TCamera>(assetService, rendererService); break;
-                        case GameScene.MENU: MenuScene = new MenuScene(_inputService, this, rendererService, collisionService); break;
+                        case GameScene.Gameplay: GameplayScene.InitGameplayScene<TCamera>(assetService, rendererService); break;
+                        case GameScene.Menu: MenuScene = new MenuScene(_inputService, this, rendererService, collisionService); break;
                         //case ENDING: InitEndingScreen(); break;
                         default: break;
                     }
@@ -88,8 +88,8 @@ namespace VortexVise.Core.Scenes
                     TransitionAlpha = 0.0f;
                     TransitionFadeOut = false;
                     OnTransition = false;
-                    TransitionFromScene = GameScene.UNKNOWN;
-                    TransitionToScene = GameScene.UNKNOWN;
+                    TransitionFromScene = GameScene.Unknown;
+                    TransitionToScene = GameScene.Unknown;
                 }
             }
         }
@@ -109,19 +109,19 @@ namespace VortexVise.Core.Scenes
                 //----------------------------------------------------------------------------------
                 switch (CurrentScene)
                 {
-                    case GameScene.GAMEPLAY:
+                    case GameScene.Gameplay:
                         {
                             GameplayScene.UpdateGameplayScene<TPlayerCamera>(sceneManager, collisionService, rendererService);
-                            if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.MENU);
+                            if (GameplayScene.FinishGameplayScene() == 1) TransitionToNewScene(GameScene.Menu);
                             //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
                         }
                         break;
-                    case GameScene.MENU:
+                    case GameScene.Menu:
                         {
                             MenuScene.UpdateMenuScene(rendererService, collisionService, inputService);
-                            if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.GAMEPLAY);
-                            else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.UNKNOWN);
+                            if (MenuScene.FinishMenuScene() == 2) TransitionToNewScene(GameScene.Gameplay);
+                            else if (MenuScene.FinishMenuScene() == -1) TransitionToNewScene(GameScene.Unknown);
                         }
                         break;
                     default: break;
@@ -134,8 +134,8 @@ namespace VortexVise.Core.Scenes
         {
             switch (CurrentScene)
             {
-                case GameScene.GAMEPLAY: GameplayScene.DrawGameplayScene(rendererService, collisionService); break;
-                case GameScene.MENU: MenuScene.DrawMenuScene(rendererService); break;
+                case GameScene.Gameplay: GameplayScene.DrawGameplayScene(rendererService, collisionService); break;
+                case GameScene.Menu: MenuScene.DrawMenuScene(rendererService); break;
                 default: break;
             }
         }

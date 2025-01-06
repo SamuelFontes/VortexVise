@@ -41,7 +41,7 @@ namespace VortexVise.Core
             GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
 
             // Setup and init first screen
-            sceneManager.CurrentScene = GameScene.MENU;
+            sceneManager.CurrentScene = GameScene.Menu;
 
 
         }
