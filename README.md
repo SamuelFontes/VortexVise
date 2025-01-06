@@ -41,4 +41,24 @@ UseJetPack - LeftShift/LeftTrigger
 
 <h2>License</h2>
 The game is licensed under GPL 2, so you can do wathever you want with the code as long as you give the credits and publish the source code if you made any changes.  
-If you want to get this code with a more permissive license just message me, if you want to use this code as base for something else I can change the license to MIT or something.  
+If you want to get this code with a more permissive license just message me, if you want to use this code as base for something else I can change the license to MIT or something. 
+
+<h2>Compiling</h2>
+Both Versions require dotnet 8 installed on your machine.  
+<h3>Desktop</h3>
+Open the root folder on the terminal and just run like normal(should work)  
+```
+cd src\VortexVise.Desktop
+dotnet run
+```
+<h3>Web</h3>
+Credits to these guys on figuring out how to do this shit: (https://github.com/Kiriller12/RaylibWasm)  
+Open the root folder on the terminal then nstall wasm things, publish and then dotnet-serve to run:  
+```
+cd src\VortexVise.Web
+dotnet workload install wasm-tools
+dotnet tool install --global dotnet-serve
+dotnet publish -c Release
+dotnet serve -d bin\Release\net8.0\browser-wasm\AppBundle
+```
+
