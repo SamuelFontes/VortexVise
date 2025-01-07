@@ -3,6 +3,7 @@ using System.Numerics;
 using VortexVise.Core.Interfaces;
 using VortexVise.Core.Extensions;
 using VortexVise.Core.Models;
+using VortexVise.Desktop.Models;
 
 namespace VortexVise.Desktop.Services
 {

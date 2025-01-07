@@ -2,7 +2,7 @@
 using ZeroElectric.Vinculum;
 using VortexVise.Core.GameGlobals;
 
-namespace VortexVise.Core.Models
+namespace VortexVise.Desktop.Models
 {
     public class SoundAsset : ISoundAsset
     {

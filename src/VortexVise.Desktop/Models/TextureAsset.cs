@@ -1,7 +1,7 @@
 ﻿using VortexVise.Core.Interfaces;
 using ZeroElectric.Vinculum;
 
-namespace VortexVise.Core.Models
+namespace VortexVise.Desktop.Models
 {
     internal class TextureAsset : ITextureAsset
     {

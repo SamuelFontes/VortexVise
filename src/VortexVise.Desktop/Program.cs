@@ -6,6 +6,7 @@ using VortexVise.Core.Models;
 using VortexVise.Core.Scenes;
 using VortexVise.Core.Services;
 using VortexVise.Core.Utilities;
+using VortexVise.Desktop.Models;
 using VortexVise.Desktop.Services;
 using ZeroElectric.Vinculum;
 
