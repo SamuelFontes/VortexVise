@@ -21,7 +21,6 @@ namespace VortexVise.Core
         public Game(GameServices services)
         {
             this.services = services;
-            sceneManager = new SceneManager(services.InputService, services.RendererService, services.CollisionService);
         }
 
         public void Init<TFontAsset, TMusicAsset, TSoundAsset, TTextureAsset>()
@@ -36,6 +35,8 @@ namespace VortexVise.Core
             // Load Assets
             GameAssets.InitializeAssets<TFontAsset, TMusicAsset, TSoundAsset, TTextureAsset>(services.AssetService);                                                                          // Load global data 
             GameUserInterface.InitUserInterface<TTextureAsset>();
+
+            sceneManager = new SceneManager(services.InputService, services.RendererService, services.CollisionService);
 
             // Initiate music
             GameAssets.MusicAndAmbience.PlayMusic(GameAssets.MusicAndAmbience.MusicAssetPixelatedDiscordance);      // Play main menu song
