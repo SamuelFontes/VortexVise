@@ -5,11 +5,17 @@ using VortexVise.Core.Models;
 using ZeroElectric.Vinculum;
 using VortexVise.Core.Services;
 using VortexVise.Core.GameGlobals;
+using System.Text.Json.Nodes;
+using System.Text.Json;
+using VortexVise.Editor;
 
 // Initialize Services
-//var assetService = new AssetService();
+var assetService = new AssetService();
+int screenWidth = 1280;
+int screenHeight = 720;
+Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise Editor");
 
-//GameAssets.InitializeAssets(assetService);
+GameAssets.Gameplay.LoadMaps(assetService);
 IOrderedEnumerable<Map> maps = GameAssets.Gameplay.Maps.OrderBy(x => x.Name);
 start:
 var mapId = 0;
@@ -34,9 +40,6 @@ static float roundf(float var)
     float value = (int)(var * 100 + .5);
     return (float)value / 100;
 }
-int screenWidth = 1280;
-int screenHeight = 720;
-Raylib.InitWindow(screenWidth, screenHeight, "Vortex Vise Editor");
 
 
 // Box B: Mouse moved box
@@ -52,7 +55,7 @@ Camera2D camera = new()
 };
 
 var mapTexture = Raylib.LoadTexture(map.TextureLocation);
-var mouseTexture = Raylib.LoadTexture("Resources\\Common\\cursor.png");
+var mouseTexture = Raylib.LoadTexture("Resources/Common/cursor.png");
 
 Vector2 oldMousePosition = new(0, 0);
 Vector2 mapPos = new(0, 0);
@@ -203,13 +206,15 @@ while (!Raylib.WindowShouldClose())    // Detect window close button or ESC key
 
 
 
-        var save = $@"[VortexViseMap]
+        string save = $@"[VortexViseMap]
 NAME={mapName}
 COLLISIONS={collisions}
 PLAYER_SPAWN={playerSpawn}
 ENEMY_SPAWN={enemySpawn}
 ITEM_SPAWN={itemSpawn}
 GAME_MODES = DM,TDM,SURVIVAL";
+
+        save = JsonSerializer.Serialize(map);
         Console.WriteLine(save);
     }
 
