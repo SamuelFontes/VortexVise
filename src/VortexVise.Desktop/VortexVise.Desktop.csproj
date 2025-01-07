@@ -1,23 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PublishAot>true</PublishAot>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PublishAot>true</PublishAot>
+		<JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
-    <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
+		<PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\VortexVise.Core\VortexVise.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\VortexVise.Core\VortexVise.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Resources\**\*.*">
+			<Link>Resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<Target Name="CopyResources" AfterTargets="Build">
+		<ItemGroup>
+			<ResourceFiles Include="..\..\Resources\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(ResourceFiles)"
+			  DestinationFiles="@(ResourceFiles->'$(OutputPath)Resources\%(RecursiveDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="true"
+			  OverwriteReadOnlyFiles="true" />
+	</Target>
+
 
 </Project>
